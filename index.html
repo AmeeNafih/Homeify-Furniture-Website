@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homeify Furniture | Ultra-Modern Home & Office Furniture | Erattupetta, Kerala</title>
+  <meta name="description" content="Homeify Furniture - Premier modern furniture workshop in Erattupetta, Kottayam, Kerala. Handcrafted luxury sofas, solid wood cots, cane dining suites, decorative wood panels, and modular office workstations. 5-Year Warranty. WhatsApp: +91 97784 46620.">
+  <meta name="keywords" content="Homeify Furniture, Furniture Erattupetta, WhatsApp 9778446620, Solid Wood Cots Kerala, Teak Dining Tables Kottayam, Cane Weave Chairs Kerala, Modular Office Workstations Kerala, 5-Year Warranty Furniture">
+
+  <link rel="icon" type="image/png" href="assets/homeify-emblem.png">
+
+  <!-- Google Fonts: Syne, Plus Jakarta Sans, Cormorant Garamond -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            alabaster: '#FAF8F5',
+            espresso: '#0D0C0B',
+            teak: {
+              DEFAULT: '#9E6738',
+              light: '#B57945',
+              dark: '#6E4018',
+            },
+            sage: {
+              DEFAULT: '#2C4A38',
+              light: '#3D634C',
+              dark: '#1C3125',
+            },
+            champagne: {
+              DEFAULT: '#D4AF37',
+              light: '#F3E5AB',
+              dark: '#AA771C',
+            }
+          },
+          fontFamily: {
+            heading: ['Syne', 'Playfair Display', 'sans-serif'],
+            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+            sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <!-- GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-alabaster text-[#141210] antialiased selection:bg-teak selection:text-white relative">
+
+  <!-- Ambient Decorative Light Flares -->
+  <div class="ambient-glow -top-32 -left-32 w-96 h-96 bg-teak/10 z-0"></div>
+  <div class="ambient-glow top-1/3 -right-32 w-[32rem] h-[32rem] bg-sage/10 z-0"></div>
+
+  <!-- =========================================================================
+       1. ULTRA-MODERN TOP UTILITY BAR (With Photo & Logo Customizer Shortcut)
+       ========================================================================= -->
+  <div class="bg-[#0D0C0B] text-[#FAF8F5] py-2.5 px-4 text-xs border-b border-white/10 relative z-50">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2.5">
+      
+      <!-- Live Workshop Status Indicator & Customizer Pill -->
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-white/10 text-white font-mono text-[11px]">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 live-pulse-dot"></span>
+          <span>Erattupetta Workshop Live</span>
+        </span>
+
+        <!-- Direct Button to Change Photos & Logo -->
+        <button 
+          id="open-customizer-btn" 
+          type="button"
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-teak to-champagne text-[#0D0C0B] font-mono font-bold text-[11px] shadow-sm hover:scale-105 transition-transform"
+          title="Click to change product MRP, prices, photos, or company logo"
+        >
+          <i class="fa-solid fa-tag text-xs"></i>
+          <span>Edit MRP & Photos</span>
+        </button>
+      </div>
+
+      <!-- Quick Action Contacts with 9778446620 -->
+      <div class="flex items-center gap-5 text-stone-300 font-mono text-[11px]">
+        <a href="tel:+919778446620" class="hover:text-champagne transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-phone text-champagne text-[10px]"></i> +91 97784 46620
+        </a>
+        <span class="text-stone-700 hidden sm:inline">|</span>
+        <a 
+          href="https://wa.me/919778446620?text=Hello%20Homeify%20Furniture%20(Erattupetta)!%20I%20would%20like%20to%20discuss%20custom%20furniture." 
+          target="_blank" 
+          rel="noopener"
+          class="hover:text-emerald-400 text-emerald-400 transition-colors flex items-center gap-1.5 font-bold"
+        >
+          <i class="fa-brands fa-whatsapp text-xs"></i> WhatsApp: 97784 46620
+        </a>
+        <span class="text-stone-700 hidden sm:inline">|</span>
+        <span class="text-stone-400 hidden lg:inline">
+          <i class="fa-solid fa-location-dot text-teak"></i> Kottayam Dist, Kerala
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       2. MODERN FLOATING GLASS NAVIGATION DOCK (With Dynamic Vector Logo)
+       ========================================================================= -->
+  <header id="primary-navbar" class="sticky top-0 z-40 glass-nav-dock transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Official Brand Logo -->
+      <a href="#" class="flex items-center gap-3.5 group">
+        <div class="h-11 sm:h-12 flex items-center">
+          <img src="assets/homeify-logo-dark-text.png" alt="Homeify Furniture - Furniture with a touch of artistry" class="dynamic-site-logo h-9 sm:h-11 w-auto object-contain">
+        </div>
+        <div class="hidden sm:block border-l border-stone-300 pl-3 py-0.5">
+          <span class="block text-[9px] tracking-[0.2em] uppercase font-bold text-stone-500 font-mono">
+            Erattupetta • Kottayam
+          </span>
+          <span class="block text-[10px] text-teak font-semibold italic font-serif">
+            Furniture with a touch of artistry.
+          </span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden lg:flex items-center gap-8 text-xs uppercase tracking-widest font-semibold text-stone-700 font-sans">
+        <a href="#gallery" class="hover:text-teak transition-colors py-2 relative group">
+          Collections
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-teak group-hover:w-full transition-all duration-300"></span>
+        </a>
+        <a href="#material-comparator" class="hover:text-teak transition-colors py-2 relative group flex items-center gap-1.5">
+          <span>Materials</span>
+          <span class="px-2 py-0.5 text-[9px] rounded-full bg-sage/10 text-sage font-bold font-mono">Wood vs Board</span>
+        </a>
+        <a href="#warranty-promise" class="hover:text-teak transition-colors py-2 relative group flex items-center gap-1.5">
+          <span>5-Year Warranty</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-champagne animate-pulse"></span>
+        </a>
+        <a href="#workshop-heritage" class="hover:text-teak transition-colors py-2 relative group">
+          Workshop
+        </a>
+        <a href="#custom-quote" class="hover:text-teak transition-colors py-2 relative group">
+          Configurator
+        </a>
+      </nav>
+
+      <!-- Desktop CTAs with updated WhatsApp 9778446620 -->
+      <div class="hidden sm:flex items-center gap-3">
+        <button 
+          id="open-customizer-btn-desktop" 
+          type="button" 
+          class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold bg-amber-500/10 text-amber-900 border border-amber-500/30 hover:bg-amber-500 hover:text-white transition-all shadow-sm font-mono cursor-pointer"
+          title="Change product MRP, prices, and photos"
+        >
+          <i class="fa-solid fa-tag text-xs"></i>
+          <span>Edit MRP</span>
+        </button>
+
+        <a 
+          href="https://wa.me/919778446620?text=Hello%20Homeify%20Furniture%20(Erattupetta)!%20I%20would%20like%20to%20inquire%20about%20your%20custom%20furniture." 
+          target="_blank" 
+          rel="noopener"
+          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold bg-[#25D366]/10 text-[#075E54] hover:bg-[#25D366] hover:text-white transition-all duration-300 border border-[#25D366]/30 shadow-sm font-mono"
+        >
+          <i class="fa-brands fa-whatsapp text-sm text-[#25D366] group-hover:text-white"></i>
+          <span>97784 46620</span>
+        </a>
+
+        <a 
+          href="#custom-quote" 
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold bg-[#0D0C0B] text-white hover:bg-teak transition-all duration-300 shadow-md transform hover:-translate-y-0.5 uppercase tracking-wider font-mono"
+        >
+          <span>Get Free Estimate</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </a>
+      </div>
+
+      <!-- Mobile Hamburger Button -->
+      <button id="mobile-menu-btn" class="lg:hidden p-2.5 rounded-2xl bg-white text-espresso border border-stone-200 shadow-sm" aria-label="Toggle Navigation">
+        <i class="fa-solid fa-bars-staggered text-xl"></i>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- Mobile Slide-out Drawer -->
+  <div id="drawer-overlay" class="fixed inset-0 bg-espresso/70 backdrop-blur-md z-50 hidden transition-opacity duration-300"></div>
+  <aside id="mobile-drawer" class="fixed top-0 right-0 bottom-0 w-84 max-w-[85vw] bg-alabaster z-50 transform translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col p-6 border-l border-stone-200">
+    <div class="flex items-center justify-between pb-6 border-b border-stone-200">
+      <div class="flex items-center gap-3">
+        <img src="assets/homeify-logo-dark-text.png" alt="Homeify Furniture - Furniture with a touch of artistry" class="dynamic-site-logo h-8 w-auto object-contain">
+      </div>
+      <button id="drawer-close-btn" class="p-2 text-stone-500 hover:text-espresso rounded-xl" aria-label="Close menu">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+    </div>
+
+    <nav class="flex flex-col gap-4 py-6 text-sm font-semibold text-stone-800 uppercase tracking-wider font-sans">
+      <a href="#gallery" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
+        <span>Bento Collections</span>
+        <i class="fa-solid fa-chevron-right text-xs text-stone-400"></i>
+      </a>
+      <a href="#material-comparator" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
+        <span>Materials (Wood vs. Board)</span>
+        <span class="text-[10px] px-2 py-0.5 rounded-full bg-sage/10 text-sage font-bold font-mono">Guide</span>
+      </a>
+      <a href="#warranty-promise" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
+        <span>5-Year Warranty Guarantee</span>
+        <span class="text-[10px] px-2 py-0.5 rounded-full bg-champagne text-espresso font-bold font-mono">Included</span>
+      </a>
+      <a href="#workshop-heritage" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
+        <span>Erattupetta Workshop</span>
+        <i class="fa-solid fa-chevron-right text-xs text-stone-400"></i>
+      </a>
+      <a href="#custom-quote" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
+        <span>Interactive Configurator</span>
+        <i class="fa-solid fa-calculator text-xs text-teak"></i>
+      </a>
+      
+      <!-- Mobile Customizer Shortcut -->
+      <button 
+        id="open-customizer-btn-mobile" 
+        type="button" 
+        class="py-2.5 px-3 rounded-xl bg-teak/10 text-teak font-mono font-bold text-xs flex items-center justify-between"
+      >
+        <span><i class="fa-solid fa-tag mr-2 text-teak"></i> Change Product MRP & Photos</span>
+        <i class="fa-solid fa-sliders text-xs"></i>
+      </button>
+    </nav>
+
+    <div class="mt-auto pt-6 border-t border-stone-200 space-y-3">
+      <a 
+        href="https://wa.me/919778446620?text=Hello%20Homeify%20Furniture%20Erattupetta!%20I%20would%20like%20to%20inquire." 
+        class="w-full py-3.5 px-4 rounded-2xl bg-[#25D366] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg"
+      >
+        <i class="fa-brands fa-whatsapp text-lg"></i>
+        <span>WhatsApp: 97784 46620</span>
+      </a>
+      <div class="text-center text-[11px] text-stone-500 font-mono">
+        <i class="fa-solid fa-location-dot text-teak"></i> Erattupetta, Kottayam District, Kerala
+      </div>
+    </div>
+  </aside>
+
+  <!-- =========================================================================
+       3. ULTRA-MODERN HERO SECTION WITH FLOATING ANTI-GRAVITY BADGES
+       ========================================================================= -->
+  <section class="relative min-h-[92vh] flex items-center overflow-hidden py-12 lg:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        
+        <!-- Left: Editorial Headline & Narrative -->
+        <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
+          
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-stone-200 shadow-sm text-xs font-bold text-teak font-mono">
+            <span class="w-2 h-2 rounded-full bg-champagne animate-ping"></span>
+            <span>Master Craftsmen of Erattupetta, Kottayam</span>
+          </div>
+
+          <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-extrabold tracking-tight text-[#0D0C0B] leading-[1.05]">
+            Homeify Your Space with <span class="italic font-serif font-normal gradient-text-teak">Timeless</span> Craftsmanship.
+          </h1>
+
+          <p class="text-sm sm:text-base md:text-lg text-[#665F57] max-w-xl mx-auto lg:mx-0 leading-relaxed font-sans">
+            Crafted at our premier workshop in <strong>Erattupetta, Kottayam District, Kerala</strong>. We forge bespoke Home & Office furniture from pure <strong>100% Seasoned Natural Wood</strong> and <strong>Premium Grade Engineered Particle Boards</strong> — complete with our industry-defining <span class="text-[#0D0C0B] font-bold underline decoration-champagne decoration-2">5-Year Manufacturing Warranty</span>.
+          </p>
+
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+            <a 
+              href="#gallery" 
+              class="px-8 py-4 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0D0C0B] text-white hover:bg-teak transition-all duration-300 shadow-xl shadow-stone-900/15 transform hover:-translate-y-1 flex items-center gap-2 font-mono"
+            >
+              <span>Explore Bento Gallery</span>
+              <i class="fa-solid fa-arrow-down-long text-xs"></i>
+            </a>
+
+            <a 
+              href="#custom-quote" 
+              class="px-8 py-4 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#0D0C0B] hover:bg-stone-50 border border-stone-300 transition-all duration-300 shadow-sm flex items-center gap-2 font-mono"
+            >
+              <i class="fa-solid fa-sliders text-teak"></i>
+              <span>Quote Configurator</span>
+            </a>
+          </div>
+
+          <div class="grid grid-cols-3 gap-4 pt-6 border-t border-stone-200/90 max-w-lg mx-auto lg:mx-0 font-sans">
+            <div>
+              <span class="block font-heading text-2xl sm:text-3xl font-extrabold text-[#0D0C0B]">5-Year</span>
+              <span class="text-xs text-stone-500 font-medium">Guaranteed Warranty</span>
+            </div>
+            <div>
+              <span class="block font-heading text-2xl sm:text-3xl font-extrabold text-teak">100%</span>
+              <span class="text-xs text-stone-500 font-medium">Kiln-Seasoned Wood</span>
+            </div>
+            <div>
+              <span class="block font-heading text-2xl sm:text-3xl font-extrabold text-sage">Direct</span>
+              <span class="text-xs text-stone-500 font-medium">From Erattupetta</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Modern Showcase Frame with 3 Floating Anti-Gravity Badges -->
+        <div id="hero-showcase-container" class="lg:col-span-6 relative">
+          
+          <div class="relative mx-auto max-w-lg lg:max-w-none rounded-[2rem] overflow-hidden shadow-2xl border-2 border-stone-200/80 bg-stone-100">
+            
+            <div class="aspect-[4/3] sm:aspect-[16/11] relative overflow-hidden bg-stone-200">
+              <img 
+                id="hero-main-img"
+                src="assets/handcrafted-wooden-sofa.jpg" 
+                alt="Homeify Luxury Furniture Erattupetta" 
+                class="w-full h-full object-cover transition-all duration-500"
+              />
+              
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B]/85 via-transparent to-transparent"></div>
+
+              <div class="absolute bottom-6 left-6 right-6 text-white">
+                <span id="hero-slide-tag" class="px-3 py-1 rounded-full text-[10px] font-bold font-mono uppercase bg-champagne text-[#0D0C0B] mb-1.5 inline-block">
+                  Living & Sofas
+                </span>
+                <h3 id="hero-slide-title" class="font-heading text-xl sm:text-2xl font-bold text-white">
+                  Earthy Luxury Living
+                </h3>
+                <p id="hero-slide-specs" class="text-xs text-stone-300 mt-1 font-sans">
+                  Nilambur Seasoned Teak • Belgian Linen • 5-Year Warranty
+                </p>
+              </div>
+            </div>
+
+            <!-- Modern Category Selector -->
+            <div class="p-3.5 bg-white/95 backdrop-blur-md border-t border-stone-200 flex items-center justify-between gap-1 overflow-x-auto">
+              <div id="hero-indicators" class="flex items-center gap-2 w-full justify-between">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- ===============================================================
+               3 FLOATING ANTI-GRAVITY TRUST BADGES
+               =============================================================== -->
+          <div class="hero-floating-badge floating-badge-1 absolute -top-6 -left-4 sm:-left-8 z-20 glass-panel-light rounded-3xl p-4 shadow-2xl max-w-[220px] transition-transform duration-200 border border-white">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-2xl bg-champagne text-[#0D0C0B] flex items-center justify-center text-lg font-bold flex-shrink-0 shadow-md pulse-gold">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+              <div>
+                <span class="block text-xs font-bold text-[#0D0C0B] uppercase font-mono tracking-wider">5-Year Warranty</span>
+                <span class="text-[11px] text-stone-600 block leading-tight mt-0.5 font-sans">Full factory joint & structural cover</span>
+                <span class="inline-block mt-1 text-[10px] font-bold text-teak font-mono">100% Written Guarantee</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-floating-badge floating-badge-2 absolute -bottom-6 -left-4 sm:-left-6 z-20 glass-panel-light rounded-3xl p-4 shadow-2xl max-w-[230px] transition-transform duration-200 border border-white">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-2xl bg-sage text-white flex items-center justify-center text-lg font-bold flex-shrink-0 shadow-md">
+                <i class="fa-solid fa-tree"></i>
+              </div>
+              <div>
+                <span class="block text-xs font-bold text-[#0D0C0B] uppercase font-mono tracking-wider">100% Natural Wood</span>
+                <span class="text-[11px] text-stone-600 block leading-tight mt-0.5 font-sans">Kiln-seasoned Nilambur teak & hardwoods</span>
+                <span class="inline-block mt-1 text-[10px] font-bold text-sage font-mono">Moisture Calibrated</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-floating-badge floating-badge-3 absolute -top-8 -right-3 sm:-right-6 z-20 glass-panel-light rounded-3xl p-4 shadow-2xl max-w-[220px] transition-transform duration-200 border border-white">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-2xl bg-[#0D0C0B] text-champagne flex items-center justify-center text-lg font-bold flex-shrink-0 shadow-md">
+                <i class="fa-solid fa-industry"></i>
+              </div>
+              <div>
+                <span class="block text-xs font-bold text-[#0D0C0B] uppercase font-mono tracking-wider">Erattupetta Factory</span>
+                <span class="text-[11px] text-stone-600 block leading-tight mt-0.5 font-sans">Zero middleman showroom markup</span>
+                <span class="inline-block mt-1 text-[10px] font-bold text-teak font-mono">Craftsman Pricing</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       4. BENTO GRID GALLERY (Interactive Category Filtering + Quick-View Modal)
+       ========================================================================= -->
+  <section id="gallery" class="py-20 lg:py-28 bg-white border-y border-stone-200 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="text-xs font-bold uppercase tracking-widest text-teak font-mono block mb-2">Curated Portfolio</span>
+        <h2 class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0D0C0B]">
+          The Homeify Collection
+        </h2>
+        <p class="text-stone-600 text-sm sm:text-base mt-3 font-sans">
+          Engineered and handcrafted in our Erattupetta workshop. Filter collections to explore solid wood cots, cane-weave dining tables, modular workstations, and decorative wall louvers.
+        </p>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-12">
+        <button 
+          class="bento-filter-btn active px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider border border-[#0D0C0B] bg-[#0D0C0B] text-white shadow-md font-mono"
+          data-filter="all"
+        >
+          <i class="fa-solid fa-shapes mr-1.5"></i> All Collections
+        </button>
+
+        <button 
+          class="bento-filter-btn px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider border border-stone-200 text-stone-700 hover:border-[#0D0C0B] hover:text-[#0D0C0B] transition-all bg-white font-mono"
+          data-filter="living"
+        >
+          <i class="fa-solid fa-couch mr-1.5"></i> Living & Sofas
+        </button>
+
+        <button 
+          class="bento-filter-btn px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider border border-stone-200 text-stone-700 hover:border-[#0D0C0B] hover:text-[#0D0C0B] transition-all bg-white font-mono"
+          data-filter="bedroom-dining"
+        >
+          <i class="fa-solid fa-bed mr-1.5"></i> Bedroom & Dining
+        </button>
+
+        <button 
+          class="bento-filter-btn px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider border border-stone-200 text-stone-700 hover:border-[#0D0C0B] hover:text-[#0D0C0B] transition-all bg-white font-mono"
+          data-filter="office"
+        >
+          <i class="fa-solid fa-briefcase mr-1.5"></i> Office & Modular
+        </button>
+
+        <button 
+          class="bento-filter-btn px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider border border-stone-200 text-stone-700 hover:border-[#0D0C0B] hover:text-[#0D0C0B] transition-all bg-white font-mono"
+          data-filter="custom-woodwork"
+        >
+          <i class="fa-solid fa-hammer mr-1.5"></i> Custom Woodwork
+        </button>
+      </div>
+
+      <!-- Gallery View & MRP Controls Toolbar -->
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-8 pb-4 border-b border-stone-200">
+        <!-- View Mode Switcher -->
+        <div class="flex items-center gap-2 text-xs font-mono">
+          <span class="text-stone-500 font-bold uppercase tracking-wider text-[11px]">Display:</span>
+          <div class="inline-flex p-1 rounded-full bg-stone-100 border border-stone-200 shadow-inner">
+            <button 
+              id="view-mode-thumbnail" 
+              type="button" 
+              class="gallery-view-btn px-4 py-2 rounded-full font-bold bg-[#0D0C0B] text-white shadow-sm flex items-center gap-1.5 transition-all"
+            >
+              <i class="fa-solid fa-table-cells-large text-xs"></i>
+              <span>Thumbnail Catalog</span>
+            </button>
+            <button 
+              id="view-mode-bento" 
+              type="button" 
+              class="gallery-view-btn px-4 py-2 rounded-full font-bold text-stone-600 hover:text-stone-900 flex items-center gap-1.5 transition-all"
+            >
+              <i class="fa-solid fa-shapes text-xs"></i>
+              <span>Bento Showcase</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Thumbnail Framing & MRP Actions -->
+        <div class="flex flex-wrap items-center gap-2.5 text-xs font-mono">
+          <div class="inline-flex p-1 rounded-full bg-stone-100 border border-stone-200 shadow-inner">
+            <button 
+              id="thumb-fit-contain" 
+              type="button" 
+              class="thumb-fit-btn px-3 py-1.5 rounded-full font-bold bg-[#0D0C0B] text-white shadow-sm flex items-center gap-1 transition-all" 
+              title="Show entire product photo thumbnail with zero cropping"
+            >
+              <i class="fa-solid fa-expand text-[10px]"></i>
+              <span>Uncropped Photo</span>
+            </button>
+            <button 
+              id="thumb-fit-cover" 
+              type="button" 
+              class="thumb-fit-btn px-3 py-1.5 rounded-full font-bold text-stone-600 hover:text-stone-900 flex items-center gap-1 transition-all" 
+              title="Fill entire card height"
+            >
+              <i class="fa-solid fa-crop-simple text-[10px]"></i>
+              <span>Cover Fill</span>
+            </button>
+          </div>
+
+          <button 
+            id="open-mrp-manager-btn" 
+            type="button" 
+            class="px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/40 text-amber-950 hover:bg-amber-500 hover:text-white transition-all font-bold flex items-center gap-1.5 shadow-sm cursor-pointer"
+          >
+            <i class="fa-solid fa-tag text-xs text-teak group-hover:text-white"></i>
+            <span>Edit Product MRP</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bento Grid Container -->
+      <div id="bento-grid-container" class="grid grid-cols-12 gap-6 transition-all duration-300">
+        <!-- Injected via app.js -->
+      </div>
+
+      <!-- Bottom Customization Banner -->
+      <div class="mt-14 p-8 rounded-3xl bg-alabaster border border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-[#0D0C0B] text-champagne flex items-center justify-center font-bold text-lg flex-shrink-0">
+            <i class="fa-solid fa-ruler-combined"></i>
+          </div>
+          <div>
+            <h4 class="font-heading font-bold text-[#0D0C0B] text-base">Custom Sizing, Wood Species & Finishes Available</h4>
+            <p class="text-xs text-stone-600 mt-0.5">Every design can be customized in Nilambur Teak, Mahogany, or Grade-E1 Particle Board to fit your space.</p>
+          </div>
+        </div>
+        <a 
+          href="#custom-quote" 
+          class="px-6 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0D0C0B] text-white hover:bg-teak transition-colors shadow-md flex-shrink-0 font-mono"
+        >
+          Request Custom Blueprint
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       5. INTERACTIVE MATERIAL COMPARATOR WITH METRIC BARS
+       ========================================================================= -->
+  <section id="material-comparator" class="py-20 lg:py-28 bg-alabaster relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-sage/10 text-sage mb-2 font-mono">
+          <i class="fa-solid fa-scale-balanced"></i> Transparency & Honesty
+        </span>
+        <h2 class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0D0C0B]">
+          Natural Wood vs. Engineered Board
+        </h2>
+        <p class="text-stone-600 text-sm sm:text-base mt-3 font-sans">
+          Compare our <strong>100% Seasoned Natural Wood</strong> and <strong>Premium Engineered Particle Board</strong> to make the optimal decision for your architectural space and budget.
+        </p>
+      </div>
+
+      <div class="flex items-center justify-center gap-2 mb-10">
+        <div class="bg-white p-1.5 rounded-full border border-stone-200 shadow-sm flex items-center gap-1 font-mono">
+          <button id="tab-wood-btn" class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0D0C0B] text-white shadow-md transition-all">
+            🌳 100% Seasoned Wood
+          </button>
+          <button id="tab-board-btn" class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-stone-700 hover:text-teak transition-all">
+            ⚙️ Engineered Board
+          </button>
+          <button id="tab-split-btn" class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-stone-700 hover:text-teak transition-all">
+            ⚖️ Side-by-Side Matrix
+          </button>
+        </div>
+      </div>
+
+      <div id="comparator-single-view" class="max-w-4xl mx-auto transition-all duration-300">
+        <!-- Rendered by app.js on load -->
+      </div>
+
+      <div id="comparator-split-view" class="hidden max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Natural Wood Column -->
+        <div class="p-8 md:p-10 rounded-3xl bg-white border-2 border-sage/40 shadow-xl relative flex flex-col justify-between">
+          <div class="absolute top-6 right-6">
+            <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-sage text-white font-mono">Generational</span>
+          </div>
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-sage/15 text-sage flex items-center justify-center text-xl font-bold mb-5 shadow-sm">
+              <i class="fa-solid fa-tree"></i>
+            </div>
+            <h3 class="font-heading text-2xl font-bold text-[#0D0C0B]">100% Seasoned Natural Wood</h3>
+            <p class="text-xs text-stone-500 mt-1 italic font-sans">Kiln-seasoned Nilambur Teak, Rosewood & Mahogany</p>
+
+            <ul class="mt-6 space-y-3.5 text-xs sm:text-sm text-stone-700 font-sans">
+              <li class="flex items-start gap-2.5">
+                <i class="fa-solid fa-circle-check text-sage mt-1"></i>
+                <span><strong>Lifespan:</strong> 40 to 60+ Years. Becomes a treasured family heirloom.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i class="fa-solid fa-circle-check text-sage mt-1"></i>
+                <span><strong>Ideal Use:</strong> Master cots/beds, 8-seater dining suites, heavy lounge chairs.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i class="fa-solid fa-circle-check text-sage mt-1"></i>
+                <span><strong>Monsoon Calibration:</strong> Kiln-dried in Erattupetta to 10-12% moisture to eliminate seasonal warping.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i class="fa-solid fa-circle-check text-sage mt-1"></i>
+                <span><strong>Restorability:</strong> Infinite re-sanding, staining, or lacquering over decades.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i class="fa-solid fa-shield-halved text-champagne mt-1"></i>
+                <span><strong>Homeify Warranty:</strong> 5-Year Full Structural & Timber Seasoning Guarantee.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-8 pt-5 border-t border-stone-200">
+            <span class="block text-xs font-bold text-sage uppercase font-mono">Best for:</span>
+            <span class="text-xs text-stone-600">Lifelong durability, rich organic grain, and architectural grandeur.</span>
+          </div>
+        </div>
+
+        <!-- Engineered Particle Board Column -->
+        <div class="p-8 md:p-10 rounded-3xl bg-white border-2 border-teak/40 shadow-xl relative flex flex-col justify-between">
+          <div class="absolute top-6 right-6">
+            <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-[#0D0C0B] text-white font-mono">Modern Agility</span>
+          </div>
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-teak/15 text-teak flex items-center justify-center text-xl font-bold mb-5 shadow-sm">
+              <i class="fa-solid fa-microchip"></i>
+            </div>
+            <h3 class="font-heading text-2xl font-bold text-[#0D0C0B]">Grade-E1 Particle Board</h3>
+            <p class="text-xs text-stone-500 mt-1 italic font-sans">High-Density Core with Hot-Melt PVC Edge Banding</p>
+
+            <ul class="mt-6 space-y-3.5 text-xs sm:text-sm text-stone-700 font-sans">
+              <li class="flex items-start gap-2.5">
+                <i class="fa-solid fa-circle-check text-teak mt-1"></i>
+                <span><strong>Lifespan:</strong> 12 to 18 Years with standard indoor care.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i class="fa-solid fa-circle-check text-teak mt-1"></i>
+                <span><strong>Ideal Use:</strong> Corporate workstations, executive credenzas, sliding wardrobes.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i class="fa-solid fa-circle-check text-teak mt-1"></i>
+                <span><strong>Surface Durability:</strong> Scratch, ink, and heat resistant melamine skins.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i class="fa-solid fa-circle-check text-teak mt-1"></i>
+                <span><strong>Budget Advantage:</strong> 35% – 50% more economical than solid timber.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i class="fa-solid fa-shield-halved text-champagne mt-1"></i>
+                <span><strong>Homeify Warranty:</strong> 5-Year Edge-Banding & Hardware Guarantee.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-8 pt-5 border-t border-stone-200">
+            <span class="block text-xs font-bold text-teak uppercase font-mono">Best for:</span>
+            <span class="text-xs text-stone-600">Clean lines, modular cable routing, and cost-effective commercial scale.</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Material Finder Helper -->
+      <div class="mt-14 max-w-3xl mx-auto p-6 sm:p-8 rounded-3xl bg-white border border-stone-200 shadow-md">
+        <div class="flex items-center gap-3.5 mb-4">
+          <div class="w-10 h-10 rounded-2xl bg-champagne text-[#0D0C0B] flex items-center justify-center font-bold">
+            <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+          </div>
+          <div>
+            <h4 class="font-heading text-lg sm:text-xl font-bold text-[#0D0C0B]">Need a Material Recommendation?</h4>
+            <p class="text-xs text-stone-500 font-sans">Answer 2 quick questions to find your match:</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1 font-mono uppercase">What space are you furnishing?</label>
+            <select id="quiz-space-select" class="w-full text-xs sm:text-sm p-3.5 rounded-2xl border border-stone-200 bg-[#FAF8F5] focus:border-[#0D0C0B] focus:outline-none font-sans">
+              <option value="bedroom">Master Bedroom / Cot</option>
+              <option value="dining">Family Dining Suite</option>
+              <option value="living">Living Room / Lounge</option>
+              <option value="office">Corporate Office / Workstations</option>
+              <option value="wardrobe">Modular Wardrobe / Storage</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1 font-mono uppercase">What is your top priority?</label>
+            <select id="quiz-priority-select" class="w-full text-xs sm:text-sm p-3.5 rounded-2xl border border-stone-200 bg-[#FAF8F5] focus:border-[#0D0C0B] focus:outline-none font-sans">
+              <option value="longevity">Lifelong 40+ Year Durability</option>
+              <option value="budget">Cost-Effective & Modern Look</option>
+              <option value="modular">Modular Cable Management</option>
+              <option value="heritage">Natural Kerala Heritage Grain</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="quiz-recommendation-result" class="mt-5">
+          <div class="p-5 rounded-2xl bg-[#2C4A38]/10 border border-[#2C4A38]/30 flex items-start gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-[#2C4A38] text-white flex items-center justify-center font-bold text-xl flex-shrink-0 shadow-md">🌳</div>
+            <div>
+              <h5 class="font-heading font-bold text-[#141210] text-base">Recommended: 100% Seasoned Natural Teak Wood</h5>
+              <p class="text-xs text-[#665F57] mt-1 font-sans">Perfect for master bedroom cots, royal dining suites, and statement living lounge pieces. Delivers generational heirloom life and superior joint resistance.</p>
+              <span class="inline-block mt-2.5 text-xs font-bold text-[#D4AF37] bg-[#0D0C0B] px-3 py-1 rounded-full font-mono">Covered by 5-Year Homeify Warranty</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       6. THE 5-YEAR WARRANTY & ERATTUPETTA PROMISE
+       ========================================================================= -->
+  <section id="warranty-promise" class="py-20 lg:py-28 bg-[#0D0C0B] text-[#FAF8F5] relative overflow-hidden">
+    
+    <div class="ambient-glow -top-32 -right-32 w-96 h-96 bg-champagne/15 pointer-events-none"></div>
+    <div class="ambient-glow -bottom-32 -left-32 w-96 h-96 bg-teak/20 pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-champagne text-[#0D0C0B] mb-3 font-mono">
+          <i class="fa-solid fa-certificate"></i> Homeify Quality Guarantee
+        </span>
+        <h2 class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-white">
+          The 5-Year Craftsmanship Promise
+        </h2>
+        <p class="text-stone-400 text-sm sm:text-base mt-3 font-sans">
+          Built at our dedicated workshop in Erattupetta with seasoned timbers, precision joinery, and an official 5-Year Manufacturing Warranty Certificate.
+        </p>
+      </div>
+
+      <div id="warranty-stats-section" class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
+        <div class="p-6 rounded-3xl glass-panel-dark text-center border border-white/10">
+          <span class="stat-counter font-heading text-4xl sm:text-5xl font-extrabold text-champagne" data-target="5" data-suffix=" Years">0</span>
+          <span class="block text-xs font-bold uppercase tracking-wider text-stone-300 mt-2 font-mono">Comprehensive Warranty</span>
+          <span class="text-[11px] text-stone-500 mt-1 block font-sans">Full factory guarantee</span>
+        </div>
+
+        <div class="p-6 rounded-3xl glass-panel-dark text-center border border-white/10">
+          <span class="stat-counter font-heading text-4xl sm:text-5xl font-extrabold text-white" data-target="100" data-suffix="%">0</span>
+          <span class="block text-xs font-bold uppercase tracking-wider text-stone-300 mt-2 font-mono">Seasoned Timber</span>
+          <span class="text-[11px] text-stone-500 mt-1 block font-sans">Kiln-dried & treated</span>
+        </div>
+
+        <div class="p-6 rounded-3xl glass-panel-dark text-center border border-white/10">
+          <span class="stat-counter font-heading text-4xl sm:text-5xl font-extrabold text-champagne" data-target="1250" data-suffix="+">0</span>
+          <span class="block text-xs font-bold uppercase tracking-wider text-stone-300 mt-2 font-mono">Spaces Furnished</span>
+          <span class="text-[11px] text-stone-500 mt-1 block font-sans">Across Kerala</span>
+        </div>
+
+        <div class="p-6 rounded-3xl glass-panel-dark text-center border border-white/10">
+          <span class="stat-counter font-heading text-4xl sm:text-5xl font-extrabold text-white" data-target="25" data-suffix="+">0</span>
+          <span class="block text-xs font-bold uppercase tracking-wider text-stone-300 mt-2 font-mono">Master Craftsmen</span>
+          <span class="text-[11px] text-stone-500 mt-1 block font-sans">Erattupetta workshop crew</span>
+        </div>
+      </div>
+
+      <div class="mb-16">
+        <div class="text-center mb-10">
+          <span class="text-xs font-bold text-teak-light tracking-widest uppercase font-mono">The Erattupetta Standard</span>
+          <h3 class="font-heading text-2xl sm:text-3xl font-bold text-white mt-1">4-Step Precision Workflow</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+          
+          <div class="p-6 rounded-3xl bg-[#161514] border border-white/10 hover:border-teak transition-colors group">
+            <span class="text-3xl font-heading font-extrabold text-champagne/40 group-hover:text-champagne transition-colors">01</span>
+            <div class="w-10 h-10 rounded-2xl bg-teak/20 text-teak flex items-center justify-center my-3 shadow-inner">
+              <i class="fa-solid fa-temperature-arrow-up"></i>
+            </div>
+            <h4 class="font-bold text-white text-base">Kiln Seasoning</h4>
+            <p class="text-xs text-stone-400 mt-2 leading-relaxed font-sans">
+              Timbers cured to 10-12% moisture in our chambers, preventing swelling during Kerala monsoons.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-3xl bg-[#161514] border border-white/10 hover:border-teak transition-colors group">
+            <span class="text-3xl font-heading font-extrabold text-champagne/40 group-hover:text-champagne transition-colors">02</span>
+            <div class="w-10 h-10 rounded-2xl bg-teak/20 text-teak flex items-center justify-center my-3 shadow-inner">
+              <i class="fa-solid fa-compass-drafting"></i>
+            </div>
+            <h4 class="font-bold text-white text-base">CAD & Silent Joinery</h4>
+            <p class="text-xs text-stone-400 mt-2 leading-relaxed font-sans">
+              Mortise & tenon joints paired with CNC edge-banding ensure rock-solid beds and squeak-free furniture.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-3xl bg-[#161514] border border-white/10 hover:border-teak transition-colors group">
+            <span class="text-3xl font-heading font-extrabold text-champagne/40 group-hover:text-champagne transition-colors">03</span>
+            <div class="w-10 h-10 rounded-2xl bg-teak/20 text-teak flex items-center justify-center my-3 shadow-inner">
+              <i class="fa-solid fa-wand-magic"></i>
+            </div>
+            <h4 class="font-bold text-white text-base">Cane & Hand Lacquer</h4>
+            <p class="text-xs text-stone-400 mt-2 leading-relaxed font-sans">
+              Artisanal cane weaving and 4-coat polyurethane finishes resist scratches, tea spills, and water rings.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-3xl bg-[#161514] border border-white/10 hover:border-champagne transition-colors group">
+            <span class="text-3xl font-heading font-extrabold text-champagne/40 group-hover:text-champagne transition-colors">04</span>
+            <div class="w-10 h-10 rounded-2xl bg-champagne/20 text-champagne flex items-center justify-center my-3 shadow-inner">
+              <i class="fa-solid fa-truck-ramp-box"></i>
+            </div>
+            <h4 class="font-bold text-white text-base">Warranty & Delivery</h4>
+            <p class="text-xs text-stone-400 mt-2 leading-relaxed font-sans">
+              White-glove installation across Kerala, backed by your signed 5-Year Guarantee Certificate.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-[#161514] to-[#0D0C0B] border border-champagne/30 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-8">
+        <div class="flex items-center gap-5">
+          <div class="w-16 h-16 rounded-2xl bg-champagne text-[#0D0C0B] flex items-center justify-center text-3xl font-bold flex-shrink-0 shadow-lg">
+            <i class="fa-solid fa-award"></i>
+          </div>
+          <div>
+            <h4 class="font-heading text-2xl font-bold text-white">What Does Our 5-Year Warranty Cover?</h4>
+            <p class="text-xs sm:text-sm text-stone-400 mt-1 max-w-xl font-sans">
+              Structural joints, timber borer protection, foam compression under normal usage, edge-band adhesion, and heavy-duty drawer hardware.
+            </p>
+          </div>
+        </div>
+
+        <a 
+          href="https://wa.me/919778446620?text=Hello%20Homeify%20Erattupetta!%20Please%20send%20me%20your%20official%205-Year%20Warranty%20terms%20and%20product%20catalog." 
+          target="_blank"
+          rel="noopener"
+          class="px-8 py-4 rounded-full text-xs font-bold uppercase tracking-wider bg-champagne text-[#0D0C0B] hover:bg-champagne-light transition-all shadow-xl flex items-center gap-2 flex-shrink-0 font-mono"
+        >
+          <i class="fa-brands fa-whatsapp text-base"></i>
+          <span>Chat on WhatsApp: 97784 46620</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       7. CUSTOM QUOTE & WHATSAPP CONFIGURATOR
+       ========================================================================= -->
+  <section id="custom-quote" class="py-20 lg:py-28 bg-white relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span class="text-xs font-bold uppercase tracking-widest text-teak font-mono block mb-2">Instant Estimation</span>
+        <h2 class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0D0C0B]">
+          Custom Quote & WhatsApp Configurator
+        </h2>
+        <p class="text-stone-600 text-sm sm:text-base mt-3 font-sans">
+          Configure your bespoke furniture requirement. Our Erattupetta workshop team will calculate direct factory costs and respond immediately on WhatsApp (+91 97784 46620).
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <div class="lg:col-span-8 p-6 sm:p-10 rounded-3xl bg-alabaster border border-stone-200 shadow-sm space-y-8">
+          
+          <!-- Step 1: Space Type -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-3 font-mono">
+              Step 1: Space Type
+            </label>
+            <div class="grid grid-cols-2 gap-3 sm:gap-4">
+              <button 
+                type="button" 
+                class="quote-space-btn py-4 px-4 rounded-2xl font-bold text-xs uppercase tracking-wider bg-[#0D0C0B] text-white border border-[#0D0C0B] shadow-sm flex items-center justify-center gap-2 transition-all font-mono"
+                data-space="Home"
+              >
+                <i class="fa-solid fa-house"></i>
+                <span>Residential / Home</span>
+              </button>
+              <button 
+                type="button" 
+                class="quote-space-btn py-4 px-4 rounded-2xl font-bold text-xs uppercase tracking-wider bg-white text-stone-700 border border-stone-200 hover:border-[#0D0C0B] shadow-sm flex items-center justify-center gap-2 transition-all font-mono"
+                data-space="Office"
+              >
+                <i class="fa-solid fa-building"></i>
+                <span>Commercial / Office</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 2: Furniture Needed -->
+          <div>
+            <div class="flex items-center justify-between mb-3 font-mono">
+              <label class="block text-xs font-bold uppercase tracking-wider text-stone-500">
+                Step 2: Furniture Items Needed
+              </label>
+              <span id="quote-selected-count" class="text-xs font-bold text-teak">2 Items Selected</span>
+            </div>
+            
+            <div class="flex flex-wrap gap-2.5 font-sans">
+              <button type="button" class="quote-item-pill px-4 py-3 rounded-2xl text-xs sm:text-sm font-semibold border bg-sage text-white border-sage transition-all flex items-center gap-2" data-item="Sofa Set">
+                <i class="fa-solid fa-couch text-xs"></i> Luxury Sofa Set
+              </button>
+              
+              <button type="button" class="quote-item-pill px-4 py-3 rounded-2xl text-xs sm:text-sm font-semibold border bg-sage text-white border-sage transition-all flex items-center gap-2" data-item="Solid Wood Cot/Bed">
+                <i class="fa-solid fa-bed text-xs"></i> Solid Wood Cot / Bed
+              </button>
+
+              <button type="button" class="quote-item-pill px-4 py-3 rounded-2xl text-xs sm:text-sm font-semibold border bg-white text-stone-700 border-stone-200 hover:border-teak transition-all flex items-center gap-2" data-item="Dining Table & Cane Chairs">
+                <i class="fa-solid fa-utensils text-xs"></i> Dining Table & Cane Chairs
+              </button>
+
+              <button type="button" class="quote-item-pill px-4 py-3 rounded-2xl text-xs sm:text-sm font-semibold border bg-white text-stone-700 border-stone-200 hover:border-teak transition-all flex items-center gap-2" data-item="Frosted Glass Coffee Table">
+                <i class="fa-solid fa-mug-hot text-xs"></i> Frosted Glass Coffee Table
+              </button>
+
+              <button type="button" class="quote-item-pill px-4 py-3 rounded-2xl text-xs sm:text-sm font-semibold border bg-white text-stone-700 border-stone-200 hover:border-teak transition-all flex items-center gap-2" data-item="Office Workstation / Desk">
+                <i class="fa-solid fa-briefcase text-xs"></i> Modular Office Desk
+              </button>
+
+              <button type="button" class="quote-item-pill px-4 py-3 rounded-2xl text-xs sm:text-sm font-semibold border bg-white text-stone-700 border-stone-200 hover:border-teak transition-all flex items-center gap-2" data-item="Decorative Wooden Wall Panel">
+                <i class="fa-solid fa-border-all text-xs"></i> Decorative Wall Panel
+              </button>
+
+              <button type="button" class="quote-item-pill px-4 py-3 rounded-2xl text-xs sm:text-sm font-semibold border bg-white text-stone-700 border-stone-200 hover:border-teak transition-all flex items-center gap-2" data-item="Custom Wardrobe & Storage">
+                <i class="fa-solid fa-door-closed text-xs"></i> Custom Wardrobes
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3: Material Preference -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-3 font-mono">
+              Step 3: Material Preference
+            </label>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <button 
+                type="button" 
+                class="quote-material-btn p-4 rounded-2xl border-2 border-teak bg-teak/10 text-left transition-all"
+                data-material="100% Seasoned Natural Wood"
+              >
+                <span class="block text-xs font-bold text-espresso font-mono">🌳 100% Natural Wood</span>
+                <span class="text-[11px] text-stone-500 block mt-0.5">Kiln-seasoned teak / mahogany</span>
+              </button>
+
+              <button 
+                type="button" 
+                class="quote-material-btn p-4 rounded-2xl border-2 border-stone-200 hover:border-teak bg-white text-left transition-all"
+                data-material="Premium Engineered Particle Board"
+              >
+                <span class="block text-xs font-bold text-espresso font-mono">⚙️ Engineered Board</span>
+                <span class="text-[11px] text-stone-500 block mt-0.5">Grade-E1 scratch-resistant</span>
+              </button>
+
+              <button 
+                type="button" 
+                class="quote-material-btn p-4 rounded-2xl border-2 border-stone-200 hover:border-teak bg-white text-left transition-all"
+                data-material="Hybrid (Recommended Blend)"
+              >
+                <span class="block text-xs font-bold text-espresso font-mono">✨ Hybrid Blend</span>
+                <span class="text-[11px] text-stone-500 block mt-0.5">Solid fronts + engineered core</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 4: Scale Slider -->
+          <div>
+            <div class="flex items-center justify-between mb-2 font-mono">
+              <label class="block text-xs font-bold uppercase tracking-wider text-stone-500">
+                Step 4: Room Size / Project Scale
+              </label>
+              <span id="quote-scale-label" class="text-xs font-bold text-teak">Standard Residence / Floor</span>
+            </div>
+            <input id="quote-scale-slider" type="range" min="1" max="3" step="1" value="2" class="cursor-pointer">
+            <div class="flex justify-between text-[11px] text-stone-400 mt-1 font-mono">
+              <span>Compact Room</span>
+              <span>Standard Residence</span>
+              <span>Grand Villa / Corporate</span>
+            </div>
+          </div>
+
+          <!-- Contact Inputs -->
+          <div class="pt-4 border-t border-stone-200 grid grid-cols-1 sm:grid-cols-3 gap-4 font-sans">
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1 font-mono uppercase">Your Name</label>
+              <input id="quote-client-name" type="text" placeholder="e.g. Thomas Mathew" class="w-full text-xs p-3.5 rounded-2xl border border-stone-200 bg-white focus:border-[#0D0C0B] focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1 font-mono uppercase">Your WhatsApp Phone</label>
+              <input id="quote-client-phone" type="tel" placeholder="+91 97784..." class="w-full text-xs p-3.5 rounded-2xl border border-stone-200 bg-white focus:border-[#0D0C0B] focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-stone-700 mb-1 font-mono uppercase">Your Kerala Location</label>
+              <input id="quote-client-location" type="text" placeholder="e.g. Erattupetta / Pala / Kottayam" class="w-full text-xs p-3.5 rounded-2xl border border-stone-200 bg-white focus:border-[#0D0C0B] focus:outline-none">
+            </div>
+            <div class="sm:col-span-3">
+              <label class="block text-xs font-bold text-stone-700 mb-1 font-mono uppercase">Custom Notes / Dimensions (Optional)</label>
+              <input id="quote-client-notes" type="text" placeholder="e.g., King size cot with hydraulic storage, 6-seater cane dining in dark teak finish" class="w-full text-xs p-3.5 rounded-2xl border border-stone-200 bg-white focus:border-[#0D0C0B] focus:outline-none">
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Live Estimate Breakdown -->
+        <div class="lg:col-span-4 sticky top-28 space-y-6">
+          <div class="p-8 rounded-3xl bg-[#0D0C0B] text-[#FAF8F5] shadow-2xl border border-white/10 space-y-6">
+            
+            <div class="flex items-center justify-between pb-4 border-b border-stone-800 font-mono">
+              <span class="text-xs uppercase font-bold text-champagne tracking-wider">Estimated Factory Budget</span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/10 text-stone-300">Direct Pricing</span>
+            </div>
+
+            <div>
+              <span class="text-xs text-stone-400 block mb-1 font-sans">Factory Direct Estimate Range:</span>
+              <div id="quote-est-range" class="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                ₹55,000 – ₹72,000
+              </div>
+              <span class="text-[11px] text-stone-400 block mt-1 font-sans">*Final quote confirmed after site visit</span>
+            </div>
+
+            <div class="space-y-3 pt-3 border-t border-stone-800 text-xs font-sans">
+              <div class="flex items-center justify-between">
+                <span class="text-stone-400">Crafting Timeline:</span>
+                <span id="quote-est-days" class="font-bold text-white font-mono">11 – 16 Working Days</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-stone-400">Warranty Coverage:</span>
+                <span class="font-bold text-champagne font-mono">5-Year Manufacturing Guarantee</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-stone-400">Destination WhatsApp:</span>
+                <span class="font-bold text-emerald-400 font-mono">+91 97784 46620</span>
+              </div>
+            </div>
+
+            <button 
+              id="quote-whatsapp-submit"
+              type="button" 
+              class="w-full py-4 px-6 rounded-2xl font-bold text-xs uppercase tracking-wider bg-[#25D366] text-white hover:bg-[#20bd5a] transition-all shadow-xl shadow-[#25D366]/30 flex items-center justify-center gap-2 transform hover:-translate-y-0.5 font-mono"
+            >
+              <i class="fa-brands fa-whatsapp text-xl"></i>
+              <span>Send to WhatsApp (97784 46620)</span>
+            </button>
+
+            <p class="text-[11px] text-center text-stone-400 font-mono">
+              ⚡ Instant response from our Erattupetta workshop team.
+            </p>
+
+          </div>
+
+          <div class="p-6 rounded-3xl bg-white border border-stone-200 flex items-center gap-4 shadow-sm">
+            <div class="w-12 h-12 rounded-2xl bg-teak/10 text-teak flex items-center justify-center font-bold text-xl flex-shrink-0">
+              <i class="fa-solid fa-phone-volume"></i>
+            </div>
+            <div class="text-xs">
+              <span class="font-heading font-bold text-[#0D0C0B] text-sm block">Direct Workshop Line</span>
+              <a href="tel:+919778446620" class="text-teak font-mono font-bold text-sm block mt-0.5 hover:underline">+91 97784 46620</a>
+              <span class="text-stone-500 block text-[11px]">Mon – Sat: 8:30 AM – 7:30 PM</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       8. ERATTUPETTA WORKSHOP HERITAGE
+       ========================================================================= -->
+  <section id="workshop-heritage" class="py-20 lg:py-28 bg-alabaster relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <div class="lg:col-span-6 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teak/10 text-teak text-xs font-bold uppercase tracking-widest font-mono">
+            <i class="fa-solid fa-compass"></i> Erattupetta, Kottayam District, Kerala
+          </div>
+
+          <h2 class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0D0C0B] leading-tight">
+            Rooted in Erattupetta's Woodworking Heritage
+          </h2>
+
+          <p class="text-stone-600 text-sm sm:text-base leading-relaxed font-sans">
+            Nestled at the foothills of the High Ranges along the Meenachil River basin, <strong>Erattupetta</strong> is celebrated for access to pristine forest timbers and multi-generational carpentry wisdom.
+          </p>
+
+          <p class="text-stone-600 text-sm sm:text-base leading-relaxed font-sans">
+            At <strong>Homeify Furniture</strong>, we combine mortise-and-tenon woodcraft with modern computerized edge-banding and precision sanding machinery. When you order from us, you deal directly with the master craftsmen who shape your wood.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <div class="p-5 rounded-2xl bg-white border border-stone-200">
+              <span class="text-xs font-bold text-teak block uppercase tracking-wider font-mono">Workshop Address</span>
+              <p class="text-xs text-stone-700 mt-1 font-medium font-sans">
+                Homeify Furniture Works<br>
+                Main Road, Erattupetta,<br>
+                Kottayam District, Kerala - 686121
+              </p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white border border-stone-200">
+              <span class="text-xs font-bold text-teak block uppercase tracking-wider font-mono">Direct Workshop Line</span>
+              <p class="text-xs text-stone-700 mt-1 font-medium font-mono">
+                Phone: +91 97784 46620<br>
+                WhatsApp: +91 97784 46620<br>
+                Email: hello@homeifyfurniture.com
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-4 pt-2">
+            <a 
+              href="https://maps.google.com/?q=Erattupetta,Kottayam,Kerala" 
+              target="_blank" 
+              rel="noopener"
+              class="px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0D0C0B] text-white hover:bg-stone-800 transition-colors flex items-center gap-2 font-mono"
+            >
+              <i class="fa-solid fa-diamond-turn-right text-champagne"></i>
+              <span>Get Directions to Workshop</span>
+            </a>
+
+            <a 
+              href="https://wa.me/919778446620?text=Hello%20Homeify!%20I%20would%20like%20to%20schedule%20a%20visit%20to%20your%20Erattupetta%20workshop." 
+              target="_blank" 
+              rel="noopener"
+              class="px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-stone-800 hover:bg-stone-50 border border-stone-200 transition-colors flex items-center gap-2 font-mono"
+            >
+              <i class="fa-regular fa-calendar-check text-teak"></i>
+              <span>Schedule Workshop Visit</span>
+            </a>
+          </div>
+
+        </div>
+
+        <div class="lg:col-span-6 grid grid-cols-2 gap-4">
+          <div class="space-y-4">
+            <div class="rounded-3xl overflow-hidden shadow-md aspect-[3/4] bg-stone-200">
+              <img 
+                src="assets/artisanal-slated-workshop.jpg" 
+                alt="Craftsman planing seasoned wood at Erattupetta workshop" 
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+            <div class="p-5 rounded-2xl bg-white border border-stone-200 text-center">
+              <span class="block font-heading text-xl font-bold text-teak">Nilambur Teak</span>
+              <span class="text-[11px] text-stone-500 font-mono">Government auction logs</span>
+            </div>
+          </div>
+
+          <div class="space-y-4 pt-6">
+            <div class="p-5 rounded-2xl bg-white border border-stone-200 text-center">
+              <span class="block font-heading text-xl font-bold text-sage">5-Year Warranty</span>
+              <span class="text-[11px] text-stone-500 font-mono">Official certificate</span>
+            </div>
+            <div class="rounded-3xl overflow-hidden shadow-md aspect-[3/4] bg-stone-200">
+              <img 
+                src="assets/timber-cot-6ft.jpg" 
+                alt="Pure natural wood grain detail" 
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       9. ARCHITECTURAL SHOWCASE & REVIEWS
+       ========================================================================= -->
+  <section class="py-20 lg:py-28 bg-white border-t border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span class="text-xs font-bold uppercase tracking-widest text-teak font-mono block mb-2">Client Testimonials</span>
+        <h2 class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0D0C0B]">
+          Trusted Across Kerala Residences
+        </h2>
+        <p class="text-stone-600 text-sm sm:text-base mt-3 font-sans">
+          From Kottayam villas to Cochin commercial setups, hear from our clients who chose Homeify Furniture.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <div class="p-8 rounded-3xl bg-alabaster border border-stone-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-1 text-champagne mb-4">
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-stone-700 text-sm leading-relaxed italic font-sans">
+              "We ordered a complete teak bedroom cot and 8-seater cane dining set for our new home in Pala. The wood seasoning is flawless — zero creaks or shrinkage even after two monsoon cycles. Having the 5-year written warranty gave us immense confidence."
+            </p>
+          </div>
+          <div class="pt-6 mt-6 border-t border-stone-200 flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-2xl bg-teak text-white flex items-center justify-center font-bold text-sm">
+              BC
+            </div>
+            <div>
+              <span class="block font-bold text-[#0D0C0B] text-sm">Adv. Binu Cherian</span>
+              <span class="text-xs text-stone-500 font-mono">Pala, Kottayam District</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-8 rounded-3xl bg-alabaster border border-stone-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-1 text-champagne mb-4">
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-stone-700 text-sm leading-relaxed italic font-sans">
+              "As an interior architect working across Central Travancore, Homeify Furniture is our first choice for custom modular office workstations and acoustic fluted wall panels. The factory-direct pricing in Erattupetta beats Kochi showrooms by 30%."
+            </p>
+          </div>
+          <div class="pt-6 mt-6 border-t border-stone-200 flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-2xl bg-sage text-white flex items-center justify-center font-bold text-sm">
+              RJ
+            </div>
+            <div>
+              <span class="block font-bold text-[#0D0C0B] text-sm">Ar. Riya Joseph</span>
+              <span class="text-xs text-stone-500 font-mono">Kottayam Design Studio</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-8 rounded-3xl bg-alabaster border border-stone-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-1 text-champagne mb-4">
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-stone-700 text-sm leading-relaxed italic font-sans">
+              "The frosted glass-top teak coffee table and custom sectional sofa are the crown jewels of our living room. Homeify visited our house in Erattupetta for laser measurements and delivered on the exact promised date."
+            </p>
+          </div>
+          <div class="pt-6 mt-6 border-t border-stone-200 flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-2xl bg-[#0D0C0B] text-champagne flex items-center justify-center font-bold text-sm">
+              FM
+            </div>
+            <div>
+              <span class="block font-bold text-[#0D0C0B] text-sm">Faisal Mohammed</span>
+              <span class="text-xs text-stone-500 font-mono">Erattupetta Town</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       10. MODERN FOOTER
+       ========================================================================= -->
+  <footer class="bg-[#0D0C0B] text-[#FAF8F5] pt-16 pb-12 border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/10">
+        
+        <div class="lg:col-span-2 space-y-4">
+          <div class="h-12 flex items-center mb-2">
+            <img src="assets/homeify-logo-cropped.png" alt="Homeify Furniture - Furniture with a touch of artistry" class="h-11 w-auto object-contain">
+          </div>
+          <p class="text-stone-400 text-xs sm:text-sm leading-relaxed max-w-sm font-sans">
+            Premier furniture manufacturing workshop in <strong>Erattupetta, Kottayam District, Kerala</strong>. Crafted from 100% seasoned natural wood and high-density engineered particle boards.
+          </p>
+          <div class="flex items-center gap-2 pt-2 font-mono">
+            <span class="px-3 py-1 rounded-full bg-champagne text-[#0D0C0B] text-[10px] font-bold uppercase tracking-wider">
+              5-Year Warranty
+            </span>
+            <span class="px-3 py-1 rounded-full bg-white/10 text-stone-300 text-[10px] font-bold uppercase tracking-wider">
+              Direct Workshop Pricing
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-stone-300 block mb-3 font-mono">Collections</span>
+          <ul class="space-y-2 text-xs text-stone-400 font-sans">
+            <li><a href="#gallery" class="hover:text-champagne transition-colors">Luxury Custom Sofas</a></li>
+            <li><a href="#gallery" class="hover:text-champagne transition-colors">Solid Teak Cots & Beds</a></li>
+            <li><a href="#gallery" class="hover:text-champagne transition-colors">Cane Dining Suites</a></li>
+            <li><a href="#gallery" class="hover:text-champagne transition-colors">Frosted Glass Tables</a></li>
+            <li><a href="#gallery" class="hover:text-champagne transition-colors">Modular Workstations</a></li>
+            <li><a href="#gallery" class="hover:text-champagne transition-colors">Acoustic Fluted Panels</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-stone-300 block mb-3 font-mono">Company</span>
+          <ul class="space-y-2 text-xs text-stone-400 font-sans">
+            <li><a href="#material-comparator" class="hover:text-champagne transition-colors">Wood vs. Particle Board</a></li>
+            <li><a href="#warranty-promise" class="hover:text-champagne transition-colors">5-Year Warranty Policy</a></li>
+            <li><a href="#workshop-heritage" class="hover:text-champagne transition-colors">Erattupetta Workshop</a></li>
+            <li><a href="#custom-quote" class="hover:text-champagne transition-colors">WhatsApp Quote Configurator</a></li>
+            <li><a href="tel:+919778446620" class="hover:text-champagne transition-colors">Call: +91 97784 46620</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-stone-300 block mb-3 font-mono">Workshop Contacts</span>
+          <p class="text-xs text-stone-400 leading-relaxed font-sans">
+            Homeify Furniture Works<br>
+            Main Road, Erattupetta,<br>
+            Kottayam District, Kerala - 686121
+          </p>
+          <div class="mt-4 space-y-1.5 text-xs text-stone-400 font-mono">
+            <p><i class="fa-solid fa-phone text-teak-light mr-1.5"></i> +91 97784 46620</p>
+            <p><i class="fa-brands fa-whatsapp text-emerald-400 mr-1.5"></i> +91 97784 46620</p>
+            <p><i class="fa-solid fa-envelope text-champagne mr-1.5"></i> hello@homeifyfurniture.com</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500 font-mono">
+        <div>
+          &copy; 2026 Homeify Furniture. Erattupetta, Kottayam, Kerala.
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="#" class="hover:text-stone-300 transition-colors">Privacy</a>
+          <span>•</span>
+          <a href="#" class="hover:text-stone-300 transition-colors">Warranty Terms</a>
+          <span>•</span>
+          <a href="https://wa.me/919778446620" class="hover:text-emerald-400 transition-colors">WhatsApp: 97784 46620</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       11. INTERACTIVE QUICK-VIEW LIGHTBOX MODAL
+       ========================================================================= -->
+  <div id="product-lightbox-modal" class="modal-overlay modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#0D0C0B]/80 backdrop-blur-md">
+    <div class="modal-container relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-stone-200 flex flex-col md:flex-row overflow-hidden">
+      
+      <button id="modal-close-btn" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-[#0D0C0B]/80 hover:bg-[#0D0C0B] text-white flex items-center justify-center transition-colors shadow-md" aria-label="Close modal">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
+      <div class="md:w-1/2 relative bg-stone-100 min-h-[300px] md:min-h-full">
+        <img 
+          id="modal-product-img" 
+          src="" 
+          alt="Homeify Furniture Product" 
+          class="w-full h-full object-cover"
+        />
+        <div class="absolute top-4 left-4">
+          <span id="modal-material-badge" class="px-3.5 py-1 rounded-full text-xs font-semibold bg-sage text-white shadow-md font-mono">
+            100% Seasoned Natural Wood
+          </span>
+        </div>
+      </div>
+
+      <div class="md:w-1/2 p-6 sm:p-8 flex flex-col justify-between space-y-5 bg-white">
+        <div>
+          <div class="flex items-center justify-between text-xs text-teak font-bold uppercase tracking-wider mb-1 font-mono">
+            <span id="modal-product-category">Living & Sofas</span>
+            <span class="flex items-center gap-1 text-[#0D0C0B] bg-champagne px-2.5 py-0.5 rounded-full font-bold text-[10px]">
+              <i class="fa-solid fa-shield-halved"></i> 5-Year Warranty
+            </span>
+          </div>
+
+          <h3 id="modal-product-title" class="font-heading text-2xl sm:text-3xl font-extrabold text-[#0D0C0B] leading-snug">
+            Product Title
+          </h3>
+
+          <p id="modal-product-desc" class="text-xs sm:text-sm text-stone-600 mt-2 leading-relaxed font-sans">
+            Product description details.
+          </p>
+
+          <div class="mt-4 pt-4 border-t border-stone-200 space-y-2.5 text-xs font-sans">
+            <div class="flex items-start justify-between">
+              <span class="text-stone-400 font-medium">Material Composition:</span>
+              <span id="modal-product-material" class="font-bold text-stone-800 text-right max-w-[220px]">Natural Teak</span>
+            </div>
+            <div class="flex items-start justify-between">
+              <span class="text-stone-400 font-medium">Dimensions:</span>
+              <span id="modal-product-dimensions" class="font-bold text-stone-800 text-right font-mono">Standard</span>
+            </div>
+            <div class="flex items-start justify-between">
+              <span class="text-stone-400 font-medium">Surface Polish:</span>
+              <span id="modal-product-finish" class="font-bold text-stone-800 text-right max-w-[220px]">Matte Polyurethane</span>
+            </div>
+            <div class="flex items-start justify-between">
+              <span class="text-stone-400 font-medium">Erattupetta Lead Time:</span>
+              <span id="modal-product-leadtime" class="font-bold text-sage text-right font-mono">8 to 12 Days</span>
+            </div>
+            <div class="flex items-start justify-between">
+              <span class="text-stone-400 font-medium">Warranty Certificate:</span>
+              <span id="modal-product-warranty" class="font-bold text-champagne-dark text-right font-mono">5-Year Structural</span>
+            </div>
+            <div class="flex items-start justify-between">
+              <span class="text-stone-400 font-medium">Showroom Retail MRP:</span>
+              <span id="modal-product-mrp" class="line-through text-stone-400 text-right font-mono text-xs">₹36,000</span>
+            </div>
+            <div class="flex items-start justify-between pt-1">
+              <span class="text-stone-700 font-bold">Direct Factory Price:</span>
+              <div class="text-right">
+                <span id="modal-product-price" class="font-black text-[#2C4A38] text-right text-base sm:text-lg font-mono">₹24,000</span>
+                <span id="modal-product-savings" class="block text-[10px] text-emerald-600 font-bold font-mono">Save 33% Factory Direct</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-4 border-t border-stone-200">
+            <span class="text-xs font-bold text-stone-700 block mb-2 font-mono uppercase">Key Highlights:</span>
+            <ul id="modal-product-features" class="space-y-1.5 font-sans">
+              <!-- Injected via JS -->
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-stone-200 flex flex-col sm:flex-row gap-3 font-mono">
+          <a 
+            id="modal-whatsapp-btn" 
+            href="#" 
+            target="_blank" 
+            rel="noopener"
+            class="flex-1 py-3.5 px-4 rounded-2xl font-bold text-xs uppercase tracking-wider bg-[#25D366] text-white hover:bg-[#20bd5a] transition-all shadow-md flex items-center justify-center gap-2 text-center"
+          >
+            <i class="fa-brands fa-whatsapp text-base"></i>
+            <span>WhatsApp (97784 46620)</span>
+          </a>
+
+          <button 
+            id="modal-add-to-quote-btn" 
+            type="button" 
+            class="py-3.5 px-4 rounded-2xl font-bold text-xs uppercase tracking-wider bg-[#0D0C0B] text-white hover:bg-teak transition-all shadow-sm flex items-center justify-center gap-2"
+          >
+            <i class="fa-solid fa-plus"></i>
+            <span>Add to Quote</span>
+          </button>
+        </div>
+
+        <!-- Thumbnail strip at bottom of modal -->
+        <div class="pt-3 border-t border-stone-200">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-[10px] font-mono font-bold text-stone-500 uppercase tracking-wider">
+              <i class="fa-solid fa-images mr-1 text-teak"></i> All Product Thumbnails:
+            </span>
+            <span class="text-[9px] font-mono text-stone-400">Click to preview</span>
+          </div>
+          <div id="modal-thumbnail-strip" class="flex items-center gap-2 overflow-x-auto pb-1 max-h-20 scrollbar-thin">
+            <!-- Injected via app.js -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       12. INTERACTIVE PHOTO & LOGO CUSTOMIZER STUDIO MODAL
+       ========================================================================= -->
+  <div id="customizer-modal" class="modal-overlay modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#0D0C0B]/85 backdrop-blur-md">
+    <div class="modal-container relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-stone-200 p-6 sm:p-8 flex flex-col space-y-6">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-4 border-b border-stone-200">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-teak font-mono">Workshop Management Studio</span>
+          <h3 class="font-heading text-2xl font-extrabold text-[#0D0C0B]">Manage MRP, Prices, Photos & Logo</h3>
+          <p class="text-xs text-stone-500 mt-0.5 font-sans">
+            Easily change Showroom MRPs, Direct Factory Offer Prices, or replace photos. Changes update live immediately!
+          </p>
+        </div>
+        <button id="customizer-close-btn" class="w-10 h-10 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition-colors">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
+      </div>
+
+      <!-- SECTION 1: LOGO CUSTOMIZATION -->
+      <div class="p-6 rounded-2xl bg-[#FAF8F5] border border-stone-200 space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h4 class="font-heading text-lg font-bold text-[#0D0C0B]">1. Company Logo</h4>
+            <p class="text-xs text-stone-500">Currently using the new Haute Architectural H-F Monogram vector logo or your uploaded logo.</p>
+          </div>
+          <button id="customizer-reset-logo-btn" class="px-3 py-1.5 rounded-lg border border-stone-200 bg-white text-xs font-mono font-semibold text-stone-600 hover:text-[#0D0C0B]">
+            Restore Default Logo
+          </button>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center gap-6 pt-2">
+          <!-- Active Preview -->
+          <div class="w-24 h-20 rounded-2xl bg-[#0D0C0B] border border-stone-800 p-2 flex items-center justify-center shadow-lg flex-shrink-0">
+            <img id="customizer-logo-preview" src="assets/homeify-logo-cropped.png" alt="Active Logo Preview" class="w-full h-full object-contain">
+          </div>
+
+          <!-- Upload Controls -->
+          <div class="flex-1 w-full space-y-2">
+            <label class="w-full py-3 px-4 rounded-xl bg-[#0D0C0B] text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer hover:bg-teak transition-colors shadow-sm">
+              <i class="fa-solid fa-cloud-arrow-up text-sm"></i>
+              <span>Upload Custom Logo (PNG / SVG / JPG)</span>
+              <input id="customizer-logo-file" type="file" accept="image/*" class="hidden">
+            </label>
+            <p class="text-[11px] text-stone-500 font-sans">
+              Currently using official logo at <code class="bg-stone-200 px-1.5 py-0.5 rounded font-mono text-stone-800">assets/homeify-logo-dark-text.png</code>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: PRODUCT MRP, PRICES & PHOTOS MANAGER -->
+      <div class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-amber-50/80 border border-amber-200">
+          <div>
+            <h4 class="font-heading text-lg font-bold text-amber-950 flex items-center gap-2">
+              <i class="fa-solid fa-tag text-teak"></i>
+              <span>2. Product MRP, Factory Prices & Photos</span>
+            </h4>
+            <p class="text-xs text-amber-900 mt-0.5 font-sans">
+              Modify the showroom MRP, factory price, or upload photos below. Click <strong>"Save Price"</strong> on any item to apply immediately!
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+            <button onclick="resetAllProductPrices()" class="px-3.5 py-1.5 rounded-xl border border-stone-300 bg-white text-stone-700 text-xs font-mono font-bold hover:bg-stone-100 transition-colors shadow-sm">
+              <i class="fa-solid fa-rotate-left mr-1"></i> Reset Prices
+            </button>
+            <button onclick="resetAllCustomMedia()" class="px-3.5 py-1.5 rounded-xl border border-red-200 bg-red-50 text-red-600 text-xs font-mono font-bold hover:bg-red-100 transition-colors shadow-sm">
+              <i class="fa-solid fa-rotate-left mr-1"></i> Reset Photos
+            </button>
+          </div>
+        </div>
+
+        <!-- How to Change in Source Code Guide -->
+        <div class="p-3.5 rounded-xl bg-stone-100 border border-stone-200 text-xs text-stone-700 font-sans flex items-start gap-2.5">
+          <i class="fa-solid fa-code text-teak mt-0.5 flex-shrink-0"></i>
+          <div>
+            <span class="font-bold">Permanent Code Editing Guide:</span> You can also directly change the MRP and prices in <code class="bg-stone-200 px-1.5 py-0.5 rounded font-mono font-semibold text-stone-900">app.js</code> inside <code class="font-mono text-teak">DEFAULT_PRODUCTS</code> by updating the <code class="font-mono">mrp: '₹...'</code> and <code class="font-mono">factoryPrice: '₹...'</code> values!
+          </div>
+        </div>
+
+        <!-- Products Grid Container -->
+        <div id="customizer-products-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[55vh] overflow-y-auto pr-1">
+          <!-- Populated by app.js with photo preview + MRP inputs + Price inputs -->
+        </div>
+      </div>
+
+      <!-- Footer helper -->
+      <div class="pt-4 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
+        <div class="font-sans">
+          💡 Uploaded photos are stored locally in your browser and survive page reloads!
+        </div>
+        <button onclick="closeCustomizer()" class="px-6 py-2.5 rounded-full bg-[#0D0C0B] text-white font-mono text-xs font-bold uppercase tracking-wider hover:bg-teak transition-colors">
+          Done & View Website
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       13. FLOATING WHATSAPP BUTTON (Pointing to 9778446620)
+       ========================================================================= -->
+  <a 
+    href="https://wa.me/919778446620?text=Hello%20Homeify%20Furniture%20(Erattupetta)!%20I%20would%20like%20to%20discuss%20custom%20furniture." 
+    target="_blank" 
+    rel="noopener"
+    class="wa-float-btn fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center text-2xl shadow-2xl transition-all duration-300"
+    aria-label="Direct WhatsApp Chat on 9778446620"
+  >
+    <i class="fa-brands fa-whatsapp"></i>
+    <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-champagne text-[#0D0C0B] font-bold text-[9px] flex items-center justify-center animate-pulse">
+      1
+    </span>
+  </a>
+
+  <!-- JavaScript Engine -->
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+# Homeify Furniture | Official Showcase & Digital Experience
+
+> **Location:** Erattupetta, Kottayam District, Kerala  
+> **Direct Workshop WhatsApp & Call:** **+91 97784 46620**  
+> **Brand Aesthetic:** *"Haute Modern Architectural Ergonomics meets Kerala Woodcraft"*  
+> **Key Value Proposition:** 5-Year Comprehensive Manufacturing Warranty, 100% Seasoned Natural Wood & Premium Engineered Particle Board, Direct-from-Factory Pricing.
+
+---
+
+## 🌟 Executive Overview
+
+**Homeify Furniture** is a premier furniture manufacturing company and workshop located in **Erattupetta, Kottayam District, Kerala**. 
+
+This single-page showcase has been completely redesigned with an **ultra-modern aesthetic**, combining architectural minimalism, high-contrast typography (*Syne* + *Plus Jakarta Sans*), ambient luminous glows, interactive metric comparisons, and real-time WhatsApp quoting directed to **+91 97784 46620**.
+
+---
+
+## 🎨 Design System & Modern Visual Identity
+
+### 1. Color Palette
+- **Primary Canvas:** Warm Alabaster / Soft Cream Chalk (`#FAF8F5`)
+- **Secondary Dark Sections:** Deep Obsidian Charcoal (`#0D0C0B`)
+- **Primary Accent:** Warm Teak Bronze (`#9E6738`)
+- **Secondary Accents:**
+  - Forest Sage (`#2C4A38`) — representing Nilambur seasoned timber & organic sustainability
+  - Champagne Gold (`#D4AF37`) — highlighting the **5-Year Warranty** seals and badges
+
+### 2. Typography
+- **Primary Display & Headings:** *Syne* & *Playfair Display* (Google Fonts)
+- **Editorial Sub-Headings:** *Cormorant Garamond* (Google Fonts)
+- **UI Elements, Metrics & Mono Labels:** *Plus Jakarta Sans* & Technical Monospace
+
+---
+
+## 📱 WhatsApp Integration: +91 97784 46620
+
+All contact points throughout the entire website are pre-wired to the workshop number **9778446620**:
+1. **Top Utility Bar:** Direct link to WhatsApp and call line `+91 97784 46620`.
+2. **Navigation Header & Mobile Drawer:** One-click WhatsApp button to `+91 97784 46620`.
+3. **Product Lightbox Modal:** Pre-filled product inquiry message sent directly to WhatsApp.
+4. **Interactive Custom Quote Configurator:** Formats selected items, room scale, and material choice into an inquiry message sent to `+91 97784 46620`.
+5. **Floating Action Button:** Persistent floating WhatsApp button with live notification ping.
+
+---
+
+## 🚀 Interactive Features
+
+1. **Floating Anti-Gravity Trust Badges:**
+   - `🛡️ 5-Year Guaranteed Warranty`
+   - `🌳 100% Seasoned Natural Wood`
+   - `🏭 Direct from Erattupetta Factory`
+   - Bob gently with CSS keyframes and react to mouse movement with 3D parallax tilt.
+2. **Filterable Bento Grid Gallery:**
+   - Dynamic cards for *Living & Sofas*, *Bedroom & Dining*, *Office & Modular*, and *Custom Woodwork*.
+   - Interactive Quick-View Lightbox modal with complete specifications.
+3. **Interactive Material Comparator with Animated Metric Bars:**
+   - 100% Seasoned Natural Wood vs. Engineered Particle Board.
+   - Animated visual percentage bars for Lifespan, Moisture Resistance, Re-sandability, and Kerala Monsoon Stability.
+   - Interactive 2-Question Material Finder Quiz.
+4. **The 5-Year Warranty & Craftsmanship Promise:**
+   - Dark modern luxury section (`#0D0C0B`) with animated number counters and 4-step workshop workflow.
+5. **Interactive Custom Quote & WhatsApp Estimator:**
+   - Calculates estimated factory costs and timeline, and launches WhatsApp to `9778446620` with a confetti celebration.
+
+---
+
+## 🛠️ How to Run & Preview
+
+The website is actively running on your local server:
+- **Local URL:** [http://localhost:8000](http://localhost:8000)
+- **Local File:** [**`index.html`**](file:///home/ameen/Downloads/Homeify%20Website/index.html)
+
+Or launch anytime using:
+```bash
+python3 -m http.server 8000
+```

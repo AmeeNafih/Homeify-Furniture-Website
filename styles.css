@@ -1,0 +1,315 @@
+/* ==========================================================================
+   Homeify Furniture - Erattupetta, Kottayam, Kerala
+   Ultra-Modern Luxury Architectural Design System & Interactions
+   Theme: "Haute Modern Ergonomics meets Timeless Kerala Craftsmanship"
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cinzel:wght@600;700;800&display=swap');
+
+:root {
+  --bg-primary: #FAF8F5;
+  --bg-secondary: #0D0C0B;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #161514;
+  --accent-teak: #9E6738;
+  --accent-teak-hover: #B57945;
+  --accent-sage: #2C4A38;
+  --accent-gold: #D4AF37;
+  --accent-gold-glow: rgba(212, 175, 55, 0.25);
+  --text-main: #141210;
+  --text-sub: #665F57;
+  --text-inverse: #FAF8F5;
+  --border-glass: rgba(20, 18, 16, 0.08);
+  --border-glass-dark: rgba(212, 175, 55, 0.16);
+  --font-heading: 'Syne', 'Playfair Display', sans-serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Global Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  overflow-x: hidden;
+  background-color: var(--bg-primary);
+  line-height: 1.6;
+}
+
+/* Custom Ultra-Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F1EDE6;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent-teak);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7A4E27;
+}
+
+/* Typography Utility */
+.font-heading {
+  font-family: var(--font-heading);
+}
+.font-serif {
+  font-family: var(--font-serif);
+}
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* Luminous Ambient Background Glows */
+.ambient-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  pointer-events: none;
+  opacity: 0.65;
+  transition: all 1s ease;
+}
+
+/* Ultra-Modern Glassmorphism */
+.glass-panel-light {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 20px 45px -15px rgba(20, 18, 16, 0.06);
+}
+
+.glass-panel-dark {
+  background: rgba(22, 21, 20, 0.78);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 25px 50px -20px rgba(0, 0, 0, 0.6);
+}
+
+.glass-nav-dock {
+  background: rgba(250, 248, 245, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(20, 18, 16, 0.06);
+}
+
+/* Floating Anti-Gravity Animations */
+@keyframes floatDynamic1 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(1.2deg);
+  }
+}
+
+@keyframes floatDynamic2 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-18px) rotate(-1.5deg);
+  }
+}
+
+@keyframes floatDynamic3 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(1deg);
+  }
+}
+
+.floating-badge-1 {
+  animation: floatDynamic1 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.floating-badge-2 {
+  animation: floatDynamic2 6.2s ease-in-out infinite 0.6s;
+  will-change: transform;
+}
+
+.floating-badge-3 {
+  animation: floatDynamic3 4.8s ease-in-out infinite 1.2s;
+  will-change: transform;
+}
+
+/* Luminous Glow Animation */
+@keyframes goldPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(212, 175, 55, 0);
+  }
+}
+
+.pulse-gold {
+  animation: goldPulse 2.8s infinite;
+}
+
+/* Live Workshop Status Pulse */
+@keyframes liveDotPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.3);
+  }
+}
+
+.live-pulse-dot {
+  animation: liveDotPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Modern Gradient Text */
+.gradient-text-gold {
+  background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #AA771C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-teak {
+  background: linear-gradient(135deg, #C2884A 0%, #9E6738 50%, #6E4018 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Modern Bento Card Hover Transitions */
+.bento-card {
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.bento-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 60px -20px rgba(158, 103, 56, 0.2);
+}
+
+.bento-card .card-img {
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+}
+
+.bento-card:hover .card-img {
+  transform: scale(1.06);
+}
+
+/* Modern Pill Filters */
+.bento-filter-btn {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bento-filter-btn.active {
+  background: #0D0C0B;
+  color: #FAF8F5;
+  border-color: #0D0C0B;
+  box-shadow: 0 6px 20px rgba(13, 12, 11, 0.25);
+}
+
+/* Modern Range Slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: #E8E2D8;
+  border-radius: 999px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #0D0C0B;
+  border: 2px solid #FAF8F5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  background: var(--accent-teak);
+}
+
+/* Lightbox Modal Animation */
+.modal-overlay {
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s ease;
+}
+.modal-container {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+}
+
+.modal-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.modal-hidden .modal-container {
+  transform: scale(0.95) translateY(20px);
+}
+
+.modal-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.modal-visible .modal-container {
+  transform: scale(1) translateY(0);
+}
+
+/* Toast Notifications */
+#toast-container {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+.toast-pill {
+  pointer-events: auto;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Floating WhatsApp Modern Pill */
+.wa-float-btn {
+  box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wa-float-btn:hover {
+  transform: scale(1.08) translateY(-3px);
+  box-shadow: 0 16px 40px rgba(37, 211, 102, 0.55);
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+  .hero-floating-badge {
+    position: static !important;
+    transform: none !important;
+    animation: none !important;
+    margin-bottom: 0.75rem;
+    max-width: 100% !important;
+  }
+}
