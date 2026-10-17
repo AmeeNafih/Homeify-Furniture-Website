@@ -62,15 +62,39 @@ All contact points throughout the entire website are pre-wired to the workshop n
 5. **Interactive Custom Quote & WhatsApp Estimator:**
    - Calculates estimated factory costs and timeline, and launches WhatsApp to `9778446620` with a confetti celebration.
 
+## 🏷️ Showroom MRP vs. Factory Direct Pricing & Thumbnail Showcase
+
+1. **Uncropped Product Thumbnails:**
+   - 9:16 portrait workshop photos are fitted with `aspect-[4/5]` / `aspect-[3/4]` containers using `object-contain` on dark studio gradient backing.
+   - Dual controls above the gallery: **"Thumbnail Grid"** vs. **"Bento Showcase"** and **"Uncropped Photo"** vs. **"Cover Fill"**.
+   - Lightbox modal contains an interactive **bottom thumbnail strip** to quickly browse between products.
+2. **Dual Pricing Engine:**
+   - Displays **Showroom Retail MRP** with strikethrough (e.g. ~₹38,000~) alongside **Factory Direct Price** (e.g. ₹24,500) and **Savings Badge** (e.g. "Save 36% Direct").
+3. **Workshop Management Studio (Edit MRP & Photos):**
+   - Click the **"Edit MRP"** button in the top navigation bar or toolbar to edit prices for any product right in the browser with instant local persistence.
+   - Or modify defaults in [`app.js`](file:///home/ameen/Downloads/Homeify%20Website/app.js) inside `DEFAULT_PRODUCTS`.
+
 ---
 
 ## 🛠️ How to Run & Preview
 
-The website is actively running on your local server:
+The website is running on your local server:
 - **Local URL:** [http://localhost:8000](http://localhost:8000)
 - **Local File:** [**`index.html`**](file:///home/ameen/Downloads/Homeify%20Website/index.html)
 
-Or launch anytime using:
+To launch anytime after reboot or from terminal:
 ```bash
+cd "/home/ameen/Downloads/Homeify Website"
 python3 -m http.server 8000
 ```
+
+---
+
+## 📦 Version Control & File Safety
+
+All files and assets are tracked in Git on branch `main`.
+To view recent commits or changes:
+```bash
+git log --oneline
+```
+
