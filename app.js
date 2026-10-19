@@ -489,7 +489,7 @@ let selectedProductForModal = null;
 let currentHeroSlideIndex = 0;
 let heroSlideTimer = null;
 let galleryViewMode = 'bento'; // Permanently set to Bento Showcase
-let galleryThumbFit = 'contain';   // Permanently set to uncropped high-quality framing
+let galleryThumbFit = 'cover';   // Full-size edge-to-edge frame fitting
 
 // Calculate discount savings percentage
 function calculateSavingsPercent(mrpStr, priceStr) {
@@ -1190,13 +1190,13 @@ function renderBentoGallery(filterCategory) {
       <!-- 3D Cursor-driven Specular Glare -->
       <div class="card-sheen"></div>
 
-      <!-- Product Photo Thumbnail Frame -->
-      <div class="relative overflow-hidden ${isLarge ? 'h-88 md:h-[460px]' : 'aspect-[4/5] sm:aspect-[3/4] max-h-[420px]'} bg-gradient-to-b from-[#181615] via-[#121110] to-[#0A0A09] flex items-center justify-center p-3 sm:p-4 border-b border-stone-100 group/thumb">
+      <!-- Product Photo Thumbnail Frame (Full Size Edge-to-Edge) -->
+      <div class="relative overflow-hidden ${isLarge ? 'h-88 sm:h-[440px] md:h-[500px]' : 'h-72 sm:h-84 md:h-96'} bg-stone-900 border-b border-stone-100 dark:border-white/10 group/thumb">
         <img 
           src="${product.image}" 
           alt="${product.name}" 
           loading="lazy"
-          class="card-img w-full h-full ${galleryThumbFit === 'contain' ? 'object-contain' : 'object-cover object-top'} transition-transform duration-600 group-hover:scale-105 drop-shadow-2xl"
+          class="card-img w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-108"
           onerror="this.src='assets/slated-coffee-table.jpg'"
         />
         
@@ -1314,7 +1314,7 @@ function openProductModal(product) {
   const modalImg = document.getElementById('modal-product-img');
   if (modalImg) {
     modalImg.src = product.image;
-    modalImg.className = 'w-full h-full object-contain bg-[#0D0C0B] p-2';
+    modalImg.className = 'w-full h-full min-h-[300px] sm:min-h-[400px] md:min-h-[500px] object-cover object-center transition-transform duration-500 hover:scale-105';
   }
 
   document.getElementById('modal-product-category').textContent = product.categoryName;
@@ -2205,8 +2205,8 @@ function populateCustomizerProductList() {
       
       <div class="flex gap-3">
         <!-- Thumbnail Preview -->
-        <div class="w-24 h-32 rounded-xl overflow-hidden bg-[#0D0C0B] flex-shrink-0 relative border border-stone-800 p-1 flex items-center justify-center">
-          <img id="custom-preview-prod-${product.id}" src="${product.image}" class="w-full h-full object-contain">
+        <div class="w-24 h-32 rounded-xl overflow-hidden bg-[#0D0C0B] flex-shrink-0 relative border border-stone-800 p-0 flex items-center justify-center">
+          <img id="custom-preview-prod-${product.id}" src="${product.image}" class="w-full h-full object-cover">
         </div>
 
         <!-- Product Name and Price Inputs -->
