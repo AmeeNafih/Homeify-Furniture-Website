@@ -89,7 +89,7 @@ const DEFAULT_PRODUCTS = [
     category: 'living',
     categoryName: 'Living & Sofas',
     materialCategory: 'natural-wood',
-    materialType: 'Solid Kiln-Dried Hardwood Frame with Botanical Linen Cushion',
+    materialType: '100% Pure Natural Hardwood Frame with Botanical Linen Cushion',
     warranty: '5-Year Frame & Cushion Resilience Warranty',
     dimensions: '82"W × 34"D × 31"H (Seat Height: 17")',
     finish: 'Smooth Natural Teak Wax with Stain-Repellent Fabric',
@@ -560,6 +560,9 @@ function applyLogoToDOM(logoSrc) {
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
   loadCustomAssets();
+  init3DAmbientCanvas();
+  init3DCardTilt();
+  init3DMaterialCube();
   initHeroParallax();
   initHeroCarousel();
   renderBentoGallery('all');
@@ -572,6 +575,231 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollSpy();
   initCustomizerManager();
 });
+
+// ==========================================================================
+// 0. MODERN 3D INTERACTION & AMBIENT DEPTH ENGINE
+// ==========================================================================
+function init3DAmbientCanvas() {
+  const canvas = document.getElementById('ambient-3d-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  let width = (canvas.width = window.innerWidth);
+  let height = (canvas.height = window.innerHeight);
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+
+  const PARTICLE_COUNT = 45;
+  const particles = [];
+  const focalLength = 400;
+
+  let targetCamX = 0;
+  let targetCamY = 0;
+  let camX = 0;
+  let camY = 0;
+
+  window.addEventListener('mousemove', (e) => {
+    targetCamX = (e.clientX - width / 2) * 0.15;
+    targetCamY = (e.clientY - height / 2) * 0.15;
+  });
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    particles.push({
+      x: (Math.random() - 0.5) * width * 1.5,
+      y: (Math.random() - 0.5) * height * 1.5,
+      z: Math.random() * 800 + 60,
+      radius: Math.random() * 2.8 + 1.2,
+      alpha: Math.random() * 0.6 + 0.2,
+      color: i % 3 === 0 ? 'rgba(212, 175, 55,' : i % 3 === 1 ? 'rgba(158, 103, 56,' : 'rgba(44, 74, 56,',
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: -Math.random() * 0.4 - 0.1,
+      vz: (Math.random() - 0.5) * 0.4
+    });
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, width, height);
+
+    camX += (targetCamX - camX) * 0.05;
+    camY += (targetCamY - camY) * 0.05;
+
+    const cx = width / 2 + camX;
+    const cy = height / 2 + camY;
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+
+      p.x += p.vx;
+      p.y += p.vy;
+      p.z += p.vz;
+
+      if (p.y < -height) p.y = height;
+      if (p.x < -width) p.x = width;
+      if (p.x > width) p.x = -width;
+      if (p.z <= 10) p.z = 800;
+      if (p.z > 850) p.z = 60;
+
+      const scale = focalLength / p.z;
+      const sx = p.x * scale + cx;
+      const sy = p.y * scale + cy;
+
+      if (sx > -50 && sx < width + 50 && sy > -50 && sy < height + 50 && scale > 0) {
+        const drawRadius = Math.max(0.8, p.radius * scale);
+        const dynamicAlpha = Math.min(0.7, p.alpha * (scale * 0.8));
+
+        ctx.beginPath();
+        ctx.arc(sx, sy, drawRadius, 0, Math.PI * 2);
+        ctx.fillStyle = `${p.color} ${dynamicAlpha})`;
+        ctx.shadowColor = p.color === 'rgba(212, 175, 55,' ? '#D4AF37' : '#9E6738';
+        ctx.shadowBlur = 10 * scale;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    requestAnimationFrame(render);
+  }
+
+  requestAnimationFrame(render);
+}
+
+function init3DCardTilt() {
+  function attachTiltToElements() {
+    const tiltElements = document.querySelectorAll('.card-3d-tilt');
+    tiltElements.forEach(el => {
+      if (el.dataset.tiltInitialized) return;
+      el.dataset.tiltInitialized = 'true';
+
+      el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = -((y - centerY) / centerY) * 7;
+        const rotateY = ((x - centerX) / centerX) * 7;
+
+        el.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
+        el.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
+        el.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
+      });
+
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+      });
+    });
+  }
+
+  attachTiltToElements();
+  window.refresh3DTilt = attachTiltToElements;
+}
+
+function init3DMaterialCube() {
+  const cube = document.getElementById('material-3d-cube');
+  const btnWood = document.getElementById('cube-btn-wood');
+  const btnBoard = document.getElementById('cube-btn-board');
+  const btnWarranty = document.getElementById('cube-btn-warranty');
+
+  if (!cube) return;
+
+  let currentRotX = -10;
+  let currentRotY = 15;
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+
+  function updateCubeTransform(smooth = true) {
+    if (smooth) {
+      cube.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+    } else {
+      cube.style.transition = 'none';
+    }
+    cube.style.transform = `rotateX(${currentRotX}deg) rotateY(${currentRotY}deg)`;
+  }
+
+  updateCubeTransform();
+
+  if (btnWood) {
+    btnWood.addEventListener('click', () => {
+      currentRotX = -8;
+      currentRotY = 0;
+      updateCubeTransform(true);
+    });
+  }
+  if (btnBoard) {
+    btnBoard.addEventListener('click', () => {
+      currentRotX = -8;
+      currentRotY = 180;
+      updateCubeTransform(true);
+    });
+  }
+  if (btnWarranty) {
+    btnWarranty.addEventListener('click', () => {
+      currentRotX = -8;
+      currentRotY = -90;
+      updateCubeTransform(true);
+    });
+  }
+
+  const container = cube.parentElement;
+  if (!container) return;
+
+  container.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const deltaX = e.clientX - startX;
+    const deltaY = e.clientY - startY;
+    currentRotY += deltaX * 0.4;
+    currentRotX -= deltaY * 0.4;
+    startX = e.clientX;
+    startY = e.clientY;
+    updateCubeTransform(false);
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      updateCubeTransform(true);
+    }
+  });
+
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      isDragging = true;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (!isDragging || e.touches.length !== 1) return;
+    const deltaX = e.touches[0].clientX - startX;
+    const deltaY = e.touches[0].clientY - startY;
+    currentRotY += deltaX * 0.5;
+    currentRotX -= deltaY * 0.5;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    updateCubeTransform(false);
+  }, { passive: true });
+
+  window.addEventListener('touchend', () => {
+    if (isDragging) {
+      isDragging = false;
+      updateCubeTransform(true);
+    }
+  });
+}
 
 // ==========================================================================
 // 1. HERO PARALLAX & FLOATING BADGE TILT
@@ -703,7 +931,7 @@ function renderBentoGallery(filterCategory) {
     }
 
     const card = document.createElement('div');
-    card.className = `${spanClasses} bento-card bg-white rounded-3xl overflow-hidden border border-stone-200/90 shadow-sm hover:shadow-2xl transition-all duration-400 flex flex-col group cursor-pointer`;
+    card.className = `${spanClasses} bento-card card-3d-tilt depth-3d-surface bg-white rounded-3xl overflow-hidden border border-stone-200/90 shadow-sm transition-all duration-400 flex flex-col group cursor-pointer preserve-3d`;
     card.setAttribute('data-id', product.id);
 
     const materialBadgeBg = product.materialCategory === 'natural-wood' 
@@ -713,7 +941,7 @@ function renderBentoGallery(filterCategory) {
         : 'bg-[#0D0C0B] text-[#D4AF37]';
 
     const materialLabel = product.materialCategory === 'natural-wood'
-      ? '🌳 100% Seasoned Wood'
+      ? '🌳 100% Pure Natural Wood'
       : product.materialCategory === 'particle-board'
         ? '⚙️ Particle Board E1'
         : '✨ Hybrid Architecture';
@@ -721,6 +949,9 @@ function renderBentoGallery(filterCategory) {
     const savingsPercent = calculateSavingsPercent(product.mrp, product.factoryPrice);
 
     card.innerHTML = `
+      <!-- 3D Cursor-driven Specular Glare -->
+      <div class="card-sheen"></div>
+
       <!-- Product Photo Thumbnail Frame -->
       <div class="relative overflow-hidden ${isLarge ? 'h-88 md:h-[460px]' : 'aspect-[4/5] sm:aspect-[3/4] max-h-[420px]'} bg-gradient-to-b from-[#181615] via-[#121110] to-[#0A0A09] flex items-center justify-center p-3 sm:p-4 border-b border-stone-100 group/thumb">
         <img 
@@ -731,8 +962,8 @@ function renderBentoGallery(filterCategory) {
           onerror="this.src='assets/slated-coffee-table.jpg'"
         />
         
-        <!-- Top Badges -->
-        <div class="absolute top-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 pointer-events-none z-10">
+        <!-- Top Badges with 3D Z-Lift -->
+        <div class="absolute top-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 pointer-events-none z-10 float-3d-element">
           <span class="px-3 py-1 text-xs font-semibold rounded-full ${materialBadgeBg} shadow-sm backdrop-blur-md">
             ${materialLabel}
           </span>
@@ -744,15 +975,15 @@ function renderBentoGallery(filterCategory) {
 
         <!-- Thumbnail Zoom / Quick View Overlay -->
         <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B]/90 via-[#0D0C0B]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5 z-10">
-          <button class="w-full py-3 px-4 bg-white text-[#0D0C0B] rounded-2xl font-bold text-xs uppercase tracking-wider shadow-xl backdrop-blur-sm flex items-center justify-center gap-2 transform translate-y-3 group-hover:translate-y-0 transition-all duration-300 font-mono">
+          <button class="w-full py-3 px-4 bg-white text-[#0D0C0B] rounded-2xl font-bold text-xs uppercase tracking-wider shadow-xl backdrop-blur-sm flex items-center justify-center gap-2 transform translate-y-3 group-hover:translate-y-0 transition-all duration-300 font-mono btn-3d">
             <svg class="w-4 h-4 text-[#9E6738]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
             Quick View Specs & Inquire
           </button>
         </div>
       </div>
 
-      <!-- Card Details & Pricing -->
-      <div class="p-6 md:p-7 flex-1 flex flex-col justify-between">
+      <!-- Card Details & Pricing with 3D Z-Depth -->
+      <div class="p-6 md:p-7 flex-1 flex flex-col justify-between float-3d-element">
         <div>
           <div class="flex items-center justify-between text-xs text-[#9E6738] font-bold uppercase tracking-widest mb-1.5 font-mono">
             <span>${product.categoryName}</span>
@@ -784,11 +1015,11 @@ function renderBentoGallery(filterCategory) {
               Save ${savingsPercent}% Direct
             </span>
             <a 
-              href="https://wa.me/${WORKSHOP_WHATSAPP}?text=${encodeURIComponent(`Hello Homeify Furniture (Erattupetta)! I am interested in ${product.name} (Factory Price: ${product.factoryPrice}, MRP: ${product.mrp}).`)}" 
+              href="https://wa.me/${WORKSHOP_WHATSAPP}?text=${encodeURIComponent(`Hello Homeify Furniture (M E S Junction, Erattupetta)! I am interested in ${product.name} (Factory Price: ${product.factoryPrice}, MRP: ${product.mrp}).`)}" 
               target="_blank" 
               rel="noopener"
               onclick="event.stopPropagation();"
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#25D366]/10 text-[#075E54] hover:bg-[#25D366] hover:text-white transition-all text-[11px] font-bold font-mono border border-[#25D366]/20"
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#25D366]/10 text-[#075E54] hover:bg-[#25D366] hover:text-white transition-all text-[11px] font-bold font-mono border border-[#25D366]/20 btn-3d"
             >
               <i class="fa-brands fa-whatsapp text-xs"></i>
               <span>Inquire</span>
@@ -804,6 +1035,10 @@ function renderBentoGallery(filterCategory) {
 
     gridContainer.appendChild(card);
   });
+
+  if (typeof window.refresh3DTilt === 'function') {
+    window.refresh3DTilt();
+  }
 }
 
 function initFilterButtons() {
@@ -940,7 +1175,7 @@ function openProductModal(product) {
   const waBtn = document.getElementById('modal-whatsapp-btn');
   if (waBtn) {
     const message = encodeURIComponent(
-      `Hello Homeify Furniture (Erattupetta)! 🌳\n\nI am interested in customizing:\n*${product.name}*\n• Factory Offer Price: ${product.factoryPrice} (Showroom MRP: ${product.mrp})\n• Material: ${product.materialType}\n• Category: ${product.categoryName}\n• 5-Year Guaranteed Warranty Included\n\nPlease share availability, finishes, and delivery timeline to my address.`
+      `Hello Homeify Furniture (M E S Junction, Erattupetta)! 🌳\n\nI am interested in customizing:\n*${product.name}*\n• Factory Offer Price: ${product.factoryPrice} (Showroom MRP: ${product.mrp})\n• Material: ${product.materialType}\n• Category: ${product.categoryName}\n• 5-Year Guaranteed Warranty Included\n\nPlease share availability, finishes, and delivery timeline to my address.`
     );
     waBtn.href = `https://wa.me/${WORKSHOP_WHATSAPP}?text=${message}`;
   }
@@ -1019,11 +1254,11 @@ function initModalListeners() {
 // ==========================================================================
 const MATERIAL_DATA = {
   naturalWood: {
-    title: '100% Seasoned Natural Wood',
+    title: '100% Pure Natural Wood',
     tagline: 'Timeless Heirloom Durability & Artisanal Warmth',
     idealFor: 'Heritage Cots/Beds, Royal Dining Suites, Lounge Chairs, Architectural Fluted Panels',
     lifespan: '40 to 60+ Years (Generational Investment)',
-    keralaClimate: 'Kiln-seasoned in Erattupetta to 10-12% moisture content to prevent monsoon swelling and cracking.',
+    keralaClimate: 'Seasoned at M E S Junction workshop to 10-12% moisture equilibrium without chemical soaking.',
     repairability: '100% Re-sandable, re-polishable, and repairable at any point in its lifespan.',
     weight: 'Substantial, solid, and heavyweight with monolithic stability.',
     aesthetic: 'Authentic organic grains, natural knots, and rich patina that grows more beautiful with age.',
@@ -1244,11 +1479,11 @@ function initAnimatedCounters() {
 let quoteState = {
   spaceType: 'Home',
   items: ['Sofa Set', 'Solid Wood Cot/Bed'],
-  material: '100% Seasoned Natural Wood',
+  material: '100% Pure Natural Wood',
   roomScale: 2,
   clientName: '',
   clientPhone: '',
-  clientLocation: 'Erattupetta'
+  clientLocation: 'M E S Junction, Erattupetta'
 };
 
 function initQuoteConfigurator() {
@@ -1372,7 +1607,7 @@ function handleWhatsAppQuoteSubmit(e) {
 
   const name = nameInput ? nameInput.value.trim() : '';
   const phone = phoneInput ? phoneInput.value.trim() : '';
-  const location = locInput ? locInput.value.trim() || 'Erattupetta / Kerala' : 'Erattupetta';
+  const location = locInput ? locInput.value.trim() || 'M E S Junction, Erattupetta / Kerala' : 'M E S Junction, Erattupetta';
   const notes = notesInput ? notesInput.value.trim() : '';
 
   if (quoteState.items.length === 0) {
@@ -1393,7 +1628,7 @@ function handleWhatsAppQuoteSubmit(e) {
   const scaleText = quoteState.roomScale === 1 ? 'Compact' : quoteState.roomScale === 2 ? 'Standard' : 'Luxury Villa / Large Floor';
 
   const messageText = 
-    `*🌳 NEW CUSTOM FURNITURE INQUIRY - HOMEIFY ERATTUPETTA*\n\n` +
+    `*🌳 NEW CUSTOM FURNITURE INQUIRY - HOMEIFY FURNITURE, M E S JUNCTION, ERATTUPETTA*\n\n` +
     `👤 *Client Name:* ${name || 'Prospective Customer'}\n` +
     `📍 *Location:* ${location}\n` +
     `📞 *Client Phone:* ${phone || 'Via WhatsApp'}\n\n` +
@@ -1449,7 +1684,7 @@ function initMobileNav() {
   const closeDrawerBtn = document.getElementById('drawer-close-btn');
   const drawer = document.getElementById('mobile-drawer');
   const drawerOverlay = document.getElementById('drawer-overlay');
-  const navLinks = document.querySelectorAll('.mobile-drawer-link');
+  const navLinks = drawer ? drawer.querySelectorAll('a, button:not(#drawer-close-btn)') : [];
 
   if (!hamburgerBtn || !drawer) return;
 
@@ -1548,6 +1783,13 @@ function initCustomizerManager() {
 function openCustomizer() {
   const modal = document.getElementById('customizer-modal');
   if (!modal) return;
+
+  // Close mobile drawer if open
+  const drawer = document.getElementById('mobile-drawer');
+  const drawerOverlay = document.getElementById('drawer-overlay');
+  if (drawer) drawer.classList.add('translate-x-full');
+  if (drawerOverlay) drawerOverlay.classList.add('hidden');
+
   modal.classList.remove('modal-hidden');
   modal.classList.add('modal-visible');
   document.body.style.overflow = 'hidden';

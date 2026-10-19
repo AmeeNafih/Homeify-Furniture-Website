@@ -1,17 +1,23 @@
 # Homeify Furniture | Official Showcase & Digital Experience
 
-> **Location:** Erattupetta, Kottayam District, Kerala  
+> **Address:** **Homeify Furniture, M E S Junction, Erattupetta, Kottayam District, Kerala - 686122**  
 > **Direct Workshop WhatsApp & Call:** **+91 97784 46620**  
-> **Brand Aesthetic:** *"Haute Modern Architectural Ergonomics meets Kerala Woodcraft"*  
-> **Key Value Proposition:** 5-Year Comprehensive Manufacturing Warranty, 100% Seasoned Natural Wood & Premium Engineered Particle Board, Direct-from-Factory Pricing.
+> **Brand Aesthetic:** *"Haute Modern 3D Architectural Ergonomics meets Kerala Woodcraft"*  
+> **Key Value Proposition:** 5-Year Comprehensive Manufacturing Warranty, 100% Pure Natural Wood & Premium Engineered Particle Board, Direct-from-Factory Pricing.
 
 ---
 
 ## 🌟 Executive Overview
 
-**Homeify Furniture** is a premier furniture manufacturing company and workshop located in **Erattupetta, Kottayam District, Kerala**. 
+**Homeify Furniture** is a premier furniture manufacturing company and workshop located at **M E S Junction, Erattupetta, Kottayam District, Kerala**. 
 
-This single-page showcase has been completely redesigned with an **ultra-modern aesthetic**, combining architectural minimalism, high-contrast typography (*Syne* + *Plus Jakarta Sans*), ambient luminous glows, interactive metric comparisons, and real-time WhatsApp quoting directed to **+91 97784 46620**.
+This single-page showcase has been completely upgraded with a **cutting-edge Modern 3D Look**, featuring:
+- **Interactive 3D Ambient Depth Canvas:** Warm floating wood-dust motes and golden ambient particles responding to 3D mouse parallax.
+- **Dynamic 3D Card Tilt & Specular Light Sheen:** Every product card and trust badge physically tilts in 3D coordinate space with cursor-driven light reflections.
+- **Interactive 3D Material Studio Cube:** Real 3D draggable plinth comparing **100% Pure Natural Wood** against **Grade-E1 Particle Board**.
+- **Tactile 3D Buttons & Layered Depth:** Multi-tier elevation drop shadows, beveled glass rims, and physical press feedback.
+- **Showroom MRP vs. Direct Factory Pricing:** Transparent dual pricing with instant in-browser editor and savings pills.
+- **Real-Time WhatsApp Inquiries:** Direct to **+91 97784 46620**.
 
 ---
 
@@ -47,8 +53,8 @@ All contact points throughout the entire website are pre-wired to the workshop n
 
 1. **Floating Anti-Gravity Trust Badges:**
    - `🛡️ 5-Year Guaranteed Warranty`
-   - `🌳 100% Seasoned Natural Wood`
-   - `🏭 Direct from Erattupetta Factory`
+   - `🌳 100% Pure Natural Wood`
+   - `🏭 Direct from Factory`
    - Bob gently with CSS keyframes and react to mouse movement with 3D parallax tilt.
 2. **Filterable Bento Grid Gallery:**
    - Dynamic cards for *Living & Sofas*, *Bedroom & Dining*, *Office & Modular*, and *Custom Woodwork*.
@@ -61,6 +67,30 @@ All contact points throughout the entire website are pre-wired to the workshop n
    - Dark modern luxury section (`#0D0C0B`) with animated number counters and 4-step workshop workflow.
 5. **Interactive Custom Quote & WhatsApp Estimator:**
    - Calculates estimated factory costs and timeline, and launches WhatsApp to `9778446620` with a confetti celebration.
+
+---
+
+## 📱 Mobile Architecture & Touch Optimization Engine
+
+The mobile experience has been engineered to feel like a high-performance native iOS / Android application:
+1. **Persistent Mobile Quick-Action Dock:**
+   - Thumb-reachable bottom bar (`#mobile-bottom-dock`) with 4 primary actions:
+     - 💬 **WhatsApp Us** (direct to `+91 97784 46620` with notification ping)
+     - 📞 **Call Now** (`tel:+919778446620`)
+     - 🛋️ **Catalog** (smooth scroll to collections)
+     - 📐 **Get Quote** (instant scroll to custom configurator)
+   - Features `safe-bottom` padding to adapt seamlessly to modern bezel-less iPhones and Androids.
+2. **Horizontal Swipeable Hero Trust Badges:**
+   - On mobile displays, the 3 floating trust badges snap into a sleek horizontal touch-scrolling reel with smooth scroll snap (`snap-x snap-mandatory`), preventing vertical layout clutter.
+3. **Touch-Swipeable Category Filter Pills:**
+   - Single-row horizontal scrollable filter strip (`no-scrollbar`) allowing quick one-thumb switching between collections without taking up vertical screen real estate.
+4. **Touch-Scaled 3D Material Studio Cube:**
+   - Dynamically scaled to `190px × 190px` on small screens (`<=640px`) to guarantee zero edge-clipping or horizontal scroll overflow on 320px–375px viewports (iPhone SE, mini).
+5. **Auto-Zoom Prevention on iOS Safari:**
+   - Text, phone, and select inputs maintain `font-size: 16px !important` on mobile, permanently preventing annoying iOS Safari viewport auto-zooming.
+6. **Auto-Closing Slide-out Drawer:**
+   - Clean slide-out drawer that automatically closes whenever any navigation anchor, quote link, or modal button is tapped.
+
 
 ## 🏷️ Showroom MRP vs. Factory Direct Pricing & Thumbnail Showcase
 

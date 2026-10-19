@@ -303,13 +303,336 @@ input[type="range"]::-webkit-slider-thumb:hover {
   box-shadow: 0 16px 40px rgba(37, 211, 102, 0.55);
 }
 
-/* Responsive Overrides */
+/* ==========================================================================
+   PERFECT MOBILE RESPONSIVE SYSTEM & TOUCH OPTIMIZATIONS
+   ========================================================================== */
+
+/* Remove Tap Highlight on Mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Horizontal Scroll Utilities (Touch Friendly) */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* Touch Safe Area for Modern iOS / Android Devices */
+.safe-bottom {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+/* Responsive Overrides for Mobile (<768px) */
 @media (max-width: 768px) {
+  /* Prevent iOS Safari Automatic Zoom on Input Focus */
+  input[type="text"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="email"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Body Padding to prevent overlap with bottom app dock */
+  body {
+    padding-bottom: 4.5rem;
+  }
+
+  /* Hide redundant desktop floating button on mobile */
+  .wa-float-btn {
+    display: none !important;
+  }
+
+  /* Hero Floating Badges Mobile Horizontal Swipe Reel */
+  .hero-badges-wrapper {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 0.75rem !important;
+    padding: 0.85rem 0.25rem 0.5rem 0.25rem !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    margin-left: -1rem !important;
+    margin-right: -1rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  .hero-badges-wrapper::-webkit-scrollbar {
+    display: none !important;
+  }
   .hero-floating-badge {
     position: static !important;
     transform: none !important;
     animation: none !important;
-    margin-bottom: 0.75rem;
-    max-width: 100% !important;
+    flex: 0 0 84% !important;
+    max-width: 84% !important;
+    scroll-snap-align: center !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Modal Container Mobile Refinements */
+  .modal-container {
+    max-height: 94vh !important;
+    margin: 0.5rem !important;
+    width: calc(100vw - 1rem) !important;
+    border-radius: 1.5rem !important;
   }
 }
+
+/* 3D Cube Scaling for Small Mobile Displays (<= 640px) */
+@media (max-width: 640px) {
+  .cube-3d-scene {
+    width: 190px !important;
+    height: 190px !important;
+    perspective: 650px !important;
+  }
+  .cube-face {
+    width: 190px !important;
+    height: 190px !important;
+    padding: 1rem !important;
+    border-radius: 1.25rem !important;
+  }
+  .cube-face-front { transform: translateZ(95px) !important; }
+  .cube-face-back { transform: rotateY(180deg) translateZ(95px) !important; }
+  .cube-face-right { transform: rotateY(90deg) translateZ(95px) !important; }
+  .cube-face-left { transform: rotateY(-90deg) translateZ(95px) !important; }
+  .cube-face-top { transform: rotateX(90deg) translateZ(95px) !important; }
+  .cube-face-bottom { transform: rotateX(-90deg) translateZ(95px) !important; }
+}
+
+/* ==========================================================================
+   MODERN 3D DESIGN SYSTEM & TACTILE DEPTH ENGINE
+   ========================================================================== */
+
+/* 3D Perspective Containers */
+.perspective-800 {
+  perspective: 800px;
+}
+.perspective-1000 {
+  perspective: 1000px;
+}
+.perspective-1200 {
+  perspective: 1200px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* 3D Depth Layer Tokens */
+.translate-z-10 {
+  transform: translateZ(10px);
+}
+.translate-z-20 {
+  transform: translateZ(20px);
+}
+.translate-z-30 {
+  transform: translateZ(30px);
+}
+.translate-z-40 {
+  transform: translateZ(40px);
+}
+
+/* Modern 3D Ambient Canvas */
+#ambient-3d-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.85;
+}
+
+/* 3D Dimensional Elevation & Embossed Bevels */
+.depth-3d-surface {
+  background: linear-gradient(145deg, #ffffff 0%, #faf6f0 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.95);
+  border-left: 1px solid rgba(255, 255, 255, 0.7);
+  border-right: 1px solid rgba(200, 190, 180, 0.35);
+  border-bottom: 2px solid rgba(170, 160, 150, 0.4);
+  box-shadow: 
+    0 12px 28px -8px rgba(20, 18, 16, 0.12),
+    0 24px 48px -12px rgba(158, 103, 56, 0.12),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.depth-3d-dark {
+  background: linear-gradient(145deg, #181716 0%, #0d0c0b 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 1px solid rgba(0, 0, 0, 0.6);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.8);
+  box-shadow: 
+    0 20px 40px -10px rgba(0, 0, 0, 0.7),
+    0 30px 60px -15px rgba(212, 175, 55, 0.12),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Dynamic 3D Tilt Card with Cursor-Driven Specular Glare */
+.card-3d-tilt {
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+  will-change: transform;
+  position: relative;
+}
+
+.card-3d-tilt .card-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 255, 255, 0.08) 35%,
+    transparent 65%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.card-3d-tilt:hover .card-sheen {
+  opacity: 1;
+}
+
+/* 3D Floating Elements with Parallax Depth */
+.float-3d-element {
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-3d-tilt:hover .float-3d-element {
+  transform: translateZ(28px);
+}
+
+/* Tactile 3D Buttons with Physical Press Feedback */
+.btn-3d {
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    0 6px 16px -4px rgba(13, 12, 11, 0.25),
+    0 2px 4px rgba(13, 12, 11, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.35);
+  transform: translateY(0);
+}
+.btn-3d:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 10px 24px -4px rgba(13, 12, 11, 0.35),
+    0 4px 8px rgba(13, 12, 11, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+.btn-3d:active {
+  transform: translateY(2px) scale(0.985);
+  box-shadow: 
+    0 2px 6px -2px rgba(13, 12, 11, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 3D Gold Accent Button */
+.btn-3d-gold {
+  background: linear-gradient(135deg, #ECC86B 0%, #D4AF37 50%, #99741B 100%);
+  color: #0D0C0B;
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  border-bottom: 2px solid rgba(100, 70, 10, 0.5);
+  box-shadow: 0 8px 20px -4px rgba(212, 175, 55, 0.45);
+}
+.btn-3d-gold:hover {
+  box-shadow: 0 14px 28px -4px rgba(212, 175, 55, 0.65);
+}
+
+/* 3D Interactive Material Cube Component */
+.cube-3d-scene {
+  width: 240px;
+  height: 240px;
+  perspective: 900px;
+  margin: 0 auto;
+}
+
+.cube-3d-object {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: grab;
+}
+
+.cube-3d-object:active {
+  cursor: grabbing;
+}
+
+.cube-face {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border-radius: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  backface-visibility: hidden;
+  box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.25), 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Front Face: Pure Natural Wood */
+.cube-face-front {
+  transform: translateZ(120px);
+  background: linear-gradient(135deg, #7A4922 0%, #4D2B11 100%);
+  color: #FAF8F5;
+}
+/* Back Face: Engineered Board */
+.cube-face-back {
+  transform: rotateY(180deg) translateZ(120px);
+  background: linear-gradient(135deg, #2A2826 0%, #151413 100%);
+  color: #FAF8F5;
+}
+/* Right Face: 5-Year Warranty Seal */
+.cube-face-right {
+  transform: rotateY(90deg) translateZ(120px);
+  background: linear-gradient(135deg, #9E6738 0%, #683E18 100%);
+  color: #FAF8F5;
+}
+/* Left Face: Kerala Monsoon Resilience */
+.cube-face-left {
+  transform: rotateY(-90deg) translateZ(120px);
+  background: linear-gradient(135deg, #2C4A38 0%, #172C20 100%);
+  color: #FAF8F5;
+}
+/* Top Face */
+.cube-face-top {
+  transform: rotateX(90deg) translateZ(120px);
+  background: linear-gradient(135deg, #B57945 0%, #8C5528 100%);
+  color: #FAF8F5;
+}
+/* Bottom Face */
+.cube-face-bottom {
+  transform: rotateX(-90deg) translateZ(120px);
+  background: #0D0C0B;
+  color: #FAF8F5;
+}
+
+/* 3D Lightbox Modal Emergence */
+.modal-visible .modal-container {
+  transform: scale(1) translateY(0) rotateX(0deg);
+}
+
+.modal-hidden .modal-container {
+  transform: scale(0.92) translateY(30px) rotateX(-6deg);
+}
+
+.modal-container {
+  transform-style: preserve-3d;
+  perspective: 1200px;
+}
+
