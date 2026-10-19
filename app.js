@@ -511,7 +511,8 @@ function loadCustomAssets() {
     if (customLogo) {
       applyLogoToDOM(customLogo);
     } else {
-      applyLogoToDOM(DEFAULT_LOGO);
+      const isDark = document.documentElement.classList.contains('dark') || localStorage.getItem('homeify_theme') === 'dark';
+      applyLogoToDOM(isDark ? 'assets/homeify-logo-cropped.png' : DEFAULT_LOGO);
     }
 
     // 2. Clear old Unsplash overrides so real local assets take precedence
@@ -523,6 +524,24 @@ function loadCustomAssets() {
         }
       }
     });
+
+    // 2b. Load custom-added products created by admin from localStorage
+    const savedCustomProducts = localStorage.getItem('homeify_custom_products');
+    if (savedCustomProducts) {
+      try {
+        const customList = JSON.parse(savedCustomProducts);
+        if (Array.isArray(customList)) {
+          // Prepend custom products so they appear prominently at the top
+          customList.forEach(cp => {
+            if (!PRODUCTS.some(p => p.id === cp.id)) {
+              PRODUCTS.unshift(cp);
+            }
+          });
+        }
+      } catch (err) {
+        console.warn('Could not parse homeify_custom_products:', err);
+      }
+    }
 
     // 3. Apply any user-uploaded dataUrl or custom photo overrides
     PRODUCTS.forEach(p => {
@@ -559,6 +578,7 @@ function applyLogoToDOM(logoSrc) {
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
+  initThemeMode();
   loadCustomAssets();
   init3DAmbientCanvas();
   init3DCardTilt();
@@ -574,6 +594,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
   initScrollSpy();
   initCustomizerManager();
+  initAddProductManager();
   initAdminAuth();
 });
 
@@ -1950,8 +1971,24 @@ function populateCustomizerProductList() {
     itemEl.className = 'p-4 rounded-2xl bg-white border border-stone-200 shadow-sm flex flex-col gap-3 hover:border-teak transition-colors';
     itemEl.innerHTML = `
       <div class="flex items-center justify-between text-xs font-mono">
-        <span class="font-bold text-teak">${product.categoryName.toUpperCase()}</span>
-        <span class="text-stone-400">${product.badge}</span>
+        <div class="flex items-center gap-2">
+          <span class="font-bold text-teak">${product.categoryName.toUpperCase()}</span>
+          ${product.isCustom ? '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-bold">CUSTOM ADDED</span>' : ''}
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-stone-400">${product.badge}</span>
+          ${product.isCustom ? `
+            <button 
+              type="button" 
+              onclick="deleteCustomProduct('${product.id}')" 
+              class="px-2 py-0.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-colors text-[10px] font-bold flex items-center gap-1 cursor-pointer" 
+              title="Delete custom product"
+            >
+              <i class="fa-solid fa-trash-can text-[9px]"></i>
+              <span>Delete</span>
+            </button>
+          ` : ''}
+        </div>
       </div>
       
       <div class="flex gap-3">
@@ -2056,14 +2093,39 @@ window.handleProductPriceSave = function(productId) {
     localStorage.setItem('homeify_prod_price_' + productId, newPrice);
   }
 
+  // If custom product, also persist in homeify_custom_products
+  if (prod.isCustom) {
+    try {
+      const customProducts = JSON.parse(localStorage.getItem('homeify_custom_products') || '[]');
+      const cpIndex = customProducts.findIndex(p => p.id === productId);
+      if (cpIndex !== -1) {
+        if (newMrp) customProducts[cpIndex].mrp = newMrp;
+        if (newPrice) {
+          customProducts[cpIndex].factoryPrice = newPrice;
+          customProducts[cpIndex].priceEstimate = `${newPrice} (Direct Workshop Price)`;
+        }
+        localStorage.setItem('homeify_custom_products', JSON.stringify(customProducts));
+      }
+    } catch (e) {
+      console.error('Failed to update homeify_custom_products:', e);
+    }
+  }
+
   renderBentoGallery(currentFilter);
   showToast(`Updated pricing for ${prod.name}! (MRP: ${newMrp}, Factory: ${newPrice})`);
 };
 
 window.resetProductPrice = function(productId) {
-  const def = DEFAULT_PRODUCTS.find(p => p.id === productId);
   const prod = PRODUCTS.find(p => p.id === productId);
-  if (!def || !prod) return;
+  if (!prod) return;
+
+  if (prod.isCustom) {
+    showToast(`Custom products keep their configured pricing.`);
+    return;
+  }
+
+  const def = DEFAULT_PRODUCTS.find(p => p.id === productId);
+  if (!def) return;
 
   localStorage.removeItem('homeify_prod_mrp_' + productId);
   localStorage.removeItem('homeify_prod_price_' + productId);
@@ -2094,7 +2156,7 @@ window.resetAllProductPrices = function() {
   });
   populateCustomizerProductList();
   renderBentoGallery(currentFilter);
-  showToast('All product MRPs & prices restored to defaults!');
+  showToast('All default product MRPs & prices restored!');
 };
 
 window.handleProductPhotoUpload = function(event, productId) {
@@ -2121,6 +2183,20 @@ function setProductPhoto(productId, newUrl) {
   const prod = PRODUCTS.find(p => p.id === productId);
   if (prod) prod.image = newUrl;
 
+  // If custom product, also persist updated photo in homeify_custom_products
+  if (prod && prod.isCustom) {
+    try {
+      const customProducts = JSON.parse(localStorage.getItem('homeify_custom_products') || '[]');
+      const cpIndex = customProducts.findIndex(p => p.id === productId);
+      if (cpIndex !== -1) {
+        customProducts[cpIndex].image = newUrl;
+        localStorage.setItem('homeify_custom_products', JSON.stringify(customProducts));
+      }
+    } catch (e) {
+      console.error('Failed to update homeify_custom_products image:', e);
+    }
+  }
+
   const preview = document.getElementById('custom-preview-prod-' + productId);
   if (preview) preview.src = newUrl;
 
@@ -2129,10 +2205,17 @@ function setProductPhoto(productId, newUrl) {
 }
 
 window.resetProductPhoto = function(productId) {
-  localStorage.removeItem('homeify_prod_img_' + productId);
-  const def = DEFAULT_PRODUCTS.find(p => p.id === productId);
   const prod = PRODUCTS.find(p => p.id === productId);
+  if (!prod) return;
+
+  if (prod.isCustom) {
+    showToast(`Custom products use their designated photo.`);
+    return;
+  }
+
+  const def = DEFAULT_PRODUCTS.find(p => p.id === productId);
   if (def && prod) {
+    localStorage.removeItem('homeify_prod_img_' + productId);
     prod.image = def.image;
     const preview = document.getElementById('custom-preview-prod-' + productId);
     if (preview) preview.src = def.image;
@@ -2190,4 +2273,260 @@ window.resetAllCustomMedia = function() {
     localStorage.clear();
     location.reload();
   }
+};
+
+// ==========================================================================
+// 12. THEME APPEARANCE SYSTEM (DARK & LIGHT MODE)
+// ==========================================================================
+function initThemeMode() {
+  const savedTheme = localStorage.getItem('homeify_theme') || 'light';
+  setTheme(savedTheme, false);
+
+  const toggleBtns = document.querySelectorAll('.theme-toggle-btn');
+  toggleBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isDark = document.documentElement.classList.contains('dark');
+      const nextTheme = isDark ? 'light' : 'dark';
+      setTheme(nextTheme, true);
+    });
+  });
+}
+
+window.setTheme = function(theme, showFeedback = false) {
+  const isDark = theme === 'dark';
+  if (isDark) {
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('homeify_theme', 'dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+    localStorage.setItem('homeify_theme', 'light');
+  }
+
+  // Toggle icons across all instances of buttons
+  document.querySelectorAll('.dark-toggle-moon').forEach(el => {
+    el.classList.toggle('hidden', isDark);
+  });
+  document.querySelectorAll('.dark-toggle-sun').forEach(el => {
+    el.classList.toggle('hidden', !isDark);
+  });
+  document.querySelectorAll('.dark-toggle-label').forEach(el => {
+    el.textContent = isDark ? 'Light' : 'Dark';
+  });
+
+  // Switch default logo between light and dark modes if custom logo is not uploaded
+  const customLogo = localStorage.getItem('homeify_custom_logo');
+  if (!customLogo) {
+    const defaultLogoSrc = isDark ? 'assets/homeify-logo-cropped.png' : 'assets/homeify-logo-dark-text.png';
+    applyLogoToDOM(defaultLogoSrc);
+  }
+
+  if (showFeedback && typeof showToast === 'function') {
+    showToast(isDark ? 'Switched to Ultra-Luxury Obsidian Dark Mode' : 'Switched to Modern Warm Light Mode');
+  }
+};
+
+// ==========================================================================
+// 13. ADMIN CATALOG PRODUCT CREATOR & MANAGER
+// ==========================================================================
+function initAddProductManager() {
+  const form = document.getElementById('admin-add-product-form');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      handleAddNewProduct(e);
+    });
+  }
+}
+
+window.toggleAddProductForm = function(forceState) {
+  const form = document.getElementById('admin-add-product-form');
+  const btnText = document.getElementById('toggle-add-product-btn-text');
+  const btn = document.getElementById('toggle-add-product-form-btn');
+  if (!form) return;
+
+  const shouldOpen = typeof forceState === 'boolean' ? forceState : form.classList.contains('hidden');
+  if (shouldOpen) {
+    form.classList.remove('hidden');
+    if (btnText) btnText.textContent = 'Close Form';
+    if (btn) {
+      const icon = btn.querySelector('i');
+      if (icon) icon.className = 'fa-solid fa-chevron-up text-xs';
+    }
+    const nameInput = document.getElementById('new-prod-name');
+    if (nameInput) setTimeout(() => nameInput.focus(), 100);
+  } else {
+    form.classList.add('hidden');
+    if (btnText) btnText.textContent = 'Add New Product';
+    if (btn) {
+      const icon = btn.querySelector('i');
+      if (icon) icon.className = 'fa-solid fa-plus text-xs';
+    }
+  }
+};
+
+window.selectNewProdPreset = function(val) {
+  if (!val) return;
+  const pathInput = document.getElementById('new-prod-img-path');
+  const previewImg = document.getElementById('new-prod-preview-img');
+  const statusEl = document.getElementById('new-prod-img-status');
+  if (pathInput) pathInput.value = val;
+  if (previewImg) previewImg.src = val;
+  if (statusEl) statusEl.textContent = 'Asset preset selected';
+};
+
+window.handleNewProductPhotoSelect = function(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    const pathInput = document.getElementById('new-prod-img-path');
+    const previewImg = document.getElementById('new-prod-preview-img');
+    const statusEl = document.getElementById('new-prod-img-status');
+    if (pathInput) pathInput.value = dataUrl;
+    if (previewImg) previewImg.src = dataUrl;
+    if (statusEl) statusEl.textContent = 'Custom photo uploaded (' + (file.name || 'image') + ')';
+  };
+  reader.readAsDataURL(file);
+};
+
+window.handleAddNewProduct = function(event) {
+  if (event) event.preventDefault();
+
+  const nameInput = document.getElementById('new-prod-name');
+  const categoryInput = document.getElementById('new-prod-category');
+  const materialCatInput = document.getElementById('new-prod-material-category');
+  const mrpInput = document.getElementById('new-prod-mrp');
+  const priceInput = document.getElementById('new-prod-price');
+  const dimInput = document.getElementById('new-prod-dimensions');
+  const finishInput = document.getElementById('new-prod-finish');
+  const badgeInput = document.getElementById('new-prod-badge');
+  const descInput = document.getElementById('new-prod-desc');
+  const featuresInput = document.getElementById('new-prod-features');
+  const imgPathInput = document.getElementById('new-prod-img-path');
+
+  if (!nameInput || !mrpInput || !priceInput || !descInput) return;
+
+  const name = nameInput.value.trim();
+  const category = categoryInput ? categoryInput.value : 'custom-woodwork';
+  const materialCategory = materialCatInput ? materialCatInput.value : 'natural-wood';
+  let mrp = mrpInput.value.trim();
+  let price = priceInput.value.trim();
+  const dimensions = dimInput ? dimInput.value.trim() : '';
+  const finish = finishInput ? finishInput.value.trim() : '';
+  const badge = badgeInput ? badgeInput.value.trim() : '';
+  const desc = descInput.value.trim();
+  const featuresRaw = featuresInput ? featuresInput.value.trim() : '';
+  const image = (imgPathInput && imgPathInput.value.trim()) ? imgPathInput.value.trim() : 'assets/slated-coffee-table.jpg';
+
+  if (!name || !mrp || !price || !desc) {
+    alert('Please fill in all required fields (Product Name, MRP, Factory Price, and Description).');
+    return;
+  }
+
+  // Format currency
+  if (!mrp.startsWith('₹')) mrp = '₹' + mrp.replace(/[^0-9,]/g, '');
+  if (!price.startsWith('₹')) price = '₹' + price.replace(/[^0-9,]/g, '');
+
+  const categoryNames = {
+    'living': 'Living & Sofas',
+    'bedroom-dining': 'Bedroom & Dining',
+    'office': 'Office & Modular',
+    'custom-woodwork': 'Custom Bespoke Kerala Woodwork',
+    'custom': 'Custom Bespoke Kerala Woodwork'
+  };
+
+  const materialNames = {
+    'natural-wood': '100% Pure Kiln-Seasoned Solid Teak / Rosewood',
+    'particle-board': 'Grade-E1 High-Density Moisture-Resistant Board',
+    'hybrid': 'Solid Teak Framing with Architectural Paneling'
+  };
+
+  let features = featuresRaw.split('\n').map(f => f.trim()).filter(Boolean);
+  if (features.length === 0) {
+    features = [
+      'Engineered with premium seasoned timber',
+      '5-Year Full Structural Warranty included',
+      'Handcrafted directly at our Erattupetta workshop'
+    ];
+  }
+
+  const id = 'custom-' + Date.now();
+  const newProduct = {
+    id: id,
+    name: name,
+    category: category,
+    categoryName: categoryNames[category] || 'Custom Bespoke',
+    materialCategory: materialCategory,
+    materialType: materialNames[materialCategory] || 'Custom Kerala Solid Wood',
+    warranty: materialCategory === 'particle-board' ? '5-Year Grade-E1 Termite & Moisture Warranty' : '5-Year Structural Integrity Warranty',
+    dimensions: dimensions || 'Custom Dimensions Available',
+    finish: finish || 'Organic Matte Teak Polyurethane Seal',
+    badge: badge || 'New Workshop Addition',
+    mrp: mrp,
+    factoryPrice: price,
+    priceEstimate: `${price} (Direct Workshop Price)`,
+    leadTime: '7 to 12 Working Days',
+    image: image,
+    description: desc,
+    features: features,
+    isCustom: true
+  };
+
+  // Prepend to active PRODUCTS list
+  PRODUCTS.unshift(newProduct);
+
+  // Save to localStorage
+  try {
+    const existing = JSON.parse(localStorage.getItem('homeify_custom_products') || '[]');
+    existing.unshift(newProduct);
+    localStorage.setItem('homeify_custom_products', JSON.stringify(existing));
+  } catch (err) {
+    console.error('Failed to save custom product to localStorage:', err);
+  }
+
+  // Update UI immediately
+  renderBentoGallery(currentFilter);
+  populateCustomizerProductList();
+
+  // Reset form
+  const form = document.getElementById('admin-add-product-form');
+  if (form) form.reset();
+  const previewImg = document.getElementById('new-prod-preview-img');
+  if (previewImg) previewImg.src = 'assets/slated-coffee-table.jpg';
+  const statusEl = document.getElementById('new-prod-img-status');
+  if (statusEl) statusEl.textContent = 'Default sample selected';
+  toggleAddProductForm(false);
+
+  showToast(`🎉 Added "${name}" to Homeify Catalog!`);
+};
+
+window.deleteCustomProduct = function(productId) {
+  const prod = PRODUCTS.find(p => p.id === productId);
+  const name = prod ? prod.name : 'this item';
+  if (!confirm(`Are you sure you want to permanently delete "${name}" from the catalog?`)) {
+    return;
+  }
+
+  // Remove from active array
+  PRODUCTS = PRODUCTS.filter(p => p.id !== productId);
+
+  // Remove from localStorage
+  try {
+    const existing = JSON.parse(localStorage.getItem('homeify_custom_products') || '[]');
+    const updated = existing.filter(p => p.id !== productId);
+    localStorage.setItem('homeify_custom_products', JSON.stringify(updated));
+  } catch (err) {
+    console.error('Failed to update homeify_custom_products:', err);
+  }
+
+  // Clean up any individual price/image overrides
+  localStorage.removeItem('homeify_prod_mrp_' + productId);
+  localStorage.removeItem('homeify_prod_price_' + productId);
+  localStorage.removeItem('homeify_prod_img_' + productId);
+
+  renderBentoGallery(currentFilter);
+  populateCustomizerProductList();
+  showToast(`Deleted "${name}" from catalog.`);
 };

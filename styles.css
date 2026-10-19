@@ -665,4 +665,135 @@ input[type="range"]::-webkit-slider-thumb:hover {
   animation: shake 0.4s ease-in-out;
 }
 
+/* ==========================================================================
+   ULTRA-LUXURY OBSIDIAN DARK THEME SYSTEM
+   ========================================================================== */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.dark {
+  --bg-primary: #0D0C0B;
+  --bg-secondary: #141210;
+  --bg-surface: #161514;
+  --bg-surface-elevated: #1F1D1A;
+  --text-main: #FAF8F5;
+  --text-sub: #A8A29E;
+  --text-inverse: #0D0C0B;
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-glass-dark: rgba(212, 175, 55, 0.22);
+}
+
+html.dark body {
+  background-color: #0D0C0B;
+  color: #FAF8F5;
+}
+
+html.dark .glass-nav-dock {
+  background: rgba(13, 12, 11, 0.92) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark section#gallery,
+html.dark section#custom-quote,
+html.dark section.bg-white {
+  background-color: #0D0C0B !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark section#material-comparator,
+html.dark section#workshop-heritage {
+  background-color: #121110 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark .bg-white {
+  background-color: #161514 !important;
+  color: #FAF8F5;
+}
+
+html.dark .bg-alabaster {
+  background-color: #121110 !important;
+}
+
+html.dark .border-stone-200,
+html.dark .border-stone-200\/90,
+html.dark .border-stone-200\/80,
+html.dark .border-stone-100 {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+html.dark .text-\[\#0D0C0B\],
+html.dark .text-\[\#141210\] {
+  color: #FAF8F5 !important;
+}
+
+html.dark .text-stone-800,
+html.dark .text-stone-700,
+html.dark .text-espresso {
+  color: #E7E5E4 !important;
+}
+
+html.dark .text-stone-600,
+html.dark .text-stone-500 {
+  color: #A8A29E !important;
+}
+
+html.dark .depth-3d-surface {
+  background: #161514 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.8) !important;
+}
+
+html.dark .bento-card {
+  background: #141210 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html.dark .bento-filter-btn:not(.active) {
+  background: #161514 !important;
+  color: #D6D3D1 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+html.dark .bento-filter-btn.active {
+  background: #FAF8F5 !important;
+  color: #0D0C0B !important;
+  border-color: #FAF8F5 !important;
+}
+
+html.dark .modal-container {
+  background-color: #141210 !important;
+  color: #FAF8F5 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+html.dark #mobile-drawer {
+  background-color: #121110 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #FAF8F5 !important;
+}
+
+html.dark input[type="text"],
+html.dark input[type="tel"],
+html.dark input[type="password"],
+html.dark select,
+html.dark textarea {
+  background-color: #1A1816 !important;
+  color: #FAF8F5 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #78716C !important;
+}
+
+html.dark .bg-stone-50,
+html.dark .bg-stone-100 {
+  background-color: #1C1A18 !important;
+  color: #FAF8F5 !important;
+}
+
+
 

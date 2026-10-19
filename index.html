@@ -18,9 +18,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- Tailwind CSS CDN -->
+  <script>
+    if (localStorage.getItem('homeify_theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
@@ -158,6 +164,18 @@
 
       <!-- Desktop CTAs with updated WhatsApp 9778446620 -->
       <div class="hidden sm:flex items-center gap-3">
+        <!-- Theme Mode Switcher -->
+        <button 
+          id="desktop-theme-toggle" 
+          type="button" 
+          class="theme-toggle-btn p-2.5 rounded-full border border-stone-200 dark:border-white/10 bg-white dark:bg-stone-800 text-stone-700 dark:text-champagne hover:scale-105 active:scale-95 transition-all shadow-sm flex items-center justify-center cursor-pointer"
+          title="Toggle Light / Dark Mode" 
+          aria-label="Toggle Light / Dark Mode"
+        >
+          <i class="fa-solid fa-moon text-sm dark-toggle-moon"></i>
+          <i class="fa-solid fa-sun text-sm dark-toggle-sun text-champagne hidden"></i>
+        </button>
+
         <a 
           href="https://wa.me/919778446620?text=Hello%20Homeify%20Furniture%20(Erattupetta)!%20I%20would%20like%20to%20inquire%20about%20your%20custom%20furniture." 
           target="_blank" 
@@ -177,10 +195,23 @@
         </a>
       </div>
 
-      <!-- Mobile Hamburger Button -->
-      <button id="mobile-menu-btn" class="lg:hidden p-2.5 rounded-2xl bg-white text-espresso border border-stone-200 shadow-sm" aria-label="Toggle Navigation">
-        <i class="fa-solid fa-bars-staggered text-xl"></i>
-      </button>
+      <!-- Mobile Quick Actions: Theme Toggle + Menu Button -->
+      <div class="flex items-center gap-2 lg:hidden">
+        <button 
+          id="mobile-theme-toggle" 
+          type="button" 
+          class="theme-toggle-btn p-2.5 rounded-2xl bg-white dark:bg-stone-800 text-stone-700 dark:text-champagne border border-stone-200 dark:border-white/10 shadow-sm flex items-center justify-center active:scale-95 transition-transform cursor-pointer"
+          title="Toggle Light / Dark Mode" 
+          aria-label="Toggle Light / Dark Mode"
+        >
+          <i class="fa-solid fa-moon text-sm dark-toggle-moon"></i>
+          <i class="fa-solid fa-sun text-sm dark-toggle-sun text-champagne hidden"></i>
+        </button>
+
+        <button id="mobile-menu-btn" class="p-2.5 rounded-2xl bg-white dark:bg-stone-800 text-espresso dark:text-white border border-stone-200 dark:border-white/10 shadow-sm cursor-pointer" aria-label="Toggle Navigation">
+          <i class="fa-solid fa-bars-staggered text-xl"></i>
+        </button>
+      </div>
 
     </div>
   </header>
@@ -219,6 +250,21 @@
         <i class="fa-solid fa-calculator text-xs text-teak"></i>
       </a>
     </nav>
+
+    <!-- Appearance Switcher in Mobile Drawer -->
+    <div class="py-3 px-3.5 rounded-2xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-white/10 flex items-center justify-between font-mono text-xs mb-3">
+      <span class="flex items-center gap-2 text-stone-700 dark:text-stone-300 font-bold">
+        <i class="fa-solid fa-circle-half-stroke text-teak"></i> Theme Appearance
+      </span>
+      <button 
+        type="button" 
+        class="theme-toggle-btn px-3 py-1.5 rounded-xl bg-white dark:bg-stone-700 text-stone-800 dark:text-champagne border border-stone-200 dark:border-white/10 font-bold shadow-sm flex items-center gap-1.5 cursor-pointer"
+      >
+        <i class="fa-solid fa-moon dark-toggle-moon text-xs"></i>
+        <i class="fa-solid fa-sun dark-toggle-sun text-champagne text-xs hidden"></i>
+        <span class="dark-toggle-label">Toggle</span>
+      </button>
+    </div>
 
     <div class="mt-auto pt-6 border-t border-stone-200 space-y-3">
       <a 
@@ -1666,13 +1712,243 @@
         </div>
       </div>
 
-      <!-- SECTION 2: PRODUCT MRP, PRICES & PHOTOS MANAGER -->
+      <!-- SECTION 2: ADD NEW PRODUCT TO CATALOG -->
+      <div class="p-6 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <h4 class="font-heading text-lg font-bold text-[#0D0C0B]">2. Add New Product to Catalog</h4>
+            </div>
+            <p class="text-xs text-stone-500 mt-0.5 font-sans">
+              Create a bespoke furniture piece and publish it directly to the Homeify Bento Showcase.
+            </p>
+          </div>
+          <button 
+            id="toggle-add-product-form-btn" 
+            type="button"
+            onclick="toggleAddProductForm()"
+            class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white transition-colors text-xs font-mono font-bold flex items-center gap-1.5 self-start sm:self-auto cursor-pointer shadow-md"
+          >
+            <i class="fa-solid fa-plus text-xs"></i>
+            <span id="toggle-add-product-btn-text">Add New Product</span>
+          </button>
+        </div>
+
+        <form id="admin-add-product-form" class="hidden space-y-4 pt-4 border-t border-stone-200" onsubmit="handleAddNewProduct(event)">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-sans">
+            <div>
+              <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-600 mb-1">
+                Product Title / Name *
+              </label>
+              <input 
+                id="new-prod-name" 
+                type="text" 
+                required 
+                placeholder="e.g. The Royale Teak Fluted Console" 
+                class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak"
+              />
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-600 mb-1">
+                Collection Category *
+              </label>
+              <select 
+                id="new-prod-category" 
+                required 
+                class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak"
+              >
+                <option value="living">Living & Sofas</option>
+                <option value="bedroom-dining">Bedroom & Dining</option>
+                <option value="office">Office & Modular</option>
+                <option value="custom-woodwork">Custom Bespoke Kerala Woodwork</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-sans">
+            <div>
+              <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-600 mb-1">
+                Material Classification *
+              </label>
+              <select 
+                id="new-prod-material-category" 
+                required 
+                class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak"
+              >
+                <option value="natural-wood">🌳 100% Pure Natural Wood</option>
+                <option value="particle-board">⚙️ Grade-E1 Particle Board</option>
+                <option value="hybrid">✨ Hybrid Architecture</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-600 mb-1">
+                Showroom MRP (₹) *
+              </label>
+              <input 
+                id="new-prod-mrp" 
+                type="text" 
+                required 
+                placeholder="e.g. ₹35,000" 
+                class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak font-mono"
+              />
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-700 mb-1">
+                Direct Factory Price (₹) *
+              </label>
+              <input 
+                id="new-prod-price" 
+                type="text" 
+                required 
+                placeholder="e.g. ₹23,500" 
+                class="w-full text-xs p-3 rounded-xl border border-emerald-300 bg-emerald-50/50 text-emerald-800 font-bold focus:outline-none focus:border-emerald-600 font-mono"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-sans">
+            <div>
+              <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-600 mb-1">
+                Dimensions
+              </label>
+              <input 
+                id="new-prod-dimensions" 
+                type="text" 
+                placeholder="e.g. 54&quot;L × 18&quot;D × 32&quot;H" 
+                class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak font-mono"
+              />
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-600 mb-1">
+                Surface Polish / Finish
+              </label>
+              <input 
+                id="new-prod-finish" 
+                type="text" 
+                placeholder="e.g. Organic Matte Teak PU" 
+                class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak"
+              />
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-600 mb-1">
+                Curated Badge / Tag
+              </label>
+              <input 
+                id="new-prod-badge" 
+                type="text" 
+                placeholder="e.g. New 2026 Release" 
+                class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak"
+              />
+            </div>
+          </div>
+
+          <div class="font-sans">
+            <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-600 mb-1">
+              Architectural Description *
+            </label>
+            <textarea 
+              id="new-prod-desc" 
+              rows="2" 
+              required 
+              placeholder="Describe craftsmanship, timber seasoning, and architectural application..." 
+              class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak"
+            ></textarea>
+          </div>
+
+          <div class="font-sans">
+            <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-600 mb-1">
+              Key Features (One feature per line)
+            </label>
+            <textarea 
+              id="new-prod-features" 
+              rows="2" 
+              placeholder="100% Solid Kiln-Dried Timber&#10;5-Year Full Structural Guarantee&#10;Handcrafted in Erattupetta Workshop" 
+              class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak font-mono text-[11px]"
+            ></textarea>
+          </div>
+
+          <!-- Product Image Upload / Selection -->
+          <div class="p-4 rounded-xl bg-stone-50 border border-stone-200 space-y-3 font-sans">
+            <div class="flex items-center justify-between">
+              <label class="text-[11px] font-mono font-bold uppercase tracking-wider text-stone-700">
+                Product Image * (Upload local photo or select asset)
+              </label>
+              <span id="new-prod-img-status" class="text-[10px] text-stone-500 font-mono">Default sample selected</span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+              <div class="w-24 h-24 rounded-xl overflow-hidden bg-stone-900 border border-stone-700 flex items-center justify-center flex-shrink-0 p-1">
+                <img id="new-prod-preview-img" src="assets/slated-coffee-table.jpg" alt="New Product Preview" class="w-full h-full object-contain">
+              </div>
+
+              <div class="flex-1 w-full space-y-2">
+                <label class="w-full py-2.5 px-4 rounded-xl bg-[#0D0C0B] text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer hover:bg-teak transition-colors shadow-sm">
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                  <span>Upload Product Photo</span>
+                  <input id="new-prod-file-input" type="file" accept="image/*" class="hidden" onchange="handleNewProductPhotoSelect(event)">
+                </label>
+                <div class="flex items-center gap-2">
+                  <input 
+                    id="new-prod-img-path" 
+                    type="text" 
+                    value="assets/slated-coffee-table.jpg" 
+                    placeholder="assets/... or URL" 
+                    class="flex-1 text-[11px] px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white font-mono"
+                    onchange="document.getElementById('new-prod-preview-img').src = this.value;"
+                  />
+                  <select 
+                    class="text-[11px] px-2 py-1.5 rounded-lg border border-stone-200 bg-white font-mono"
+                    onchange="selectNewProdPreset(this.value)"
+                  >
+                    <option value="">Choose Asset Preset...</option>
+                    <option value="assets/slated-coffee-table.jpg">Slated Table</option>
+                    <option value="assets/premium-wooden-cot.jpg">Premium Cot</option>
+                    <option value="assets/rosewood-coffee-table.jpg">Rosewood Table</option>
+                    <option value="assets/handcrafted-wooden-sofa.jpg">Wooden Sofa</option>
+                    <option value="assets/teakwood-glass-coffee-table.jpg">Teak Glass Table</option>
+                    <option value="assets/curve-dining-chair.jpg">Curve Chair</option>
+                    <option value="assets/harmony-dining-table.jpg">Harmony Table</option>
+                    <option value="assets/oval-dining-set-chairs.jpg">Oval Dining Set</option>
+                    <option value="assets/oval-marble-dining-table.jpg">Marble Dining</option>
+                    <option value="assets/royal-jhoola-swing.jpg">Royal Jhoola</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-3">
+            <button 
+              type="button" 
+              onclick="toggleAddProductForm(false)" 
+              class="px-4 py-2.5 rounded-xl border border-stone-300 text-stone-600 hover:bg-stone-100 text-xs font-mono font-bold cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-mono text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-2 cursor-pointer transition-all"
+            >
+              <i class="fa-solid fa-check"></i>
+              <span>Add to Catalog & Publish</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- SECTION 3: PRODUCT MRP, PRICES & PHOTOS MANAGER -->
       <div class="space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-amber-50/80 border border-amber-200">
           <div>
             <h4 class="font-heading text-lg font-bold text-amber-950 flex items-center gap-2">
               <i class="fa-solid fa-tag text-teak"></i>
-              <span>2. Product MRP, Factory Prices & Photos</span>
+              <span>3. Product MRP, Factory Prices & Photos</span>
             </h4>
             <p class="text-xs text-amber-900 mt-0.5 font-sans">
               Modify the showroom MRP, factory price, or upload photos below. Click <strong>"Save Price"</strong> on any item to apply immediately!

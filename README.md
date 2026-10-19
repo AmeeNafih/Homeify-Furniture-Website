@@ -109,6 +109,28 @@ The mobile experience has been engineered to feel like a high-performance native
      3. Append **`#admin`** or **`?admin=1`** to the site URL.
    - **Authentication:** Protected by an Admin PIN (Default: `1234`).
    - **Session Security:** Authenticated session is maintained in `sessionStorage` with a one-click **"Log Out"** button to lock the studio, plus a **"Change PIN"** utility.
+   - **Add New Product to Catalog (Section 2):** Admins can create and publish bespoke pieces directly from the studio:
+     - Enter title, collection, material classification, showroom MRP, direct factory price, dimensions, finish, badge, description, and key features.
+     - Upload local device photos via `FileReader` or choose from curated workshop asset presets.
+     - New items immediately publish to the top of the Bento Showcase and can be deleted or priced dynamically.
+     - Persisted locally in `localStorage` under `homeify_custom_products`.
+
+---
+
+## 🌓 Ultra-Luxury Obsidian Dark Mode System
+
+Homeify now features an ultra-luxury dark mode designed to showcase fine woodwork with deep obsidian surfaces (`#0D0C0B`):
+1. **One-Click Theme Switcher:**
+   - Available on desktop navbar, mobile top header, and mobile slide-out drawer.
+   - Instant transition between **Modern Warm Light Mode** and **Ultra-Luxury Obsidian Dark Mode**.
+2. **Adaptive Dynamic Logo System:**
+   - In Light Mode: displays the rich deep bronze/espresso logo (`assets/homeify-logo-dark-text.png`).
+   - In Dark Mode: automatically switches to the champagne gold logo (`assets/homeify-logo-cropped.png`) for maximum contrast.
+   - Preserves custom uploaded workshop logos if uploaded by admin.
+3. **Zero-FOUC (Flash of Unstyled Content):**
+   - High-performance inline `<head>` detection checks `localStorage.getItem('homeify_theme')` before render, ensuring instant theme application on initial load.
+4. **Comprehensive Surface Adaptation:**
+   - Overrides all cards, glass docks, 3D tilt surfaces, comparison cubes, filter pills, and admin modals for comfortable nighttime browsing.
 
 ---
 
