@@ -607,16 +607,26 @@ function init3DAmbientCanvas() {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
+  // Respect battery & CPU if user prefers reduced motion
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return;
+  }
+
   let width = (canvas.width = window.innerWidth);
   let height = (canvas.height = window.innerHeight);
 
+  // Debounced resize to avoid layout thrashing
+  let resizeTimer = null;
   window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  });
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }, 120);
+  }, { passive: true });
 
   const isMobile = window.innerWidth < 768;
-  const PARTICLE_COUNT = isMobile ? 38 : 68;
+  const PARTICLE_COUNT = isMobile ? 32 : 60;
   const particles = [];
   const focalLength = 380;
 
@@ -646,7 +656,7 @@ function init3DAmbientCanvas() {
     lastMouseX = e.clientX;
     lastMouseY = e.clientY;
     mouseMoved = true;
-  });
+  }, { passive: true });
 
   // Authentic Furniture Timber Color Palette
   const WOOD_PALETTES = [
@@ -895,10 +905,28 @@ function init3DAmbientCanvas() {
       }
     }
 
-    requestAnimationFrame(render);
+    if (!isPaused) {
+      animFrameId = requestAnimationFrame(render);
+    }
   }
 
-  requestAnimationFrame(render);
+  let isPaused = false;
+  let animFrameId = requestAnimationFrame(render);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      isPaused = true;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+    } else {
+      if (isPaused) {
+        isPaused = false;
+        animFrameId = requestAnimationFrame(render);
+      }
+    }
+  });
 }
 
 function init3DCardTilt() {
@@ -1905,16 +1933,24 @@ function initMobileNav() {
 // ==========================================================================
 function initScrollSpy() {
   const navbar = document.getElementById('primary-navbar');
+  if (!navbar) return;
+  let ticking = false;
+
   window.addEventListener('scroll', () => {
-    if (!navbar) return;
-    if (window.scrollY > 40) {
-      navbar.classList.add('shadow-xl', 'bg-white/95');
-      navbar.classList.remove('bg-[#FAF8F5]/85');
-    } else {
-      navbar.classList.remove('shadow-xl', 'bg-white/95');
-      navbar.classList.add('bg-[#FAF8F5]/85');
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        if (window.scrollY > 30) {
+          navbar.classList.add('shadow-xl', 'bg-white/95', 'dark:bg-stone-900/95');
+          navbar.classList.remove('bg-[#FAF8F5]/85', 'dark:bg-stone-900/80');
+        } else {
+          navbar.classList.remove('shadow-xl', 'bg-white/95', 'dark:bg-stone-900/95');
+          navbar.classList.add('bg-[#FAF8F5]/85', 'dark:bg-stone-900/80');
+        }
+        ticking = false;
+      });
+      ticking = true;
     }
-  });
+  }, { passive: true });
 }
 
 // ==========================================================================

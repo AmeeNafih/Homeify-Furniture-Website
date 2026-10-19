@@ -24,13 +24,69 @@
   <meta name="twitter:description" content="Handcrafted solid wood and modular furniture made in Erattupetta, Kerala. 5-Year Manufacturing Warranty. WhatsApp: +91 97784 46620.">
   <meta name="twitter:image" content="https://homeifyfurniture.in/assets/harmony-dining-table.jpg">
 
-  <!-- Google Fonts: Manrope, Inter, Plus Jakarta Sans, Cormorant Garamond -->
+  <!-- Mobile Browser Theme Color -->
+  <meta name="theme-color" content="#FAF8F5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0D0C0B" media="(prefers-color-scheme: dark)">
+
+  <!-- High-Performance DNS-Prefetch & Preconnect Hints -->
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="dns-prefetch" href="//fonts.gstatic.com">
+  <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="//cdn.tailwindcss.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Schema.org JSON-LD Structured Data for LocalBusiness & FurnitureStore -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FurnitureStore",
+    "name": "Homeify Furniture",
+    "alternateName": "Homeify Furniture Erattupetta",
+    "image": "https://homeifyfurniture.in/assets/harmony-dining-table.jpg",
+    "logo": "https://homeifyfurniture.in/assets/homeify-logo-cropped.png",
+    "@id": "https://homeifyfurniture.in/#store",
+    "url": "https://homeifyfurniture.in/",
+    "telephone": "+919778446620",
+    "priceRange": "₹₹",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "M E S Junction",
+      "addressLocality": "Erattupetta",
+      "addressRegion": "Kerala",
+      "postalCode": "686122",
+      "addressCountry": "IN"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 9.6894,
+      "longitude": 76.7828
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday"
+        ],
+        "opens": "09:00",
+        "closes": "20:00"
+      }
+    ],
+    "sameAs": [
+      "https://www.instagram.com/homeify.furniture/"
+    ]
+  }
+  </script>
 
   <!-- Tailwind CSS CDN -->
   <script>
@@ -74,12 +130,8 @@
     }
   </script>
 
-  <!-- Canvas Confetti -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-
-  <!-- GSAP & ScrollTrigger -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- Canvas Confetti (Deferred to avoid blocking DOM parse) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="styles.css">
@@ -96,58 +148,7 @@
   </div>
 
   <!-- =========================================================================
-       1. ULTRA-MODERN TOP UTILITY BAR (Direct Factory Workshop Contacts)
-       ========================================================================= -->
-  <div class="bg-[#0D0C0B] text-[#FAF8F5] py-2 px-3 sm:px-4 text-xs border-b border-white/10 relative z-50">
-    <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
-      
-      <!-- Direct Factory Trust Statement (Desktop/Tablet) -->
-      <div class="hidden sm:flex items-center gap-2 text-stone-400 font-mono text-[11px]">
-        <span class="inline-flex items-center gap-1.5 text-stone-300">
-          <i class="fa-solid fa-shield-halved text-champagne text-[10px]"></i>
-          <span>Direct from Factory • 5-Year Warranty</span>
-        </span>
-      </div>
-
-      <!-- Quick Action Contacts with 9778446620 -->
-      <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-3 sm:gap-5 text-stone-300 font-mono text-[11px]">
-        <a href="tel:+919778446620" class="hover:text-champagne transition-colors flex items-center gap-1 font-bold whitespace-nowrap">
-          <i class="fa-solid fa-phone text-champagne text-[10px]"></i> <span class="hidden sm:inline">+91 </span>97784 46620
-        </a>
-        <span class="text-stone-700">|</span>
-        <a 
-          href="https://wa.me/919778446620?text=Hello%20Homeify%20Furniture%20(Erattupetta)!%20I%20would%20like%20to%20discuss%20custom%20furniture." 
-          target="_blank" 
-          rel="noopener"
-          class="hover:text-emerald-400 text-emerald-400 transition-colors flex items-center gap-1.5 font-bold whitespace-nowrap"
-        >
-          <i class="fa-brands fa-whatsapp text-xs"></i>
-          <span class="hidden sm:inline">WhatsApp: 97784 46620</span>
-          <span class="sm:hidden">WhatsApp</span>
-        </a>
-        <span class="text-stone-700">|</span>
-        <a 
-          href="https://www.instagram.com/homeify.furniture/" 
-          target="_blank" 
-          rel="noopener" 
-          class="hover:text-pink-400 text-stone-300 transition-colors flex items-center gap-1.5 font-bold whitespace-nowrap"
-          title="Follow Homeify on Instagram (@homeify.furniture)"
-        >
-          <i class="fa-brands fa-instagram text-xs text-pink-500"></i>
-          <span class="hidden md:inline">@homeify.furniture</span>
-          <span class="md:hidden">Instagram</span>
-        </a>
-        <span class="text-stone-700 hidden lg:inline">|</span>
-        <span class="text-stone-400 hidden lg:inline flex items-center gap-1">
-          <i class="fa-solid fa-location-dot text-teak"></i> M E S Junction, Erattupetta
-        </span>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- =========================================================================
-       2. MODERN FLOATING GLASS NAVIGATION DOCK (With Dynamic Vector Logo)
+       1. MODERN FLOATING GLASS NAVIGATION DOCK (With Dynamic Vector Logo)
        ========================================================================= -->
   <header id="primary-navbar" class="sticky top-0 z-40 glass-nav-dock transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
@@ -203,18 +204,6 @@
           <i class="fa-solid fa-sun text-sm dark-toggle-sun text-champagne hidden"></i>
         </button>
 
-        <!-- Instagram Profile Link -->
-        <a 
-          href="https://www.instagram.com/homeify.furniture/" 
-          target="_blank" 
-          rel="noopener" 
-          class="p-2.5 rounded-full border border-stone-200 dark:border-white/10 bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:text-pink-600 dark:hover:text-pink-400 hover:scale-105 active:scale-95 transition-all shadow-sm flex items-center justify-center cursor-pointer group"
-          title="Follow Homeify on Instagram (@homeify.furniture)"
-          aria-label="Instagram Profile"
-        >
-          <i class="fa-brands fa-instagram text-sm group-hover:scale-110 transition-transform"></i>
-        </a>
-
         <a 
           href="https://wa.me/919778446620?text=Hello%20Homeify%20Furniture%20(Erattupetta)!%20I%20would%20like%20to%20inquire%20about%20your%20custom%20furniture." 
           target="_blank" 
@@ -234,19 +223,8 @@
         </a>
       </div>
 
-      <!-- Mobile Quick Actions: Theme Toggle + Instagram + Menu Button -->
+      <!-- Mobile Quick Actions: Theme Toggle + Menu Button -->
       <div class="flex items-center gap-2 lg:hidden">
-        <a 
-          href="https://www.instagram.com/homeify.furniture/" 
-          target="_blank" 
-          rel="noopener" 
-          class="p-2.5 rounded-2xl bg-white dark:bg-stone-800 text-stone-700 dark:text-pink-400 border border-stone-200 dark:border-white/10 shadow-sm flex items-center justify-center active:scale-95 transition-transform cursor-pointer"
-          title="Follow on Instagram" 
-          aria-label="Follow on Instagram"
-        >
-          <i class="fa-brands fa-instagram text-base text-pink-500"></i>
-        </a>
-
         <button 
           id="mobile-theme-toggle" 
           type="button" 
@@ -350,23 +328,6 @@
         <!-- Left: Editorial Headline & Narrative -->
         <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
           
-          <div class="inline-flex flex-wrap items-center justify-center lg:justify-start gap-2 max-w-full">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-stone-800/90 backdrop-blur-md border border-stone-200/80 dark:border-white/10 shadow-sm text-[11px] font-bold text-teak font-mono depth-3d-surface">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping flex-shrink-0"></span>
-              <span>Workshop Live • Erattupetta</span>
-            </div>
-            <a 
-              href="https://www.instagram.com/homeify.furniture/" 
-              target="_blank" 
-              rel="noopener"
-              class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-purple-600/10 dark:from-amber-500/20 dark:via-rose-500/20 dark:to-purple-600/20 text-rose-700 dark:text-rose-300 border border-rose-500/30 text-[11px] font-mono font-bold hover:scale-105 active:scale-95 transition-all shadow-sm group"
-            >
-              <i class="fa-brands fa-instagram text-rose-500 group-hover:scale-110 transition-transform"></i>
-              <span>@homeify.furniture</span>
-              <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-70"></i>
-            </a>
-          </div>
-
           <h1 class="font-heading text-3xl sm:text-5xl md:text-6xl xl:text-7xl font-extrabold tracking-tight text-[#0D0C0B] leading-[1.05] break-words">
             Homeify Your Space with <span class="italic font-serif font-normal gradient-text-teak">Timeless</span> Craftsmanship.
           </h1>
@@ -420,6 +381,10 @@
                 id="hero-main-img"
                 src="assets/handcrafted-wooden-sofa.jpg" 
                 alt="Homeify Luxury Furniture Erattupetta" 
+                fetchpriority="high"
+                decoding="async"
+                width="800"
+                height="550"
                 class="w-full h-full object-cover transition-all duration-500"
               />
               
@@ -1321,6 +1286,8 @@
               <img 
                 src="assets/artisanal-slated-workshop.jpg" 
                 alt="Craftsman planing seasoned wood at Erattupetta workshop" 
+                loading="lazy"
+                decoding="async"
                 class="w-full h-full object-cover object-top"
               />
             </div>
@@ -1339,6 +1306,8 @@
               <img 
                 src="assets/timber-cot-6ft.jpg" 
                 alt="Pure natural wood grain detail" 
+                loading="lazy"
+                decoding="async"
                 class="w-full h-full object-cover object-top"
               />
             </div>
@@ -1498,7 +1467,7 @@
           class="group relative rounded-3xl overflow-hidden bg-[#161514] border border-white/10 hover:border-pink-500/40 transition-all duration-400 flex flex-col shadow-xl hover:-translate-y-2"
         >
           <div class="aspect-[4/5] relative overflow-hidden bg-stone-900">
-            <img src="assets/handcrafted-wooden-sofa.jpg" alt="Homeify Furniture Kerala" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700">
+            <img src="assets/handcrafted-wooden-sofa.jpg" alt="Homeify Furniture Kerala" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B] via-transparent to-black/30"></div>
             
             <div class="absolute top-4 left-4 flex items-center gap-2">
@@ -1525,11 +1494,11 @@
         <a 
           href="https://www.instagram.com/homeify.furniture/" 
           target="_blank" 
-          rel="noopener"
+          rel="noopener" 
           class="group relative rounded-3xl overflow-hidden bg-[#161514] border border-white/10 hover:border-pink-500/40 transition-all duration-400 flex flex-col shadow-xl hover:-translate-y-2"
         >
           <div class="aspect-[4/5] relative overflow-hidden bg-stone-900">
-            <img src="assets/royal-jhoola-swing.jpg" alt="Homeify Royal Jhoola Kerala" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700">
+            <img src="assets/royal-jhoola-swing.jpg" alt="Homeify Royal Jhoola Kerala" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B] via-transparent to-black/30"></div>
             
             <div class="absolute top-4 left-4 flex items-center gap-2">
@@ -1556,11 +1525,11 @@
         <a 
           href="https://www.instagram.com/homeify.furniture/" 
           target="_blank" 
-          rel="noopener"
+          rel="noopener" 
           class="group relative rounded-3xl overflow-hidden bg-[#161514] border border-white/10 hover:border-pink-500/40 transition-all duration-400 flex flex-col shadow-xl hover:-translate-y-2"
         >
           <div class="aspect-[4/5] relative overflow-hidden bg-stone-900">
-            <img src="assets/premium-wooden-cot.jpg" alt="Homeify Teak Cot 6ft" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700">
+            <img src="assets/premium-wooden-cot.jpg" alt="Homeify Teak Cot 6ft" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B] via-transparent to-black/30"></div>
             
             <div class="absolute top-4 left-4 flex items-center gap-2">
@@ -1587,11 +1556,11 @@
         <a 
           href="https://www.instagram.com/homeify.furniture/" 
           target="_blank" 
-          rel="noopener"
+          rel="noopener" 
           class="group relative rounded-3xl overflow-hidden bg-[#161514] border border-white/10 hover:border-pink-500/40 transition-all duration-400 flex flex-col shadow-xl hover:-translate-y-2"
         >
           <div class="aspect-[4/5] relative overflow-hidden bg-stone-900">
-            <img src="assets/curve-dining-chair-studio.jpg" alt="Homeify Cane Dining Set" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700">
+            <img src="assets/curve-dining-chair-studio.jpg" alt="Homeify Cane Dining Set" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B] via-transparent to-black/30"></div>
             
             <div class="absolute top-4 left-4 flex items-center gap-2">
