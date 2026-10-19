@@ -846,7 +846,7 @@ function initHeroCarousel() {
 
   indicatorsContainer.innerHTML = HERO_SLIDES.map((slide, idx) => `
     <button 
-      class="hero-indicator-btn px-4 py-2 rounded-xl text-xs font-semibold tracking-wide transition-all duration-300 ${idx === 0 ? 'bg-[#0D0C0B] text-white shadow-lg' : 'bg-white/80 text-[#141210] hover:bg-white'}"
+      class="hero-indicator-btn flex-shrink-0 whitespace-nowrap px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-semibold tracking-wide transition-all duration-300 ${idx === 0 ? 'bg-[#0D0C0B] text-white shadow-lg' : 'bg-white/80 text-[#141210] hover:bg-white'}"
       data-slide="${idx}"
       onclick="setHeroSlide(${idx})"
     >
@@ -968,19 +968,19 @@ function renderBentoGallery(filterCategory) {
         />
         
         <!-- Top Badges with 3D Z-Lift -->
-        <div class="absolute top-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 pointer-events-none z-10 float-3d-element">
-          <span class="px-3 py-1 text-xs font-semibold rounded-full ${materialBadgeBg} shadow-sm backdrop-blur-md">
+        <div class="absolute top-2.5 sm:top-4 left-2.5 sm:left-4 right-2.5 sm:right-4 flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 pointer-events-none z-10 float-3d-element">
+          <span class="px-2.5 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold rounded-full ${materialBadgeBg} shadow-sm backdrop-blur-md">
             ${materialLabel}
           </span>
-          <span class="px-2.5 py-1 text-xs font-bold rounded-full bg-[#D4AF37] text-[#0D0C0B] shadow-sm flex items-center gap-1 font-mono">
-            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span class="px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-xs font-bold rounded-full bg-[#D4AF37] text-[#0D0C0B] shadow-sm flex items-center gap-1 font-mono">
+            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             5-Yr Warranty
           </span>
         </div>
 
         <!-- Thumbnail Zoom / Quick View Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B]/90 via-[#0D0C0B]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5 z-10">
-          <button class="w-full py-3 px-4 bg-white text-[#0D0C0B] rounded-2xl font-bold text-xs uppercase tracking-wider shadow-xl backdrop-blur-sm flex items-center justify-center gap-2 transform translate-y-3 group-hover:translate-y-0 transition-all duration-300 font-mono btn-3d">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B]/90 via-[#0D0C0B]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 sm:p-5 z-10">
+          <button class="w-full py-2.5 sm:py-3 px-4 bg-white text-[#0D0C0B] rounded-2xl font-bold text-xs uppercase tracking-wider shadow-xl backdrop-blur-sm flex items-center justify-center gap-2 transform translate-y-3 group-hover:translate-y-0 transition-all duration-300 font-mono btn-3d">
             <svg class="w-4 h-4 text-[#9E6738]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
             Quick View Specs & Inquire
           </button>
@@ -988,7 +988,7 @@ function renderBentoGallery(filterCategory) {
       </div>
 
       <!-- Card Details & Pricing with 3D Z-Depth -->
-      <div class="p-6 md:p-7 flex-1 flex flex-col justify-between float-3d-element">
+      <div class="p-4 sm:p-6 md:p-7 flex-1 flex flex-col justify-between float-3d-element">
         <div>
           <div class="flex items-center justify-between text-xs text-[#9E6738] font-bold uppercase tracking-widest mb-1.5 font-mono">
             <span>${product.categoryName}</span>
@@ -1346,7 +1346,7 @@ function renderSingleMaterial(key) {
   `).join('');
 
   container.innerHTML = `
-    <div class="p-8 md:p-10 rounded-3xl bg-white border border-stone-200/90 shadow-xl flex flex-col md:flex-row gap-8 items-center">
+    <div class="p-4 sm:p-8 md:p-10 rounded-3xl bg-white border border-stone-200/90 shadow-xl flex flex-col md:flex-row gap-6 md:gap-8 items-center">
       <div class="w-full md:w-5/12">
         <div class="relative rounded-2xl overflow-hidden shadow-lg h-72 md:h-80 bg-stone-100">
           <img 

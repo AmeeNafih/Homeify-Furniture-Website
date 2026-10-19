@@ -69,8 +69,10 @@
   <canvas id="ambient-3d-canvas"></canvas>
 
   <!-- Ambient Decorative Light Flares -->
-  <div class="ambient-glow -top-32 -left-32 w-96 h-96 bg-teak/10 z-0"></div>
-  <div class="ambient-glow top-1/3 -right-32 w-[32rem] h-[32rem] bg-sage/10 z-0"></div>
+  <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+    <div class="ambient-glow -top-32 -left-32 w-96 h-96 bg-teak/10"></div>
+    <div class="ambient-glow top-1/3 -right-32 w-[32rem] h-[32rem] bg-sage/10"></div>
+  </div>
 
   <!-- =========================================================================
        1. ULTRA-MODERN TOP UTILITY BAR (With Photo & Logo Customizer Shortcut)
@@ -240,12 +242,12 @@
         <!-- Left: Editorial Headline & Narrative -->
         <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
           
-          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-stone-200 shadow-sm text-xs font-bold text-teak font-mono depth-3d-surface">
-            <span class="w-2 h-2 rounded-full bg-champagne animate-ping"></span>
-            <span>Homeify Furniture, M E S Junction, Erattupetta</span>
+          <div class="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-white border border-stone-200 shadow-sm text-[10px] sm:text-xs font-bold text-teak font-mono depth-3d-surface max-w-full">
+            <span class="w-2 h-2 rounded-full bg-champagne animate-ping flex-shrink-0"></span>
+            <span class="truncate sm:whitespace-normal">Homeify Furniture • M E S Junction, Erattupetta</span>
           </div>
 
-          <h1 class="font-heading text-3xl sm:text-5xl md:text-6xl xl:text-7xl font-extrabold tracking-tight text-[#0D0C0B] leading-[1.05]">
+          <h1 class="font-heading text-3xl sm:text-5xl md:text-6xl xl:text-7xl font-extrabold tracking-tight text-[#0D0C0B] leading-[1.05] break-words">
             Homeify Your Space with <span class="italic font-serif font-normal gradient-text-teak">Timeless</span> Craftsmanship.
           </h1>
 
@@ -272,17 +274,17 @@
           </div>
 
           <div class="grid grid-cols-3 gap-2 sm:gap-4 pt-6 border-t border-stone-200/90 max-w-lg mx-auto lg:mx-0 font-sans">
-            <div class="p-2.5 sm:p-3 rounded-2xl depth-3d-surface text-center">
-              <span class="block font-heading text-lg sm:text-2xl md:text-3xl font-extrabold text-[#0D0C0B]">5-Year</span>
-              <span class="text-[10px] sm:text-xs text-stone-500 font-medium">Warranty</span>
+            <div class="p-2 sm:p-3 rounded-2xl depth-3d-surface text-center">
+              <span class="block font-heading text-base sm:text-2xl md:text-3xl font-extrabold text-[#0D0C0B]">5-Year</span>
+              <span class="text-[9px] sm:text-xs text-stone-500 font-medium">Warranty</span>
             </div>
-            <div class="p-2.5 sm:p-3 rounded-2xl depth-3d-surface text-center">
-              <span class="block font-heading text-lg sm:text-2xl md:text-3xl font-extrabold text-teak">100%</span>
-              <span class="text-[10px] sm:text-xs text-stone-500 font-medium">Natural Wood</span>
+            <div class="p-2 sm:p-3 rounded-2xl depth-3d-surface text-center">
+              <span class="block font-heading text-base sm:text-2xl md:text-3xl font-extrabold text-teak">100%</span>
+              <span class="text-[9px] sm:text-xs text-stone-500 font-medium leading-tight">Natural Wood</span>
             </div>
-            <div class="p-2.5 sm:p-3 rounded-2xl depth-3d-surface text-center">
-              <span class="block font-heading text-lg sm:text-2xl md:text-3xl font-extrabold text-sage">Direct</span>
-              <span class="text-[10px] sm:text-xs text-stone-500 font-medium">From Factory</span>
+            <div class="p-2 sm:p-3 rounded-2xl depth-3d-surface text-center">
+              <span class="block font-heading text-base sm:text-2xl md:text-3xl font-extrabold text-sage">Direct</span>
+              <span class="text-[9px] sm:text-xs text-stone-500 font-medium leading-tight">From Factory</span>
             </div>
           </div>
         </div>
@@ -317,8 +319,8 @@
             </div>
 
             <!-- Modern Category Selector -->
-            <div class="p-3.5 bg-white/95 backdrop-blur-md border-t border-stone-200 flex items-center justify-between gap-1 overflow-x-auto">
-              <div id="hero-indicators" class="flex items-center gap-2 w-full justify-between">
+            <div class="p-2 sm:p-3.5 bg-white/95 backdrop-blur-md border-t border-stone-200 overflow-x-auto no-scrollbar">
+              <div id="hero-indicators" class="flex items-center gap-1.5 sm:gap-2 flex-nowrap min-w-max">
                 <!-- Injected via JS -->
               </div>
             </div>
@@ -380,7 +382,7 @@
   <!-- =========================================================================
        4. BENTO GRID GALLERY (Interactive Category Filtering + Quick-View Modal)
        ========================================================================= -->
-  <section id="gallery" class="py-20 lg:py-28 bg-white border-y border-stone-200 relative">
+  <section id="gallery" class="py-20 lg:py-28 bg-white border-y border-stone-200 relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Section Header -->
@@ -463,7 +465,7 @@
   <!-- =========================================================================
        5. INTERACTIVE MATERIAL COMPARATOR WITH METRIC BARS
        ========================================================================= -->
-  <section id="material-comparator" class="py-20 lg:py-28 bg-alabaster relative">
+  <section id="material-comparator" class="py-20 lg:py-28 bg-alabaster relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-3xl mx-auto mb-12">
@@ -478,22 +480,22 @@
         </p>
       </div>
 
-      <div class="flex items-center justify-center gap-2 mb-10">
-        <div class="bg-white p-1.5 rounded-full border border-stone-200 shadow-sm flex items-center gap-1 font-mono">
-          <button id="tab-wood-btn" class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0D0C0B] text-white shadow-md transition-all">
-            🌳 100% Seasoned Wood
+      <div class="flex items-center justify-center mb-10 overflow-x-auto no-scrollbar max-w-full px-2">
+        <div class="bg-white p-1 sm:p-1.5 rounded-full border border-stone-200 shadow-sm flex items-center gap-1 font-mono max-w-full overflow-x-auto no-scrollbar flex-nowrap">
+          <button id="tab-wood-btn" class="flex-shrink-0 whitespace-nowrap px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider bg-[#0D0C0B] text-white shadow-md transition-all">
+            🌳 Natural Wood
           </button>
-          <button id="tab-board-btn" class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-stone-700 hover:text-teak transition-all">
+          <button id="tab-board-btn" class="flex-shrink-0 whitespace-nowrap px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider text-stone-700 hover:text-teak transition-all">
             ⚙️ Engineered Board
           </button>
-          <button id="tab-split-btn" class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-stone-700 hover:text-teak transition-all">
-            ⚖️ Side-by-Side Matrix
+          <button id="tab-split-btn" class="flex-shrink-0 whitespace-nowrap px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider text-stone-700 hover:text-teak transition-all">
+            ⚖️ Comparison Matrix
           </button>
         </div>
       </div>
 
       <!-- Interactive 3D Material Studio Cube -->
-      <div class="mb-14 max-w-4xl mx-auto p-6 sm:p-8 rounded-3xl depth-3d-surface card-3d-tilt preserve-3d">
+      <div class="mb-14 max-w-4xl mx-auto p-4 sm:p-8 rounded-3xl depth-3d-surface card-3d-tilt preserve-3d overflow-hidden">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
           <div class="lg:col-span-5 text-center">
@@ -572,7 +574,7 @@
             </div>
 
             <!-- Cube Interactive Controls -->
-            <div class="mt-4 flex items-center justify-center gap-2">
+            <div class="mt-4 flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
               <button id="cube-btn-wood" type="button" class="btn-3d px-3 py-1.5 rounded-full text-[11px] font-mono font-bold bg-[#7A4922] text-white">
                 🌳 Natural Wood
               </button>
@@ -598,7 +600,7 @@
             <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-sans">
               Rotate the 3D studio to inspect how <strong>100% Pure Natural Wood</strong> provides monolithic generational strength, while <strong>Grade-E1 Engineered Particle Board</strong> excels in modular office environments with seamless hot-melt edge seals.
             </p>
-            <div class="grid grid-cols-2 gap-3 pt-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               <div class="p-3.5 rounded-2xl bg-white border border-stone-200/90 shadow-sm">
                 <span class="text-xs font-bold text-teak block font-mono">100% Pure Natural Wood</span>
                 <span class="text-[11px] text-stone-500 mt-0.5 block font-sans">Zero chemical veneers or treatments</span>
@@ -619,7 +621,7 @@
       <div id="comparator-split-view" class="hidden max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
         
         <!-- Natural Wood Column -->
-        <div class="p-8 md:p-10 rounded-3xl bg-white border-2 border-sage/40 shadow-xl relative flex flex-col justify-between">
+        <div class="p-5 sm:p-8 md:p-10 rounded-3xl bg-white border-2 border-sage/40 shadow-xl relative flex flex-col justify-between">
           <div class="absolute top-6 right-6">
             <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-sage text-white font-mono">Generational</span>
           </div>
@@ -661,7 +663,7 @@
         </div>
 
         <!-- Engineered Particle Board Column -->
-        <div class="p-8 md:p-10 rounded-3xl bg-white border-2 border-teak/40 shadow-xl relative flex flex-col justify-between">
+        <div class="p-5 sm:p-8 md:p-10 rounded-3xl bg-white border-2 border-teak/40 shadow-xl relative flex flex-col justify-between">
           <div class="absolute top-6 right-6">
             <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-[#0D0C0B] text-white font-mono">Modern Agility</span>
           </div>
@@ -775,40 +777,40 @@
         </p>
       </div>
 
-      <div id="warranty-stats-section" class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20 perspective-1000">
-        <div class="p-6 rounded-3xl depth-3d-dark card-3d-tilt preserve-3d text-center border border-white/10">
+      <div id="warranty-stats-section" class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-16 sm:mb-20 perspective-1000">
+        <div class="p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl depth-3d-dark card-3d-tilt preserve-3d text-center border border-white/10">
           <div class="card-sheen"></div>
           <div class="float-3d-element">
-            <span class="stat-counter font-heading text-4xl sm:text-5xl font-extrabold text-champagne" data-target="5" data-suffix=" Years">0</span>
-            <span class="block text-xs font-bold uppercase tracking-wider text-stone-300 mt-2 font-mono">Comprehensive Warranty</span>
-            <span class="text-[11px] text-stone-500 mt-1 block font-sans">Full factory guarantee</span>
+            <span class="stat-counter font-heading text-2xl sm:text-4xl md:text-5xl font-extrabold text-champagne" data-target="5" data-suffix=" Years">0</span>
+            <span class="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-stone-300 mt-1.5 sm:mt-2 font-mono leading-tight">Comprehensive Warranty</span>
+            <span class="text-[10px] sm:text-[11px] text-stone-500 mt-0.5 sm:mt-1 block font-sans">Full factory guarantee</span>
           </div>
         </div>
 
-        <div class="p-6 rounded-3xl depth-3d-dark card-3d-tilt preserve-3d text-center border border-white/10">
+        <div class="p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl depth-3d-dark card-3d-tilt preserve-3d text-center border border-white/10">
           <div class="card-sheen"></div>
           <div class="float-3d-element">
-            <span class="stat-counter font-heading text-4xl sm:text-5xl font-extrabold text-white" data-target="100" data-suffix="%">0</span>
-            <span class="block text-xs font-bold uppercase tracking-wider text-stone-300 mt-2 font-mono">Natural Wood Timber</span>
-            <span class="text-[11px] text-stone-400 mt-1 block font-sans">100% Pure Natural Wood</span>
+            <span class="stat-counter font-heading text-2xl sm:text-4xl md:text-5xl font-extrabold text-white" data-target="100" data-suffix="%">0</span>
+            <span class="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-stone-300 mt-1.5 sm:mt-2 font-mono leading-tight">Natural Wood Timber</span>
+            <span class="text-[10px] sm:text-[11px] text-stone-400 mt-0.5 sm:mt-1 block font-sans">100% Pure Natural Wood</span>
           </div>
         </div>
 
-        <div class="p-6 rounded-3xl depth-3d-dark card-3d-tilt preserve-3d text-center border border-white/10">
+        <div class="p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl depth-3d-dark card-3d-tilt preserve-3d text-center border border-white/10">
           <div class="card-sheen"></div>
           <div class="float-3d-element">
-            <span class="stat-counter font-heading text-4xl sm:text-5xl font-extrabold text-champagne" data-target="1250" data-suffix="+">0</span>
-            <span class="block text-xs font-bold uppercase tracking-wider text-stone-300 mt-2 font-mono">Spaces Furnished</span>
-            <span class="text-[11px] text-stone-500 mt-1 block font-sans">Across Kerala</span>
+            <span class="stat-counter font-heading text-2xl sm:text-4xl md:text-5xl font-extrabold text-champagne" data-target="1250" data-suffix="+">0</span>
+            <span class="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-stone-300 mt-1.5 sm:mt-2 font-mono leading-tight">Spaces Furnished</span>
+            <span class="text-[10px] sm:text-[11px] text-stone-500 mt-0.5 sm:mt-1 block font-sans">Across Kerala</span>
           </div>
         </div>
 
-        <div class="p-6 rounded-3xl depth-3d-dark card-3d-tilt preserve-3d text-center border border-white/10">
+        <div class="p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl depth-3d-dark card-3d-tilt preserve-3d text-center border border-white/10">
           <div class="card-sheen"></div>
           <div class="float-3d-element">
-            <span class="stat-counter font-heading text-4xl sm:text-5xl font-extrabold text-white" data-target="25" data-suffix="+">0</span>
-            <span class="block text-xs font-bold uppercase tracking-wider text-stone-300 mt-2 font-mono">Master Craftsmen</span>
-            <span class="text-[11px] text-stone-500 mt-1 block font-sans">M E S Junction Crew</span>
+            <span class="stat-counter font-heading text-2xl sm:text-4xl md:text-5xl font-extrabold text-white" data-target="25" data-suffix="+">0</span>
+            <span class="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-stone-300 mt-1.5 sm:mt-2 font-mono leading-tight">Master Craftsmen</span>
+            <span class="text-[10px] sm:text-[11px] text-stone-500 mt-0.5 sm:mt-1 block font-sans">M E S Junction Crew</span>
           </div>
         </div>
       </div>
@@ -898,7 +900,7 @@
   <!-- =========================================================================
        7. CUSTOM QUOTE & WHATSAPP CONFIGURATOR
        ========================================================================= -->
-  <section id="custom-quote" class="py-20 lg:py-28 bg-white relative">
+  <section id="custom-quote" class="py-20 lg:py-28 bg-white relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-3xl mx-auto mb-14">
@@ -913,17 +915,17 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        <div class="lg:col-span-8 p-6 sm:p-10 rounded-3xl bg-alabaster border border-stone-200 shadow-sm space-y-8">
+        <div class="lg:col-span-8 p-4 sm:p-10 rounded-3xl bg-alabaster border border-stone-200 shadow-sm space-y-6 sm:space-y-8">
           
           <!-- Step 1: Space Type -->
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-stone-500 mb-3 font-mono">
               Step 1: Space Type
             </label>
-            <div class="grid grid-cols-2 gap-3 sm:gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4">
               <button 
                 type="button" 
-                class="quote-space-btn py-4 px-4 rounded-2xl font-bold text-xs uppercase tracking-wider bg-[#0D0C0B] text-white border border-[#0D0C0B] shadow-sm flex items-center justify-center gap-2 transition-all font-mono"
+                class="quote-space-btn py-3 sm:py-4 px-3 sm:px-4 rounded-2xl font-bold text-xs uppercase tracking-wider bg-[#0D0C0B] text-white border border-[#0D0C0B] shadow-sm flex items-center justify-center gap-2 transition-all font-mono"
                 data-space="Home"
               >
                 <i class="fa-solid fa-house"></i>
@@ -931,7 +933,7 @@
               </button>
               <button 
                 type="button" 
-                class="quote-space-btn py-4 px-4 rounded-2xl font-bold text-xs uppercase tracking-wider bg-white text-stone-700 border border-stone-200 hover:border-[#0D0C0B] shadow-sm flex items-center justify-center gap-2 transition-all font-mono"
+                class="quote-space-btn py-3 sm:py-4 px-3 sm:px-4 rounded-2xl font-bold text-xs uppercase tracking-wider bg-white text-stone-700 border border-stone-200 hover:border-[#0D0C0B] shadow-sm flex items-center justify-center gap-2 transition-all font-mono"
                 data-space="Office"
               >
                 <i class="fa-solid fa-building"></i>
@@ -1055,7 +1057,7 @@
 
         <!-- Right: Live Estimate Breakdown -->
         <div class="lg:col-span-4 sticky top-28 space-y-6">
-          <div class="p-8 rounded-3xl bg-[#0D0C0B] text-[#FAF8F5] shadow-2xl border border-white/10 space-y-6">
+          <div class="p-5 sm:p-8 rounded-3xl bg-[#0D0C0B] text-[#FAF8F5] shadow-2xl border border-white/10 space-y-5 sm:space-y-6">
             
             <div class="flex items-center justify-between pb-4 border-b border-stone-800 font-mono">
               <span class="text-xs uppercase font-bold text-champagne tracking-wider">Estimated Factory Budget</span>
@@ -1064,7 +1066,7 @@
 
             <div>
               <span class="text-xs text-stone-400 block mb-1 font-sans">Factory Direct Estimate Range:</span>
-              <div id="quote-est-range" class="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              <div id="quote-est-range" class="font-heading text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
                 ₹55,000 – ₹72,000
               </div>
               <span class="text-[11px] text-stone-400 block mt-1 font-sans">*Final quote confirmed after site visit</span>
@@ -1088,9 +1090,9 @@
             <button 
               id="quote-whatsapp-submit"
               type="button" 
-              class="w-full py-4 px-6 rounded-2xl font-bold text-xs uppercase tracking-wider bg-[#25D366] text-white hover:bg-[#20bd5a] transition-all shadow-xl shadow-[#25D366]/30 flex items-center justify-center gap-2 transform hover:-translate-y-0.5 font-mono"
+              class="w-full py-3.5 sm:py-4 px-4 sm:px-6 rounded-2xl font-bold text-xs uppercase tracking-wider bg-[#25D366] text-white hover:bg-[#20bd5a] transition-all shadow-xl shadow-[#25D366]/30 flex items-center justify-center gap-2 transform hover:-translate-y-0.5 font-mono text-center"
             >
-              <i class="fa-brands fa-whatsapp text-xl"></i>
+              <i class="fa-brands fa-whatsapp text-lg sm:text-xl"></i>
               <span>Send to WhatsApp (97784 46620)</span>
             </button>
 
@@ -1121,7 +1123,7 @@
   <!-- =========================================================================
        8. ERATTUPETTA WORKSHOP HERITAGE
        ========================================================================= -->
-  <section id="workshop-heritage" class="py-20 lg:py-28 bg-alabaster relative">
+  <section id="workshop-heritage" class="py-20 lg:py-28 bg-alabaster relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -1169,12 +1171,12 @@
             </div>
           </div>
 
-          <div class="flex flex-wrap gap-4 pt-2">
+          <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 pt-2">
             <a 
               href="https://maps.google.com/?q=Homeify+Furniture+MES+Junction+Erattupetta+Kottayam+Kerala" 
               target="_blank" 
               rel="noopener"
-              class="px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0D0C0B] text-white hover:bg-stone-800 transition-colors flex items-center gap-2 font-mono btn-3d"
+              class="w-full sm:w-auto text-center px-6 sm:px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0D0C0B] text-white hover:bg-stone-800 transition-colors flex items-center justify-center gap-2 font-mono btn-3d"
             >
               <i class="fa-solid fa-diamond-turn-right text-champagne"></i>
               <span>Get Directions to Workshop</span>
@@ -1184,7 +1186,7 @@
               href="https://wa.me/919778446620?text=Hello%20Homeify!%20I%20would%20like%20to%20schedule%20a%20visit%20to%20your%20workshop%20at%20M%20E%20S%20Junction,%20Erattupetta." 
               target="_blank" 
               rel="noopener"
-              class="px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-stone-800 hover:bg-stone-50 border border-stone-200 transition-colors flex items-center gap-2 font-mono btn-3d"
+              class="w-full sm:w-auto text-center px-6 sm:px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-stone-800 hover:bg-stone-50 border border-stone-200 transition-colors flex items-center justify-center gap-2 font-mono btn-3d"
             >
               <i class="fa-regular fa-calendar-check text-teak"></i>
               <span>Schedule Workshop Visit</span>
@@ -1231,7 +1233,7 @@
   <!-- =========================================================================
        9. ARCHITECTURAL SHOWCASE & REVIEWS
        ========================================================================= -->
-  <section class="py-20 lg:py-28 bg-white border-t border-stone-200">
+  <section class="py-20 lg:py-28 bg-white border-t border-stone-200 overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center max-w-3xl mx-auto mb-14">
@@ -1244,9 +1246,9 @@
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
         
-        <div class="p-8 rounded-3xl bg-alabaster border border-stone-200 shadow-sm flex flex-col justify-between">
+        <div class="p-6 sm:p-8 rounded-3xl bg-alabaster border border-stone-200 shadow-sm flex flex-col justify-between">
           <div>
             <div class="flex items-center gap-1 text-champagne mb-4">
               <i class="fa-solid fa-star"></i>
@@ -1270,7 +1272,7 @@
           </div>
         </div>
 
-        <div class="p-8 rounded-3xl bg-alabaster border border-stone-200 shadow-sm flex flex-col justify-between">
+        <div class="p-6 sm:p-8 rounded-3xl bg-alabaster border border-stone-200 shadow-sm flex flex-col justify-between">
           <div>
             <div class="flex items-center gap-1 text-champagne mb-4">
               <i class="fa-solid fa-star"></i>
@@ -1294,7 +1296,7 @@
           </div>
         </div>
 
-        <div class="p-8 rounded-3xl bg-alabaster border border-stone-200 shadow-sm flex flex-col justify-between">
+        <div class="p-6 sm:p-8 rounded-3xl bg-alabaster border border-stone-200 shadow-sm flex flex-col justify-between">
           <div>
             <div class="flex items-center gap-1 text-champagne mb-4">
               <i class="fa-solid fa-star"></i>

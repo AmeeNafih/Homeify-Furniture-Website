@@ -40,12 +40,24 @@ html {
   color: var(--text-main);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
 }
 
 body {
   overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+  position: relative;
   background-color: var(--bg-primary);
   line-height: 1.6;
+}
+
+/* Global Responsive Media Safeguard */
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
 }
 
 /* Custom Ultra-Sleek Scrollbar */
@@ -326,8 +338,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
   padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
 }
 
-/* Responsive Overrides for Mobile (<768px) */
-@media (max-width: 768px) {
+/* Responsive Overrides for Mobile & Tablets (<= 1023px) */
+@media (max-width: 1023px) {
   /* Prevent iOS Safari Automatic Zoom on Input Focus */
   input[type="text"],
   input[type="tel"],
@@ -340,12 +352,17 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
   /* Body Padding to prevent overlap with bottom app dock */
   body {
-    padding-bottom: 4.5rem;
+    padding-bottom: 5.5rem !important;
   }
 
   /* Hide redundant desktop floating button on mobile */
   .wa-float-btn {
     display: none !important;
+  }
+
+  /* Stabilize 3D tilt cards on mobile/tablets to prevent horizontal overflow */
+  .card-3d-tilt {
+    transform: none !important;
   }
 
   /* Hero Floating Badges Mobile Horizontal Swipe Reel */
@@ -357,10 +374,10 @@ input[type="range"]::-webkit-slider-thumb:hover {
     padding: 0.85rem 0.25rem 0.5rem 0.25rem !important;
     -webkit-overflow-scrolling: touch !important;
     scrollbar-width: none !important;
-    margin-left: -1rem !important;
-    margin-right: -1rem !important;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
   .hero-badges-wrapper::-webkit-scrollbar {
     display: none !important;
@@ -369,17 +386,18 @@ input[type="range"]::-webkit-slider-thumb:hover {
     position: static !important;
     transform: none !important;
     animation: none !important;
-    flex: 0 0 84% !important;
-    max-width: 84% !important;
+    flex: 0 0 82% !important;
+    max-width: 82% !important;
     scroll-snap-align: center !important;
     margin-bottom: 0 !important;
   }
 
   /* Modal Container Mobile Refinements */
   .modal-container {
-    max-height: 94vh !important;
-    margin: 0.5rem !important;
-    width: calc(100vw - 1rem) !important;
+    max-height: 92vh !important;
+    margin: 0.5rem auto !important;
+    width: 100% !important;
+    max-width: calc(100vw - 1.5rem) !important;
     border-radius: 1.5rem !important;
   }
 }
@@ -442,8 +460,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
   z-index: 1;
   opacity: 0.85;
