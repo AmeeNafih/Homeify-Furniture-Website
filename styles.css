@@ -795,5 +795,71 @@ html.dark .bg-stone-100 {
   color: #FAF8F5 !important;
 }
 
+/* ==========================================================================
+   INSTAGRAM BRAND INTEGRATION & ULTRA-MODERN AESTHETICS
+   ========================================================================== */
+.bg-instagram-gradient {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+.text-instagram-gradient {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.border-instagram-gradient {
+  border-image: linear-gradient(45deg, #f09433, #dc2743, #bc1888) 1;
+}
+
+/* Floating Instagram Action Button */
+.insta-float-btn {
+  box-shadow: 0 10px 25px -4px rgba(220, 39, 67, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+}
+
+.insta-float-btn:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 16px 35px -4px rgba(220, 39, 67, 0.6), 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Modern Specular Sheen for Cards */
+.specular-border {
+  position: relative;
+}
+
+.specular-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(212, 175, 55, 0.15), rgba(255, 255, 255, 0.05));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+html.dark .specular-border::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(212, 175, 55, 0.25), rgba(255, 255, 255, 0.02));
+}
+
+/* Subtle Breathing Glow for Modern Accents */
+@keyframes atmosphericAura {
+  0%, 100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.05);
+  }
+}
+
+.atmospheric-aura {
+  animation: atmosphericAura 6s ease-in-out infinite;
+}
+
 
 

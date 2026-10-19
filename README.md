@@ -51,6 +51,20 @@ All contact points throughout the entire website are pre-wired to the workshop n
 
 ---
 
+## 📷 Official Instagram Integration: [@homeify.furniture](https://www.instagram.com/homeify.furniture/)
+
+The website seamlessly integrates Homeify's official Instagram profile across 8 touchpoints:
+1. **Top Utility Bar:** Direct link to `@homeify.furniture` with official gradient icon.
+2. **Desktop Navbar:** Elegant circular Instagram button beside the theme toggle.
+3. **Hero Section Live Badge:** Interactive `@homeify.furniture` badge linking to live reels.
+4. **Mobile Header & Drawer:** One-tap Instagram follow buttons with gradient styling.
+5. **Mobile Bottom Dock:** Dedicated thumb-reachable **"Insta"** tab on all mobile viewports.
+6. **Floating Action Dock (Desktop/Tablet):** Dedicated glowing floating Instagram action button stacked with WhatsApp.
+7. **Dedicated Instagram Workshop Reels Showcase:** High-impact 4-card live workshop reels gallery displaying Nilambur teak carving, brass jhoola chains, and client installations.
+8. **Footer & Workshop Contacts:** Prominent follow card, workshop handles, and social bar links.
+
+---
+
 ## 🚀 Interactive Features
 
 1. **Floating Anti-Gravity Trust Badges:**
