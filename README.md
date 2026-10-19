@@ -32,9 +32,10 @@ This single-page showcase has been completely upgraded with a **cutting-edge Mod
   - Champagne Gold (`#D4AF37`) — highlighting the **5-Year Warranty** seals and badges
 
 ### 2. Typography
-- **Primary Display & Headings:** *Syne* & *Playfair Display* (Google Fonts)
+- **Primary Display & Headings:** *Manrope* & *Plus Jakarta Sans* (Modern Corporate Geometric Sans)
+- **Body & Interface:** *Inter* & *Plus Jakarta Sans* (Modern Corporate Standard)
 - **Editorial Sub-Headings:** *Cormorant Garamond* (Google Fonts)
-- **UI Elements, Metrics & Mono Labels:** *Plus Jakarta Sans* & Technical Monospace
+- **UI Elements, Metrics & Mono Labels:** Technical Monospace & *Inter*
 
 ---
 
