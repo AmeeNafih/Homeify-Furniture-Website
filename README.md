@@ -92,17 +92,22 @@ The mobile experience has been engineered to feel like a high-performance native
    - Clean slide-out drawer that automatically closes whenever any navigation anchor, quote link, or modal button is tapped.
 
 
-## 🏷️ Showroom MRP vs. Factory Direct Pricing & Thumbnail Showcase
+## 🏷️ Showroom MRP vs. Factory Direct Pricing & Permanent Bento Showcase
 
-1. **Uncropped Product Thumbnails:**
-   - 9:16 portrait workshop photos are fitted with `aspect-[4/5]` / `aspect-[3/4]` containers using `object-contain` on dark studio gradient backing.
-   - Dual controls above the gallery: **"Thumbnail Grid"** vs. **"Bento Showcase"** and **"Uncropped Photo"** vs. **"Cover Fill"**.
-   - Lightbox modal contains an interactive **bottom thumbnail strip** to quickly browse between products.
+1. **Permanent Bento Showcase Architecture:**
+   - The catalog is permanently locked to the Haute Architectural Bento Showcase layout.
+   - Featured items receive expansive dynamic grid spans (`col-span-12 md:col-span-12 lg:col-span-8`) alongside standard cards (`col-span-12 sm:col-span-6 lg:col-span-4`).
+   - All furniture photos are rendered uncropped with `object-contain` on dark luxury studio backing (`#181615` to `#0A0A09`).
 2. **Dual Pricing Engine:**
    - Displays **Showroom Retail MRP** with strikethrough (e.g. ~₹38,000~) alongside **Factory Direct Price** (e.g. ₹24,500) and **Savings Badge** (e.g. "Save 36% Direct").
-3. **Workshop Management Studio (Edit MRP & Photos):**
-   - Click the **"Edit MRP"** button in the top navigation bar or toolbar to edit prices for any product right in the browser with instant local persistence.
-   - Or modify defaults in [`app.js`](file:///home/ameen/Downloads/Homeify%20Website/app.js) inside `DEFAULT_PRODUCTS`.
+3. **Admin-Only Management Studio (MRP, Prices, Photos & Logo):**
+   - Public "Edit MRP" buttons have been completely removed from the header, navbar, mobile drawer, and catalog toolbar for visitors.
+   - **Admin Access Methods:**
+     1. Click the discreet **"Admin"** button in the footer copyright row.
+     2. Press keyboard shortcut: **`Ctrl + Shift + A`** (or **`Cmd + Shift + A`** on Mac).
+     3. Append **`#admin`** or **`?admin=1`** to the site URL.
+   - **Authentication:** Protected by an Admin PIN (Default: `1234`).
+   - **Session Security:** Authenticated session is maintained in `sessionStorage` with a one-click **"Log Out"** button to lock the studio, plus a **"Change PIN"** utility.
 
 ---
 

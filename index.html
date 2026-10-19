@@ -78,23 +78,12 @@
   <div class="bg-[#0D0C0B] text-[#FAF8F5] py-2 px-3 sm:px-4 text-xs border-b border-white/10 relative z-50">
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
       
-      <!-- Live Workshop Status Indicator & Customizer Pill -->
+      <!-- Live Workshop Status Indicator -->
       <div class="flex items-center gap-2 sm:gap-3">
         <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 text-white font-mono text-[10px] sm:text-[11px] shadow-sm whitespace-nowrap">
           <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 live-pulse-dot"></span>
           <span>M E S Junction Live</span>
         </span>
-
-        <!-- Direct Button to Change Photos & Logo -->
-        <button 
-          id="open-customizer-btn" 
-          type="button"
-          class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-teak to-champagne text-[#0D0C0B] font-mono font-bold text-[10px] sm:text-[11px] shadow-sm hover:scale-105 transition-transform btn-3d whitespace-nowrap"
-          title="Click to change product MRP, prices, photos, or company logo"
-        >
-          <i class="fa-solid fa-tag text-[9px] sm:text-xs"></i>
-          <span>Edit MRP</span>
-        </button>
       </div>
 
       <!-- Quick Action Contacts with 9778446620 -->
@@ -165,16 +154,6 @@
 
       <!-- Desktop CTAs with updated WhatsApp 9778446620 -->
       <div class="hidden sm:flex items-center gap-3">
-        <button 
-          id="open-customizer-btn-desktop" 
-          type="button" 
-          class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold bg-amber-500/10 text-amber-900 border border-amber-500/30 hover:bg-amber-500 hover:text-white transition-all shadow-sm font-mono cursor-pointer"
-          title="Change product MRP, prices, and photos"
-        >
-          <i class="fa-solid fa-tag text-xs"></i>
-          <span>Edit MRP</span>
-        </button>
-
         <a 
           href="https://wa.me/919778446620?text=Hello%20Homeify%20Furniture%20(Erattupetta)!%20I%20would%20like%20to%20inquire%20about%20your%20custom%20furniture." 
           target="_blank" 
@@ -235,16 +214,6 @@
         <span>Interactive Configurator</span>
         <i class="fa-solid fa-calculator text-xs text-teak"></i>
       </a>
-      
-      <!-- Mobile Customizer Shortcut -->
-      <button 
-        id="open-customizer-btn-mobile" 
-        type="button" 
-        class="py-2.5 px-3 rounded-xl bg-teak/10 text-teak font-mono font-bold text-xs flex items-center justify-between"
-      >
-        <span><i class="fa-solid fa-tag mr-2 text-teak"></i> Change Product MRP & Photos</span>
-        <i class="fa-solid fa-sliders text-xs"></i>
-      </button>
     </nav>
 
     <div class="mt-auto pt-6 border-t border-stone-200 space-y-3">
@@ -463,69 +432,11 @@
         </button>
       </div>
 
-      <!-- Gallery View & MRP Controls Toolbar -->
-      <div class="flex flex-wrap items-center justify-between gap-4 mb-8 pb-4 border-b border-stone-200">
-        <!-- View Mode Switcher -->
-        <div class="flex items-center gap-2 text-xs font-mono">
-          <span class="text-stone-500 font-bold uppercase tracking-wider text-[11px]">Display:</span>
-          <div class="inline-flex p-1 rounded-full bg-stone-100 border border-stone-200 shadow-inner">
-            <button 
-              id="view-mode-thumbnail" 
-              type="button" 
-              class="gallery-view-btn px-4 py-2 rounded-full font-bold bg-[#0D0C0B] text-white shadow-sm flex items-center gap-1.5 transition-all"
-            >
-              <i class="fa-solid fa-table-cells-large text-xs"></i>
-              <span>Thumbnail Catalog</span>
-            </button>
-            <button 
-              id="view-mode-bento" 
-              type="button" 
-              class="gallery-view-btn px-4 py-2 rounded-full font-bold text-stone-600 hover:text-stone-900 flex items-center gap-1.5 transition-all"
-            >
-              <i class="fa-solid fa-shapes text-xs"></i>
-              <span>Bento Showcase</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Thumbnail Framing & MRP Actions -->
-        <div class="flex flex-wrap items-center gap-2.5 text-xs font-mono">
-          <div class="inline-flex p-1 rounded-full bg-stone-100 border border-stone-200 shadow-inner">
-            <button 
-              id="thumb-fit-contain" 
-              type="button" 
-              class="thumb-fit-btn px-3 py-1.5 rounded-full font-bold bg-[#0D0C0B] text-white shadow-sm flex items-center gap-1 transition-all" 
-              title="Show entire product photo thumbnail with zero cropping"
-            >
-              <i class="fa-solid fa-expand text-[10px]"></i>
-              <span>Uncropped Photo</span>
-            </button>
-            <button 
-              id="thumb-fit-cover" 
-              type="button" 
-              class="thumb-fit-btn px-3 py-1.5 rounded-full font-bold text-stone-600 hover:text-stone-900 flex items-center gap-1 transition-all" 
-              title="Fill entire card height"
-            >
-              <i class="fa-solid fa-crop-simple text-[10px]"></i>
-              <span>Cover Fill</span>
-            </button>
-          </div>
-
-          <button 
-            id="open-mrp-manager-btn" 
-            type="button" 
-            class="px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/40 text-amber-950 hover:bg-amber-500 hover:text-white transition-all font-bold flex items-center gap-1.5 shadow-sm cursor-pointer"
-          >
-            <i class="fa-solid fa-tag text-xs text-teak group-hover:text-white"></i>
-            <span>Edit Product MRP</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Bento Grid Container -->
+      <!-- Bento Grid Container (Permanent Bento Showcase Layout) -->
       <div id="bento-grid-container" class="grid grid-cols-12 gap-6 transition-all duration-300">
         <!-- Injected via app.js -->
       </div>
+
 
       <!-- Bottom Customization Banner -->
       <div class="mt-14 p-8 rounded-3xl bg-alabaster border border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
@@ -1480,12 +1391,17 @@
         <div>
           &copy; 2026 Homeify Furniture. M E S Junction, Erattupetta, Kottayam, Kerala.
         </div>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3 sm:gap-4 flex-wrap">
           <a href="#" class="hover:text-stone-300 transition-colors">Privacy</a>
           <span>•</span>
           <a href="#" class="hover:text-stone-300 transition-colors">Warranty Terms</a>
           <span>•</span>
           <a href="https://wa.me/919778446620" class="hover:text-emerald-400 transition-colors">WhatsApp: 97784 46620</a>
+          <span>•</span>
+          <button id="footer-admin-btn" type="button" class="text-stone-500 hover:text-champagne transition-colors inline-flex items-center gap-1 cursor-pointer" title="Admin Login (Ctrl+Shift+A)">
+            <i class="fa-solid fa-lock text-[10px]"></i>
+            <span>Admin</span>
+          </button>
         </div>
       </div>
 
@@ -1616,23 +1532,102 @@
   </div>
 
   <!-- =========================================================================
-       12. INTERACTIVE PHOTO & LOGO CUSTOMIZER STUDIO MODAL
+       12. ADMIN AUTHENTICATION GATEWAY MODAL (Restricted Access)
+       ========================================================================= -->
+  <div id="admin-auth-modal" class="modal-overlay modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0D0C0B]/85 backdrop-blur-md">
+    <div class="modal-container relative w-full max-w-md bg-[#141210] border border-white/10 rounded-3xl shadow-2xl p-6 sm:p-8 text-white">
+      <button id="admin-auth-close-btn" type="button" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 flex items-center justify-center transition-colors">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-teak to-champagne flex items-center justify-center text-[#0D0C0B] text-2xl shadow-lg">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <span class="text-[11px] font-mono uppercase tracking-widest text-champagne font-bold block mb-1">Restricted Access</span>
+        <h3 class="font-heading text-2xl font-extrabold text-white">Workshop Admin Login</h3>
+        <p class="text-xs text-stone-400 mt-1 font-sans">
+          Enter your admin PIN to manage Showroom MRPs, factory prices, product photos, and company branding.
+        </p>
+      </div>
+
+      <form id="admin-auth-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-mono font-bold uppercase tracking-wider text-stone-300 mb-1.5">
+            Admin PIN / Password
+          </label>
+          <div class="relative">
+            <input 
+              id="admin-auth-pin" 
+              type="password" 
+              placeholder="Enter Admin PIN (Default: 1234)" 
+              class="w-full text-sm font-mono tracking-wider p-3.5 pr-10 rounded-2xl bg-white/5 border border-white/15 focus:border-champagne focus:outline-none text-white placeholder-stone-500"
+              autocomplete="current-password"
+              required
+            />
+            <button 
+              id="admin-toggle-pin-visibility" 
+              type="button" 
+              class="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-200 text-xs"
+              aria-label="Toggle PIN Visibility"
+            >
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <p id="admin-auth-error" class="hidden text-xs text-rose-400 mt-2 font-mono flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span id="admin-auth-error-msg">Incorrect PIN. Please try again.</span>
+          </p>
+        </div>
+
+        <button 
+          type="submit" 
+          class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-teak to-champagne hover:brightness-110 text-[#0D0C0B] font-mono text-xs font-extrabold uppercase tracking-wider shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <i class="fa-solid fa-lock-open"></i>
+          <span>Authenticate & Open Studio</span>
+        </button>
+
+        <p class="text-[11px] text-stone-500 font-mono text-center">
+          Default Admin PIN: <span class="text-champagne font-bold">1234</span>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       13. ADMIN PHOTO & MRP STUDIO MODAL (Protected by Admin Auth)
        ========================================================================= -->
   <div id="customizer-modal" class="modal-overlay modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#0D0C0B]/85 backdrop-blur-md">
     <div class="modal-container relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-stone-200 p-6 sm:p-8 flex flex-col space-y-6">
       
-      <!-- Modal Header -->
-      <div class="flex items-center justify-between pb-4 border-b border-stone-200">
+      <!-- Modal Header with Admin Status & Logout -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-stone-200 gap-4">
         <div>
-          <span class="text-xs font-bold uppercase tracking-widest text-teak font-mono">Workshop Management Studio</span>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xs font-bold uppercase tracking-widest text-teak font-mono">Workshop Management Studio</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 font-mono flex items-center gap-1">
+              <i class="fa-solid fa-shield-halved text-[10px]"></i> Admin Verified
+            </span>
+          </div>
           <h3 class="font-heading text-2xl font-extrabold text-[#0D0C0B]">Manage MRP, Prices, Photos & Logo</h3>
           <p class="text-xs text-stone-500 mt-0.5 font-sans">
-            Easily change Showroom MRPs, Direct Factory Offer Prices, or replace photos. Changes update live immediately!
+            Only authenticated administrators can edit Showroom MRPs, Factory Offer Prices, or upload workshop assets.
           </p>
         </div>
-        <button id="customizer-close-btn" class="w-10 h-10 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition-colors">
-          <i class="fa-solid fa-xmark text-base"></i>
-        </button>
+        <div class="flex items-center gap-2 flex-wrap">
+          <button id="admin-change-pin-btn" type="button" class="px-3 py-1.5 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-700 text-xs font-mono font-bold flex items-center gap-1.5 transition-colors cursor-pointer" title="Change Admin PIN">
+            <i class="fa-solid fa-key text-[11px] text-teak"></i>
+            <span>Change PIN</span>
+          </button>
+          <button id="admin-logout-btn" type="button" class="px-3 py-1.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-mono font-bold flex items-center gap-1.5 transition-colors cursor-pointer" title="Lock & Log Out">
+            <i class="fa-solid fa-arrow-right-from-bracket text-[11px]"></i>
+            <span>Log Out</span>
+          </button>
+          <button id="customizer-close-btn" class="w-10 h-10 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition-colors cursor-pointer" aria-label="Close studio">
+            <i class="fa-solid fa-xmark text-base"></i>
+          </button>
+        </div>
       </div>
 
       <!-- SECTION 1: LOGO CUSTOMIZATION -->

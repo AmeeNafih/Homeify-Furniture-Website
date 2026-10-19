@@ -488,8 +488,8 @@ let currentFilter = 'all';
 let selectedProductForModal = null;
 let currentHeroSlideIndex = 0;
 let heroSlideTimer = null;
-let galleryViewMode = localStorage.getItem('homeify_gallery_view_mode') || 'thumbnail'; // 'thumbnail' or 'bento'
-let galleryThumbFit = localStorage.getItem('homeify_gallery_thumb_fit') || 'contain';   // 'contain' or 'cover'
+let galleryViewMode = 'bento'; // Permanently set to Bento Showcase
+let galleryThumbFit = 'contain';   // Permanently set to uncropped high-quality framing
 
 // Calculate discount savings percentage
 function calculateSavingsPercent(mrpStr, priceStr) {
@@ -574,6 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
   initScrollSpy();
   initCustomizerManager();
+  initAdminAuth();
 });
 
 // ==========================================================================
@@ -923,11 +924,15 @@ function renderBentoGallery(filterCategory) {
     let spanClasses = 'col-span-12 sm:col-span-6 lg:col-span-4';
     let isLarge = false;
 
-    if (galleryViewMode === 'bento' && filterCategory === 'all') {
+    // Permanent Bento Showcase: Hero featured items receive prominent architectural spans
+    if (filterCategory === 'all') {
       if (index === 0 || index === 3) {
         spanClasses = 'col-span-12 md:col-span-12 lg:col-span-8';
         isLarge = true;
       }
+    } else if (filtered.length >= 3 && index === 0) {
+      spanClasses = 'col-span-12 md:col-span-12 lg:col-span-8';
+      isLarge = true;
     }
 
     const card = document.createElement('div');
@@ -1063,53 +1068,6 @@ function initFilterButtons() {
       }
     });
   });
-
-  // Gallery View Mode & Thumbnail Fit Toolbar Listeners
-  const viewThumbBtn = document.getElementById('view-mode-thumbnail');
-  const viewBentoBtn = document.getElementById('view-mode-bento');
-  const fitContainBtn = document.getElementById('thumb-fit-contain');
-  const fitCoverBtn = document.getElementById('thumb-fit-cover');
-  const mrpManagerBtn = document.getElementById('open-mrp-manager-btn');
-  const navMrpBtn = document.getElementById('open-customizer-btn-desktop');
-
-  if (viewThumbBtn && viewBentoBtn) {
-    viewThumbBtn.addEventListener('click', () => {
-      galleryViewMode = 'thumbnail';
-      localStorage.setItem('homeify_gallery_view_mode', 'thumbnail');
-      viewThumbBtn.className = 'gallery-view-btn px-4 py-2 rounded-full font-bold bg-[#0D0C0B] text-white shadow-sm flex items-center gap-1.5 transition-all';
-      viewBentoBtn.className = 'gallery-view-btn px-4 py-2 rounded-full font-bold text-stone-600 hover:text-stone-900 flex items-center gap-1.5 transition-all';
-      renderBentoGallery(currentFilter);
-    });
-
-    viewBentoBtn.addEventListener('click', () => {
-      galleryViewMode = 'bento';
-      localStorage.setItem('homeify_gallery_view_mode', 'bento');
-      viewBentoBtn.className = 'gallery-view-btn px-4 py-2 rounded-full font-bold bg-[#0D0C0B] text-white shadow-sm flex items-center gap-1.5 transition-all';
-      viewThumbBtn.className = 'gallery-view-btn px-4 py-2 rounded-full font-bold text-stone-600 hover:text-stone-900 flex items-center gap-1.5 transition-all';
-      renderBentoGallery(currentFilter);
-    });
-  }
-
-  if (fitContainBtn && fitCoverBtn) {
-    fitContainBtn.addEventListener('click', () => {
-      galleryThumbFit = 'contain';
-      localStorage.setItem('homeify_gallery_thumb_fit', 'contain');
-      fitContainBtn.className = 'thumb-fit-btn px-3 py-1.5 rounded-full font-bold bg-[#0D0C0B] text-white shadow-sm flex items-center gap-1 transition-all';
-      fitCoverBtn.className = 'thumb-fit-btn px-3 py-1.5 rounded-full font-bold text-stone-600 hover:text-stone-900 flex items-center gap-1 transition-all';
-      renderBentoGallery(currentFilter);
-    });
-
-    fitCoverBtn.addEventListener('click', () => {
-      galleryThumbFit = 'cover';
-      localStorage.setItem('homeify_gallery_thumb_fit', 'cover');
-      fitCoverBtn.className = 'thumb-fit-btn px-3 py-1.5 rounded-full font-bold bg-[#0D0C0B] text-white shadow-sm flex items-center gap-1 transition-all';
-      fitContainBtn.className = 'thumb-fit-btn px-3 py-1.5 rounded-full font-bold text-stone-600 hover:text-stone-900 flex items-center gap-1 transition-all';
-      renderBentoGallery(currentFilter);
-    });
-  }
-
-  if (mrpManagerBtn) mrpManagerBtn.addEventListener('click', openCustomizer);
-  if (navMrpBtn) navMrpBtn.addEventListener('click', openCustomizer);
 }
 
 // ==========================================================================
@@ -1727,20 +1685,157 @@ function initScrollSpy() {
 }
 
 // ==========================================================================
-// 10. PHOTO & LOGO CUSTOMIZER MANAGER
+// 10. WORKSHOP ADMIN AUTHENTICATION & RESTRICTED ACCESS GATEWAY
+// ==========================================================================
+function initAdminAuth() {
+  const footerAdminBtn = document.getElementById('footer-admin-btn');
+  const authModal = document.getElementById('admin-auth-modal');
+  const authCloseBtn = document.getElementById('admin-auth-close-btn');
+  const authForm = document.getElementById('admin-auth-form');
+  const pinInput = document.getElementById('admin-auth-pin');
+  const errorMsg = document.getElementById('admin-auth-error');
+  const togglePinBtn = document.getElementById('admin-toggle-pin-visibility');
+  const logoutBtn = document.getElementById('admin-logout-btn');
+  const changePinBtn = document.getElementById('admin-change-pin-btn');
+
+  // Trigger from footer button
+  if (footerAdminBtn) {
+    footerAdminBtn.addEventListener('click', () => {
+      openAdminAuthGateway();
+    });
+  }
+
+  // Close auth modal
+  if (authCloseBtn) {
+    authCloseBtn.addEventListener('click', closeAdminAuthGateway);
+  }
+
+  if (authModal) {
+    authModal.addEventListener('click', (e) => {
+      if (e.target === authModal) closeAdminAuthGateway();
+    });
+  }
+
+  // Toggle PIN visibility
+  if (togglePinBtn && pinInput) {
+    togglePinBtn.addEventListener('click', () => {
+      const isPassword = pinInput.type === 'password';
+      pinInput.type = isPassword ? 'text' : 'password';
+      togglePinBtn.innerHTML = isPassword 
+        ? '<i class="fa-solid fa-eye-slash"></i>' 
+        : '<i class="fa-solid fa-eye"></i>';
+    });
+  }
+
+  // Form submit
+  if (authForm) {
+    authForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const enteredPin = (pinInput ? pinInput.value : '').trim();
+      const currentPin = localStorage.getItem('homeify_admin_pin') || '1234';
+
+      if (enteredPin === currentPin) {
+        sessionStorage.setItem('homeify_admin_authenticated', 'true');
+        closeAdminAuthGateway();
+        openCustomizer();
+        showToast('Admin authenticated successfully. Welcome, Ameen!');
+      } else {
+        if (errorMsg) {
+          errorMsg.classList.remove('hidden');
+          const errText = document.getElementById('admin-auth-error-msg');
+          if (errText) errText.textContent = 'Incorrect Admin PIN. Please try again.';
+        }
+        if (pinInput) {
+          pinInput.classList.add('border-rose-500');
+          setTimeout(() => pinInput.classList.remove('border-rose-500'), 600);
+          pinInput.value = '';
+          pinInput.focus();
+        }
+      }
+    });
+  }
+
+  // Admin Logout
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      sessionStorage.removeItem('homeify_admin_authenticated');
+      closeCustomizer();
+      showToast('Admin session locked and logged out.');
+    });
+  }
+
+  // Admin Change PIN
+  if (changePinBtn) {
+    changePinBtn.addEventListener('click', () => {
+      const currentPin = localStorage.getItem('homeify_admin_pin') || '1234';
+      const verifyPin = prompt('Enter your current Admin PIN:');
+      if (verifyPin === null) return;
+      if (verifyPin.trim() !== currentPin) {
+        alert('Verification failed: Current PIN is incorrect.');
+        return;
+      }
+      const newPin = prompt('Enter new Admin PIN (minimum 4 characters):');
+      if (!newPin || newPin.trim().length < 4) {
+        alert('PIN must be at least 4 characters.');
+        return;
+      }
+      localStorage.setItem('homeify_admin_pin', newPin.trim());
+      showToast('Admin PIN updated successfully!');
+    });
+  }
+
+  // Secret shortcut: Ctrl + Shift + A / Cmd + Shift + A
+  window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+      e.preventDefault();
+      openAdminAuthGateway();
+    }
+  });
+
+  // URL Hash or query parameter trigger (#admin or ?admin)
+  if (window.location.hash === '#admin' || window.location.search.includes('admin')) {
+    setTimeout(openAdminAuthGateway, 400);
+  }
+}
+
+function openAdminAuthGateway() {
+  if (sessionStorage.getItem('homeify_admin_authenticated') === 'true') {
+    openCustomizer();
+    return;
+  }
+
+  const authModal = document.getElementById('admin-auth-modal');
+  if (!authModal) return;
+
+  const pinInput = document.getElementById('admin-auth-pin');
+  const errorMsg = document.getElementById('admin-auth-error');
+  if (pinInput) pinInput.value = '';
+  if (errorMsg) errorMsg.classList.add('hidden');
+
+  authModal.classList.remove('modal-hidden');
+  authModal.classList.add('modal-visible');
+  document.body.style.overflow = 'hidden';
+
+  setTimeout(() => {
+    if (pinInput) pinInput.focus();
+  }, 100);
+}
+
+function closeAdminAuthGateway() {
+  const authModal = document.getElementById('admin-auth-modal');
+  if (!authModal) return;
+  authModal.classList.add('modal-hidden');
+  authModal.classList.remove('modal-visible');
+  document.body.style.overflow = 'auto';
+}
+
+// ==========================================================================
+// 11. PHOTO & LOGO CUSTOMIZER STUDIO (Restricted to Authenticated Admin)
 // ==========================================================================
 function initCustomizerManager() {
-  const openBtn = document.getElementById('open-customizer-btn');
-  const openBtnMobile = document.getElementById('open-customizer-btn-mobile');
-  const openBtnDesktop = document.getElementById('open-customizer-btn-desktop');
-  const openMrpBtn = document.getElementById('open-mrp-manager-btn');
   const modal = document.getElementById('customizer-modal');
   const closeBtn = document.getElementById('customizer-close-btn');
 
-  if (openBtn) openBtn.addEventListener('click', openCustomizer);
-  if (openBtnMobile) openBtnMobile.addEventListener('click', openCustomizer);
-  if (openBtnDesktop) openBtnDesktop.addEventListener('click', openCustomizer);
-  if (openMrpBtn) openMrpBtn.addEventListener('click', openCustomizer);
   if (closeBtn) closeBtn.addEventListener('click', closeCustomizer);
 
   if (modal) {
@@ -1781,6 +1876,12 @@ function initCustomizerManager() {
 }
 
 function openCustomizer() {
+  // Security guard: Only authenticated admin can access
+  if (sessionStorage.getItem('homeify_admin_authenticated') !== 'true') {
+    openAdminAuthGateway();
+    return;
+  }
+
   const modal = document.getElementById('customizer-modal');
   if (!modal) return;
 
