@@ -599,7 +599,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================================================
-// 0. MODERN 3D INTERACTION & AMBIENT DEPTH ENGINE
+// 0. ARTISANAL 3D SAWDUST & TIMBER SHAVINGS AMBIENT SIMULATION
 // ==========================================================================
 function init3DAmbientCanvas() {
   const canvas = document.getElementById('ambient-3d-canvas');
@@ -615,71 +615,283 @@ function init3DAmbientCanvas() {
     height = canvas.height = window.innerHeight;
   });
 
-  const PARTICLE_COUNT = 45;
+  const isMobile = window.innerWidth < 768;
+  const PARTICLE_COUNT = isMobile ? 38 : 68;
   const particles = [];
-  const focalLength = 400;
+  const focalLength = 380;
 
+  // Camera parallax targets
   let targetCamX = 0;
   let targetCamY = 0;
   let camX = 0;
   let camY = 0;
 
+  // Mouse wind wake
+  let lastMouseX = width / 2;
+  let lastMouseY = height / 2;
+  let mouseX = width / 2;
+  let mouseY = height / 2;
+  let mouseVx = 0;
+  let mouseVy = 0;
+  let mouseMoved = false;
+
   window.addEventListener('mousemove', (e) => {
-    targetCamX = (e.clientX - width / 2) * 0.15;
-    targetCamY = (e.clientY - height / 2) * 0.15;
+    targetCamX = (e.clientX - width / 2) * 0.12;
+    targetCamY = (e.clientY - height / 2) * 0.12;
+
+    mouseVx = (e.clientX - lastMouseX) * 0.25;
+    mouseVy = (e.clientY - lastMouseY) * 0.25;
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+    mouseMoved = true;
   });
 
-  for (let i = 0; i < PARTICLE_COUNT; i++) {
-    particles.push({
-      x: (Math.random() - 0.5) * width * 1.5,
-      y: (Math.random() - 0.5) * height * 1.5,
-      z: Math.random() * 800 + 60,
-      radius: Math.random() * 2.8 + 1.2,
-      alpha: Math.random() * 0.6 + 0.2,
-      color: i % 3 === 0 ? 'rgba(212, 175, 55,' : i % 3 === 1 ? 'rgba(158, 103, 56,' : 'rgba(44, 74, 56,',
-      vx: (Math.random() - 0.5) * 0.35,
-      vy: -Math.random() * 0.4 - 0.1,
-      vz: (Math.random() - 0.5) * 0.4
-    });
+  // Authentic Furniture Timber Color Palette
+  const WOOD_PALETTES = [
+    { base: [218, 155, 76], edge: [184, 122, 50], hi: [248, 195, 128] }, // Teak Amber Gold
+    { base: [194, 136, 74], edge: [152, 98, 42],  hi: [230, 178, 118] }, // Warm Honey Teak
+    { base: [158, 88, 42],  edge: [118, 58, 24],  hi: [198, 128, 78] },  // Seasoned Rosewood
+    { base: [236, 208, 162],edge: [198, 168, 122],hi: [255, 235, 202] }, // Fresh Planed Pine
+    { base: [226, 185, 96], edge: [178, 138, 58], hi: [250, 222, 146] }  // Golden Teak Sawdust
+  ];
+
+  function createParticle(initial = false) {
+    // 4 Distinct Artisanal Wood Models:
+    // 'shaving': Curled hand-planed timber ribbon (30%)
+    // 'chip': Faceted polygonal wood flake (35%)
+    // 'splinter': Fine teak grain fiber needle (20%)
+    // 'mote': Ambient floating micro-dust mote (15%)
+    const typeRoll = Math.random();
+    let type = 'chip';
+    if (typeRoll < 0.30) type = 'shaving';
+    else if (typeRoll < 0.65) type = 'chip';
+    else if (typeRoll < 0.85) type = 'splinter';
+    else type = 'mote';
+
+    const pal = WOOD_PALETTES[Math.floor(Math.random() * WOOD_PALETTES.length)];
+    const z = Math.random() * 850 + 60;
+    const baseVy = Math.random() * 0.42 + 0.22; // Gentle organic settling
+
+    // Generate irregular polygon vertices for wood chips
+    const vertices = [];
+    const numVerts = Math.floor(Math.random() * 3) + 4; // 4 to 6 vertices
+    for (let k = 0; k < numVerts; k++) {
+      const angle = (k / numVerts) * Math.PI * 2;
+      const r = 0.65 + Math.random() * 0.7; // Asymmetric radial distance
+      vertices.push([Math.cos(angle) * r, Math.sin(angle) * r]);
+    }
+
+    return {
+      type: type,
+      x: (Math.random() - 0.5) * width * 1.6,
+      y: initial ? (Math.random() - 0.5) * height * 1.6 : -height * 0.8 - Math.random() * 200,
+      z: z,
+      size: type === 'shaving' ? Math.random() * 4.5 + 3.0 :
+            type === 'chip' ? Math.random() * 3.5 + 2.2 :
+            type === 'splinter' ? Math.random() * 3.0 + 1.8 :
+            Math.random() * 1.8 + 0.9,
+      curl: Math.random() * 0.55 + 0.35, // Ribbon curvature
+      vertices: vertices,
+      pal: pal,
+      baseAlpha: Math.random() * 0.45 + 0.40,
+
+      // 3D Motion & Tumbling
+      baseVy: baseVy,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: baseVy,
+      vz: (Math.random() - 0.5) * 0.2,
+
+      // Flutter / oscillation mimicking air currents
+      wobbleSpeed: Math.random() * 0.025 + 0.015,
+      wobbleAmp: Math.random() * 0.5 + 0.2,
+      wobblePhase: Math.random() * Math.PI * 2,
+
+      // 3D Rotation Angles & Tumbling Velocities
+      rotX: Math.random() * Math.PI * 2,
+      rotY: Math.random() * Math.PI * 2,
+      rotZ: Math.random() * Math.PI * 2,
+      vRotX: (Math.random() - 0.5) * 0.035,
+      vRotY: (Math.random() - 0.5) * 0.045,
+      vRotZ: (Math.random() - 0.5) * 0.025
+    };
   }
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    particles.push(createParticle(true));
+  }
+
+  let time = 0;
 
   function render() {
     ctx.clearRect(0, 0, width, height);
+    time += 0.018;
 
-    camX += (targetCamX - camX) * 0.05;
-    camY += (targetCamY - camY) * 0.05;
+    // Decay mouse wake velocity
+    mouseVx *= 0.92;
+    mouseVy *= 0.92;
+
+    // Parallax camera lerp
+    camX += (targetCamX - camX) * 0.04;
+    camY += (targetCamY - camY) * 0.04;
 
     const cx = width / 2 + camX;
     const cy = height / 2 + camY;
+    const isDark = document.documentElement.classList.contains('dark');
 
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
 
+      // Organic horizontal sway mimicking delicate air drafts
+      p.vx = Math.sin(time * p.wobbleSpeed * 60 + p.wobblePhase) * p.wobbleAmp;
+
+      // Mouse wake breeze interaction
+      if (mouseMoved) {
+        const scaleApprox = focalLength / p.z;
+        const screenPx = p.x * scaleApprox + cx;
+        const screenPy = p.y * scaleApprox + cy;
+        const dx = screenPx - mouseX;
+        const dy = screenPy - mouseY;
+        const distSq = dx * dx + dy * dy;
+        const breezeRadius = 160;
+
+        if (distSq < breezeRadius * breezeRadius && distSq > 4) {
+          const dist = Math.sqrt(distSq);
+          const force = (1 - dist / breezeRadius) * 1.8;
+          p.x += (dx / dist) * force * 3.5 + mouseVx * 0.8;
+          p.y += (dy / dist) * force * 3.5 + mouseVy * 0.8;
+          // Agitate 3D tumble when stirred by cursor breeze
+          p.vRotX += (Math.random() - 0.5) * 0.06;
+          p.vRotY += (Math.random() - 0.5) * 0.06;
+          p.vRotZ += (Math.random() - 0.5) * 0.04;
+        }
+      }
+
+      // Physics update
       p.x += p.vx;
       p.y += p.vy;
       p.z += p.vz;
 
-      if (p.y < -height) p.y = height;
-      if (p.x < -width) p.x = width;
-      if (p.x > width) p.x = -width;
-      if (p.z <= 10) p.z = 800;
-      if (p.z > 850) p.z = 60;
+      // Tumbling rotation update
+      p.rotX += p.vRotX;
+      p.rotY += p.vRotY;
+      p.rotZ += p.vRotZ;
 
+      // Restoring natural gentle tumble speeds
+      p.vRotX *= 0.99;
+      p.vRotY *= 0.99;
+      p.vRotZ *= 0.99;
+
+      // Boundary recycle (smooth looping drift)
+      if (p.y > height * 0.9) {
+        p.y = -height * 0.8;
+        p.x = (Math.random() - 0.5) * width * 1.6;
+        p.z = Math.random() * 850 + 60;
+      }
+      if (p.x < -width * 0.9) p.x = width * 0.9;
+      if (p.x > width * 0.9) p.x = -width * 0.9;
+      if (p.z <= 20) p.z = 850;
+      if (p.z > 920) p.z = 70;
+
+      // 3D Perspective Projection
       const scale = focalLength / p.z;
       const sx = p.x * scale + cx;
       const sy = p.y * scale + cy;
 
-      if (sx > -50 && sx < width + 50 && sy > -50 && sy < height + 50 && scale > 0) {
-        const drawRadius = Math.max(0.8, p.radius * scale);
-        const dynamicAlpha = Math.min(0.7, p.alpha * (scale * 0.8));
+      // Render only within viewport bounds
+      if (sx > -60 && sx < width + 60 && sy > -60 && sy < height + 60 && scale > 0) {
+        // Depth-based alpha fade
+        const depthAlpha = Math.min(0.9, p.baseAlpha * Math.min(1.4, scale * 1.3));
+        const [r, g, b] = p.pal.base;
+        const [er, eg, eb] = p.pal.edge;
+        const [hr, hg, hb] = p.pal.hi;
 
-        ctx.beginPath();
-        ctx.arc(sx, sy, drawRadius, 0, Math.PI * 2);
-        ctx.fillStyle = `${p.color} ${dynamicAlpha})`;
-        ctx.shadowColor = p.color === 'rgba(212, 175, 55,' ? '#D4AF37' : '#9E6738';
-        ctx.shadowBlur = 10 * scale;
-        ctx.fill();
-        ctx.shadowBlur = 0;
+        // Dark mode brings out warm glowing amber highlights
+        const alpha = isDark ? Math.min(0.85, depthAlpha * 1.15) : depthAlpha;
+        const fillColor = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        const edgeColor = `rgba(${er}, ${eg}, ${eb}, ${alpha * 0.8})`;
+        const hiColor = `rgba(${hr}, ${hg}, ${hb}, ${alpha * 0.95})`;
+
+        ctx.save();
+        ctx.translate(sx, sy);
+        ctx.rotate(p.rotZ);
+
+        // 3D perspective foreshortening (tumbling in coordinate space)
+        const cosX = Math.cos(p.rotX);
+        const cosY = Math.cos(p.rotY);
+        ctx.scale(Math.abs(cosX) > 0.08 ? cosX : 0.08, Math.abs(cosY) > 0.08 ? cosY : 0.08);
+
+        // Render specific artisanal sawdust model
+        if (p.type === 'shaving') {
+          // Curled Wood Shaving: graceful curved ribbon
+          const len = p.size * scale * 2.8;
+          const w = p.size * scale * 0.95;
+          const c = p.curl;
+
+          ctx.beginPath();
+          ctx.moveTo(-len / 2, 0);
+          ctx.bezierCurveTo(-len * 0.25, -w * (c + 0.4), len * 0.25, w * c, len / 2, 0);
+          ctx.bezierCurveTo(len * 0.25, w * (c + 0.5), -len * 0.25, -w * (c - 0.2), -len / 2, 0);
+          ctx.fillStyle = fillColor;
+          ctx.fill();
+
+          // Subtle wood fiber highlight ridge
+          ctx.beginPath();
+          ctx.moveTo(-len * 0.35, -w * 0.15);
+          ctx.quadraticCurveTo(0, w * 0.2, len * 0.35, 0);
+          ctx.strokeStyle = hiColor;
+          ctx.lineWidth = Math.max(0.4, 0.7 * scale);
+          ctx.stroke();
+
+        } else if (p.type === 'chip') {
+          // Faceted Wood Chip: irregular timber flake
+          const s = p.size * scale;
+          ctx.beginPath();
+          for (let k = 0; k < p.vertices.length; k++) {
+            const vx = p.vertices[k][0] * s;
+            const vy = p.vertices[k][1] * s;
+            if (k === 0) ctx.moveTo(vx, vy);
+            else ctx.lineTo(vx, vy);
+          }
+          ctx.closePath();
+          ctx.fillStyle = fillColor;
+          ctx.fill();
+
+          ctx.strokeStyle = edgeColor;
+          ctx.lineWidth = Math.max(0.35, 0.55 * scale);
+          ctx.stroke();
+
+        } else if (p.type === 'splinter') {
+          // Slender Teak Fiber / Splinter
+          const len = p.size * scale * 3.4;
+          const w = Math.max(0.65, p.size * scale * 0.35);
+
+          ctx.beginPath();
+          ctx.moveTo(-len / 2, 0);
+          ctx.lineTo(-len * 0.15, -w);
+          ctx.lineTo(len * 0.3, -w * 0.6);
+          ctx.lineTo(len / 2, 0);
+          ctx.lineTo(len * 0.25, w * 0.6);
+          ctx.lineTo(-len * 0.1, w);
+          ctx.closePath();
+          ctx.fillStyle = fillColor;
+          ctx.fill();
+
+        } else {
+          // Ambient Golden Wood Mote
+          const r = Math.max(0.65, p.size * scale * 0.75);
+          ctx.beginPath();
+          ctx.arc(0, 0, r, 0, Math.PI * 2);
+          ctx.fillStyle = hiColor;
+          if (isDark) {
+            ctx.shadowColor = 'rgba(230, 180, 90, 0.7)';
+            ctx.shadowBlur = 5 * scale;
+          }
+          ctx.fill();
+        }
+
+        ctx.restore();
       }
     }
 

@@ -12,7 +12,7 @@
 **Homeify Furniture** is a premier furniture manufacturing company and workshop located at **M E S Junction, Erattupetta, Kottayam District, Kerala**. 
 
 This single-page showcase has been completely upgraded with a **cutting-edge Modern 3D Look**, featuring:
-- **Interactive 3D Ambient Depth Canvas:** Warm floating wood-dust motes and golden ambient particles responding to 3D mouse parallax.
+- **Artisanal 3D Sawdust & Timber Shavings Simulation:** Curled hand-planed wood shavings, faceted timber flakes, and golden teak dust motes gently fluttering and tumbling in 3D air currents with cursor breeze interaction.
 - **Dynamic 3D Card Tilt & Specular Light Sheen:** Every product card and trust badge physically tilts in 3D coordinate space with cursor-driven light reflections.
 - **Interactive 3D Material Studio Cube:** Real 3D draggable plinth comparing **100% Pure Natural Wood** against **Grade-E1 Particle Board**.
 - **Tactile 3D Buttons & Layered Depth:** Multi-tier elevation drop shadows, beveled glass rims, and physical press feedback.
