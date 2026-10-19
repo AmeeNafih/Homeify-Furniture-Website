@@ -543,6 +543,12 @@ function loadCustomAssets() {
       }
     }
 
+    // 2c. Filter out products removed/hidden by admin from the collection
+    const hiddenProductIds = JSON.parse(localStorage.getItem('homeify_hidden_collection_ids') || '[]');
+    if (Array.isArray(hiddenProductIds) && hiddenProductIds.length > 0) {
+      PRODUCTS = PRODUCTS.filter(p => !hiddenProductIds.includes(p.id));
+    }
+
     // 3. Apply any user-uploaded dataUrl or custom photo overrides
     PRODUCTS.forEach(p => {
       const customImg = localStorage.getItem('homeify_prod_img_' + p.id);
@@ -562,6 +568,16 @@ function loadCustomAssets() {
       if (customPrice) {
         p.factoryPrice = customPrice;
         p.priceEstimate = `${customPrice} (Direct Workshop Price)`;
+      }
+    });
+
+    // 5. Apply any saved custom features / highlights overrides
+    PRODUCTS.forEach(p => {
+      const savedFeatures = localStorage.getItem('homeify_prod_features_' + p.id);
+      if (savedFeatures !== null) {
+        try {
+          p.features = JSON.parse(savedFeatures);
+        } catch (e) {}
       }
     });
   } catch (e) {
@@ -1185,15 +1201,23 @@ function renderBentoGallery(filterCategory) {
     let spanClasses = 'col-span-12 sm:col-span-6 lg:col-span-4';
     let isLarge = false;
 
-    // Permanent Bento Showcase: Hero featured items receive prominent architectural spans
-    if (filterCategory === 'all') {
-      if (index === 0 || index === 3) {
+    // Bento layout: Highlighted featured items receive prominent architectural spans
+    const customHighlights = JSON.parse(localStorage.getItem('homeify_highlighted_bento_ids') || 'null');
+    if (customHighlights !== null) {
+      if (customHighlights.includes(product.id)) {
         spanClasses = 'col-span-12 md:col-span-12 lg:col-span-8';
         isLarge = true;
       }
-    } else if (filtered.length >= 3 && index === 0) {
-      spanClasses = 'col-span-12 md:col-span-12 lg:col-span-8';
-      isLarge = true;
+    } else {
+      if (filterCategory === 'all') {
+        if (index === 0 || index === 3) {
+          spanClasses = 'col-span-12 md:col-span-12 lg:col-span-8';
+          isLarge = true;
+        }
+      } else if (filtered.length >= 3 && index === 0) {
+        spanClasses = 'col-span-12 md:col-span-12 lg:col-span-8';
+        isLarge = true;
+      }
     }
 
     const card = document.createElement('div');
@@ -1381,14 +1405,30 @@ function openProductModal(product) {
     }
   }
 
+  const highlightsContainer = document.getElementById('modal-highlights-container');
+  const hideHighlights = localStorage.getItem('homeify_hide_collection_highlights') === 'true';
+  const hasFeatures = Array.isArray(product.features) && product.features.length > 0;
+
+  if (highlightsContainer) {
+    if (hideHighlights || !hasFeatures) {
+      highlightsContainer.classList.add('hidden');
+    } else {
+      highlightsContainer.classList.remove('hidden');
+    }
+  }
+
   const featuresList = document.getElementById('modal-product-features');
   if (featuresList) {
-    featuresList.innerHTML = product.features.map(f => `
-      <li class="flex items-start gap-2.5 text-xs sm:text-sm text-[#4A443E]">
-        <svg class="w-4 h-4 text-[#2C4A38] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-        <span>${f}</span>
-      </li>
-    `).join('');
+    if (hasFeatures && !hideHighlights) {
+      featuresList.innerHTML = product.features.map(f => `
+        <li class="flex items-start gap-2.5 text-xs sm:text-sm text-[#4A443E]">
+          <svg class="w-4 h-4 text-[#2C4A38] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <span>${f}</span>
+        </li>
+      `).join('');
+    } else {
+      featuresList.innerHTML = '';
+    }
   }
 
   const waBtn = document.getElementById('modal-whatsapp-btn');
@@ -2166,6 +2206,9 @@ function openCustomizer() {
 
   const currentLogo = localStorage.getItem('homeify_custom_logo') || DEFAULT_LOGO;
   updateCustomizerLogoPreview(currentLogo);
+  updateHighlightsToggleButtonUI();
+  updateRestoreCollectionButtonUI();
+  populateCustomizerProductList();
 }
 
 function closeCustomizer() {
@@ -2217,6 +2260,13 @@ function populateCustomizerProductList() {
   PRODUCTS.forEach((product) => {
     const itemEl = document.createElement('div');
     itemEl.className = 'p-4 rounded-2xl bg-white border border-stone-200 shadow-sm flex flex-col gap-3 hover:border-teak transition-colors';
+
+    const highlightedBento = JSON.parse(localStorage.getItem('homeify_highlighted_bento_ids') || 'null');
+    const isCurrentlyLarge = highlightedBento !== null 
+      ? highlightedBento.includes(product.id)
+      : (product.id === 'living-slated-table' || product.id === 'handcrafted-sofa');
+    const featCount = (product.features || []).length;
+
     itemEl.innerHTML = `
       <div class="flex items-center justify-between text-xs font-mono">
         <div class="flex items-center gap-2">
@@ -2225,17 +2275,15 @@ function populateCustomizerProductList() {
         </div>
         <div class="flex items-center gap-2">
           <span class="text-stone-400">${product.badge}</span>
-          ${product.isCustom ? `
-            <button 
-              type="button" 
-              onclick="deleteCustomProduct('${product.id}')" 
-              class="px-2 py-0.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-colors text-[10px] font-bold flex items-center gap-1 cursor-pointer" 
-              title="Delete custom product"
-            >
-              <i class="fa-solid fa-trash-can text-[9px]"></i>
-              <span>Delete</span>
-            </button>
-          ` : ''}
+          <button 
+            type="button" 
+            onclick="removeProductFromCollection('${product.id}')" 
+            class="px-2.5 py-1 rounded-lg border border-rose-200 bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition-colors text-[10px] font-bold flex items-center gap-1 cursor-pointer" 
+            title="Remove this item from the collection"
+          >
+            <i class="fa-solid fa-trash-can text-[9px]"></i>
+            <span>Remove</span>
+          </button>
         </div>
       </div>
       
@@ -2313,6 +2361,54 @@ function populateCustomizerProductList() {
             onchange="handleProductPhotoUrlChange(event, '${product.id}')"
           />
           <button type="button" class="px-1.5 py-0.5 text-[9px] text-stone-400 hover:text-red-600 font-mono" onclick="resetProductPhoto('${product.id}')">Reset</button>
+        </div>
+      </div>
+
+      <!-- Collection Key Highlights & Bento Frame Controls -->
+      <div class="pt-2 border-t border-stone-100 flex flex-col gap-1.5 font-mono text-[10px]">
+        <div class="flex items-center justify-between">
+          <span class="text-stone-600 font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-list-check text-teak text-[9px]"></i>
+            <span>Highlights:</span>
+            <span class="font-bold text-stone-800">${featCount} points</span>
+          </span>
+          <div class="flex items-center gap-1">
+            ${featCount > 0 ? `
+              <button 
+                type="button" 
+                onclick="clearProductHighlights('${product.id}')" 
+                class="px-2 py-0.5 rounded border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-600 hover:text-white font-bold transition-colors cursor-pointer"
+                title="Remove all Key Highlights from this product"
+              >
+                <i class="fa-solid fa-eraser text-[8px] mr-1"></i>Remove Highlights
+              </button>
+            ` : `
+              <button 
+                type="button" 
+                onclick="restoreProductHighlights('${product.id}')" 
+                class="px-2 py-0.5 rounded border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white font-bold transition-colors cursor-pointer"
+                title="Restore default Key Highlights"
+              >
+                <i class="fa-solid fa-rotate-left text-[8px] mr-1"></i>Restore Highlights
+              </button>
+            `}
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-1 border-t border-dashed border-stone-200">
+          <span class="text-stone-600 font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-border-all text-stone-500 text-[9px]"></i>
+            <span>Bento Showcase Frame</span>
+          </span>
+          <button 
+            type="button" 
+            onclick="toggleProductFeaturedBento('${product.id}')" 
+            class="px-2 py-0.5 rounded border text-[10px] font-bold transition-colors cursor-pointer ${isCurrentlyLarge ? 'bg-amber-100 text-amber-900 border-amber-300' : 'bg-stone-100 text-stone-600 border-stone-200 hover:bg-stone-200'}"
+            title="${isCurrentlyLarge ? 'Click to remove large highlight framing' : 'Click to highlight as large card in Bento Showcase'}"
+          >
+            <i class="fa-solid ${isCurrentlyLarge ? 'fa-compress text-amber-700' : 'fa-expand text-stone-500'} text-[8px] mr-1"></i>
+            <span>${isCurrentlyLarge ? 'Featured (Large Highlight)' : 'Standard Size'}</span>
+          </button>
         </div>
       </div>
     `;
@@ -2750,24 +2846,81 @@ window.handleAddNewProduct = function(event) {
   showToast(`🎉 Added "${name}" to Homeify Catalog!`);
 };
 
-window.deleteCustomProduct = function(productId) {
+// ==========================================================================
+// 12. ADMIN COLLECTION & HIGHLIGHTS MANAGEMENT
+// ==========================================================================
+
+// Global toggle for Key Highlights visibility in product modal/views
+window.toggleCollectionHighlights = function() {
+  const current = localStorage.getItem('homeify_hide_collection_highlights') === 'true';
+  const newState = !current;
+  if (newState) {
+    localStorage.setItem('homeify_hide_collection_highlights', 'true');
+    showToast('Collection Key Highlights removed/hidden from product views.');
+  } else {
+    localStorage.removeItem('homeify_hide_collection_highlights');
+    showToast('Collection Key Highlights restored to product views.');
+  }
+  updateHighlightsToggleButtonUI();
+};
+
+window.updateHighlightsToggleButtonUI = function() {
+  const btn = document.getElementById('admin-toggle-highlights-btn');
+  const txt = document.getElementById('admin-highlights-btn-text');
+  const isHidden = localStorage.getItem('homeify_hide_collection_highlights') === 'true';
+  if (btn && txt) {
+    if (isHidden) {
+      btn.className = 'px-3.5 py-1.5 rounded-xl border border-rose-300 bg-rose-50 text-rose-700 text-xs font-mono font-bold hover:bg-rose-100 transition-colors shadow-sm flex items-center gap-1.5 cursor-pointer';
+      txt.textContent = 'Highlights: Hidden (Click to Show)';
+    } else {
+      btn.className = 'px-3.5 py-1.5 rounded-xl border border-stone-300 bg-white text-stone-700 text-xs font-mono font-bold hover:bg-stone-100 transition-colors shadow-sm flex items-center gap-1.5 cursor-pointer';
+      txt.textContent = 'Highlights: Visible (Click to Remove)';
+    }
+  }
+};
+
+window.updateRestoreCollectionButtonUI = function() {
+  const btn = document.getElementById('admin-restore-collection-btn');
+  if (!btn) return;
+  const hiddenProductIds = JSON.parse(localStorage.getItem('homeify_hidden_collection_ids') || '[]');
+  if (Array.isArray(hiddenProductIds) && hiddenProductIds.length > 0) {
+    btn.classList.remove('hidden');
+    btn.innerHTML = `<i class="fa-solid fa-rotate-left text-emerald-600 text-[11px]"></i><span>Restore Collection (${hiddenProductIds.length} hidden)</span>`;
+  } else {
+    btn.classList.add('hidden');
+  }
+};
+
+// Remove any product (default or custom) from the active collection
+window.removeProductFromCollection = function(productId) {
   const prod = PRODUCTS.find(p => p.id === productId);
   const name = prod ? prod.name : 'this item';
-  if (!confirm(`Are you sure you want to permanently delete "${name}" from the catalog?`)) {
+  if (!confirm(`Are you sure you want to remove "${name}" from the Homeify Collection?`)) {
     return;
   }
 
-  // Remove from active array
-  PRODUCTS = PRODUCTS.filter(p => p.id !== productId);
-
-  // Remove from localStorage
-  try {
-    const existing = JSON.parse(localStorage.getItem('homeify_custom_products') || '[]');
-    const updated = existing.filter(p => p.id !== productId);
-    localStorage.setItem('homeify_custom_products', JSON.stringify(updated));
-  } catch (err) {
-    console.error('Failed to update homeify_custom_products:', err);
+  if (prod && prod.isCustom) {
+    try {
+      const existing = JSON.parse(localStorage.getItem('homeify_custom_products') || '[]');
+      const updated = existing.filter(p => p.id !== productId);
+      localStorage.setItem('homeify_custom_products', JSON.stringify(updated));
+    } catch (err) {
+      console.error('Failed to update homeify_custom_products:', err);
+    }
+  } else {
+    try {
+      const hiddenIds = JSON.parse(localStorage.getItem('homeify_hidden_collection_ids') || '[]');
+      if (!hiddenIds.includes(productId)) {
+        hiddenIds.push(productId);
+        localStorage.setItem('homeify_hidden_collection_ids', JSON.stringify(hiddenIds));
+      }
+    } catch (err) {
+      console.error('Failed to update homeify_hidden_collection_ids:', err);
+    }
   }
+
+  // Remove from active memory
+  PRODUCTS = PRODUCTS.filter(p => p.id !== productId);
 
   // Clean up any individual price/image overrides
   localStorage.removeItem('homeify_prod_mrp_' + productId);
@@ -2776,5 +2929,63 @@ window.deleteCustomProduct = function(productId) {
 
   renderBentoGallery(currentFilter);
   populateCustomizerProductList();
-  showToast(`Deleted "${name}" from catalog.`);
+  updateRestoreCollectionButtonUI();
+  showToast(`Removed "${name}" from Collection.`);
+};
+
+// Backwards-compatible alias for deleteCustomProduct
+window.deleteCustomProduct = window.removeProductFromCollection;
+
+// Restore all default collection products that were removed/hidden
+window.restoreAllRemovedCollectionItems = function() {
+  localStorage.removeItem('homeify_hidden_collection_ids');
+  PRODUCTS = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+  loadCustomAssets();
+  renderBentoGallery(currentFilter);
+  populateCustomizerProductList();
+  updateRestoreCollectionButtonUI();
+  showToast('Restored all default collection items!');
+};
+
+// Clear/remove key highlights for a specific product
+window.clearProductHighlights = function(productId) {
+  const prod = PRODUCTS.find(p => p.id === productId);
+  if (!prod) return;
+  if (!confirm(`Remove all Key Highlights from "${prod.name}"?`)) return;
+
+  prod.features = [];
+  localStorage.setItem('homeify_prod_features_' + productId, JSON.stringify([]));
+  populateCustomizerProductList();
+  showToast(`Removed Key Highlights for "${prod.name}".`);
+};
+
+// Restore original key highlights for a specific product
+window.restoreProductHighlights = function(productId) {
+  const def = DEFAULT_PRODUCTS.find(p => p.id === productId);
+  const prod = PRODUCTS.find(p => p.id === productId);
+  if (prod && def) {
+    prod.features = JSON.parse(JSON.stringify(def.features || []));
+    localStorage.removeItem('homeify_prod_features_' + productId);
+    populateCustomizerProductList();
+    showToast(`Restored Key Highlights for "${prod.name}".`);
+  }
+};
+
+// Toggle whether a product is highlighted as a large featured card in the Bento Showcase
+window.toggleProductFeaturedBento = function(productId) {
+  let highlightedList = JSON.parse(localStorage.getItem('homeify_highlighted_bento_ids') || 'null');
+  if (highlightedList === null) {
+    highlightedList = ['living-slated-table', 'handcrafted-sofa'];
+  }
+  const idx = highlightedList.indexOf(productId);
+  if (idx > -1) {
+    highlightedList.splice(idx, 1);
+    showToast('Removed large bento highlight (set to standard size).');
+  } else {
+    highlightedList.push(productId);
+    showToast('Highlighted as Large Featured Card in Collection!');
+  }
+  localStorage.setItem('homeify_highlighted_bento_ids', JSON.stringify(highlightedList));
+  renderBentoGallery(currentFilter);
+  populateCustomizerProductList();
 };
