@@ -503,6 +503,105 @@ function calculateSavingsPercent(mrpStr, priceStr) {
   return 30;
 }
 
+// ==========================================================================
+// RESILIENT MULTI-TIER PERSISTENCE ENGINE (IndexedDB + Storage Quota Guard)
+// ==========================================================================
+const IDB_NAME = 'homeify_store_v1';
+const IDB_STORE = 'catalog_state';
+
+function openHomeifyDB() {
+  return new Promise((resolve) => {
+    if (typeof window === 'undefined' || !window.indexedDB) return resolve(null);
+    try {
+      const req = window.indexedDB.open(IDB_NAME, 1);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(IDB_STORE)) {
+          db.createObjectStore(IDB_STORE);
+        }
+      };
+      req.onsuccess = (e) => resolve(e.target.result);
+      req.onerror = () => resolve(null);
+    } catch (e) {
+      resolve(null);
+    }
+  });
+}
+
+async function idbSet(key, val) {
+  try {
+    const db = await openHomeifyDB();
+    if (!db) return;
+    const tx = db.transaction(IDB_STORE, 'readwrite');
+    tx.objectStore(IDB_STORE).put(val, key);
+  } catch (e) {}
+}
+
+async function idbGet(key) {
+  try {
+    const db = await openHomeifyDB();
+    if (!db) return null;
+    return new Promise((resolve) => {
+      const tx = db.transaction(IDB_STORE, 'readonly');
+      const req = tx.objectStore(IDB_STORE).get(key);
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => resolve(null);
+    });
+  } catch (e) {
+    return null;
+  }
+}
+
+async function idbDelete(key) {
+  try {
+    const db = await openHomeifyDB();
+    if (!db) return;
+    const tx = db.transaction(IDB_STORE, 'readwrite');
+    tx.objectStore(IDB_STORE).delete(key);
+  } catch (e) {}
+}
+
+// Auto-compress uploaded photos to max 900x900px JPEG 0.82 (typically 35KB-60KB)
+// This prevents QuotaExceededError in localStorage and ensures fast mobile paints
+function compressImageFile(file, maxWidth = 900, maxHeight = 900, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    if (!file) return reject(new Error('No image file provided'));
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+        if (width > maxWidth || height > maxHeight) {
+          if (width / height > maxWidth / maxHeight) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          } else {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        try {
+          const dataUrl = canvas.toDataURL('image/jpeg', quality);
+          resolve(dataUrl);
+        } catch (err) {
+          resolve(e.target.result);
+        }
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 // Load persisted custom images, logo, and MRPs from localStorage
 function loadCustomAssets() {
   try {
@@ -515,11 +614,11 @@ function loadCustomAssets() {
       applyLogoToDOM(isDark ? 'assets/homeify-logo-cropped.png' : DEFAULT_LOGO);
     }
 
-    // 2. Clear old Unsplash overrides so real local assets take precedence
+    // 2. Safe cleanup of legacy demo unsplash keys ONLY (do not touch https:// user images)
     Object.keys(localStorage).forEach(key => {
       if (key.startsWith('homeify_prod_img_') || key.startsWith('homeify_hero_img_')) {
         const val = localStorage.getItem(key);
-        if (val && (val.includes('unsplash.com') || val.includes('http://') || val.includes('https://'))) {
+        if (val && val.includes('images.unsplash.com')) {
           localStorage.removeItem(key);
         }
       }
@@ -531,9 +630,11 @@ function loadCustomAssets() {
       try {
         const customList = JSON.parse(savedCustomProducts);
         if (Array.isArray(customList)) {
-          // Prepend custom products so they appear prominently at the top
           customList.forEach(cp => {
-            if (!PRODUCTS.some(p => p.id === cp.id)) {
+            const existingIdx = PRODUCTS.findIndex(p => p.id === cp.id);
+            if (existingIdx !== -1) {
+              PRODUCTS[existingIdx] = Object.assign({}, PRODUCTS[existingIdx], cp);
+            } else {
               PRODUCTS.unshift(cp);
             }
           });
@@ -549,15 +650,19 @@ function loadCustomAssets() {
       PRODUCTS = PRODUCTS.filter(p => !hiddenProductIds.includes(p.id));
     }
 
-    // 3. Apply any user-uploaded dataUrl or custom photo overrides
+    // 3. Apply any user-uploaded dataUrl or custom photo overrides (supports data:, assets/, https://, http://, blob:)
     PRODUCTS.forEach(p => {
       const customImg = localStorage.getItem('homeify_prod_img_' + p.id);
-      if (customImg && (customImg.startsWith('data:') || customImg.startsWith('assets/'))) p.image = customImg;
+      if (customImg && typeof customImg === 'string' && customImg.trim().length > 0) {
+        p.image = customImg;
+      }
     });
 
     HERO_SLIDES.forEach(s => {
       const customHeroImg = localStorage.getItem('homeify_hero_img_' + s.id);
-      if (customHeroImg && (customHeroImg.startsWith('data:') || customHeroImg.startsWith('assets/'))) s.image = customHeroImg;
+      if (customHeroImg && typeof customHeroImg === 'string' && customHeroImg.trim().length > 0) {
+        s.image = customHeroImg;
+      }
     });
 
     // 4. Apply any saved custom MRP and Factory Price overrides
@@ -583,6 +688,45 @@ function loadCustomAssets() {
   } catch (e) {
     console.warn('LocalStorage access warning:', e);
   }
+}
+
+// Authoritative Catalog Hydration: Fetches live catalog.json deployed on Vercel
+// and merges with IndexedDB & localStorage so all visitors see the latest updates.
+async function loadAuthoritativeCatalog() {
+  try {
+    const res = await fetch('catalog.json?v=' + Date.now(), { cache: 'no-cache' });
+    if (res.ok) {
+      const liveCatalog = await res.json();
+      if (Array.isArray(liveCatalog) && liveCatalog.length > 0) {
+        PRODUCTS = liveCatalog;
+      }
+    }
+  } catch (e) {
+    // Normal in local file:// mode or when offline
+  }
+
+  // Load any IndexedDB custom products & overrides
+  try {
+    const idbCustom = await idbGet('homeify_custom_products');
+    if (Array.isArray(idbCustom) && idbCustom.length > 0) {
+      idbCustom.forEach(cp => {
+        const idx = PRODUCTS.findIndex(p => p.id === cp.id);
+        if (idx !== -1) {
+          PRODUCTS[idx] = Object.assign({}, PRODUCTS[idx], cp);
+        } else {
+          PRODUCTS.unshift(cp);
+        }
+      });
+    }
+  } catch (e) {}
+
+  // Apply localStorage overlays on top
+  loadCustomAssets();
+
+  // Re-render gallery & customizer with authoritative catalog
+  renderBentoGallery(currentFilter);
+  populateCustomizerProductList();
+  updateSyncStatusUI();
 }
 
 function applyLogoToDOM(logoSrc) {
@@ -612,6 +756,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCustomizerManager();
   initAddProductManager();
   initAdminAuth();
+  loadAuthoritativeCatalog();
 });
 
 // ==========================================================================
@@ -2155,18 +2300,30 @@ function initCustomizerManager() {
 
   const logoFileInput = document.getElementById('customizer-logo-file');
   if (logoFileInput) {
-    logoFileInput.addEventListener('change', (e) => {
+    logoFileInput.addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const dataUrl = event.target.result;
+        try {
+          const dataUrl = await compressImageFile(file, 600, 300, 0.85);
           localStorage.setItem('homeify_custom_logo', dataUrl);
+          idbSet('homeify_custom_logo', dataUrl);
           applyLogoToDOM(dataUrl);
           updateCustomizerLogoPreview(dataUrl);
+          markCatalogDirty();
           showToast('Custom logo uploaded and applied successfully!');
-        };
-        reader.readAsDataURL(file);
+        } catch (err) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const dataUrl = event.target.result;
+            try { localStorage.setItem('homeify_custom_logo', dataUrl); } catch (e) {}
+            idbSet('homeify_custom_logo', dataUrl);
+            applyLogoToDOM(dataUrl);
+            updateCustomizerLogoPreview(dataUrl);
+            markCatalogDirty();
+            showToast('Custom logo applied!');
+          };
+          reader.readAsDataURL(file);
+        }
       }
     });
   }
@@ -2175,8 +2332,10 @@ function initCustomizerManager() {
   if (resetLogoBtn) {
     resetLogoBtn.addEventListener('click', () => {
       localStorage.removeItem('homeify_custom_logo');
+      idbDelete('homeify_custom_logo');
       applyLogoToDOM(DEFAULT_LOGO);
       updateCustomizerLogoPreview(DEFAULT_LOGO);
+      markCatalogDirty();
       showToast('Logo restored to official brand logo.');
     });
   }
@@ -2209,6 +2368,12 @@ function openCustomizer() {
   updateHighlightsToggleButtonUI();
   updateRestoreCollectionButtonUI();
   populateCustomizerProductList();
+  
+  const tokenInput = document.getElementById('admin-github-token');
+  if (tokenInput && !tokenInput.value) {
+    tokenInput.value = localStorage.getItem('homeify_gh_token') || '';
+  }
+  updateSyncStatusUI();
 }
 
 function closeCustomizer() {
@@ -2429,12 +2594,14 @@ window.handleProductPriceSave = function(productId) {
 
   if (newMrp) {
     prod.mrp = newMrp;
-    localStorage.setItem('homeify_prod_mrp_' + productId, newMrp);
+    try { localStorage.setItem('homeify_prod_mrp_' + productId, newMrp); } catch (e) {}
+    idbSet('homeify_prod_mrp_' + productId, newMrp);
   }
   if (newPrice) {
     prod.factoryPrice = newPrice;
     prod.priceEstimate = `${newPrice} (Direct Workshop Price)`;
-    localStorage.setItem('homeify_prod_price_' + productId, newPrice);
+    try { localStorage.setItem('homeify_prod_price_' + productId, newPrice); } catch (e) {}
+    idbSet('homeify_prod_price_' + productId, newPrice);
   }
 
   // If custom product, also persist in homeify_custom_products
@@ -2451,11 +2618,26 @@ window.handleProductPriceSave = function(productId) {
         localStorage.setItem('homeify_custom_products', JSON.stringify(customProducts));
       }
     } catch (e) {
-      console.error('Failed to update homeify_custom_products:', e);
+      console.error('Failed to update homeify_custom_products in localStorage:', e);
     }
+
+    idbGet('homeify_custom_products').then(customProducts => {
+      if (Array.isArray(customProducts)) {
+        const cpIndex = customProducts.findIndex(p => p.id === productId);
+        if (cpIndex !== -1) {
+          if (newMrp) customProducts[cpIndex].mrp = newMrp;
+          if (newPrice) {
+            customProducts[cpIndex].factoryPrice = newPrice;
+            customProducts[cpIndex].priceEstimate = `${newPrice} (Direct Workshop Price)`;
+          }
+          idbSet('homeify_custom_products', customProducts);
+        }
+      }
+    }).catch(() => {});
   }
 
   renderBentoGallery(currentFilter);
+  markCatalogDirty();
   showToast(`Updated pricing for ${prod.name}! (MRP: ${newMrp}, Factory: ${newPrice})`);
 };
 
@@ -2471,8 +2653,12 @@ window.resetProductPrice = function(productId) {
   const def = DEFAULT_PRODUCTS.find(p => p.id === productId);
   if (!def) return;
 
-  localStorage.removeItem('homeify_prod_mrp_' + productId);
-  localStorage.removeItem('homeify_prod_price_' + productId);
+  try {
+    localStorage.removeItem('homeify_prod_mrp_' + productId);
+    localStorage.removeItem('homeify_prod_price_' + productId);
+  } catch (e) {}
+  idbDelete('homeify_prod_mrp_' + productId);
+  idbDelete('homeify_prod_price_' + productId);
 
   prod.mrp = def.mrp;
   prod.factoryPrice = def.factoryPrice;
@@ -2484,13 +2670,19 @@ window.resetProductPrice = function(productId) {
   if (priceInput) priceInput.value = def.factoryPrice;
 
   renderBentoGallery(currentFilter);
+  markCatalogDirty();
   showToast(`Restored default price for ${prod.name}`);
 };
 
 window.resetAllProductPrices = function() {
+  if (!confirm('Are you sure you want to restore all product MRPs and factory prices to their defaults?')) return;
   DEFAULT_PRODUCTS.forEach(def => {
-    localStorage.removeItem('homeify_prod_mrp_' + def.id);
-    localStorage.removeItem('homeify_prod_price_' + def.id);
+    try {
+      localStorage.removeItem('homeify_prod_mrp_' + def.id);
+      localStorage.removeItem('homeify_prod_price_' + def.id);
+    } catch (e) {}
+    idbDelete('homeify_prod_mrp_' + def.id);
+    idbDelete('homeify_prod_price_' + def.id);
     const prod = PRODUCTS.find(p => p.id === def.id);
     if (prod) {
       prod.mrp = def.mrp;
@@ -2500,19 +2692,26 @@ window.resetAllProductPrices = function() {
   });
   populateCustomizerProductList();
   renderBentoGallery(currentFilter);
+  markCatalogDirty();
   showToast('All default product MRPs & prices restored!');
 };
 
-window.handleProductPhotoUpload = function(event, productId) {
-  const file = event.target.files[0];
+window.handleProductPhotoUpload = async function(event, productId) {
+  const file = event.target.files && event.target.files[0];
   if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const dataUrl = e.target.result;
-    setProductPhoto(productId, dataUrl);
-  };
-  reader.readAsDataURL(file);
+  showToast('Optimizing photo for fast loading...');
+  try {
+    const compressed = await compressImageFile(file, 900, 900, 0.82);
+    setProductPhoto(productId, compressed);
+  } catch (err) {
+    console.error('Photo optimization error:', err);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setProductPhoto(productId, e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
 };
 
 window.handleProductPhotoUrlChange = function(event, productId) {
@@ -2523,7 +2722,13 @@ window.handleProductPhotoUrlChange = function(event, productId) {
 };
 
 function setProductPhoto(productId, newUrl) {
-  localStorage.setItem('homeify_prod_img_' + productId, newUrl);
+  try {
+    localStorage.setItem('homeify_prod_img_' + productId, newUrl);
+  } catch (err) {
+    console.warn('localStorage full, falling back to IndexedDB:', err);
+  }
+  idbSet('homeify_prod_img_' + productId, newUrl);
+
   const prod = PRODUCTS.find(p => p.id === productId);
   if (prod) prod.image = newUrl;
 
@@ -2539,12 +2744,23 @@ function setProductPhoto(productId, newUrl) {
     } catch (e) {
       console.error('Failed to update homeify_custom_products image:', e);
     }
+
+    idbGet('homeify_custom_products').then(customProducts => {
+      if (Array.isArray(customProducts)) {
+        const cpIndex = customProducts.findIndex(p => p.id === productId);
+        if (cpIndex !== -1) {
+          customProducts[cpIndex].image = newUrl;
+          idbSet('homeify_custom_products', customProducts);
+        }
+      }
+    }).catch(() => {});
   }
 
   const preview = document.getElementById('custom-preview-prod-' + productId);
   if (preview) preview.src = newUrl;
 
   renderBentoGallery(currentFilter);
+  markCatalogDirty();
   showToast(`Updated photo for "${prod ? prod.name : 'product'}"!`);
 }
 
@@ -2559,25 +2775,32 @@ window.resetProductPhoto = function(productId) {
 
   const def = DEFAULT_PRODUCTS.find(p => p.id === productId);
   if (def && prod) {
-    localStorage.removeItem('homeify_prod_img_' + productId);
+    try { localStorage.removeItem('homeify_prod_img_' + productId); } catch (e) {}
+    idbDelete('homeify_prod_img_' + productId);
     prod.image = def.image;
     const preview = document.getElementById('custom-preview-prod-' + productId);
     if (preview) preview.src = def.image;
     renderBentoGallery(currentFilter);
+    markCatalogDirty();
     showToast(`Restored default photo for "${prod.name}"`);
   }
 };
 
-window.handleHeroPhotoUpload = function(slideId) {
-  const file = event.target.files[0];
+window.handleHeroPhotoUpload = async function(slideId) {
+  const file = event.target.files && event.target.files[0];
   if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const dataUrl = e.target.result;
-    setHeroPhoto(slideId, dataUrl);
-  };
-  reader.readAsDataURL(file);
+  showToast('Optimizing hero banner photo...');
+  try {
+    const compressed = await compressImageFile(file, 1400, 900, 0.82);
+    setHeroPhoto(slideId, compressed);
+  } catch (err) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setHeroPhoto(slideId, e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
 };
 
 window.handleHeroPhotoUrlChange = function(event, slideId) {
@@ -2588,7 +2811,9 @@ window.handleHeroPhotoUrlChange = function(event, slideId) {
 };
 
 function setHeroPhoto(slideId, newUrl) {
-  localStorage.setItem('homeify_hero_img_' + slideId, newUrl);
+  try { localStorage.setItem('homeify_hero_img_' + slideId, newUrl); } catch (e) {}
+  idbSet('homeify_hero_img_' + slideId, newUrl);
+
   const slide = HERO_SLIDES.find(s => s.id === slideId);
   if (slide) slide.image = newUrl;
 
@@ -2600,7 +2825,8 @@ function setHeroPhoto(slideId, newUrl) {
 }
 
 window.resetHeroPhoto = function(slideId) {
-  localStorage.removeItem('homeify_hero_img_' + slideId);
+  try { localStorage.removeItem('homeify_hero_img_' + slideId); } catch (e) {}
+  idbDelete('homeify_hero_img_' + slideId);
   const def = DEFAULT_HERO_SLIDES.find(s => s.id === slideId);
   const slide = HERO_SLIDES.find(s => s.id === slideId);
   if (def && slide) {
@@ -2613,8 +2839,14 @@ window.resetHeroPhoto = function(slideId) {
 };
 
 window.resetAllCustomMedia = function() {
-  if (confirm('Are you sure you want to restore all photos and logo to the default workshop assets?')) {
-    localStorage.clear();
+  if (confirm('Are you sure you want to restore all product photos and logo to the default workshop assets? (Your custom products and pricing will be safely kept!)')) {
+    try {
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('homeify_prod_img_') || key.startsWith('homeify_hero_img_') || key === 'homeify_custom_logo') {
+          localStorage.removeItem(key);
+        }
+      });
+    } catch (e) {}
     location.reload();
   }
 };
@@ -2718,21 +2950,33 @@ window.selectNewProdPreset = function(val) {
   if (statusEl) statusEl.textContent = 'Asset preset selected';
 };
 
-window.handleNewProductPhotoSelect = function(event) {
+window.handleNewProductPhotoSelect = async function(event) {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const dataUrl = e.target.result;
+  const statusEl = document.getElementById('new-prod-img-status');
+  if (statusEl) statusEl.textContent = 'Optimizing photo for fast loading...';
+
+  try {
+    const dataUrl = await compressImageFile(file, 900, 900, 0.82);
     const pathInput = document.getElementById('new-prod-img-path');
     const previewImg = document.getElementById('new-prod-preview-img');
-    const statusEl = document.getElementById('new-prod-img-status');
     if (pathInput) pathInput.value = dataUrl;
     if (previewImg) previewImg.src = dataUrl;
-    if (statusEl) statusEl.textContent = 'Custom photo uploaded (' + (file.name || 'image') + ')';
-  };
-  reader.readAsDataURL(file);
+    if (statusEl) statusEl.textContent = 'Optimized photo ready (' + Math.round(dataUrl.length / 1024) + ' KB)';
+  } catch (err) {
+    console.error('Photo optimization error:', err);
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const dataUrl = e.target.result;
+      const pathInput = document.getElementById('new-prod-img-path');
+      const previewImg = document.getElementById('new-prod-preview-img');
+      if (pathInput) pathInput.value = dataUrl;
+      if (previewImg) previewImg.src = dataUrl;
+      if (statusEl) statusEl.textContent = 'Custom photo uploaded';
+    };
+    reader.readAsDataURL(file);
+  }
 };
 
 window.handleAddNewProduct = function(event) {
@@ -2827,12 +3071,20 @@ window.handleAddNewProduct = function(event) {
     existing.unshift(newProduct);
     localStorage.setItem('homeify_custom_products', JSON.stringify(existing));
   } catch (err) {
-    console.error('Failed to save custom product to localStorage:', err);
+    console.warn('Failed to save custom product to localStorage, will rely on IndexedDB:', err);
   }
+
+  // Also save to IndexedDB (unlimited quota)
+  idbGet('homeify_custom_products').then(existing => {
+    const list = Array.isArray(existing) ? existing : [];
+    list.unshift(newProduct);
+    idbSet('homeify_custom_products', list);
+  }).catch(() => {});
 
   // Update UI immediately
   renderBentoGallery(currentFilter);
   populateCustomizerProductList();
+  markCatalogDirty();
 
   // Reset form
   const form = document.getElementById('admin-add-product-form');
@@ -2904,6 +3156,7 @@ window.removeProductFromCollection = function(productId) {
       const existing = JSON.parse(localStorage.getItem('homeify_custom_products') || '[]');
       const updated = existing.filter(p => p.id !== productId);
       localStorage.setItem('homeify_custom_products', JSON.stringify(updated));
+      idbSet('homeify_custom_products', updated);
     } catch (err) {
       console.error('Failed to update homeify_custom_products:', err);
     }
@@ -2913,6 +3166,7 @@ window.removeProductFromCollection = function(productId) {
       if (!hiddenIds.includes(productId)) {
         hiddenIds.push(productId);
         localStorage.setItem('homeify_hidden_collection_ids', JSON.stringify(hiddenIds));
+        idbSet('homeify_hidden_collection_ids', hiddenIds);
       }
     } catch (err) {
       console.error('Failed to update homeify_hidden_collection_ids:', err);
@@ -2923,13 +3177,19 @@ window.removeProductFromCollection = function(productId) {
   PRODUCTS = PRODUCTS.filter(p => p.id !== productId);
 
   // Clean up any individual price/image overrides
-  localStorage.removeItem('homeify_prod_mrp_' + productId);
-  localStorage.removeItem('homeify_prod_price_' + productId);
-  localStorage.removeItem('homeify_prod_img_' + productId);
+  try {
+    localStorage.removeItem('homeify_prod_mrp_' + productId);
+    localStorage.removeItem('homeify_prod_price_' + productId);
+    localStorage.removeItem('homeify_prod_img_' + productId);
+  } catch (e) {}
+  idbDelete('homeify_prod_mrp_' + productId);
+  idbDelete('homeify_prod_price_' + productId);
+  idbDelete('homeify_prod_img_' + productId);
 
   renderBentoGallery(currentFilter);
   populateCustomizerProductList();
   updateRestoreCollectionButtonUI();
+  markCatalogDirty();
   showToast(`Removed "${name}" from Collection.`);
 };
 
@@ -2939,11 +3199,13 @@ window.deleteCustomProduct = window.removeProductFromCollection;
 // Restore all default collection products that were removed/hidden
 window.restoreAllRemovedCollectionItems = function() {
   localStorage.removeItem('homeify_hidden_collection_ids');
+  idbDelete('homeify_hidden_collection_ids');
   PRODUCTS = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
   loadCustomAssets();
   renderBentoGallery(currentFilter);
   populateCustomizerProductList();
   updateRestoreCollectionButtonUI();
+  markCatalogDirty();
   showToast('Restored all default collection items!');
 };
 
@@ -2955,7 +3217,9 @@ window.clearProductHighlights = function(productId) {
 
   prod.features = [];
   localStorage.setItem('homeify_prod_features_' + productId, JSON.stringify([]));
+  idbSet('homeify_prod_features_' + productId, []);
   populateCustomizerProductList();
+  markCatalogDirty();
   showToast(`Removed Key Highlights for "${prod.name}".`);
 };
 
@@ -2966,7 +3230,9 @@ window.restoreProductHighlights = function(productId) {
   if (prod && def) {
     prod.features = JSON.parse(JSON.stringify(def.features || []));
     localStorage.removeItem('homeify_prod_features_' + productId);
+    idbDelete('homeify_prod_features_' + productId);
     populateCustomizerProductList();
+    markCatalogDirty();
     showToast(`Restored Key Highlights for "${prod.name}".`);
   }
 };
@@ -2986,6 +3252,165 @@ window.toggleProductFeaturedBento = function(productId) {
     showToast('Highlighted as Large Featured Card in Collection!');
   }
   localStorage.setItem('homeify_highlighted_bento_ids', JSON.stringify(highlightedList));
+  idbSet('homeify_highlighted_bento_ids', highlightedList);
   renderBentoGallery(currentFilter);
   populateCustomizerProductList();
+  markCatalogDirty();
+};
+
+// ==========================================================================
+// 14. LIVE DEPLOYMENT & PERMANENT DOMAIN SYNCHRONIZATION (homeifyfurniture.in)
+// ==========================================================================
+
+function markCatalogDirty() {
+  localStorage.setItem('homeify_catalog_dirty', 'true');
+  updateSyncStatusUI();
+}
+
+function updateSyncStatusUI() {
+  const isDirty = localStorage.getItem('homeify_catalog_dirty') === 'true';
+  const indicator = document.getElementById('admin-sync-indicator');
+  const text = document.getElementById('admin-sync-indicator-text');
+  const tokenInput = document.getElementById('admin-github-token');
+
+  if (tokenInput && !tokenInput.value) {
+    tokenInput.value = localStorage.getItem('homeify_gh_token') || '';
+  }
+
+  if (indicator && text) {
+    if (isDirty) {
+      indicator.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[11px] font-bold border border-amber-400/30 self-start sm:self-auto';
+      indicator.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span><span>Pending Live Deploy</span>';
+    } else {
+      indicator.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[11px] font-bold border border-emerald-400/30 self-start sm:self-auto';
+      indicator.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>Live Synced</span>';
+    }
+  }
+}
+
+// 1-Click Publish to GitHub Main Branch -> Vercel Auto-Deploy to homeifyfurniture.in
+window.publishCatalogToGitHub = async function() {
+  const tokenInput = document.getElementById('admin-github-token');
+  let token = (tokenInput ? tokenInput.value.trim() : '') || localStorage.getItem('homeify_gh_token') || '';
+
+  if (!token) {
+    token = prompt(
+      'Enter your GitHub Personal Access Token to deploy directly to homeifyfurniture.in:\n\n' +
+      '(To create one: go to github.com/settings/tokens, click "Generate new token (classic)", select "repo" scope, and paste it here.)'
+    );
+    if (!token || !token.trim()) {
+      alert('GitHub token is required to deploy permanently to homeifyfurniture.in.');
+      return;
+    }
+    token = token.trim();
+    localStorage.setItem('homeify_gh_token', token);
+    if (tokenInput) tokenInput.value = token;
+  }
+
+  const publishBtn = document.getElementById('admin-publish-live-btn');
+  const statusEl = document.getElementById('admin-publish-status');
+
+  if (publishBtn) {
+    publishBtn.disabled = true;
+    publishBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Publishing to Live Website...';
+  }
+  if (statusEl) statusEl.innerHTML = '<span class="text-amber-300">Connecting to GitHub repository (AmeeNafih/Homeify-Furniture-Website)...</span>';
+
+  try {
+    const owner = 'AmeeNafih';
+    const repo = 'Homeify-Furniture-Website';
+    const path = 'catalog.json';
+    const branch = 'main';
+
+    // 1. Get current SHA of catalog.json from GitHub
+    let currentSha = null;
+    try {
+      const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`, {
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+      if (getRes.ok) {
+        const fileData = await getRes.json();
+        currentSha = fileData.sha;
+      }
+    } catch (e) {
+      console.warn('Could not read existing SHA:', e);
+    }
+
+    if (statusEl) statusEl.innerHTML = '<span class="text-amber-300">Writing updated catalog with ' + PRODUCTS.length + ' products...</span>';
+
+    // 2. Format catalog JSON string and encode to Base64 (supporting UTF-8 characters like ₹)
+    const jsonStr = JSON.stringify(PRODUCTS, null, 2);
+    const base64Content = window.btoa(unescape(encodeURIComponent(jsonStr)));
+
+    // 3. Commit catalog.json to GitHub main branch
+    const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify({
+        message: `Admin update catalog: ${PRODUCTS.length} products & updated pricing [skip ci]`,
+        content: base64Content,
+        sha: currentSha || undefined,
+        branch: branch
+      })
+    });
+
+    if (!putRes.ok) {
+      const errData = await putRes.json().catch(() => ({}));
+      throw new Error(errData.message || `GitHub error ${putRes.status}`);
+    }
+
+    localStorage.setItem('homeify_gh_token', token);
+    localStorage.setItem('homeify_catalog_dirty', 'false');
+    updateSyncStatusUI();
+
+    showToast('🚀 Successfully Published! Vercel is now deploying your changes live to homeifyfurniture.in.');
+    if (statusEl) {
+      statusEl.innerHTML = '<span class="text-emerald-400 font-bold">✓ Published! Live across all devices on homeifyfurniture.in in ~15 seconds.</span>';
+    }
+  } catch (err) {
+    console.error('Publishing failed:', err);
+    alert(`Could not deploy to GitHub:\n${err.message}\n\nPlease verify your GitHub Token has "repo" permissions enabled.`);
+    if (statusEl) {
+      statusEl.innerHTML = `<span class="text-rose-400 font-bold">Deploy failed: ${err.message}</span>`;
+    }
+  } finally {
+    if (publishBtn) {
+      publishBtn.disabled = false;
+      publishBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i><span>Publish to Live Website</span>';
+    }
+  }
+};
+
+window.downloadCatalogJson = function() {
+  const jsonStr = JSON.stringify(PRODUCTS, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'catalog.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Downloaded authoritative catalog.json file!');
+};
+
+window.copyCatalogJson = function() {
+  const jsonStr = JSON.stringify(PRODUCTS, null, 2);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(jsonStr).then(() => {
+      showToast('Copied full catalog JSON to clipboard!');
+    }).catch(() => {
+      prompt('Copy your catalog JSON:', jsonStr);
+    });
+  } else {
+    prompt('Copy your catalog JSON:', jsonStr);
+  }
 };
