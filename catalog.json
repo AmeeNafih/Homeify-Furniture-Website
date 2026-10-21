@@ -310,29 +310,5 @@
       "Compact footprint perfect for living lounge seating and reading nooks",
       "100% seasoned solid timber crafted in Erattupetta"
     ]
-  },
-  {
-    "id": "office-executive-suite",
-    "name": "The Oval Executive Conference & Dining Suite",
-    "category": "office",
-    "categoryName": "Office & Modular",
-    "materialCategory": "natural-wood",
-    "materialType": "Polished Italian White Marble & Monolithic Teak Pedestals",
-    "warranty": "5-Year Structural Warranty",
-    "dimensions": "96\"L × 44\"W × 30\"H (10-Seater Executive / Boardroom)",
-    "finish": "Nano-Sealed Italian Marble with Satin Teak Pedestals",
-    "badge": "Boardroom Luxury",
-    "mrp": "₹1,40,000",
-    "factoryPrice": "₹29999",
-    "priceEstimate": "₹29999 (Direct Workshop Price)",
-    "leadTime": "14 to 18 Working Days",
-    "image": "assets/oval-dining-marble-solo.jpg",
-    "description": "Craftsmanship in every curve. A grand oval marble table designed for corporate conference rooms, executive suites, and opulent dining halls. Twin monolithic teak pedestals maximize legroom.",
-    "features": [
-      "Expansive 8-to-10 seater oval profile facilitating collaborative meetings and discussions",
-      "Monolithic solid teak pedestals engineered for heavy-duty stability with hidden wire raceway options",
-      "Stain-resistant and scratch-resistant Italian marble top ideal for intensive daily use",
-      "Custom dimensions and integrated power/data box options available on order"
-    ]
   }
 ]
