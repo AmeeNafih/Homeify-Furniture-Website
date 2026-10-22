@@ -682,42 +682,424 @@ const DEFAULT_PRODUCTS = [
       "Customizable privacy acoustic screens, CPU holders, and credenza storage pedestals",
       "Turnkey delivery and on-site assembly across Kottayam, Cochin, and all Kerala districts"
     ]
+  },
+  {
+    "id": "living-teak-lounge-sofa",
+    "name": "Kerala Artisan Teak Lounge Sofa",
+    "category": "living",
+    "categoryName": "Living & Sofas",
+    "materialCategory": "natural-wood",
+    "materialType": "Grade-A Natural Teak Wood",
+    "warranty": "5-Year Structural Integrity Warranty",
+    "dimensions": "75\"L × 32\"D × 32\"H",
+    "finish": "Organic Teak Satin Matt Seal",
+    "badge": "Comfort Collection",
+    "mrp": "₹58,000",
+    "factoryPrice": "₹38,500",
+    "priceEstimate": "₹38,500 (Direct Workshop Price)",
+    "leadTime": "8 to 12 Working Days",
+    "image": "assets/teak-lounge-sofa.jpg",
+    "description": "Comfortable deep-seat lounge sofa crafted from solid Grade-A natural teak with cushioned backrests, broad armrests, and seasoned hardwood frame.",
+    "features": [
+      "100% Grade-A natural teak construction",
+      "High-density ergonomic seat and back cushioning",
+      "Solid under-framing engineered for lifetime durability",
+      "Handcrafted in Gateway of Malanadu"
+    ]
+  },
+  {
+    "id": "living-royal-sofa",
+    "name": "The Royal High-Back Teak Wood Sofa",
+    "category": "living",
+    "categoryName": "Living & Sofas",
+    "materialCategory": "natural-wood",
+    "materialType": "Grade-A Natural Teak Wood",
+    "warranty": "5-Year Structural Integrity Warranty",
+    "dimensions": "78\"L × 34\"D × 36\"H",
+    "finish": "Honey Teak PU Polish",
+    "badge": "Royal Living",
+    "mrp": "₹72,000",
+    "factoryPrice": "₹44,999",
+    "priceEstimate": "₹44,999 (Direct Workshop Price)",
+    "leadTime": "10 to 14 Working Days",
+    "image": "assets/royal-living-sofa.jpg",
+    "description": "Regal high-back teak sofa suite featuring sculpted armrests, thick solid wood planks, and premium stain-resistant upholstery.",
+    "features": [
+      "Ergonomic high-back cervical and lumbar posture support",
+      "Hand-sculpted organic teak armrests with rounded safety edges",
+      "5-Year Full Structural Warranty included",
+      "Direct factory pickup or delivery from Gateway of Malanadu"
+    ]
+  },
+  {
+    "id": "living-contemporary-sofa",
+    "name": "Minimalist Contemporary Teak Sofa",
+    "category": "living",
+    "categoryName": "Living & Sofas",
+    "materialCategory": "natural-wood",
+    "materialType": "Grade-A Natural Teak Wood",
+    "warranty": "5-Year Structural Integrity Warranty",
+    "dimensions": "72\"L × 30\"D × 30\"H",
+    "finish": "Natural Teak Matt Polish",
+    "badge": "Urban Minimalist",
+    "mrp": "₹54,000",
+    "factoryPrice": "₹36,000",
+    "priceEstimate": "₹36,000 (Direct Workshop Price)",
+    "leadTime": "7 to 10 Working Days",
+    "image": "assets/contemporary-teak-sofa.jpg",
+    "description": "Sleek low-profile modern living sofa with warm natural teak grain and comfortable high-resilience foam cushioning.",
+    "features": [
+      "Compact footprint tailored for modern apartments and villas",
+      "Solid Grade-A natural teakwood framework",
+      "Removable zip-off cushion covers for effortless washing",
+      "Crafted in Gateway of Malanadu"
+    ]
+  },
+  {
+    "id": "bed-teak-panel-king-cot",
+    "name": "Classic Raised-Panel Solid Teak King Cot",
+    "category": "bedroom-dining",
+    "categoryName": "Bedroom & Dining",
+    "materialCategory": "natural-wood",
+    "materialType": "Grade-A Natural Teak Wood",
+    "warranty": "5-Year Structural Integrity Warranty",
+    "dimensions": "78\"L × 72\"W × 44\"H (King 6×6.5 Ft)",
+    "finish": "Organic Teak Matt Seal",
+    "badge": "Master Bedroom",
+    "mrp": "₹76,000",
+    "factoryPrice": "₹49,999",
+    "priceEstimate": "₹49,999 (Direct Workshop Price)",
+    "leadTime": "10 to 14 Working Days",
+    "image": "assets/teak-panel-king-cot.jpg",
+    "description": "Substantial 6-foot solid teak cot with architectural raised wood panels, heavy corner posts, and noise-free mortise joints.",
+    "features": [
+      "Triple raised-panel headboard carved from seasoned teak",
+      "Internal heavy-duty solid wood cross-members",
+      "Completely silent mortise-and-tenon structural joints",
+      "Direct workshop price from Gateway of Malanadu"
+    ]
+  },
+  {
+    "id": "bed-fluted-teak-cot",
+    "name": "The Fluted Headboard Teak King Cot",
+    "category": "bedroom-dining",
+    "categoryName": "Bedroom & Dining",
+    "materialCategory": "natural-wood",
+    "materialType": "Grade-A Natural Teak Wood",
+    "warranty": "5-Year Structural Integrity Warranty",
+    "dimensions": "78\"L × 72\"W × 46\"H",
+    "finish": "Natural Golden Teak Lacquer",
+    "badge": "Architectural Design",
+    "mrp": "₹79,000",
+    "factoryPrice": "₹52,000",
+    "priceEstimate": "₹52,000 (Direct Workshop Price)",
+    "leadTime": "12 to 16 Working Days",
+    "image": "assets/fluted-teak-cot.jpg",
+    "description": "Artisan-crafted master bed featuring a rhythmic vertical fluted headboard carved from seasoned Grade-A natural teak.",
+    "features": [
+      "Fluted vertical architectural relief pattern across headboard",
+      "Kiln-seasoned hardwood built to resist Kerala humidity",
+      "5-Year Full Structural Integrity Warranty",
+      "Handcrafted in Gateway of Malanadu"
+    ]
+  },
+  {
+    "id": "bed-minimalist-teak-cot",
+    "name": "Minimalist Platform Teak Cot (6×6 Ft)",
+    "category": "bedroom-dining",
+    "categoryName": "Bedroom & Dining",
+    "materialCategory": "natural-wood",
+    "materialType": "Grade-A Natural Teak Wood",
+    "warranty": "5-Year Structural Integrity Warranty",
+    "dimensions": "75\"L × 72\"W × 38\"H",
+    "finish": "Natural Teak Satin Finish",
+    "badge": "Clean Platform",
+    "mrp": "₹68,000",
+    "factoryPrice": "₹44,500",
+    "priceEstimate": "₹44,500 (Direct Workshop Price)",
+    "leadTime": "8 to 12 Working Days",
+    "image": "assets/minimalist-teak-cot.jpg",
+    "description": "Low-profile modern platform bed with solid teak framing, smooth rounded corner safety posts, and breathable slatted base.",
+    "features": [
+      "Rounded corner posts designed to prevent shin bumps",
+      "Natural timber ventilation slats for mattress longevity",
+      "Solid Grade-A natural teak throughout",
+      "Direct factory price from Gateway of Malanadu"
+    ]
+  },
+  {
+    "id": "bed-heritage-carved-cot",
+    "name": "Heritage Floral Carved Teak King Cot",
+    "category": "bedroom-dining",
+    "categoryName": "Bedroom & Dining",
+    "materialCategory": "natural-wood",
+    "materialType": "Grade-A Natural Teak Wood",
+    "warranty": "5-Year Structural Integrity Warranty",
+    "dimensions": "80\"L × 72\"W × 50\"H (King)",
+    "finish": "Warm Antique Teak Satin Hand Polish",
+    "badge": "Masterpiece Craft",
+    "mrp": "₹92,000",
+    "factoryPrice": "₹62,000",
+    "priceEstimate": "₹62,000 (Direct Workshop Price)",
+    "leadTime": "14 to 18 Working Days",
+    "image": "assets/heritage-carved-cot.jpg",
+    "description": "Master craftsman carved headboard displaying intricate Kerala floral relief work on monumental kiln-seasoned natural teak.",
+    "features": [
+      "Hand-chiseled botanical arch crown on monolithic teak planks",
+      "Heavy-section 4x4 inch corner columns with carved finials",
+      "5-Year Structural Guarantee",
+      "Crafted in Gateway of Malanadu"
+    ]
+  },
+  {
+    "id": "dining-royal-suite",
+    "name": "The Royal 6-Seater Teak Dining Suite",
+    "category": "bedroom-dining",
+    "categoryName": "Bedroom & Dining",
+    "materialCategory": "natural-wood",
+    "materialType": "Grade-A Natural Teak Wood",
+    "warranty": "5-Year Structural Integrity Warranty",
+    "dimensions": "Table: 66\"L × 36\"W × 30\"H + 6 Chairs",
+    "finish": "Heat & Moisture Sealed Teak Matt",
+    "badge": "Complete Dining Set",
+    "mrp": "₹74,000",
+    "factoryPrice": "₹48,500",
+    "priceEstimate": "₹48,500 (Direct Workshop Price)",
+    "leadTime": "10 to 14 Working Days",
+    "image": "assets/royal-teak-dining-suite.jpg",
+    "description": "Solid teak 6-seater dining table with six hand-planed curved ergonomic dining chairs with water-resistant upholstery.",
+    "features": [
+      "Seamless solid teak dining surface with stain-shield polyurethane",
+      "6 ergonomic dining chairs with high-density padded seats",
+      "Interlocking cross-braced table foundation for rock-solid stability",
+      "Handcrafted in Gateway of Malanadu"
+    ]
+  },
+  {
+    "id": "dining-teak-oval-craft-table",
+    "name": "Artisan Oval Teak Pedestal Dining Table",
+    "category": "bedroom-dining",
+    "categoryName": "Bedroom & Dining",
+    "materialCategory": "natural-wood",
+    "materialType": "Grade-A Natural Teak Wood",
+    "warranty": "5-Year Structural Integrity Warranty",
+    "dimensions": "72\"L × 40\"W × 30\"H (6 to 8 Seater)",
+    "finish": "Hand-Rubbed Organic Teak Satin Finish",
+    "badge": "Pedestal Luxury",
+    "mrp": "₹56,000",
+    "factoryPrice": "₹36,999",
+    "priceEstimate": "₹36,999 (Direct Workshop Price)",
+    "leadTime": "10 to 14 Working Days",
+    "image": "assets/teak-oval-craft-table.jpg",
+    "description": "Seamless oval dining table showcasing bookmatched natural teak grain with twin sturdy pedestals maximizing leg clearance.",
+    "features": [
+      "Curved oval silhouette preventing sharp corner collisions",
+      "Dual solid teak center pedestals leaving corners completely open",
+      "100% Grade-A kiln-seasoned natural teakwood",
+      "Crafted in Gateway of Malanadu"
+    ]
+  },
+  {
+    "id": "living-traditional-verandah-chair",
+    "name": "Traditional Kerala Easy Verandah Chair",
+    "category": "living",
+    "categoryName": "Living & Sofas",
+    "materialCategory": "natural-wood",
+    "materialType": "Grade-A Natural Teak Wood",
+    "warranty": "5-Year Structural Integrity Warranty",
+    "dimensions": "34\"L × 26\"W × 36\"H",
+    "finish": "Organic Teak Natural Matt Lacquer",
+    "badge": "Verandah Classic",
+    "mrp": "₹22,000",
+    "factoryPrice": "₹13,999",
+    "priceEstimate": "₹13,999 (Direct Workshop Price)",
+    "leadTime": "5 to 8 Working Days",
+    "image": "assets/traditional-verandah-chair.jpg",
+    "description": "Classic Kerala porch chair with extended armrests and contoured back slat support for breezy sitout lounging.",
+    "features": [
+      "Comfortably inclined back angle for natural spinal relaxation",
+      "Wide contoured armrest planks suitable for books and cups",
+      "Weather-resistant Grade-A natural teakwood",
+      "Direct workshop price from Gateway of Malanadu"
+    ]
+  },
+  {
+    "id": "living-teak-easy-armchair",
+    "name": "Hand-Sculpted Teak Sitout Armchair",
+    "category": "living",
+    "categoryName": "Living & Sofas",
+    "materialCategory": "natural-wood",
+    "materialType": "Grade-A Natural Teak Wood",
+    "warranty": "5-Year Structural Integrity Warranty",
+    "dimensions": "32\"L × 26\"W × 35\"H",
+    "finish": "Deep Honey Teak Weatherproof Polish",
+    "badge": "Sitout Lounger",
+    "mrp": "₹25,000",
+    "factoryPrice": "₹15,500",
+    "priceEstimate": "₹15,500 (Direct Workshop Price)",
+    "leadTime": "5 to 8 Working Days",
+    "image": "assets/teak-easy-armchair.jpg",
+    "description": "Heavy-duty outdoor-indoor verandah armchair crafted from Grade-A natural teak with weather-resistant satin PU finish.",
+    "features": [
+      "Heavy-section timber posts built for open-air verandahs",
+      "Solid wood slatted seat with natural airflow ventilation",
+      "Handcrafted in Gateway of Malanadu",
+      "5-Year Full Structural Integrity Warranty"
+    ]
+  },
+  {
+    "id": "living-sculpted-teapoy",
+    "name": "The Sculpted Solid Teak Teapoy",
+    "category": "living",
+    "categoryName": "Living & Sofas",
+    "materialCategory": "natural-wood",
+    "materialType": "Grade-A Natural Teak Wood",
+    "warranty": "5-Year Structural Integrity Warranty",
+    "dimensions": "38\"L × 22\"W × 18\"H",
+    "finish": "Satin Honey Teak Moisture Seal",
+    "badge": "Living Room Accent",
+    "mrp": "₹15,000",
+    "factoryPrice": "₹8,499",
+    "priceEstimate": "₹8,499 (Direct Workshop Price)",
+    "leadTime": "4 to 7 Working Days",
+    "image": "assets/sculpted-teak-teapoy.jpg",
+    "description": "Artisan coffee table with chamfered perimeter edging, sturdy solid wood legs, and convenient lower storage shelf.",
+    "features": [
+      "Smooth rounded top edges with natural teak woodgrain",
+      "Integrated bottom shelf for reading materials and decor",
+      "Heat and water-ring resistant topcoat protection",
+      "Crafted in Gateway of Malanadu"
+    ]
+  },
+  {
+    "id": "living-glass-top-teapoy",
+    "name": "Glass-Top Teak Wood Coffee Table",
+    "category": "living",
+    "categoryName": "Living & Sofas",
+    "materialCategory": "natural-wood",
+    "materialType": "Grade-A Natural Teak Wood",
+    "warranty": "5-Year Structural Integrity Warranty",
+    "dimensions": "40\"L × 24\"W × 18\"H",
+    "finish": "Natural Teak Matt Polish with Beveled Glass",
+    "badge": "Modern Elegance",
+    "mrp": "₹16,500",
+    "factoryPrice": "₹9,200",
+    "priceEstimate": "₹9,200 (Direct Workshop Price)",
+    "leadTime": "5 to 7 Working Days",
+    "image": "assets/glass-top-teak-teapoy.jpg",
+    "description": "Tempered float glass top framed in rich Grade-A natural teak with architectural lower shelf for living room elegance.",
+    "features": [
+      "8mm toughened beveled safety glass insert",
+      "Interlocking solid teak joinery with lower magazine shelf",
+      "5-Year Full Warranty included",
+      "Direct factory pickup or delivery from Gateway of Malanadu"
+    ]
+  },
+  {
+    "id": "custom-ornate-entrance-door",
+    "name": "Ornate Hand-Carved Teak Villa Entrance Door",
+    "category": "custom-woodwork",
+    "categoryName": "Custom Bespoke Kerala Woodwork",
+    "materialCategory": "natural-wood",
+    "materialType": "Grade-A Natural Teak Wood",
+    "warranty": "10-Year Timber Durability Guarantee",
+    "dimensions": "84\"H × 42\"W × 2\" Thickness",
+    "finish": "Weatherproof Exterior Polyurethane Teak Seal",
+    "badge": "Villa Heritage",
+    "mrp": "₹62,000",
+    "factoryPrice": "₹38,000",
+    "priceEstimate": "₹38,000 (Direct Workshop Price)",
+    "leadTime": "14 to 18 Working Days",
+    "image": "assets/ornate-teak-entrance-door.jpg",
+    "description": "Bespoke Kerala villa main door carved from 2-inch thick seasoned natural teak with dimensional raised panels and brass studs.",
+    "features": [
+      "Massive 2-inch thick solid seasoned Grade-A teak construction",
+      "Traditional carved central rosette panels with heavy-duty framing",
+      "Weather-shield exterior barrier against sun and heavy monsoon rainfall",
+      "Custom dimensions tailored to your architect's masonry opening"
+    ]
+  },
+  {
+    "id": "custom-pillar-grandfather-clock",
+    "name": "Turned-Pillar Solid Teak Grandfather Clock",
+    "category": "custom-woodwork",
+    "categoryName": "Custom Bespoke Kerala Woodwork",
+    "materialCategory": "natural-wood",
+    "materialType": "Grade-A Natural Teak Wood",
+    "warranty": "5-Year Structural Integrity Warranty",
+    "dimensions": "76\"H × 20\"W × 12\"D",
+    "finish": "Dark Walnut-Teak Satin Polish",
+    "badge": "Artisan Horology",
+    "mrp": "₹49,000",
+    "factoryPrice": "₹29,999",
+    "priceEstimate": "₹29,999 (Direct Workshop Price)",
+    "leadTime": "10 to 14 Working Days",
+    "image": "assets/pillar-grandfather-clock.jpg",
+    "description": "Artisanal tall clock cabinet featuring twin hand-turned solid teak corner pillars, beveled glass chamber, and carved pediment.",
+    "features": [
+      "Lathe-turned classical solid wood columns flanking the clock case",
+      "Magnetic catch front access door with clear float glass",
+      "Crafted by senior master carpenters in Gateway of Malanadu",
+      "5-Year Full Structural Integrity Warranty"
+    ]
   }
 ];
 
 // --- REAL HERO SLIDES (Using Real Homeify Local Photos) ---
 const DEFAULT_HERO_SLIDES = [
   {
-    id: 'hero-0',
-    title: 'The Indoor Living Experience',
-    tag: 'Living & Sofas',
-    image: 'assets/handcrafted-wooden-sofa.jpg',
-    specs: 'Handcrafted Wooden Sofa • Botanical Belgian Linen • 5-Year Warranty',
-    quoteTarget: 'sofa'
+    id: 'hero-sofa',
+    title: 'Handcrafted Teak Wood 3+1+1 Sofa Suite',
+    tag: 'Sofa Suite',
+    image: 'assets/teak-wood-sofa-set.jpg',
+    specs: 'Kiln-Seasoned Teak Planks • Belgian Linen • 5-Year Warranty',
+    quoteTarget: 'sofa',
+    productId: 'living-royal-teak-sofa-set'
   },
   {
-    id: 'hero-1',
-    title: 'The Timber Cot (6-Foot King)',
-    tag: 'Master Bedroom',
-    image: 'assets/timber-cot-6ft.jpg',
-    specs: '100% Kiln-Seasoned Teak • Monolithic Headboard • Silent Sleep',
-    quoteTarget: 'bed'
+    id: 'hero-cot',
+    title: 'Royal Carved Solid Teak King Cot',
+    tag: 'King Cot',
+    image: 'assets/royal-carved-teak-cot.jpg',
+    specs: 'Grade-A Natural Teak • Architectural Crown • 5-Year Warranty',
+    quoteTarget: 'bed',
+    productId: 'bed-royal-carved-cot'
   },
   {
-    id: 'hero-2',
-    title: 'The Oval Dining Set',
-    tag: 'Royal Dining Suites',
-    image: 'assets/oval-dining-set-chairs.jpg',
-    specs: 'Oval Table + 6 Curved Chairs • Marble & Teak • Direct Factory Price',
-    quoteTarget: 'dining'
+    id: 'hero-dining',
+    title: '6-Seater Solid Teak Dining Suite',
+    tag: 'Dining Suite',
+    image: 'assets/teak-dining-table-chairs-6seater.jpg',
+    specs: 'Solid Teak Table + 6 Cushioned Chairs • Direct Workshop Price',
+    quoteTarget: 'dining',
+    productId: 'dining-teak-6seater-set'
   },
   {
-    id: 'hero-3',
-    title: 'The Royal Jhoola',
-    tag: 'Custom Kerala Woodwork',
+    id: 'hero-sitout',
+    title: 'Traditional Kerala Teak Sitout Chair',
+    tag: 'Charukasera',
+    image: 'assets/kerala-teak-sitout-chair.jpg',
+    specs: 'Dense Grade-A Teak • Ergonomic Lounging • Brass Joinery',
+    quoteTarget: 'custom',
+    productId: 'living-kerala-sitout-chair'
+  },
+  {
+    id: 'hero-door',
+    title: 'Grand Padippura Solid Teak Entrance Door',
+    tag: 'Main Door',
+    image: 'assets/architectural-teak-door.jpg',
+    specs: '2-Inch Mature Teak • Heritage Relief Carving • Weatherproof PU',
+    quoteTarget: 'custom',
+    productId: 'custom-architectural-teak-door'
+  },
+  {
+    id: 'hero-jhoola',
+    title: 'The Royal Kerala Jhoola (Oonjal)',
+    tag: 'Kerala Oonjal',
     image: 'assets/royal-jhoola-swing.jpg',
-    specs: 'Authentic Kerala Oonjal • Brass Interlocking Chains • Solid Teak',
-    quoteTarget: 'custom'
+    specs: 'Authentic Kerala Verandah Oonjal • Pure Brass Interlocking Chains',
+    quoteTarget: 'custom',
+    productId: 'custom-royal-jhoola'
   }
 ];
 
@@ -964,6 +1346,7 @@ async function loadAuthoritativeCatalog() {
   loadCustomAssets();
 
   // Re-render gallery & customizer with authoritative catalog
+  renderCuratedHighlights();
   renderBentoGallery(currentFilter);
   populateCustomizerProductList();
   updateSyncStatusUI();
@@ -986,6 +1369,7 @@ document.addEventListener('DOMContentLoaded', () => {
   init3DMaterialCube();
   initHeroParallax();
   initHeroCarousel();
+  renderCuratedHighlights();
   renderBentoGallery('all');
   initFilterButtons();
   initModalListeners();
@@ -1511,11 +1895,19 @@ function initHeroCarousel() {
 
   indicatorsContainer.innerHTML = HERO_SLIDES.map((slide, idx) => `
     <button 
-      class="hero-indicator-btn flex-shrink-0 whitespace-nowrap px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-semibold tracking-wide transition-all duration-300 ${idx === 0 ? 'bg-[#0D0C0B] text-white shadow-lg' : 'bg-white/80 text-[#141210] hover:bg-white'}"
+      type="button"
+      class="hero-indicator-btn flex-shrink-0 flex items-center gap-2 p-1.5 pr-3 rounded-2xl border transition-all duration-300 cursor-pointer ${idx === 0 ? 'active bg-[#0D0C0B] text-white border-amber-400 shadow-md ring-1 ring-amber-400/40' : 'bg-white/95 text-stone-700 border-stone-200/90 hover:border-stone-400 hover:bg-white'}"
       data-slide="${idx}"
       onclick="setHeroSlide(${idx})"
+      title="${slide.title}"
     >
-      ${slide.tag}
+      <div class="indicator-thumb w-8 h-8 sm:w-9 sm:h-9 rounded-xl overflow-hidden bg-stone-900 border ${idx === 0 ? 'border-amber-400 ring-1 ring-amber-400' : 'border-stone-200'} flex-shrink-0">
+        <img src="${slide.image}" alt="${slide.tag}" class="w-full h-full object-cover" />
+      </div>
+      <div class="text-left pr-0.5">
+        <span class="indicator-title block text-[11px] sm:text-xs font-bold leading-tight font-sans whitespace-nowrap">${slide.tag}</span>
+        <span class="indicator-sub text-[9px] font-mono uppercase tracking-wider block ${idx === 0 ? 'text-amber-300' : 'text-stone-500 font-medium'}">Highlight</span>
+      </div>
     </button>
   `).join('');
 
@@ -1550,10 +1942,17 @@ window.setHeroSlide = function(index) {
   }, 240);
 
   indicatorBtns.forEach((btn, idx) => {
-    if (idx === index) {
-      btn.className = 'hero-indicator-btn px-4 py-2 rounded-xl text-xs font-semibold tracking-wide transition-all duration-300 bg-[#0D0C0B] text-white shadow-lg';
+    const isCur = (idx === index);
+    const thumbBox = btn.querySelector('.indicator-thumb');
+    const subtext = btn.querySelector('.indicator-sub');
+    if (isCur) {
+      btn.className = 'hero-indicator-btn flex-shrink-0 flex items-center gap-2 p-1.5 pr-3 rounded-2xl border transition-all duration-300 cursor-pointer active bg-[#0D0C0B] text-white border-amber-400 shadow-md ring-1 ring-amber-400/40';
+      if (thumbBox) thumbBox.className = 'indicator-thumb w-8 h-8 sm:w-9 sm:h-9 rounded-xl overflow-hidden bg-stone-900 border border-amber-400 ring-1 ring-amber-400 flex-shrink-0';
+      if (subtext) subtext.className = 'indicator-sub text-[9px] font-mono uppercase tracking-wider block text-amber-300';
     } else {
-      btn.className = 'hero-indicator-btn px-4 py-2 rounded-xl text-xs font-semibold tracking-wide transition-all duration-300 bg-white/80 text-[#141210] hover:bg-white';
+      btn.className = 'hero-indicator-btn flex-shrink-0 flex items-center gap-2 p-1.5 pr-3 rounded-2xl border transition-all duration-300 cursor-pointer bg-white/95 text-stone-700 border-stone-200/90 hover:border-stone-400 hover:bg-white';
+      if (thumbBox) thumbBox.className = 'indicator-thumb w-8 h-8 sm:w-9 sm:h-9 rounded-xl overflow-hidden bg-stone-900 border border-stone-200 flex-shrink-0';
+      if (subtext) subtext.className = 'indicator-sub text-[9px] font-mono uppercase tracking-wider block text-stone-500 font-medium';
     }
   });
 };
@@ -1561,6 +1960,67 @@ window.setHeroSlide = function(index) {
 // ==========================================================================
 // 2. ULTRA-MODERN BENTO GALLERY (Configured for Local Homeify Assets)
 // ==========================================================================
+
+// Open a product modal directly by ID
+window.openProductModalById = function(productId) {
+  const prod = PRODUCTS.find(p => p.id === productId);
+  if (prod) {
+    openProductModal(prod);
+  }
+};
+
+// Curated Highlights Bar: Showcases only the most good looking products in small professional thumbnails
+function renderCuratedHighlights() {
+  const container = document.getElementById('curated-highlights-strip');
+  if (!container) return;
+
+  // Selected top most good looking flagship products from Google Drive & workshop
+  const highlightIds = [
+    'bed-royal-carved-cot',
+    'living-royal-teak-sofa-set',
+    'dining-teak-6seater-set',
+    'living-kerala-sitout-chair',
+    'custom-architectural-teak-door',
+    'custom-heritage-grandfather-clock',
+    'bed-solid-teak-wardrobe',
+    'custom-royal-jhoola'
+  ];
+
+  const highlightItems = highlightIds
+    .map(id => PRODUCTS.find(p => p.id === id))
+    .filter(Boolean);
+
+  container.innerHTML = highlightItems.map(item => {
+    let shortName = item.name;
+    if (shortName.includes('(')) shortName = shortName.split('(')[0].trim();
+    if (shortName.length > 17) shortName = shortName.slice(0, 15) + '...';
+
+    return `
+      <button 
+        type="button" 
+        onclick="openProductModalById('${item.id}')"
+        class="group flex flex-col items-center flex-shrink-0 cursor-pointer focus:outline-none transition-transform duration-300 hover:-translate-y-1"
+        title="${item.name} • Direct Workshop Price: ${item.factoryPrice}"
+      >
+        <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-2xl p-0.5 bg-gradient-to-tr from-amber-400 via-amber-200 to-stone-300 shadow-sm group-hover:shadow-md group-hover:ring-2 group-hover:ring-amber-400 transition-all">
+          <div class="w-full h-full rounded-[14px] overflow-hidden bg-stone-900 border border-white/60">
+            <img src="${item.image}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-115" />
+          </div>
+          <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-stone-950 flex items-center justify-center text-[8px] font-bold shadow-sm">
+            <i class="fa-solid fa-crown text-[7px]"></i>
+          </span>
+        </div>
+        <span class="mt-1.5 text-[11px] font-bold text-stone-800 group-hover:text-teak transition-colors font-sans max-w-[80px] truncate text-center leading-tight">
+          ${shortName}
+        </span>
+        <span class="text-[9px] font-mono text-emerald-800 font-bold">
+          ${item.factoryPrice}
+        </span>
+      </button>
+    `;
+  }).join('');
+}
+
 function renderBentoGallery(filterCategory) {
   const gridContainer = document.getElementById('bento-grid-container');
   if (!gridContainer) return;
@@ -1589,23 +2049,13 @@ function renderBentoGallery(filterCategory) {
     let spanClasses = 'col-span-12 sm:col-span-6 lg:col-span-4';
     let isLarge = false;
 
-    // Bento layout: Highlighted featured items receive prominent architectural spans
+    // Bento layout: Only top curated showcase items receive featured architectural spans
+    const defaultFlagshipHighlights = ['bed-royal-carved-cot', 'living-royal-teak-sofa-set'];
     const customHighlights = JSON.parse(localStorage.getItem('homeify_highlighted_bento_ids') || 'null');
-    if (customHighlights !== null) {
-      if (customHighlights.includes(product.id)) {
-        spanClasses = 'col-span-12 md:col-span-12 lg:col-span-8';
-        isLarge = true;
-      }
-    } else {
-      if (filterCategory === 'all') {
-        if (index === 0 || index === 3) {
-          spanClasses = 'col-span-12 md:col-span-12 lg:col-span-8';
-          isLarge = true;
-        }
-      } else if (filtered.length >= 3 && index === 0) {
-        spanClasses = 'col-span-12 md:col-span-12 lg:col-span-8';
-        isLarge = true;
-      }
+    const activeHighlights = customHighlights !== null ? customHighlights : defaultFlagshipHighlights;
+    if (activeHighlights.includes(product.id)) {
+      spanClasses = 'col-span-12 md:col-span-12 lg:col-span-8';
+      isLarge = true;
     }
 
     const card = document.createElement('div');
@@ -1631,7 +2081,7 @@ function renderBentoGallery(filterCategory) {
       <div class="card-sheen"></div>
 
       <!-- Product Photo Thumbnail Frame (Full Size Edge-to-Edge) -->
-      <div class="relative overflow-hidden ${isLarge ? 'h-88 sm:h-[440px] md:h-[500px]' : 'h-72 sm:h-84 md:h-96'} bg-stone-900 border-b border-stone-100 dark:border-white/10 group/thumb">
+      <div class="relative overflow-hidden ${isLarge ? 'h-64 sm:h-72 md:h-80' : 'h-52 sm:h-60 md:h-64'} bg-stone-900 border-b border-stone-100 dark:border-white/10 group/thumb">
         <img 
           src="${product.image}" 
           alt="${product.name}" 
@@ -3173,6 +3623,7 @@ window.handleProductPriceSave = function(productId) {
     }).catch(() => {});
   }
 
+  renderCuratedHighlights();
   renderBentoGallery(currentFilter);
   markCatalogDirty();
   showToast(`Updated pricing for ${prod.name}! (MRP: ${newMrp}, Factory: ${newPrice})`);
@@ -3206,6 +3657,7 @@ window.resetProductPrice = function(productId) {
   if (mrpInput) mrpInput.value = def.mrp;
   if (priceInput) priceInput.value = def.factoryPrice;
 
+  renderCuratedHighlights();
   renderBentoGallery(currentFilter);
   markCatalogDirty();
   showToast(`Restored default price for ${prod.name}`);
@@ -3228,6 +3680,7 @@ window.resetAllProductPrices = function() {
     }
   });
   populateCustomizerProductList();
+  renderCuratedHighlights();
   renderBentoGallery(currentFilter);
   markCatalogDirty();
   showToast('All default product MRPs & prices restored!');
@@ -3296,6 +3749,7 @@ function setProductPhoto(productId, newUrl) {
   const preview = document.getElementById('custom-preview-prod-' + productId);
   if (preview) preview.src = newUrl;
 
+  renderCuratedHighlights();
   renderBentoGallery(currentFilter);
   markCatalogDirty();
   showToast(`Updated photo for "${prod ? prod.name : 'product'}"!`);
@@ -3317,7 +3771,8 @@ window.resetProductPhoto = function(productId) {
     prod.image = def.image;
     const preview = document.getElementById('custom-preview-prod-' + productId);
     if (preview) preview.src = def.image;
-    renderBentoGallery(currentFilter);
+    renderCuratedHighlights();
+  renderBentoGallery(currentFilter);
     markCatalogDirty();
     showToast(`Restored default photo for "${prod.name}"`);
   }
@@ -3619,6 +4074,7 @@ window.handleAddNewProduct = function(event) {
   }).catch(() => {});
 
   // Update UI immediately
+  renderCuratedHighlights();
   renderBentoGallery(currentFilter);
   populateCustomizerProductList();
   markCatalogDirty();
@@ -3723,6 +4179,7 @@ window.removeProductFromCollection = function(productId) {
   idbDelete('homeify_prod_price_' + productId);
   idbDelete('homeify_prod_img_' + productId);
 
+  renderCuratedHighlights();
   renderBentoGallery(currentFilter);
   populateCustomizerProductList();
   updateRestoreCollectionButtonUI();
@@ -3739,6 +4196,7 @@ window.restoreAllRemovedCollectionItems = function() {
   idbDelete('homeify_hidden_collection_ids');
   PRODUCTS = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
   loadCustomAssets();
+  renderCuratedHighlights();
   renderBentoGallery(currentFilter);
   populateCustomizerProductList();
   updateRestoreCollectionButtonUI();
@@ -3790,6 +4248,7 @@ window.toggleProductFeaturedBento = function(productId) {
   }
   localStorage.setItem('homeify_highlighted_bento_ids', JSON.stringify(highlightedList));
   idbSet('homeify_highlighted_bento_ids', highlightedList);
+  renderCuratedHighlights();
   renderBentoGallery(currentFilter);
   populateCustomizerProductList();
   markCatalogDirty();
