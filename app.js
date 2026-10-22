@@ -123,7 +123,7 @@ const DEFAULT_PRODUCTS = [
     priceEstimate: '₹48,000 (Direct Workshop Price)',
     leadTime: '10 to 14 Working Days',
     image: 'assets/timber-cot-6ft.jpg',
-    description: 'Minimalist low-profile platform bed engineered to showcase the pure, uninterrupted natural grain of seasoned Nilambur teak. Monolithic headboard plank with recessed shadow-gap pedestal framing.',
+    description: 'Minimalist low-profile platform bed engineered to showcase the pure, uninterrupted natural grain of seasoned Grade-A natural teak. Monolithic headboard plank with recessed shadow-gap pedestal framing.',
     features: [
       'Wide continuous solid teak planks grain-matched across headboard',
       'Low platform profile offering ergonomic accessibility and modern spatial depth',
@@ -257,7 +257,7 @@ const DEFAULT_PRODUCTS = [
     category: 'bedroom-dining',
     categoryName: 'Bedroom & Dining',
     materialCategory: 'natural-wood',
-    materialType: '100% Solid Natural Nilambur Teak Wood (Zero Veneers)',
+    materialType: '100% Solid Grade-A Natural Teak Wood (Zero Veneers)',
     warranty: '5-Year Timber & Manufacturing Warranty',
     dimensions: '84"L × 42"W × 30"H (8-Seater)',
     finish: 'Natural Teak Satin Oil with Water-Repellent Seal',
@@ -281,7 +281,7 @@ const DEFAULT_PRODUCTS = [
     category: 'custom-woodwork',
     categoryName: 'Custom Woodwork',
     materialCategory: 'natural-wood',
-    materialType: 'Solid Nilambur Teak Wood Planks & Handcrafted Brass/Steel Chains',
+    materialType: 'Solid Grade-A Natural Teak Wood Planks & Handcrafted Brass/Steel Chains',
     warranty: '5-Year Heavy-Duty Structural Warranty',
     dimensions: '54"L × 26"D × 22"H Backrest (Chains adjustable to ceiling height)',
     finish: 'Deep Heritage Teak Luster Polish with Brass Accents',
@@ -339,7 +339,7 @@ const DEFAULT_PRODUCTS = [
     priceEstimate: '₹15,000 (Direct Workshop Price)',
     leadTime: '6 to 9 Working Days',
     image: 'assets/tropical-teak-low-table.jpg',
-    description: 'From The Tropical Modern Collection. A circular coffee table designed with interlocked sculptural four-beam legs, celebrating the natural warmth and golden tones of Nilambur teak.',
+    description: 'From The Tropical Modern Collection. A circular coffee table designed with interlocked sculptural four-beam legs, celebrating the natural warmth and golden tones of Grade-A natural teak.',
     features: [
       'Interlocking cross-lap solid timber joinery for indestructible stability',
       'Round solid wood top highlighting natural growth rings and golden woodgrain',
@@ -3720,8 +3720,8 @@ const DEFAULT_INSTAGRAM_REELS = [
     id: 'reel-teak-sofa',
     category: 'crafting',
     tag: 'Workshop Joinery',
-    title: 'Handcrafted Nilambur Teak Sofa Frame',
-    caption: 'Master artisans carving and assembling 3-seater solid Nilambur teak sofa frames with traditional mortise & tenon interlocking joints. Monolithic strength built to last generations without metallic fasteners. 🌿✨',
+    title: 'Handcrafted Grade-A Natural Teak Sofa Frame',
+    caption: 'Master artisans carving and assembling 3-seater solid Grade-A natural teak sofa frames with traditional mortise & tenon interlocking joints. Monolithic strength built to last generations without metallic fasteners. 🌿✨',
     image: 'assets/handcrafted-wooden-sofa.jpg',
     views: '14.8K',
     likes: 1248,
@@ -3730,14 +3730,14 @@ const DEFAULT_INSTAGRAM_REELS = [
     location: 'Erattupetta Workshop • Kerala',
     batch: 'Erattupetta Workshop • Batch #NK-42',
     instagramUrl: 'https://www.instagram.com/homeify.furniture/',
-    productInquiry: 'Handcrafted Nilambur Teak Sofa Frame (3-Seater)'
+    productInquiry: 'Handcrafted Grade-A Natural Teak Sofa Frame (3-Seater)'
   },
   {
     id: 'reel-kerala-jhoola',
     category: 'delivery',
     tag: 'Client Delivery',
     title: 'Royal Kerala Jhoola Swing Installation',
-    caption: 'Delivered & installed at a heritage villa residence in Kottayam! 100% monolithic Nilambur teak plank suspended with ornamental solid cast-brass chains and high-gloss marine polyurethane coat. 🏡✨',
+    caption: 'Delivered & installed at a heritage villa residence in Kottayam! 100% monolithic Grade-A natural teak plank suspended with ornamental solid cast-brass chains and high-gloss marine polyurethane coat. 🏡✨',
     image: 'assets/royal-jhoola-swing.jpg',
     views: '28.6K',
     likes: 2890,
@@ -3751,8 +3751,8 @@ const DEFAULT_INSTAGRAM_REELS = [
   {
     id: 'reel-teak-cot',
     category: 'teak',
-    tag: 'Nilambur Teak',
-    title: 'Kiln-Seasoned 6-ft Nilambur Teak King Cot',
+    tag: 'Grade-A Natural Teak',
+    title: 'Kiln-Seasoned 6-ft Grade-A Natural Teak King Cot',
     caption: 'From seasoned plantation teak logs to a monolithic 6-ft king cot headboard. Calibrated to 10-12% moisture equilibrium so it will never bend, expand, or creak through humid Kerala monsoon seasons. 🪵💤',
     image: 'assets/premium-wooden-cot.jpg',
     views: '19.8K',
@@ -3760,7 +3760,7 @@ const DEFAULT_INSTAGRAM_REELS = [
     duration: '0:52',
     audioTitle: 'Woodworking ASMR - Timber Planing & Polish',
     location: 'Kiln Seasoning Unit • M E S Junction',
-    batch: 'Nilambur Plantation Grade-A Teak',
+    batch: 'Seasoned Grade-A Natural Teak',
     instagramUrl: 'https://www.instagram.com/homeify.furniture/',
     productInquiry: 'Kiln-Seasoned 6-ft Monolithic Teak Cot'
   },
@@ -3799,9 +3799,9 @@ const DEFAULT_INSTAGRAM_REELS = [
   {
     id: 'reel-slated-table',
     category: 'teak',
-    tag: 'Nilambur Teak',
-    title: 'Slated Nilambur Teak Low Coffee Table',
-    caption: 'Hand-rubbed Italian matte polyurethane coat applied to slated Nilambur teak coffee table. Water-resistant, scratch-resistant, and showcasing natural golden amber teak grain patterns. ☕✨',
+    tag: 'Grade-A Natural Teak',
+    title: 'Slated Grade-A Natural Teak Low Coffee Table',
+    caption: 'Hand-rubbed Italian matte polyurethane coat applied to slated Grade-A natural teak coffee table. Water-resistant, scratch-resistant, and showcasing natural golden amber teak grain patterns. ☕✨',
     image: 'assets/slated-coffee-table.jpg',
     views: '16.4K',
     likes: 1450,
@@ -3810,7 +3810,7 @@ const DEFAULT_INSTAGRAM_REELS = [
     location: 'Erattupetta Workshop • Finishing Bay',
     batch: 'Italian Polyurethane Matte Finish',
     instagramUrl: 'https://www.instagram.com/homeify.furniture/',
-    productInquiry: 'Slated Nilambur Teak Coffee Table'
+    productInquiry: 'Slated Grade-A Natural Teak Coffee Table'
   }
 ];
 

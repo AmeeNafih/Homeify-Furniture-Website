@@ -29,7 +29,7 @@ This single-page showcase has been completely upgraded with a **cutting-edge Mod
 - **Secondary Dark Sections:** Deep Obsidian Charcoal (`#0D0C0B`)
 - **Primary Accent:** Warm Teak Bronze (`#9E6738`)
 - **Secondary Accents:**
-  - Forest Sage (`#2C4A38`) — representing Nilambur seasoned timber & organic sustainability
+  - Forest Sage (`#2C4A38`) — representing Grade-A natural seasoned timber & organic sustainability
   - Champagne Gold (`#D4AF37`) — highlighting the **5-Year Warranty** seals and badges
 
 ### 2. Typography
@@ -60,7 +60,7 @@ The website seamlessly integrates Homeify's official Instagram profile across 8 
 4. **Mobile Header & Drawer:** One-tap Instagram follow buttons with gradient styling.
 5. **Mobile Bottom Dock:** Dedicated thumb-reachable **"Insta"** tab on all mobile viewports.
 6. **Floating Action Dock (Desktop/Tablet):** Dedicated glowing floating Instagram action button stacked with WhatsApp.
-7. **Dedicated Instagram Workshop Reels Showcase:** High-impact 4-card live workshop reels gallery displaying Nilambur teak carving, brass jhoola chains, and client installations.
+7. **Dedicated Instagram Workshop Reels Showcase:** High-impact 4-card live workshop reels gallery displaying Grade-A natural teak carving, brass jhoola chains, and client installations.
 8. **Footer & Workshop Contacts:** Prominent follow card, workshop handles, and social bar links.
 
 ---
