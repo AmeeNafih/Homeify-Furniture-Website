@@ -80,7 +80,7 @@ The website seamlessly integrates Homeify's official Instagram profile across 8 
    - Animated visual percentage bars for Lifespan, Moisture Resistance, Re-sandability, and Kerala Monsoon Stability.
    - Interactive 2-Question Material Finder Quiz.
 4. **The 5-Year Warranty & Craftsmanship Promise:**
-   - Dark modern luxury section (`#0D0C0B`) with animated number counters and 4-step workshop workflow.
+   - Dark modern luxury section (`#0D0C0B`) with animated number counters and official warranty guarantee terms.
 5. **Interactive Custom Quote & WhatsApp Estimator:**
    - Calculates estimated factory costs and timeline, and launches WhatsApp to `9778446620` with a confetti celebration.
 
