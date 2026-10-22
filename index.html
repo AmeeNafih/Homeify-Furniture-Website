@@ -2073,6 +2073,16 @@
       
       <div class="absolute top-4 right-4 z-20 flex items-center gap-2">
         <button 
+          id="modal-quick-edit-btn" 
+          type="button" 
+          onclick="openProductEditModalFromQuickView()" 
+          class="hidden w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-600 text-[#0D0C0B] flex items-center justify-center transition-all hover:scale-105 shadow-md border border-amber-400 cursor-pointer" 
+          title="Admin: Edit this product details & photo" 
+          aria-label="Edit product"
+        >
+          <i class="fa-solid fa-pen-to-square text-sm"></i>
+        </button>
+        <button 
           id="modal-quick-share-btn" 
           type="button" 
           onclick="shareCurrentModalProduct(event)" 
@@ -2961,6 +2971,49 @@
           </div>
         </div>
 
+        <!-- Admin Product Search & Category Filters -->
+        <div class="p-3.5 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-3 font-sans">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="relative flex-1">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
+              <input 
+                id="admin-product-search" 
+                type="text" 
+                placeholder="Search catalog products by name, timber, specs, or tag..." 
+                class="w-full text-xs pl-9 pr-8 py-2.5 rounded-xl border border-stone-200 bg-stone-50 focus:bg-white focus:border-teak outline-none transition-all font-sans"
+                oninput="handleAdminProductSearch(this.value)"
+              />
+              <button 
+                id="admin-clear-search-btn" 
+                type="button" 
+                onclick="document.getElementById('admin-product-search').value = ''; handleAdminProductSearch('');" 
+                class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 text-xs"
+                title="Clear search"
+              >
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-auto flex-shrink-0">
+              <span id="admin-product-count" class="text-[11px] font-mono font-bold text-stone-600 bg-stone-100 px-3 py-1.5 rounded-xl border border-stone-200">
+                Showing 71 products
+              </span>
+            </div>
+          </div>
+
+          <!-- Category Filter Tabs -->
+          <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs font-mono">
+            <button type="button" onclick="setAdminCategoryFilter('all')" class="admin-cat-filter-btn active flex-shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-[#0D0C0B] text-white border border-[#0D0C0B] transition-colors" data-admin-cat="all">All (71)</button>
+            <button type="button" onclick="setAdminCategoryFilter('sofas')" class="admin-cat-filter-btn flex-shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-white text-stone-700 border border-stone-200 hover:border-stone-400 transition-colors" data-admin-cat="sofas">Sofas</button>
+            <button type="button" onclick="setAdminCategoryFilter('cots')" class="admin-cat-filter-btn flex-shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-white text-stone-700 border border-stone-200 hover:border-stone-400 transition-colors" data-admin-cat="cots">Cots</button>
+            <button type="button" onclick="setAdminCategoryFilter('dining-tables')" class="admin-cat-filter-btn flex-shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-white text-stone-700 border border-stone-200 hover:border-stone-400 transition-colors" data-admin-cat="dining-tables">Dining Tables</button>
+            <button type="button" onclick="setAdminCategoryFilter('chairs')" class="admin-cat-filter-btn flex-shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-white text-stone-700 border border-stone-200 hover:border-stone-400 transition-colors" data-admin-cat="chairs">Chairs</button>
+            <button type="button" onclick="setAdminCategoryFilter('coffee-tables')" class="admin-cat-filter-btn flex-shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-white text-stone-700 border border-stone-200 hover:border-stone-400 transition-colors" data-admin-cat="coffee-tables">Coffee Tables</button>
+            <button type="button" onclick="setAdminCategoryFilter('wardrobes')" class="admin-cat-filter-btn flex-shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-white text-stone-700 border border-stone-200 hover:border-stone-400 transition-colors" data-admin-cat="wardrobes">Wardrobes</button>
+            <button type="button" onclick="setAdminCategoryFilter('swings')" class="admin-cat-filter-btn flex-shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-white text-stone-700 border border-stone-200 hover:border-stone-400 transition-colors" data-admin-cat="swings">Swings</button>
+            <button type="button" onclick="setAdminCategoryFilter('doors-custom')" class="admin-cat-filter-btn flex-shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-white text-stone-700 border border-stone-200 hover:border-stone-400 transition-colors" data-admin-cat="doors-custom">Doors & Custom</button>
+          </div>
+        </div>
+
         <!-- Products Grid Container -->
         <div id="customizer-products-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[55vh] overflow-y-auto pr-1">
           <!-- Populated by app.js with photo preview + MRP inputs + Price inputs -->
@@ -3047,6 +3100,22 @@
               </button>
               <button 
                 type="button" 
+                onclick="document.getElementById('admin-import-catalog-input').click()"
+                class="w-full py-2 px-3 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/30 font-bold text-center flex items-center justify-center gap-2 cursor-pointer transition-colors text-xs"
+                title="Import/upload a replacement catalog.json file"
+              >
+                <i class="fa-solid fa-file-import text-xs text-[#D4AF37]"></i>
+                <span>Upload / Import catalog.json</span>
+              </button>
+              <input 
+                type="file" 
+                id="admin-import-catalog-input" 
+                accept=".json,application/json" 
+                class="hidden" 
+                onchange="importCatalogJsonFile(event)"
+              />
+              <button 
+                type="button" 
                 onclick="copyCatalogJson()"
                 class="w-full py-2 px-3 rounded-lg border border-white/15 hover:bg-white/10 text-stone-300 font-semibold text-center flex items-center justify-center gap-2 cursor-pointer transition-colors text-[11px]"
               >
@@ -3068,6 +3137,338 @@
           Done & View Website
         </button>
       </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       14. ADMIN EDIT PRODUCT DETAILS MODAL (Full Product & Photo Editor)
+       ========================================================================= -->
+  <div id="admin-edit-product-modal" class="modal-overlay modal-hidden fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 bg-[#0D0C0B]/85 backdrop-blur-md">
+    <div class="modal-container relative w-full max-w-3xl max-h-[92vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-stone-200 p-6 sm:p-8 flex flex-col space-y-5">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-4 border-b border-stone-200">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-amber-500 text-[#0D0C0B] flex items-center justify-center text-lg font-bold shadow-md">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold uppercase tracking-widest text-teak font-mono">Catalog Editor</span>
+              <span id="edit-prod-id-badge" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-stone-100 text-stone-600 border border-stone-200">#id</span>
+            </div>
+            <h3 id="edit-prod-modal-title" class="font-heading text-xl sm:text-2xl font-extrabold text-[#0D0C0B] line-clamp-1">Edit Furniture Piece</h3>
+          </div>
+        </div>
+        <button 
+          type="button" 
+          onclick="closeProductEditModal()" 
+          class="w-10 h-10 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition-colors cursor-pointer"
+          aria-label="Close edit modal"
+        >
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
+      </div>
+
+      <!-- Edit Form -->
+      <form id="admin-edit-product-form" class="space-y-4" onsubmit="handleSaveProductEdit(event)">
+        <input type="hidden" id="edit-prod-id" />
+
+        <!-- Row 1: Name & Category -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-sans">
+          <div>
+            <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Product Title / Name *
+            </label>
+            <input 
+              id="edit-prod-name" 
+              type="text" 
+              required 
+              placeholder="e.g. The Royale Teak Fluted Console" 
+              class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak font-sans"
+            />
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Collection Category *
+            </label>
+            <select 
+              id="edit-prod-category" 
+              required 
+              class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak font-sans"
+            >
+              <option value="sofas">Sofas & Couches</option>
+              <option value="cots">Cots & Beds</option>
+              <option value="dining-tables">Dining Tables & Suites</option>
+              <option value="chairs">Sitout & Dining Chairs</option>
+              <option value="coffee-tables">Coffee Tables & Teapoys</option>
+              <option value="wardrobes">Wardrobes & Storage</option>
+              <option value="swings">Swings & Oonjal</option>
+              <option value="doors-custom">Doors & Custom Woodwork</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Row 2: Material Category & Material Type & Badge -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-sans">
+          <div>
+            <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Material Classification *
+            </label>
+            <select 
+              id="edit-prod-material-category" 
+              required 
+              class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak font-sans"
+            >
+              <option value="natural-wood">🌳 100% Pure Natural Wood</option>
+              <option value="particle-board">⚙️ Grade-E1 Particle Board</option>
+              <option value="hybrid">✨ Hybrid Architecture</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Material Type / Species
+            </label>
+            <input 
+              id="edit-prod-material-type" 
+              type="text" 
+              placeholder="e.g. 100% Grade-A Natural Teak" 
+              class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak font-sans"
+            />
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Curated Ribbon / Badge
+            </label>
+            <input 
+              id="edit-prod-badge" 
+              type="text" 
+              placeholder="e.g. Best Seller, Handcrafted" 
+              class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak font-sans"
+            />
+          </div>
+        </div>
+
+        <!-- Row 3: Pricing & Lead Time -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-sans">
+          <div>
+            <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Showroom MRP (₹) *
+            </label>
+            <input 
+              id="edit-prod-mrp" 
+              type="text" 
+              required 
+              placeholder="₹45,000" 
+              class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak font-mono font-bold"
+            />
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-700 mb-1">
+              Direct Factory Price (₹) *
+            </label>
+            <input 
+              id="edit-prod-price" 
+              type="text" 
+              required 
+              placeholder="₹32,000" 
+              class="w-full text-xs p-3 rounded-xl border border-emerald-300 bg-emerald-50/60 text-emerald-800 focus:outline-none focus:border-emerald-600 font-mono font-bold"
+            />
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Workshop Lead Time
+            </label>
+            <input 
+              id="edit-prod-leadtime" 
+              type="text" 
+              placeholder="7 to 10 Working Days" 
+              class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak font-sans"
+            />
+          </div>
+        </div>
+
+        <!-- Row 4: Dimensions & Finish -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-sans">
+          <div>
+            <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Dimensions
+            </label>
+            <input 
+              id="edit-prod-dimensions" 
+              type="text" 
+              placeholder="e.g. 78&quot;L × 72&quot;W × 38&quot;H" 
+              class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak font-mono"
+            />
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-700 mb-1">
+              Surface Polish / Finish
+            </label>
+            <input 
+              id="edit-prod-finish" 
+              type="text" 
+              placeholder="e.g. Organic Matte Teak PU" 
+              class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak font-sans"
+            />
+          </div>
+        </div>
+
+        <!-- Row 5: Warranty Certificate -->
+        <div class="font-sans">
+          <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-700 mb-1">
+            Warranty Certificate
+          </label>
+          <input 
+            id="edit-prod-warranty" 
+            type="text" 
+            placeholder="5-Year Structural Integrity Warranty" 
+            class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak font-sans"
+          />
+        </div>
+
+        <!-- Row 6: Description -->
+        <div class="font-sans">
+          <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-700 mb-1">
+            Architectural Description *
+          </label>
+          <textarea 
+            id="edit-prod-desc" 
+            rows="3" 
+            required 
+            placeholder="Describe craftsmanship, timber seasoning, and architectural application..." 
+            class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak font-sans"
+          ></textarea>
+        </div>
+
+        <!-- Row 7: Key Features -->
+        <div class="font-sans">
+          <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-700 mb-1">
+            Key Features (One feature per line)
+          </label>
+          <textarea 
+            id="edit-prod-features" 
+            rows="3" 
+            placeholder="100% Solid Kiln-Dried Timber&#10;5-Year Full Structural Guarantee&#10;Handcrafted in Erattupetta Workshop" 
+            class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak font-mono text-[11px]"
+          ></textarea>
+        </div>
+
+        <!-- Row 8: Photo Upload & Selection Card -->
+        <div class="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80 space-y-3 font-sans">
+          <div class="flex items-center justify-between">
+            <label class="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-950 flex items-center gap-1.5">
+              <i class="fa-solid fa-camera text-teak"></i>
+              <span>Product Photo * (Upload from phone/PC or select asset)</span>
+            </label>
+            <span id="edit-prod-img-status" class="text-[10px] text-stone-500 font-mono">Current photo loaded</span>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center gap-4">
+            <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-stone-900 border border-stone-300 flex items-center justify-center flex-shrink-0 shadow-sm">
+              <img id="edit-prod-preview-img" src="" alt="Product Preview" class="w-full h-full object-cover">
+            </div>
+
+            <div class="flex-1 w-full space-y-2">
+              <label class="w-full py-2.5 px-4 rounded-xl bg-[#0D0C0B] hover:bg-teak text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-sm">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <span>Upload New Photo from Device</span>
+                <input id="edit-prod-file-input" type="file" accept="image/*" class="hidden" onchange="handleEditProductPhotoSelect(event)">
+              </label>
+
+              <div class="flex items-center gap-2">
+                <input 
+                  id="edit-prod-img-path" 
+                  type="text" 
+                  placeholder="assets/... or URL" 
+                  class="flex-1 text-[11px] px-2.5 py-1.5 rounded-lg border border-stone-300 bg-white font-mono"
+                  onchange="document.getElementById('edit-prod-preview-img').src = this.value;"
+                />
+                <select 
+                  id="edit-prod-preset-select"
+                  class="text-[11px] px-2 py-1.5 rounded-lg border border-stone-300 bg-white font-mono max-w-[150px]"
+                  onchange="selectEditProdPreset(this.value)"
+                >
+                  <option value="">Asset Presets...</option>
+                  <option value="assets/handcrafted-wooden-sofa.jpg">Wooden Sofa</option>
+                  <option value="assets/teak-corner-l-sofa.jpg">Teak L-Sofa</option>
+                  <option value="assets/teak-3seater-cushion-sofa.jpg">3-Seater Sofa</option>
+                  <option value="assets/solid-teak-accent-sofa.jpg">Accent Sofa</option>
+                  <option value="assets/modern-curved-teak-sofa.jpg">Curved Sofa</option>
+                  <option value="assets/premium-wooden-cot.jpg">Premium Cot</option>
+                  <option value="assets/teak-poster-cot.jpg">Poster Cot</option>
+                  <option value="assets/carved-arch-cot.jpg">Carved Arch Cot</option>
+                  <option value="assets/kerala-slat-cot.jpg">Kerala Slat Cot</option>
+                  <option value="assets/teak-box-storage-cot.jpg">Box Storage Cot</option>
+                  <option value="assets/oval-marble-dining-table.jpg">Marble Dining</option>
+                  <option value="assets/teak-marble-dining-suite.jpg">Marble Suite</option>
+                  <option value="assets/teak-rectangular-dining-table.jpg">Rect Dining</option>
+                  <option value="assets/teak-round-dining-table.jpg">Round Dining</option>
+                  <option value="assets/architectural-teak-dining-table.jpg">Architectural Dining</option>
+                  <option value="assets/harmony-dining-table.jpg">Harmony Table</option>
+                  <option value="assets/oval-dining-set-chairs.jpg">Oval Dining Set</option>
+                  <option value="assets/curve-dining-chair.jpg">Curve Chair</option>
+                  <option value="assets/curve-dining-chair-studio.jpg">Cane Dining Chair</option>
+                  <option value="assets/handcrafted-sitout-chair-pair.jpg">Sitout Chair Pair</option>
+                  <option value="assets/traditional-kerala-recliner-chair.jpg">Kerala Recliner</option>
+                  <option value="assets/teak-slat-verandah-chair.jpg">Slat Verandah Chair</option>
+                  <option value="assets/classic-kerala-charukasera-armchair.jpg">Charukasera</option>
+                  <option value="assets/slated-coffee-table.jpg">Slated Table</option>
+                  <option value="assets/teakwood-glass-coffee-table.jpg">Teak Glass Table</option>
+                  <option value="assets/rosewood-coffee-table.jpg">Rosewood Table</option>
+                  <option value="assets/minimalist-square-teak-teapoy.jpg">Square Teapoy</option>
+                  <option value="assets/carved-teak-teapoy-table.jpg">Carved Teapoy</option>
+                  <option value="assets/round-teak-coffee-table.jpg">Round Coffee Table</option>
+                  <option value="assets/oval-glass-teak-teapoy.jpg">Oval Glass Teapoy</option>
+                  <option value="assets/royal-jhoola-swing.jpg">Royal Jhoola</option>
+                  <option value="assets/carved-teak-temple-door.jpg">Temple Door</option>
+                  <option value="assets/traditional-palakkad-teak-door.jpg">Palakkad Door</option>
+                  <option value="assets/regal-teak-grandfather-clock.jpg">Grandfather Clock</option>
+                  <option value="assets/handcrafted-teak-staircase-woodwork.jpg">Teak Staircase</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-stone-200">
+          <button 
+            type="button" 
+            id="edit-prod-reset-btn"
+            onclick="handleResetProductInEditModal()" 
+            class="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs font-mono font-bold flex items-center justify-center gap-1.5 cursor-pointer"
+            title="Reset this product back to original defaults"
+          >
+            <i class="fa-solid fa-rotate-left text-xs"></i>
+            <span>Restore Original Defaults</span>
+          </button>
+
+          <div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+            <button 
+              type="button" 
+              onclick="closeProductEditModal()" 
+              class="px-5 py-2.5 rounded-xl border border-stone-300 text-stone-600 hover:bg-stone-100 text-xs font-mono font-bold cursor-pointer transition-colors"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:brightness-110 text-white font-mono text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-2 cursor-pointer transition-all active:scale-95"
+            >
+              <i class="fa-solid fa-check"></i>
+              <span>Save Changes & Update Catalog</span>
+            </button>
+          </div>
+        </div>
+      </form>
 
     </div>
   </div>

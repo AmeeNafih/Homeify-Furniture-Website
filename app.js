@@ -1937,7 +1937,20 @@ function loadCustomAssets() {
       }
     }
 
-    // 2c. Filter out products removed/hidden by admin from the collection
+    // 2c. Apply complete product edits & field overrides from homeify_product_overrides
+    try {
+      const savedOverrides = JSON.parse(localStorage.getItem('homeify_product_overrides') || '{}');
+      Object.keys(savedOverrides).forEach(id => {
+        const p = PRODUCTS.find(prod => prod.id === id);
+        if (p) {
+          Object.assign(p, savedOverrides[id]);
+        }
+      });
+    } catch (e) {
+      console.warn('Could not parse homeify_product_overrides:', e);
+    }
+
+    // 2d. Filter out products removed/hidden by admin from the collection
     const hiddenProductIds = JSON.parse(localStorage.getItem('homeify_hidden_collection_ids') || '[]');
     if (Array.isArray(hiddenProductIds) && hiddenProductIds.length > 0) {
       PRODUCTS = PRODUCTS.filter(p => !hiddenProductIds.includes(p.id));
@@ -2008,6 +2021,16 @@ async function loadAuthoritativeCatalog() {
           PRODUCTS[idx] = Object.assign({}, PRODUCTS[idx], cp);
         } else {
           PRODUCTS.unshift(cp);
+        }
+      });
+    }
+
+    const idbOverrides = await idbGet('homeify_product_overrides');
+    if (idbOverrides && typeof idbOverrides === 'object') {
+      Object.keys(idbOverrides).forEach(id => {
+        const p = PRODUCTS.find(prod => prod.id === id);
+        if (p) {
+          Object.assign(p, idbOverrides[id]);
         }
       });
     }
@@ -3032,10 +3055,30 @@ function openProductModal(product) {
     });
   }
 
+  // Show Admin Quick-Edit button if authenticated
+  const adminEditBtn = document.getElementById('modal-quick-edit-btn');
+  if (adminEditBtn) {
+    if (sessionStorage.getItem('homeify_admin_authenticated') === 'true') {
+      adminEditBtn.classList.remove('hidden');
+    } else {
+      adminEditBtn.classList.add('hidden');
+    }
+  }
+
   modal.classList.remove('modal-hidden');
   modal.classList.add('modal-visible');
   document.body.style.overflow = 'hidden';
 }
+
+window.openProductEditModalFromQuickView = function() {
+  if (selectedProductForModal && selectedProductForModal.id) {
+    const editId = selectedProductForModal.id;
+    closeProductModal();
+    setTimeout(() => {
+      openProductEditModal(editId);
+    }, 150);
+  }
+};
 
 function closeProductModal() {
   const modal = document.getElementById('product-lightbox-modal');
@@ -3074,8 +3117,16 @@ function initModalListeners() {
     });
   }
 
+  const editProdModal = document.getElementById('admin-edit-product-modal');
+  if (editProdModal) {
+    editProdModal.addEventListener('click', (e) => {
+      if (e.target === editProdModal) closeProductEditModal();
+    });
+  }
+
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
+      closeProductEditModal();
       closeShareModal();
       closeProductModal();
       closeCustomizer();
@@ -4085,40 +4136,108 @@ function updateCustomizerLogoPreview(src) {
   if (preview) preview.src = src;
 }
 
+let adminCatalogSearchQuery = '';
+let adminCatalogCategoryFilter = 'all';
+
+window.handleAdminProductSearch = function(query) {
+  adminCatalogSearchQuery = (query || '').trim().toLowerCase();
+  const clearBtn = document.getElementById('admin-clear-search-btn');
+  if (clearBtn) {
+    if (adminCatalogSearchQuery) clearBtn.classList.remove('hidden');
+    else clearBtn.classList.add('hidden');
+  }
+  populateCustomizerProductList();
+};
+
+window.setAdminCategoryFilter = function(cat) {
+  adminCatalogCategoryFilter = cat;
+  document.querySelectorAll('.admin-cat-filter-btn').forEach(btn => {
+    if (btn.getAttribute('data-admin-cat') === cat) {
+      btn.className = 'admin-cat-filter-btn active flex-shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-[#0D0C0B] text-white border border-[#0D0C0B] transition-colors';
+    } else {
+      btn.className = 'admin-cat-filter-btn flex-shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold bg-white text-stone-700 border border-stone-200 hover:border-stone-400 transition-colors';
+    }
+  });
+  populateCustomizerProductList();
+};
+
 function populateCustomizerProductList() {
   const listContainer = document.getElementById('customizer-products-grid');
   if (!listContainer) return;
 
   listContainer.innerHTML = '';
 
-  HERO_SLIDES.forEach((slide, idx) => {
-    const itemEl = document.createElement('div');
-    itemEl.className = 'p-4 rounded-2xl bg-[#FAF8F5] border border-stone-200 flex flex-col gap-3';
-    itemEl.innerHTML = `
-      <div class="flex items-center justify-between text-xs font-mono">
-        <span class="font-bold text-teak">HERO SLIDE #${idx + 1}</span>
-        <span class="text-stone-400">${slide.tag}</span>
-      </div>
-      <div class="aspect-video rounded-xl overflow-hidden bg-stone-900 relative">
-        <img id="custom-preview-hero-${slide.id}" src="${slide.image}" class="w-full h-full object-cover object-top">
-      </div>
-      <div class="text-xs font-bold text-[#0D0C0B]">${slide.title}</div>
-      
-      <div class="space-y-2 mt-auto">
-        <label class="w-full py-2 px-3 rounded-xl bg-[#0D0C0B] text-white text-[11px] font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer hover:bg-teak transition-colors">
-          <i class="fa-solid fa-upload"></i> Upload Local Image
-          <input type="file" accept="image/*" class="hidden" onchange="handleHeroPhotoUpload(event, '${slide.id}')">
-        </label>
-        <div class="flex gap-2">
-          <input type="text" placeholder="assets/..." value="${slide.image.startsWith('data:') ? '' : slide.image}" class="flex-1 text-[11px] px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white" onchange="handleHeroPhotoUrlChange(event, '${slide.id}')">
-          <button type="button" class="px-2 py-1 text-[10px] text-stone-500 hover:text-red-600 font-mono" onclick="resetHeroPhoto('${slide.id}')">Reset</button>
+  // Show hero banner slides only when viewing All or Sofas and no search query is active
+  if ((adminCatalogCategoryFilter === 'all' || adminCatalogCategoryFilter === 'sofas') && !adminCatalogSearchQuery) {
+    HERO_SLIDES.forEach((slide, idx) => {
+      const itemEl = document.createElement('div');
+      itemEl.className = 'p-4 rounded-2xl bg-[#FAF8F5] border border-stone-200 flex flex-col gap-3 shadow-sm';
+      itemEl.innerHTML = `
+        <div class="flex items-center justify-between text-xs font-mono">
+          <span class="font-bold text-teak">HERO BANNER SLIDE #${idx + 1}</span>
+          <span class="text-stone-400 font-semibold">${slide.tag}</span>
         </div>
+        <div class="aspect-video rounded-xl overflow-hidden bg-stone-900 relative border border-stone-800">
+          <img id="custom-preview-hero-${slide.id}" src="${slide.image}" class="w-full h-full object-cover object-top" onerror="this.src='assets/handcrafted-wooden-sofa.jpg'">
+        </div>
+        <div class="text-xs font-bold text-[#0D0C0B] font-heading">${slide.title}</div>
+        
+        <div class="space-y-2 mt-auto">
+          <label class="w-full py-2 px-3 rounded-xl bg-[#0D0C0B] text-white text-[11px] font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer hover:bg-teak transition-colors shadow-sm">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Upload Slide Image
+            <input type="file" accept="image/*" class="hidden" onchange="handleHeroPhotoUpload(event, '${slide.id}')">
+          </label>
+          <div class="flex gap-2">
+            <input type="text" placeholder="assets/..." value="${slide.image.startsWith('data:') ? '' : slide.image}" class="flex-1 text-[11px] px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white font-mono" onchange="handleHeroPhotoUrlChange(event, '${slide.id}')">
+            <button type="button" class="px-2 py-1 text-[10px] text-stone-500 hover:text-red-600 font-mono" onclick="resetHeroPhoto('${slide.id}')">Reset</button>
+          </div>
+        </div>
+      `;
+      listContainer.appendChild(itemEl);
+    });
+  }
+
+  // Filter products by category and search query
+  let filtered = PRODUCTS;
+  if (adminCatalogCategoryFilter !== 'all') {
+    filtered = filtered.filter(p => p.category === adminCatalogCategoryFilter);
+  }
+  if (adminCatalogSearchQuery) {
+    const q = adminCatalogSearchQuery;
+    filtered = filtered.filter(p => {
+      return (
+        (p.name && p.name.toLowerCase().includes(q)) ||
+        (p.category && p.category.toLowerCase().includes(q)) ||
+        (p.categoryName && p.categoryName.toLowerCase().includes(q)) ||
+        (p.materialType && p.materialType.toLowerCase().includes(q)) ||
+        (p.dimensions && p.dimensions.toLowerCase().includes(q)) ||
+        (p.finish && p.finish.toLowerCase().includes(q)) ||
+        (p.badge && p.badge.toLowerCase().includes(q)) ||
+        (p.description && p.description.toLowerCase().includes(q))
+      );
+    });
+  }
+
+  const countBadge = document.getElementById('admin-product-count');
+  if (countBadge) {
+    countBadge.textContent = `Showing ${filtered.length} of ${PRODUCTS.length} products`;
+  }
+
+  if (filtered.length === 0) {
+    const emptyEl = document.createElement('div');
+    emptyEl.className = 'col-span-1 md:col-span-2 p-8 text-center rounded-2xl bg-stone-50 border border-dashed border-stone-300 text-stone-500 font-mono text-xs';
+    emptyEl.innerHTML = `
+      <i class="fa-solid fa-box-open text-2xl text-stone-400 mb-2 block"></i>
+      <span>No furniture products match your query "${adminCatalogSearchQuery || adminCatalogCategoryFilter}".</span>
+      <div class="mt-2">
+        <button type="button" onclick="setAdminCategoryFilter('all'); document.getElementById('admin-product-search').value = ''; handleAdminProductSearch('');" class="px-3 py-1 rounded-lg bg-[#0D0C0B] text-white text-[10px] font-bold cursor-pointer">Show All Products</button>
       </div>
     `;
-    listContainer.appendChild(itemEl);
-  });
+    listContainer.appendChild(emptyEl);
+    return;
+  }
 
-  PRODUCTS.forEach((product) => {
+  filtered.forEach((product) => {
     const itemEl = document.createElement('div');
     itemEl.className = 'p-4 rounded-2xl bg-white border border-stone-200 shadow-sm flex flex-col gap-3 hover:border-teak transition-colors';
 
@@ -4130,16 +4249,25 @@ function populateCustomizerProductList() {
 
     itemEl.innerHTML = `
       <div class="flex items-center justify-between text-xs font-mono">
-        <div class="flex items-center gap-2">
-          <span class="font-bold text-teak">${product.categoryName.toUpperCase()}</span>
-          ${product.isCustom ? '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-bold">CUSTOM ADDED</span>' : ''}
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <span class="font-bold text-teak">${product.categoryName ? product.categoryName.toUpperCase() : product.category.toUpperCase()}</span>
+          ${product.isCustom ? '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-bold">CUSTOM</span>' : ''}
+          ${product.badge ? `<span class="px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 text-[9px] font-medium">${product.badge}</span>` : ''}
         </div>
-        <div class="flex items-center gap-2">
-          <span class="text-stone-400">${product.badge}</span>
+        <div class="flex items-center gap-1.5">
+          <button 
+            type="button" 
+            onclick="openProductEditModal('${product.id}')" 
+            class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-[#0D0C0B] transition-colors text-[10px] font-bold flex items-center gap-1 cursor-pointer shadow-sm"
+            title="Edit all product specifications, description, and photo"
+          >
+            <i class="fa-solid fa-pen-to-square text-[9px]"></i>
+            <span>Edit</span>
+          </button>
           <button 
             type="button" 
             onclick="removeProductFromCollection('${product.id}')" 
-            class="px-2.5 py-1 rounded-lg border border-rose-200 bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition-colors text-[10px] font-bold flex items-center gap-1 cursor-pointer" 
+            class="px-2 py-1 rounded-lg border border-rose-200 bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition-colors text-[10px] font-bold flex items-center gap-1 cursor-pointer" 
             title="Remove this item from the collection"
           >
             <i class="fa-solid fa-trash-can text-[9px]"></i>
@@ -4150,15 +4278,16 @@ function populateCustomizerProductList() {
       
       <div class="flex gap-3">
         <!-- Thumbnail Preview -->
-        <div class="w-24 h-32 rounded-xl overflow-hidden bg-[#0D0C0B] flex-shrink-0 relative border border-stone-800 p-0 flex items-center justify-center">
-          <img id="custom-preview-prod-${product.id}" src="${product.image}" class="w-full h-full object-cover">
+        <div class="w-24 h-28 sm:w-28 sm:h-32 rounded-xl overflow-hidden bg-[#0D0C0B] flex-shrink-0 relative border border-stone-800 p-0 flex items-center justify-center">
+          <img id="custom-preview-prod-${product.id}" src="${product.image}" class="w-full h-full object-cover" onerror="this.src='assets/slated-coffee-table.jpg'">
         </div>
 
-        <!-- Product Name and Price Inputs -->
+        <!-- Product Details and Pricing -->
         <div class="flex-1 min-w-0 flex flex-col justify-between">
           <div>
-            <h5 class="text-xs font-bold text-[#0D0C0B] line-clamp-1">${product.name}</h5>
+            <h5 class="text-xs font-bold text-[#0D0C0B] line-clamp-1" title="${product.name}">${product.name}</h5>
             <span class="text-[10px] text-stone-500 font-mono block mt-0.5 line-clamp-1">${product.materialType}</span>
+            <span class="text-[9px] text-stone-400 font-mono block">${product.dimensions || 'Custom Size'}</span>
           </div>
           
           <!-- Pricing Inputs -->
@@ -4185,43 +4314,45 @@ function populateCustomizerProductList() {
             </div>
           </div>
 
-          <!-- Save Price Button -->
-          <div class="pt-2 flex items-center justify-between gap-1.5 font-mono text-xs">
+          <!-- Quick Actions Row -->
+          <div class="pt-2 flex items-center gap-1.5 font-mono text-xs">
             <button 
               type="button" 
               onclick="handleProductPriceSave('${product.id}')"
-              class="flex-1 py-1 px-2.5 rounded-lg bg-[#0D0C0B] text-white hover:bg-emerald-700 transition-colors font-bold text-[10px] flex items-center justify-center gap-1 shadow-sm"
+              class="flex-1 py-1 px-2 rounded-lg bg-[#0D0C0B] text-white hover:bg-emerald-700 transition-colors font-bold text-[10px] flex items-center justify-center gap-1 shadow-sm cursor-pointer"
             >
               <i class="fa-solid fa-check text-[9px]"></i>
               <span>Save Price</span>
             </button>
             <button 
               type="button" 
-              onclick="resetProductPrice('${product.id}')"
-              class="py-1 px-2 rounded-lg border border-stone-200 text-stone-500 hover:text-stone-800 text-[10px]"
-              title="Reset to default price"
+              onclick="openProductEditModal('${product.id}')" 
+              class="py-1 px-2.5 rounded-lg border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-[10px] flex items-center gap-1 cursor-pointer transition-colors"
             >
-              Reset
+              <i class="fa-solid fa-pen-to-square text-[9px]"></i>
+              <span>Full Edit</span>
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Photo Controls -->
+      <!-- Photo Controls with Upload & URL -->
       <div class="space-y-1.5 pt-2 border-t border-stone-100 text-xs font-mono">
-        <label class="w-full py-1.5 px-2 rounded-lg bg-stone-100 hover:bg-teak hover:text-white transition-colors text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer text-stone-700">
-          <i class="fa-solid fa-camera text-[10px]"></i> Replace Photo
-          <input type="file" accept="image/*" class="hidden" onchange="handleProductPhotoUpload(event, '${product.id}')">
-        </label>
+        <div class="flex items-center justify-between">
+          <label class="w-full py-1.5 px-2 rounded-lg bg-stone-100 hover:bg-teak hover:text-white transition-colors text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer text-stone-700">
+            <i class="fa-solid fa-cloud-arrow-up text-[10px]"></i> Upload New Photo
+            <input type="file" accept="image/*" class="hidden" onchange="handleProductPhotoUpload(event, '${product.id}')">
+          </label>
+        </div>
         <div class="flex gap-1.5">
           <input 
             type="text" 
-            placeholder="assets/..." 
+            placeholder="assets/... or URL" 
             value="${product.image.startsWith('data:') ? '' : product.image}" 
-            class="flex-1 text-[10px] px-2 py-1 rounded border border-stone-200 bg-stone-50" 
+            class="flex-1 text-[10px] px-2 py-1 rounded border border-stone-200 bg-stone-50 font-mono" 
             onchange="handleProductPhotoUrlChange(event, '${product.id}')"
           />
-          <button type="button" class="px-1.5 py-0.5 text-[9px] text-stone-400 hover:text-red-600 font-mono" onclick="resetProductPhoto('${product.id}')">Reset</button>
+          <button type="button" class="px-1.5 py-0.5 text-[9px] text-stone-400 hover:text-red-600 font-mono cursor-pointer" onclick="resetProductPhoto('${product.id}')">Reset</button>
         </div>
       </div>
 
@@ -4241,7 +4372,7 @@ function populateCustomizerProductList() {
                 class="px-2 py-0.5 rounded border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-600 hover:text-white font-bold transition-colors cursor-pointer"
                 title="Remove all Key Highlights from this product"
               >
-                <i class="fa-solid fa-eraser text-[8px] mr-1"></i>Remove Highlights
+                <i class="fa-solid fa-eraser text-[8px] mr-1"></i>Remove
               </button>
             ` : `
               <button 
@@ -4250,7 +4381,7 @@ function populateCustomizerProductList() {
                 class="px-2 py-0.5 rounded border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white font-bold transition-colors cursor-pointer"
                 title="Restore default Key Highlights"
               >
-                <i class="fa-solid fa-rotate-left text-[8px] mr-1"></i>Restore Highlights
+                <i class="fa-solid fa-rotate-left text-[8px] mr-1"></i>Restore
               </button>
             `}
           </div>
@@ -4268,7 +4399,7 @@ function populateCustomizerProductList() {
             title="${isCurrentlyLarge ? 'Click to remove large highlight framing' : 'Click to highlight as large card in Bento Showcase'}"
           >
             <i class="fa-solid ${isCurrentlyLarge ? 'fa-compress text-amber-700' : 'fa-expand text-stone-500'} text-[8px] mr-1"></i>
-            <span>${isCurrentlyLarge ? 'Featured (Large Highlight)' : 'Standard Size'}</span>
+            <span>${isCurrentlyLarge ? 'Featured' : 'Standard'}</span>
           </button>
         </div>
       </div>
@@ -4276,6 +4407,343 @@ function populateCustomizerProductList() {
     listContainer.appendChild(itemEl);
   });
 }
+
+// ==========================================================================
+// FULL PRODUCT EDIT MODAL, PHOTO UPLOAD & CATALOG JSON MANAGEMENT
+// ==========================================================================
+
+window.openProductEditModal = function(productId) {
+  const prod = PRODUCTS.find(p => p.id === productId) || DEFAULT_PRODUCTS.find(p => p.id === productId);
+  if (!prod) return;
+
+  const modal = document.getElementById('admin-edit-product-modal');
+  if (!modal) return;
+
+  const idInput = document.getElementById('edit-prod-id');
+  const idBadge = document.getElementById('edit-prod-id-badge');
+  const modalTitle = document.getElementById('edit-prod-modal-title');
+  const nameInput = document.getElementById('edit-prod-name');
+  const catInput = document.getElementById('edit-prod-category');
+  const matCatInput = document.getElementById('edit-prod-material-category');
+  const matTypeInput = document.getElementById('edit-prod-material-type');
+  const badgeInput = document.getElementById('edit-prod-badge');
+  const mrpInput = document.getElementById('edit-prod-mrp');
+  const priceInput = document.getElementById('edit-prod-price');
+  const leadInput = document.getElementById('edit-prod-leadtime');
+  const dimInput = document.getElementById('edit-prod-dimensions');
+  const finishInput = document.getElementById('edit-prod-finish');
+  const warrantyInput = document.getElementById('edit-prod-warranty');
+  const descInput = document.getElementById('edit-prod-desc');
+  const featInput = document.getElementById('edit-prod-features');
+  const imgPathInput = document.getElementById('edit-prod-img-path');
+  const previewImg = document.getElementById('edit-prod-preview-img');
+  const statusEl = document.getElementById('edit-prod-img-status');
+  const resetBtn = document.getElementById('edit-prod-reset-btn');
+
+  if (idInput) idInput.value = prod.id;
+  if (idBadge) idBadge.textContent = '#' + prod.id;
+  if (modalTitle) modalTitle.textContent = 'Edit: ' + prod.name;
+  if (nameInput) nameInput.value = prod.name;
+  if (catInput) catInput.value = prod.category;
+  if (matCatInput) matCatInput.value = prod.materialCategory || 'natural-wood';
+  if (matTypeInput) matTypeInput.value = prod.materialType || '';
+  if (badgeInput) badgeInput.value = prod.badge || '';
+  if (mrpInput) mrpInput.value = prod.mrp || '';
+  if (priceInput) priceInput.value = prod.factoryPrice || '';
+  if (leadInput) leadInput.value = prod.leadTime || '7 to 10 Working Days';
+  if (dimInput) dimInput.value = prod.dimensions || '';
+  if (finishInput) finishInput.value = prod.finish || '';
+  if (warrantyInput) warrantyInput.value = prod.warranty || '5-Year Structural Integrity Warranty';
+  if (descInput) descInput.value = prod.description || '';
+  if (featInput) featInput.value = (prod.features || []).join('\n');
+  if (imgPathInput) imgPathInput.value = prod.image || '';
+  if (previewImg) previewImg.src = prod.image || 'assets/slated-coffee-table.jpg';
+  if (statusEl) statusEl.textContent = 'Current product photo loaded';
+
+  if (resetBtn) {
+    if (prod.isCustom) resetBtn.classList.add('hidden');
+    else resetBtn.classList.remove('hidden');
+  }
+
+  modal.classList.remove('modal-hidden');
+  modal.classList.add('modal-visible');
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeProductEditModal = function() {
+  const modal = document.getElementById('admin-edit-product-modal');
+  if (!modal) return;
+  modal.classList.add('modal-hidden');
+  modal.classList.remove('modal-visible');
+
+  const customizerModal = document.getElementById('customizer-modal');
+  if (customizerModal && customizerModal.classList.contains('modal-visible')) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'auto';
+  }
+};
+
+window.handleEditProductPhotoSelect = async function(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const statusEl = document.getElementById('edit-prod-img-status');
+  if (statusEl) statusEl.textContent = 'Optimizing photo for fast loading...';
+
+  try {
+    const dataUrl = await compressImageFile(file, 900, 900, 0.85);
+    const pathInput = document.getElementById('edit-prod-img-path');
+    const previewImg = document.getElementById('edit-prod-preview-img');
+    if (pathInput) pathInput.value = dataUrl;
+    if (previewImg) previewImg.src = dataUrl;
+    if (statusEl) statusEl.textContent = 'Optimized photo ready (' + Math.round(dataUrl.length / 1024) + ' KB)';
+  } catch (err) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const dataUrl = e.target.result;
+      const pathInput = document.getElementById('edit-prod-img-path');
+      const previewImg = document.getElementById('edit-prod-preview-img');
+      if (pathInput) pathInput.value = dataUrl;
+      if (previewImg) previewImg.src = dataUrl;
+      if (statusEl) statusEl.textContent = 'Custom photo uploaded';
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+window.selectEditProdPreset = function(val) {
+  if (!val) return;
+  const pathInput = document.getElementById('edit-prod-img-path');
+  const previewImg = document.getElementById('edit-prod-preview-img');
+  const statusEl = document.getElementById('edit-prod-img-status');
+  if (pathInput) pathInput.value = val;
+  if (previewImg) previewImg.src = val;
+  if (statusEl) statusEl.textContent = 'Asset preset selected';
+};
+
+window.handleSaveProductEdit = function(event) {
+  if (event) event.preventDefault();
+
+  const id = document.getElementById('edit-prod-id').value;
+  if (!id) return;
+
+  const name = document.getElementById('edit-prod-name').value.trim();
+  const category = document.getElementById('edit-prod-category').value;
+  const materialCategory = document.getElementById('edit-prod-material-category').value;
+  let materialType = document.getElementById('edit-prod-material-type').value.trim();
+  let mrp = document.getElementById('edit-prod-mrp').value.trim();
+  let price = document.getElementById('edit-prod-price').value.trim();
+  const leadTime = document.getElementById('edit-prod-leadtime').value.trim();
+  const dimensions = document.getElementById('edit-prod-dimensions').value.trim();
+  const finish = document.getElementById('edit-prod-finish').value.trim();
+  const badge = document.getElementById('edit-prod-badge').value.trim();
+  const warranty = document.getElementById('edit-prod-warranty').value.trim();
+  const desc = document.getElementById('edit-prod-desc').value.trim();
+  const featuresRaw = document.getElementById('edit-prod-features').value.trim();
+  const image = document.getElementById('edit-prod-img-path').value.trim();
+
+  if (!name || !mrp || !price || !desc) {
+    alert('Please complete all required fields (Name, MRP, Factory Price, and Description).');
+    return;
+  }
+
+  if (!mrp.startsWith('₹')) mrp = '₹' + mrp.replace(/[^0-9,]/g, '');
+  if (!price.startsWith('₹')) price = '₹' + price.replace(/[^0-9,]/g, '');
+
+  const categoryNames = {
+    'sofas': 'Sofas & Couches',
+    'cots': 'Cots & Beds',
+    'dining-tables': 'Dining Tables & Suites',
+    'chairs': 'Sitout & Dining Chairs',
+    'coffee-tables': 'Coffee Tables & Teapoys',
+    'wardrobes': 'Wardrobes & Storage',
+    'swings': 'Swings & Oonjal',
+    'doors-custom': 'Doors & Custom Woodwork'
+  };
+
+  const defaultMaterialNames = {
+    'natural-wood': '100% Pure Kiln-Seasoned Solid Teak / Rosewood',
+    'particle-board': 'Grade-E1 High-Density Moisture-Resistant Board',
+    'hybrid': 'Solid Teak Framing with Architectural Paneling'
+  };
+
+  if (!materialType) {
+    materialType = defaultMaterialNames[materialCategory] || 'Custom Kerala Hardwood';
+  }
+
+  let features = featuresRaw.split('\n').map(f => f.trim()).filter(Boolean);
+  if (features.length === 0) {
+    features = [
+      '100% Seasoned Grade-A Hardwood Timber',
+      '5-Year Full Structural Warranty included',
+      'Handcrafted directly at Erattupetta workshop'
+    ];
+  }
+
+  const prod = PRODUCTS.find(p => p.id === id);
+  if (!prod) return;
+
+  const updatedData = {
+    name: name,
+    category: category,
+    categoryName: categoryNames[category] || prod.categoryName || 'Bespoke Furniture',
+    materialCategory: materialCategory,
+    materialType: materialType,
+    mrp: mrp,
+    factoryPrice: price,
+    priceEstimate: `${price} (Direct Workshop Price)`,
+    leadTime: leadTime || prod.leadTime || '7 to 12 Working Days',
+    dimensions: dimensions || prod.dimensions || 'Custom Dimensions Available',
+    finish: finish || prod.finish || 'Organic Matte Teak Polyurethane Seal',
+    badge: badge || prod.badge || '',
+    warranty: warranty || prod.warranty || '5-Year Structural Integrity Warranty',
+    description: desc,
+    features: features,
+    image: image || prod.image
+  };
+
+  Object.assign(prod, updatedData);
+
+  // Persist into homeify_product_overrides
+  let overrides = {};
+  try {
+    overrides = JSON.parse(localStorage.getItem('homeify_product_overrides') || '{}');
+  } catch (e) {}
+  overrides[id] = updatedData;
+  try {
+    localStorage.setItem('homeify_product_overrides', JSON.stringify(overrides));
+  } catch (e) {
+    console.warn('localStorage quota warning for homeify_product_overrides:', e);
+  }
+  idbSet('homeify_product_overrides', overrides);
+
+  // If custom product, also update homeify_custom_products
+  if (prod.isCustom) {
+    try {
+      const customProducts = JSON.parse(localStorage.getItem('homeify_custom_products') || '[]');
+      const cpIndex = customProducts.findIndex(p => p.id === id);
+      if (cpIndex !== -1) {
+        Object.assign(customProducts[cpIndex], updatedData);
+        localStorage.setItem('homeify_custom_products', JSON.stringify(customProducts));
+      }
+    } catch (e) {}
+    idbGet('homeify_custom_products').then(customProducts => {
+      if (Array.isArray(customProducts)) {
+        const cpIndex = customProducts.findIndex(p => p.id === id);
+        if (cpIndex !== -1) {
+          Object.assign(customProducts[cpIndex], updatedData);
+          idbSet('homeify_custom_products', customProducts);
+        }
+      }
+    }).catch(() => {});
+  }
+
+  // Also sync individual legacy keys
+  try {
+    localStorage.setItem('homeify_prod_mrp_' + id, mrp);
+    localStorage.setItem('homeify_prod_price_' + id, price);
+    if (image) localStorage.setItem('homeify_prod_img_' + id, image);
+    localStorage.setItem('homeify_prod_features_' + id, JSON.stringify(features));
+  } catch (e) {}
+  idbSet('homeify_prod_mrp_' + id, mrp);
+  idbSet('homeify_prod_price_' + id, price);
+  if (image) idbSet('homeify_prod_img_' + id, image);
+  idbSet('homeify_prod_features_' + id, features);
+
+  // Refresh UI
+  renderCuratedHighlights();
+  renderBentoGallery(currentFilter);
+  populateCustomizerProductList();
+  markCatalogDirty();
+  closeProductEditModal();
+  showToast(`✨ Saved updates for "${name}"!`);
+};
+
+window.handleResetProductInEditModal = function() {
+  const id = document.getElementById('edit-prod-id').value;
+  if (!id) return;
+  resetProductToDefault(id);
+};
+
+window.resetProductToDefault = function(productId) {
+  const def = DEFAULT_PRODUCTS.find(p => p.id === productId);
+  if (!def) {
+    showToast('This is a custom-added product. You can edit or remove it.');
+    return;
+  }
+  if (!confirm(`Are you sure you want to restore "${def.name}" to original factory defaults?`)) {
+    return;
+  }
+
+  let overrides = {};
+  try {
+    overrides = JSON.parse(localStorage.getItem('homeify_product_overrides') || '{}');
+  } catch (e) {}
+  delete overrides[productId];
+  try {
+    localStorage.setItem('homeify_product_overrides', JSON.stringify(overrides));
+  } catch (e) {}
+  idbSet('homeify_product_overrides', overrides);
+
+  try {
+    localStorage.removeItem('homeify_prod_mrp_' + productId);
+    localStorage.removeItem('homeify_prod_price_' + productId);
+    localStorage.removeItem('homeify_prod_img_' + productId);
+    localStorage.removeItem('homeify_prod_features_' + productId);
+  } catch (e) {}
+  idbDelete('homeify_prod_mrp_' + productId);
+  idbDelete('homeify_prod_price_' + productId);
+  idbDelete('homeify_prod_img_' + productId);
+  idbDelete('homeify_prod_features_' + productId);
+
+  const idx = PRODUCTS.findIndex(p => p.id === productId);
+  if (idx !== -1) {
+    PRODUCTS[idx] = JSON.parse(JSON.stringify(def));
+  }
+
+  renderCuratedHighlights();
+  renderBentoGallery(currentFilter);
+  populateCustomizerProductList();
+  markCatalogDirty();
+  closeProductEditModal();
+  showToast(`Restored original factory defaults for "${def.name}"!`);
+};
+
+window.importCatalogJsonFile = function(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!Array.isArray(parsed) || parsed.length === 0) {
+        alert('Invalid catalog file format. It must be a JSON array of furniture products.');
+        return;
+      }
+
+      if (!confirm(`Import ${parsed.length} products from this catalog.json? This will update your active catalog.`)) {
+        return;
+      }
+
+      PRODUCTS = parsed;
+      idbSet('homeify_authoritative_catalog', parsed);
+      localStorage.setItem('homeify_authoritative_catalog_cached', 'true');
+
+      renderCuratedHighlights();
+      renderBentoGallery(currentFilter);
+      populateCustomizerProductList();
+      markCatalogDirty();
+      showToast(`🎉 Successfully imported ${parsed.length} products into Homeify Catalog!`);
+    } catch (err) {
+      console.error('Failed to import catalog JSON:', err);
+      alert('Failed to parse catalog JSON file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+};
+
 
 window.handleProductPriceSave = function(productId) {
   const mrpInput = document.getElementById(`custom-mrp-${productId}`);
