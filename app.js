@@ -4193,3 +4193,24 @@ function initInstagramReels() {
     }
   });
 }
+
+// Interactive Google Review Helpful Button Reaction
+window.markReviewHelpful = function(btn) {
+  const countEl = btn.querySelector('.helpful-count');
+  if (!countEl) return;
+  const isMarked = btn.getAttribute('data-marked') === 'true';
+  let count = parseInt(countEl.textContent, 10) || 0;
+  if (isMarked) {
+    btn.setAttribute('data-marked', 'false');
+    countEl.textContent = count - 1;
+    btn.classList.remove('text-blue-600', 'font-bold');
+    btn.classList.add('text-stone-500');
+    showToast('Removed helpful reaction');
+  } else {
+    btn.setAttribute('data-marked', 'true');
+    countEl.textContent = count + 1;
+    btn.classList.add('text-blue-600', 'font-bold');
+    btn.classList.remove('text-stone-500');
+    showToast('👍 Thanks! Marked review as helpful');
+  }
+};
