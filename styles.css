@@ -859,5 +859,77 @@ html.dark .specular-border::before {
   animation: atmosphericAura 6s ease-in-out infinite;
 }
 
+/* ==========================================================================
+   INSTAGRAM REELS SHOWCASE & PHONE MOCKUP AESTHETICS
+   ========================================================================== */
+.reel-phone-frame {
+  aspect-ratio: 9 / 16;
+  border-radius: 1.75rem;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.12);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  background-color: #141210;
+}
+
+.reel-phone-frame:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 30px 60px -12px rgba(220, 39, 67, 0.35), 0 0 0 1px rgba(240, 148, 51, 0.5);
+}
+
+/* Audio wave equalizer bars */
+.audio-equalizer {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+.audio-equalizer span {
+  width: 2px;
+  background-color: #fff;
+  border-radius: 1px;
+  animation: audioWave 1.2s ease-in-out infinite;
+}
+.audio-equalizer span:nth-child(1) { height: 4px; animation-delay: 0.1s; }
+.audio-equalizer span:nth-child(2) { height: 10px; animation-delay: 0.3s; }
+.audio-equalizer span:nth-child(3) { height: 6px; animation-delay: 0.2s; }
+.audio-equalizer span:nth-child(4) { height: 12px; animation-delay: 0.4s; }
+
+@keyframes audioWave {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+
+/* Animated Reel playback bar */
+.reel-playback-bar {
+  height: 2.5px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+}
+.reel-playback-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #f09433, #dc2743, #bc1888);
+  transform: translateX(-100%);
+  transition: transform 6s linear;
+}
+.reel-phone-frame:hover .reel-playback-bar::after {
+  transform: translateX(0);
+}
+
+/* Instagram Story Ring */
+.insta-story-ring {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  padding: 2px;
+  border-radius: 9999px;
+  display: inline-block;
+}
+
 
 

@@ -759,6 +759,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAdminAuth();
   checkUrlForProductDeepLink();
   loadAuthoritativeCatalog();
+  initInstagramReels();
 });
 
 // ==========================================================================
@@ -3710,3 +3711,485 @@ window.copyCatalogJson = function() {
     prompt('Copy your catalog JSON:', jsonStr);
   }
 };
+
+// ==========================================================================
+// 15. INSTAGRAM REELS SHOWCASE & LIGHTBOX VIEWER ENGINE (@homeify.furniture)
+// ==========================================================================
+const DEFAULT_INSTAGRAM_REELS = [
+  {
+    id: 'reel-teak-sofa',
+    category: 'crafting',
+    tag: 'Workshop Joinery',
+    title: 'Handcrafted Nilambur Teak Sofa Frame',
+    caption: 'Master artisans carving and assembling 3-seater solid Nilambur teak sofa frames with traditional mortise & tenon interlocking joints. Monolithic strength built to last generations without metallic fasteners. 🌿✨',
+    image: 'assets/handcrafted-wooden-sofa.jpg',
+    views: '14.8K',
+    likes: 1248,
+    duration: '0:38',
+    audioTitle: 'Original Audio - Homeify Timber Acoustics',
+    location: 'Erattupetta Workshop • Kerala',
+    batch: 'Erattupetta Workshop • Batch #NK-42',
+    instagramUrl: 'https://www.instagram.com/homeify.furniture/',
+    productInquiry: 'Handcrafted Nilambur Teak Sofa Frame (3-Seater)'
+  },
+  {
+    id: 'reel-kerala-jhoola',
+    category: 'delivery',
+    tag: 'Client Delivery',
+    title: 'Royal Kerala Jhoola Swing Installation',
+    caption: 'Delivered & installed at a heritage villa residence in Kottayam! 100% monolithic Nilambur teak plank suspended with ornamental solid cast-brass chains and high-gloss marine polyurethane coat. 🏡✨',
+    image: 'assets/royal-jhoola-swing.jpg',
+    views: '28.6K',
+    likes: 2890,
+    duration: '0:45',
+    audioTitle: 'Heritage Kerala Jhoola - Workshop Chimes',
+    location: 'Client Villa • Kottayam',
+    batch: 'Installed & Load-Tested to 450kg',
+    instagramUrl: 'https://www.instagram.com/homeify.furniture/',
+    productInquiry: 'Royal Kerala Solid Teak Jhoola Swing'
+  },
+  {
+    id: 'reel-teak-cot',
+    category: 'teak',
+    tag: 'Nilambur Teak',
+    title: 'Kiln-Seasoned 6-ft Nilambur Teak King Cot',
+    caption: 'From seasoned plantation teak logs to a monolithic 6-ft king cot headboard. Calibrated to 10-12% moisture equilibrium so it will never bend, expand, or creak through humid Kerala monsoon seasons. 🪵💤',
+    image: 'assets/premium-wooden-cot.jpg',
+    views: '19.8K',
+    likes: 1720,
+    duration: '0:52',
+    audioTitle: 'Woodworking ASMR - Timber Planing & Polish',
+    location: 'Kiln Seasoning Unit • M E S Junction',
+    batch: 'Nilambur Plantation Grade-A Teak',
+    instagramUrl: 'https://www.instagram.com/homeify.furniture/',
+    productInquiry: 'Kiln-Seasoned 6-ft Monolithic Teak Cot'
+  },
+  {
+    id: 'reel-cane-dining',
+    category: 'crafting',
+    tag: 'Workshop Joinery',
+    title: 'Organic Cane Weave Dining Chair Studio Finish',
+    caption: 'Hand-weaving natural cane mesh onto steam-curved solid teak backrests. Ergonomic, breathable, and an iconic mid-century modern Kerala dining silhouette designed for tropical comfort. 🪑🌿',
+    image: 'assets/curve-dining-chair-studio.jpg',
+    views: '22.1K',
+    likes: 1980,
+    duration: '0:34',
+    audioTitle: 'Artisan Hands - Cane Weaving Rhythm',
+    location: 'Erattupetta Finishing Studio',
+    batch: 'Hand-Woven Natural Rattan & Teak',
+    instagramUrl: 'https://www.instagram.com/homeify.furniture/',
+    productInquiry: 'Curved Back Cane Teak Dining Chair'
+  },
+  {
+    id: 'reel-marble-table',
+    category: 'delivery',
+    tag: 'Client Delivery',
+    title: 'Italian Marble & Fluted Teak Dining Table',
+    caption: 'Unboxing & assembly at Kochi luxury waterfront apartment! Monolithic fluted teak twin pedestal bases paired with a chamfered 20mm Italian Carrara marble oval top. Direct factory price advantage! 🏛️🍽️',
+    image: 'assets/oval-marble-dining-table.jpg',
+    views: '34.5K',
+    likes: 3410,
+    duration: '1:02',
+    audioTitle: 'Trending Interior Audio - Architectural Reveal',
+    location: 'Marine Drive Waterfront • Kochi',
+    batch: 'Custom Fluted Teak & 20mm Carrara Marble',
+    instagramUrl: 'https://www.instagram.com/homeify.furniture/',
+    productInquiry: 'Italian Marble & Fluted Teak Oval Dining Table'
+  },
+  {
+    id: 'reel-slated-table',
+    category: 'teak',
+    tag: 'Nilambur Teak',
+    title: 'Slated Nilambur Teak Low Coffee Table',
+    caption: 'Hand-rubbed Italian matte polyurethane coat applied to slated Nilambur teak coffee table. Water-resistant, scratch-resistant, and showcasing natural golden amber teak grain patterns. ☕✨',
+    image: 'assets/slated-coffee-table.jpg',
+    views: '16.4K',
+    likes: 1450,
+    duration: '0:29',
+    audioTitle: 'Workshop Acoustics - Spray & Rub Polish',
+    location: 'Erattupetta Workshop • Finishing Bay',
+    batch: 'Italian Polyurethane Matte Finish',
+    instagramUrl: 'https://www.instagram.com/homeify.furniture/',
+    productInquiry: 'Slated Nilambur Teak Coffee Table'
+  }
+];
+
+const LIKED_REELS_STORAGE_KEY = 'homeify_liked_reels';
+let activeModalReel = null;
+let reelPlaybackTimer = null;
+let reelPlaybackProgress = 0;
+let isReelPlaying = false;
+let currentReelsFilter = 'all';
+
+function getLikedReelIds() {
+  try {
+    const raw = localStorage.getItem(LIKED_REELS_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveLikedReelIds(ids) {
+  try {
+    localStorage.setItem(LIKED_REELS_STORAGE_KEY, JSON.stringify(ids));
+  } catch (e) {}
+}
+
+function formatReelNumber(num) {
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+  }
+  return num.toString();
+}
+
+function escapeReelText(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+window.renderInstagramReels = function(filterCategory = 'all') {
+  currentReelsFilter = filterCategory;
+  const container = document.getElementById('instagram-reels-container');
+  if (!container) return;
+
+  const likedIds = getLikedReelIds();
+  const reelsToDisplay = filterCategory === 'all'
+    ? DEFAULT_INSTAGRAM_REELS
+    : DEFAULT_INSTAGRAM_REELS.filter(r => r.category === filterCategory);
+
+  if (reelsToDisplay.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-full py-12 text-center text-stone-400 font-mono text-sm">
+        No reels found for this category.
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = reelsToDisplay.map((reel) => {
+    const isLiked = likedIds.includes(reel.id);
+    const displayLikes = isLiked ? reel.likes + 1 : reel.likes;
+
+    return `
+      <div 
+        class="reel-phone-frame group cursor-pointer relative overflow-hidden bg-[#141210] border border-white/10 hover:border-pink-500/50 flex flex-col justify-between"
+        onclick="openReelModal('${reel.id}')"
+        role="button"
+        tabindex="0"
+        aria-label="Watch Instagram Reel: ${escapeReelText(reel.title)}"
+      >
+        <!-- Background Reel Image -->
+        <div class="absolute inset-0 bg-stone-900 overflow-hidden">
+          <img 
+            src="${reel.image}" 
+            alt="${escapeReelText(reel.title)}" 
+            loading="lazy" 
+            decoding="async" 
+            class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 select-none"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B] via-transparent to-black/40"></div>
+        </div>
+
+        <!-- Top Header Info Row -->
+        <div class="relative z-10 p-3 flex items-start justify-between gap-2">
+          <div class="flex items-center gap-1.5">
+            <span class="px-2 py-0.5 rounded-full bg-black/65 backdrop-blur-md text-[9px] font-mono font-bold text-champagne border border-white/10 shadow-sm">
+              ${escapeReelText(reel.tag)}
+            </span>
+          </div>
+
+          <div class="flex items-center gap-1.5">
+            <span class="px-2 py-0.5 rounded-full bg-black/65 backdrop-blur-md text-[9px] font-mono font-bold text-white border border-white/10 flex items-center gap-1 shadow-sm">
+              <i class="fa-solid fa-play text-[7px] text-pink-400"></i>
+              <span>${reel.views}</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Center Floating Play Button -->
+        <div class="relative z-10 my-auto flex items-center justify-center">
+          <div class="w-12 h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/25 text-white flex items-center justify-center group-hover:scale-115 group-hover:bg-pink-600 group-hover:border-pink-400 transition-all duration-300 shadow-xl">
+            <i class="fa-solid fa-play ml-0.5 text-base"></i>
+          </div>
+        </div>
+
+        <!-- Bottom Overlay: Title, Audio Equalizer, Likes & CTA -->
+        <div class="relative z-10 p-3 pt-6 bg-gradient-to-t from-black via-black/85 to-transparent text-white space-y-1.5">
+          <!-- Audio Equalizer Strip -->
+          <div class="flex items-center gap-1.5 text-[9px] font-mono text-stone-300">
+            <div class="audio-equalizer">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <span class="truncate max-w-[120px] sm:max-w-[140px] text-stone-300">Homeify Teak</span>
+          </div>
+
+          <h4 class="text-xs font-bold leading-snug line-clamp-2 text-white group-hover:text-pink-200 transition-colors">
+            ${escapeReelText(reel.title)}
+          </h4>
+
+          <div class="flex items-center justify-between pt-1.5 border-t border-white/10 text-[10px] font-mono text-stone-400">
+            <span class="flex items-center gap-1 ${isLiked ? 'text-pink-400 font-bold' : ''}">
+              <i class="${isLiked ? 'fa-solid' : 'fa-regular'} fa-heart text-pink-400 text-[10px]"></i>
+              <span>${formatReelNumber(displayLikes)}</span>
+            </span>
+
+            <span class="text-pink-400 font-bold group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
+              <span>Watch</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[8px]"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- Simulated Reel Playback Bar at Bottom -->
+        <div class="reel-playback-bar z-10"></div>
+      </div>
+    `;
+  }).join('');
+};
+
+window.filterReels = function(category, btnElement) {
+  // Update button active states
+  const buttons = document.querySelectorAll('.reel-tab-btn');
+  buttons.forEach(btn => {
+    btn.classList.remove('active', 'bg-white', 'text-[#0D0C0B]', 'font-bold');
+    btn.classList.add('bg-white/10', 'text-stone-300', 'font-medium');
+  });
+
+  if (btnElement) {
+    btnElement.classList.add('active', 'bg-white', 'text-[#0D0C0B]', 'font-bold');
+    btnElement.classList.remove('bg-white/10', 'text-stone-300', 'font-medium');
+  }
+
+  // Fade out container briefly for smooth modern feel
+  const container = document.getElementById('instagram-reels-container');
+  if (container) {
+    container.style.opacity = '0.5';
+    container.style.transform = 'translateY(4px)';
+    container.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+    setTimeout(() => {
+      renderInstagramReels(category);
+      container.style.opacity = '1';
+      container.style.transform = 'translateY(0)';
+    }, 120);
+  } else {
+    renderInstagramReels(category);
+  }
+};
+
+window.openReelModal = function(reelId) {
+  const reel = DEFAULT_INSTAGRAM_REELS.find(r => r.id === reelId);
+  if (!reel) return;
+  activeModalReel = reel;
+
+  const modal = document.getElementById('instagram-reel-modal');
+  if (!modal) return;
+
+  // Set Modal Data
+  const posterEl = document.getElementById('reel-modal-poster');
+  if (posterEl) {
+    posterEl.src = reel.image;
+    posterEl.alt = reel.title;
+  }
+
+  const tagEl = document.getElementById('reel-modal-tag');
+  if (tagEl) tagEl.textContent = reel.tag;
+
+  const locEl = document.getElementById('reel-modal-location');
+  if (locEl) locEl.textContent = reel.location;
+
+  const titleEl = document.getElementById('reel-modal-title');
+  if (titleEl) titleEl.textContent = reel.title;
+
+  const captionEl = document.getElementById('reel-modal-caption');
+  if (captionEl) captionEl.textContent = reel.caption;
+
+  const viewsEl = document.getElementById('reel-modal-views');
+  if (viewsEl) viewsEl.textContent = reel.views;
+
+  const durationEl = document.getElementById('reel-modal-duration');
+  if (durationEl) durationEl.textContent = reel.duration;
+
+  const batchEl = document.getElementById('reel-modal-batch');
+  if (batchEl) batchEl.textContent = reel.batch;
+
+  const audioTitleEl = document.getElementById('reel-modal-audio-title');
+  if (audioTitleEl) audioTitleEl.textContent = reel.audioTitle;
+
+  // Update Like State in Modal
+  updateModalLikeState();
+
+  // Update WhatsApp Inquiry Link
+  const waCta = document.getElementById('reel-modal-wa-cta');
+  const waFloat = document.getElementById('reel-modal-whatsapp-float');
+  const waMsg = encodeURIComponent(
+    `Hello Homeify Furniture Workshop (Erattupetta),\n\nI was watching your Instagram Reel "${reel.title}" (@homeify.furniture).\n\nI would like to inquire about specifications, customized wood dimensions, and direct workshop pricing for this piece:\n${reel.productInquiry}`
+  );
+  const waUrl = `https://wa.me/919778446620?text=${waMsg}`;
+  if (waCta) waCta.href = waUrl;
+  if (waFloat) waFloat.href = waUrl;
+
+  // Open Modal
+  modal.classList.remove('modal-hidden');
+  modal.classList.add('modal-visible');
+  document.body.style.overflow = 'hidden';
+
+  // Start Playback Simulation
+  startReelPlaybackSimulation();
+};
+
+function updateModalLikeState() {
+  if (!activeModalReel) return;
+  const likedIds = getLikedReelIds();
+  const isLiked = likedIds.includes(activeModalReel.id);
+  const heartIcon = document.getElementById('reel-modal-heart-icon');
+  const likesCountEl = document.getElementById('reel-modal-likes-count');
+
+  const currentCount = isLiked ? activeModalReel.likes + 1 : activeModalReel.likes;
+  if (likesCountEl) {
+    likesCountEl.textContent = currentCount.toLocaleString();
+    if (isLiked) {
+      likesCountEl.classList.add('text-pink-400');
+    } else {
+      likesCountEl.classList.remove('text-pink-400');
+    }
+  }
+
+  if (heartIcon) {
+    if (isLiked) {
+      heartIcon.className = 'fa-solid fa-heart text-base text-pink-500 animate-pulse';
+    } else {
+      heartIcon.className = 'fa-regular fa-heart text-base text-white';
+    }
+  }
+}
+
+window.toggleCurrentModalReelLike = function() {
+  if (!activeModalReel) return;
+  const likedIds = getLikedReelIds();
+  const index = likedIds.indexOf(activeModalReel.id);
+
+  if (index > -1) {
+    likedIds.splice(index, 1);
+    saveLikedReelIds(likedIds);
+    showToast(`Removed like for "${activeModalReel.title}"`);
+  } else {
+    likedIds.push(activeModalReel.id);
+    saveLikedReelIds(likedIds);
+    showToast(`❤️ Liked "${activeModalReel.title}"!`);
+  }
+
+  updateModalLikeState();
+  renderInstagramReels(currentReelsFilter);
+};
+
+window.toggleReelPlayback = function() {
+  if (isReelPlaying) {
+    pauseReelPlaybackSimulation();
+  } else {
+    resumeReelPlaybackSimulation();
+  }
+};
+
+function startReelPlaybackSimulation() {
+  clearInterval(reelPlaybackTimer);
+  reelPlaybackProgress = 0;
+  isReelPlaying = true;
+  updatePlayButtonUI(true);
+
+  const progressBar = document.getElementById('reel-modal-progress-bar');
+  if (progressBar) progressBar.style.width = '0%';
+
+  reelPlaybackTimer = setInterval(() => {
+    if (!isReelPlaying) return;
+    reelPlaybackProgress += 1.5;
+    if (reelPlaybackProgress >= 100) {
+      reelPlaybackProgress = 0;
+    }
+    if (progressBar) {
+      progressBar.style.width = `${reelPlaybackProgress}%`;
+    }
+  }, 100);
+}
+
+function pauseReelPlaybackSimulation() {
+  isReelPlaying = false;
+  updatePlayButtonUI(false);
+}
+
+function resumeReelPlaybackSimulation() {
+  isReelPlaying = true;
+  updatePlayButtonUI(true);
+}
+
+function updatePlayButtonUI(playing) {
+  const playBtn = document.getElementById('reel-modal-play-btn');
+  const playIcon = document.getElementById('reel-modal-play-icon');
+  if (!playBtn || !playIcon) return;
+
+  if (playing) {
+    playIcon.className = 'fa-solid fa-pause text-2xl group-hover:scale-105 transition-transform';
+    playBtn.style.opacity = '0.35';
+  } else {
+    playIcon.className = 'fa-solid fa-play ml-1 text-2xl group-hover:scale-105 transition-transform';
+    playBtn.style.opacity = '0.9';
+  }
+}
+
+window.shareCurrentModalReel = function() {
+  if (!activeModalReel) return;
+  const reelShareUrl = activeModalReel.instagramUrl;
+  const shareTitle = `${activeModalReel.title} | Homeify Instagram Reels`;
+  const shareText = `Watch ${activeModalReel.title} on Homeify Furniture Instagram Reels:\n${reelShareUrl}`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: shareTitle,
+      text: shareText,
+      url: reelShareUrl
+    }).catch(() => {});
+  } else {
+    copyTextToClipboard(reelShareUrl, () => {
+      showToast('🔗 Copied Homeify Instagram Reel link to clipboard!');
+    });
+  }
+};
+
+window.closeReelModal = function() {
+  const modal = document.getElementById('instagram-reel-modal');
+  if (!modal) return;
+  clearInterval(reelPlaybackTimer);
+  isReelPlaying = false;
+  modal.classList.add('modal-hidden');
+  modal.classList.remove('modal-visible');
+  document.body.style.overflow = '';
+  activeModalReel = null;
+};
+
+function initInstagramReels() {
+  renderInstagramReels('all');
+
+  // Modal Backdrop Click & Escape Key Listener
+  const modal = document.getElementById('instagram-reel-modal');
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeReelModal();
+      }
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const modal = document.getElementById('instagram-reel-modal');
+      if (modal && modal.classList.contains('modal-visible')) {
+        closeReelModal();
+      }
+    }
+  });
+}

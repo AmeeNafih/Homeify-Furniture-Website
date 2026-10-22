@@ -1417,7 +1417,7 @@
   <!-- =========================================================================
        9B. INSTAGRAM LIVE WORKSHOP REELS & STORIES (@homeify.furniture)
        ========================================================================= -->
-  <section class="py-20 lg:py-28 bg-[#0D0C0B] text-white relative overflow-hidden border-t border-b border-white/10">
+  <section id="reels" class="py-20 lg:py-28 bg-[#0D0C0B] text-white relative overflow-hidden border-t border-b border-white/10">
     <!-- Atmospheric Ambient Aura -->
     <div class="absolute inset-0 pointer-events-none overflow-hidden">
       <div class="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-gradient-to-tr from-amber-500/10 via-rose-500/10 to-purple-600/10 rounded-full blur-3xl atmospheric-aura"></div>
@@ -1456,133 +1456,32 @@
         </div>
       </div>
 
-      <!-- 4 Modern Instagram Story / Reel Showcase Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        <!-- Reel Card 1 -->
-        <a 
-          href="https://www.instagram.com/homeify.furniture/" 
-          target="_blank" 
-          rel="noopener"
-          class="group relative rounded-3xl overflow-hidden bg-[#161514] border border-white/10 hover:border-pink-500/40 transition-all duration-400 flex flex-col shadow-xl hover:-translate-y-2"
-        >
-          <div class="aspect-[4/5] relative overflow-hidden bg-stone-900">
-            <img src="assets/handcrafted-wooden-sofa.jpg" alt="Homeify Furniture Kerala" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700">
-            <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B] via-transparent to-black/30"></div>
-            
-            <div class="absolute top-4 left-4 flex items-center gap-2">
-              <span class="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-mono font-bold text-white flex items-center gap-1 border border-white/10">
-                <i class="fa-solid fa-play text-[8px] text-pink-400"></i> Reel
-              </span>
-            </div>
+      <!-- Reel Filter Tabs & View Controls -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 w-full sm:w-auto scrollbar-none font-mono text-xs">
+          <button type="button" class="reel-tab-btn active px-4 py-2 rounded-full bg-white text-[#0D0C0B] font-bold transition-all shadow-sm cursor-pointer whitespace-nowrap" data-filter="all" onclick="filterReels('all', this)">
+            <i class="fa-solid fa-play text-[10px] mr-1.5 text-pink-500"></i> All Reels (6)
+          </button>
+          <button type="button" class="reel-tab-btn px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 font-medium transition-all cursor-pointer whitespace-nowrap" data-filter="crafting" onclick="filterReels('crafting', this)">
+            🔨 Workshop Joinery
+          </button>
+          <button type="button" class="reel-tab-btn px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 font-medium transition-all cursor-pointer whitespace-nowrap" data-filter="teak" onclick="filterReels('teak', this)">
+            🌳 Nilambur Teak
+          </button>
+          <button type="button" class="reel-tab-btn px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 font-medium transition-all cursor-pointer whitespace-nowrap" data-filter="delivery" onclick="filterReels('delivery', this)">
+            ✨ Client Deliveries
+          </button>
+        </div>
 
-            <div class="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white/80 group-hover:text-pink-400 transition-colors">
-              <i class="fa-brands fa-instagram text-sm"></i>
-            </div>
+        <div class="hidden sm:flex items-center gap-2 font-mono text-xs text-stone-400">
+          <span>Click any card to watch</span>
+          <i class="fa-solid fa-circle-play text-pink-400 text-sm animate-pulse"></i>
+        </div>
+      </div>
 
-            <div class="absolute bottom-4 left-4 right-4 text-white">
-              <p class="text-xs font-bold leading-snug line-clamp-2">Handcrafting Pure Teak Sofa frames with traditional mortise joinery</p>
-              <div class="flex items-center justify-between mt-2 pt-2 border-t border-white/10 text-[10px] font-mono text-stone-400">
-                <span>Erattupetta Workshop</span>
-                <span class="text-pink-400 group-hover:translate-x-0.5 transition-transform">Watch ↗</span>
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <!-- Reel Card 2 -->
-        <a 
-          href="https://www.instagram.com/homeify.furniture/" 
-          target="_blank" 
-          rel="noopener" 
-          class="group relative rounded-3xl overflow-hidden bg-[#161514] border border-white/10 hover:border-pink-500/40 transition-all duration-400 flex flex-col shadow-xl hover:-translate-y-2"
-        >
-          <div class="aspect-[4/5] relative overflow-hidden bg-stone-900">
-            <img src="assets/royal-jhoola-swing.jpg" alt="Homeify Royal Jhoola Kerala" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700">
-            <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B] via-transparent to-black/30"></div>
-            
-            <div class="absolute top-4 left-4 flex items-center gap-2">
-              <span class="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-mono font-bold text-white flex items-center gap-1 border border-white/10">
-                <i class="fa-solid fa-play text-[8px] text-pink-400"></i> Reel
-              </span>
-            </div>
-
-            <div class="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white/80 group-hover:text-pink-400 transition-colors">
-              <i class="fa-brands fa-instagram text-sm"></i>
-            </div>
-
-            <div class="absolute bottom-4 left-4 right-4 text-white">
-              <p class="text-xs font-bold leading-snug line-clamp-2">The Royal Kerala Jhoola with solid brass interlocking links</p>
-              <div class="flex items-center justify-between mt-2 pt-2 border-t border-white/10 text-[10px] font-mono text-stone-400">
-                <span>Client Installation</span>
-                <span class="text-pink-400 group-hover:translate-x-0.5 transition-transform">Watch ↗</span>
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <!-- Reel Card 3 -->
-        <a 
-          href="https://www.instagram.com/homeify.furniture/" 
-          target="_blank" 
-          rel="noopener" 
-          class="group relative rounded-3xl overflow-hidden bg-[#161514] border border-white/10 hover:border-pink-500/40 transition-all duration-400 flex flex-col shadow-xl hover:-translate-y-2"
-        >
-          <div class="aspect-[4/5] relative overflow-hidden bg-stone-900">
-            <img src="assets/premium-wooden-cot.jpg" alt="Homeify Teak Cot 6ft" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700">
-            <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B] via-transparent to-black/30"></div>
-            
-            <div class="absolute top-4 left-4 flex items-center gap-2">
-              <span class="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-mono font-bold text-white flex items-center gap-1 border border-white/10">
-                <i class="fa-solid fa-camera text-[8px] text-pink-400"></i> Story
-              </span>
-            </div>
-
-            <div class="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white/80 group-hover:text-pink-400 transition-colors">
-              <i class="fa-brands fa-instagram text-sm"></i>
-            </div>
-
-            <div class="absolute bottom-4 left-4 right-4 text-white">
-              <p class="text-xs font-bold leading-snug line-clamp-2">Kiln-seasoned 6-foot monolithic solid teak timber cots</p>
-              <div class="flex items-center justify-between mt-2 pt-2 border-t border-white/10 text-[10px] font-mono text-stone-400">
-                <span>5-Year Warranty</span>
-                <span class="text-pink-400 group-hover:translate-x-0.5 transition-transform">View ↗</span>
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <!-- Reel Card 4 -->
-        <a 
-          href="https://www.instagram.com/homeify.furniture/" 
-          target="_blank" 
-          rel="noopener" 
-          class="group relative rounded-3xl overflow-hidden bg-[#161514] border border-white/10 hover:border-pink-500/40 transition-all duration-400 flex flex-col shadow-xl hover:-translate-y-2"
-        >
-          <div class="aspect-[4/5] relative overflow-hidden bg-stone-900">
-            <img src="assets/curve-dining-chair-studio.jpg" alt="Homeify Cane Dining Set" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700">
-            <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B] via-transparent to-black/30"></div>
-            
-            <div class="absolute top-4 left-4 flex items-center gap-2">
-              <span class="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-mono font-bold text-white flex items-center gap-1 border border-white/10">
-                <i class="fa-solid fa-play text-[8px] text-pink-400"></i> Reel
-              </span>
-            </div>
-
-            <div class="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white/80 group-hover:text-pink-400 transition-colors">
-              <i class="fa-brands fa-instagram text-sm"></i>
-            </div>
-
-            <div class="absolute bottom-4 left-4 right-4 text-white">
-              <p class="text-xs font-bold leading-snug line-clamp-2">Organic curved back dining chairs with hand-woven cane</p>
-              <div class="flex items-center justify-between mt-2 pt-2 border-t border-white/10 text-[10px] font-mono text-stone-400">
-                <span>Artisan Finish</span>
-                <span class="text-pink-400 group-hover:translate-x-0.5 transition-transform">Watch ↗</span>
-              </div>
-            </div>
-          </div>
-        </a>
-
+      <!-- Instagram Reels 9:16 Showcase Grid (Populated & Managed via app.js) -->
+      <div id="instagram-reels-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-4 sm:gap-5">
+        <!-- Rendered by app.js -->
       </div>
 
       <!-- Workshop Instagram Handle Bar -->
@@ -1994,6 +1893,204 @@
           <i class="fa-solid fa-arrow-up-from-bracket text-xs text-teak"></i>
           <span>More Share Options (System Menu)</span>
         </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       11C. INSTAGRAM REELS LIGHTBOX & INTERACTIVE VIEWER MODAL
+       ========================================================================= -->
+  <div id="instagram-reel-modal" class="modal-overlay modal-hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/90 backdrop-blur-md">
+    <div class="modal-container relative w-full max-w-sm sm:max-w-md bg-[#121110] border border-white/15 rounded-3xl shadow-2xl overflow-hidden flex flex-col text-white my-auto max-h-[94vh]">
+      
+      <!-- Top Bar: Creator Profile & Close Button -->
+      <div class="px-4 py-3 bg-[#181615] border-b border-white/10 flex items-center justify-between z-20 flex-shrink-0">
+        <a href="https://www.instagram.com/homeify.furniture/" target="_blank" rel="noopener" class="flex items-center gap-2.5 group">
+          <div class="insta-story-ring">
+            <img src="assets/homeify-official-logo.jpg" alt="Homeify Furniture" class="w-8 h-8 rounded-full object-cover border border-[#141210]">
+          </div>
+          <div class="leading-tight">
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs font-bold text-white group-hover:text-pink-400 transition-colors font-sans">homeify.furniture</span>
+              <i class="fa-solid fa-circle-check text-blue-400 text-[10px]"></i>
+              <span class="text-[9px] px-1.5 py-0.2 rounded-full bg-pink-500/20 text-pink-300 font-mono font-bold">Follow</span>
+            </div>
+            <span id="reel-modal-location" class="text-[10px] text-stone-400 font-mono block">Erattupetta Workshop • Kerala</span>
+          </div>
+        </a>
+
+        <div class="flex items-center gap-2">
+          <button 
+            type="button" 
+            onclick="closeReelModal()" 
+            aria-label="Close Instagram Reel"
+            class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+          >
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Visual Reel Area (Smartphone 9:16 Aspect Viewport) -->
+      <div class="relative w-full aspect-[9/14] sm:aspect-[9/15] max-h-[58vh] bg-stone-950 overflow-hidden select-none flex items-center justify-center">
+        <!-- Reel Visual Poster / Simulated Video -->
+        <img 
+          id="reel-modal-poster" 
+          src="assets/handcrafted-wooden-sofa.jpg" 
+          alt="Instagram Reel Showcase" 
+          class="w-full h-full object-cover select-none transition-transform duration-700"
+        />
+
+        <!-- Top Gradient Overlay -->
+        <div class="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/70 to-transparent pointer-events-none"></div>
+
+        <!-- Reel Category Badge & Live Pulse -->
+        <div class="absolute top-3 left-3 z-10 flex items-center gap-2 pointer-events-none">
+          <span id="reel-modal-tag" class="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-mono font-bold text-champagne border border-white/15 shadow-sm">
+            Workshop Joinery
+          </span>
+          <span class="px-2 py-0.5 rounded-full bg-pink-600/80 backdrop-blur-md text-[9px] font-mono font-bold text-white flex items-center gap-1 shadow-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span> REEL
+          </span>
+        </div>
+
+        <!-- Center Interactive Play/Pause Button -->
+        <button 
+          id="reel-modal-play-btn" 
+          type="button" 
+          onclick="toggleReelPlayback()" 
+          aria-label="Play or Pause Reel"
+          class="absolute inset-0 m-auto w-16 h-16 rounded-full bg-black/55 backdrop-blur-md border border-white/25 text-white flex items-center justify-center cursor-pointer shadow-2xl hover:scale-110 hover:bg-pink-600 transition-all z-10 group"
+        >
+          <i id="reel-modal-play-icon" class="fa-solid fa-play ml-1 text-2xl group-hover:scale-105 transition-transform"></i>
+        </button>
+
+        <!-- Right Side Floating Reels Engagement Sidebar (Native Instagram Style) -->
+        <div class="absolute right-3 bottom-8 z-20 flex flex-col items-center gap-4">
+          <!-- Like Button -->
+          <button 
+            id="reel-modal-like-btn" 
+            type="button" 
+            onclick="toggleCurrentModalReelLike()" 
+            title="Like this Reel"
+            class="group flex flex-col items-center gap-1 cursor-pointer"
+          >
+            <div class="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center text-white group-hover:bg-pink-600 group-hover:border-pink-500 transition-all shadow-lg active:scale-125">
+              <i id="reel-modal-heart-icon" class="fa-regular fa-heart text-base text-white group-hover:text-white transition-colors"></i>
+            </div>
+            <span id="reel-modal-likes-count" class="text-[10px] font-mono font-bold text-white drop-shadow">1,248</span>
+          </button>
+
+          <!-- WhatsApp Direct Inquiry -->
+          <a 
+            id="reel-modal-whatsapp-float" 
+            href="#" 
+            target="_blank" 
+            rel="noopener" 
+            title="Inquire about this piece on WhatsApp"
+            class="group flex flex-col items-center gap-1 cursor-pointer"
+          >
+            <div class="w-10 h-10 rounded-full bg-emerald-600/90 hover:bg-emerald-500 backdrop-blur-md border border-emerald-400/40 flex items-center justify-center text-white transition-all shadow-lg hover:scale-108">
+              <i class="fa-brands fa-whatsapp text-lg"></i>
+            </div>
+            <span class="text-[9px] font-mono font-bold text-emerald-300 drop-shadow">Order</span>
+          </a>
+
+          <!-- Share Reel Button -->
+          <button 
+            type="button" 
+            onclick="shareCurrentModalReel()" 
+            title="Share Reel"
+            class="group flex flex-col items-center gap-1 cursor-pointer"
+          >
+            <div class="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center text-white group-hover:bg-teak group-hover:border-amber-400 transition-all shadow-lg">
+              <i class="fa-solid fa-paper-plane text-sm"></i>
+            </div>
+            <span class="text-[9px] font-mono font-bold text-white drop-shadow">Share</span>
+          </button>
+
+          <!-- Instagram Direct Jump Button -->
+          <a 
+            id="reel-modal-insta-float" 
+            href="https://www.instagram.com/homeify.furniture/" 
+            target="_blank" 
+            rel="noopener" 
+            title="Open on Instagram"
+            class="group flex flex-col items-center gap-1 cursor-pointer"
+          >
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white transition-all shadow-lg hover:scale-108">
+              <i class="fa-brands fa-instagram text-base"></i>
+            </div>
+            <span class="text-[9px] font-mono font-bold text-pink-300 drop-shadow">Insta</span>
+          </a>
+        </div>
+
+        <!-- Bottom Gradient Overlay for readability -->
+        <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#121110] via-black/60 to-transparent pointer-events-none"></div>
+
+        <!-- Audio Track Strip Overlay -->
+        <div class="absolute bottom-2 left-3 right-16 z-10 flex items-center gap-2 pointer-events-none">
+          <div class="audio-equalizer">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <p id="reel-modal-audio-title" class="text-[10px] font-mono text-stone-300 truncate">
+            Original Audio - Homeify Timber Acoustics
+          </p>
+        </div>
+
+        <!-- Simulated Video Playback Progress Bar -->
+        <div class="absolute bottom-0 inset-x-0 h-1 bg-white/20 z-20">
+          <div id="reel-modal-progress-bar" class="h-full bg-gradient-to-r from-pink-500 via-rose-500 to-amber-400 transition-all" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Bottom Details & Direct WhatsApp Order Action Area -->
+      <div class="p-4 bg-[#141210] border-t border-white/10 space-y-3 flex-shrink-0">
+        <div>
+          <h4 id="reel-modal-title" class="font-heading font-extrabold text-white text-base leading-snug">
+            Handcrafted Nilambur Teak Sofa Frame
+          </h4>
+          <p id="reel-modal-caption" class="text-xs text-stone-300 mt-1 font-sans line-clamp-2 leading-relaxed">
+            Watch master craftsmen assemble our 3-seater solid Nilambur teak sofa with authentic mortise & tenon joints.
+          </p>
+        </div>
+
+        <!-- Reel Stats Row -->
+        <div class="flex items-center justify-between text-[11px] font-mono text-stone-400 pt-1 border-t border-white/10">
+          <div class="flex items-center gap-3">
+            <span><i class="fa-solid fa-eye text-stone-400 mr-1"></i><span id="reel-modal-views">14.2K</span> views</span>
+            <span><i class="fa-regular fa-clock text-stone-400 mr-1"></i><span id="reel-modal-duration">0:38</span></span>
+          </div>
+          <span id="reel-modal-batch" class="text-champagne font-semibold text-[10px]">
+            Erattupetta Workshop • Batch #NK-42
+          </span>
+        </div>
+
+        <!-- Dual Action Buttons: Order via WhatsApp & View on Instagram -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+          <a 
+            id="reel-modal-wa-cta" 
+            href="#" 
+            target="_blank" 
+            rel="noopener"
+            class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-colors"
+          >
+            <i class="fa-brands fa-whatsapp text-sm"></i>
+            <span>Order On WhatsApp</span>
+          </a>
+
+          <a 
+            id="reel-modal-insta-cta" 
+            href="https://www.instagram.com/homeify.furniture/" 
+            target="_blank" 
+            rel="noopener"
+            class="py-2.5 px-3 rounded-xl bg-white/10 hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all border border-white/10"
+          >
+            <i class="fa-brands fa-instagram text-sm"></i>
+            <span>View on Instagram ↗</span>
+          </a>
+        </div>
       </div>
 
     </div>
