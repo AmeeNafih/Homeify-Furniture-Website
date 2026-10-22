@@ -727,6 +727,7 @@ async function loadAuthoritativeCatalog() {
   renderBentoGallery(currentFilter);
   populateCustomizerProductList();
   updateSyncStatusUI();
+  checkUrlForProductDeepLink();
 }
 
 function applyLogoToDOM(logoSrc) {
@@ -756,6 +757,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCustomizerManager();
   initAddProductManager();
   initAdminAuth();
+  checkUrlForProductDeepLink();
   loadAuthoritativeCatalog();
 });
 
@@ -1398,14 +1400,25 @@ function renderBentoGallery(filterCategory) {
         />
         
         <!-- Top Badges with 3D Z-Lift -->
-        <div class="absolute top-2.5 sm:top-4 left-2.5 sm:left-4 right-2.5 sm:right-4 flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 pointer-events-none z-10 float-3d-element">
+        <div class="absolute top-2.5 sm:top-4 left-2.5 sm:left-4 right-2.5 sm:right-4 flex items-center justify-between gap-1.5 sm:gap-2 pointer-events-none z-10 float-3d-element">
           <span class="px-2.5 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold rounded-full ${materialBadgeBg} shadow-sm backdrop-blur-md">
             ${materialLabel}
           </span>
-          <span class="px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-xs font-bold rounded-full bg-[#D4AF37] text-[#0D0C0B] shadow-sm flex items-center gap-1 font-mono">
-            <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            5-Yr Warranty
-          </span>
+          <div class="flex items-center gap-1.5">
+            <span class="px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-xs font-bold rounded-full bg-[#D4AF37] text-[#0D0C0B] shadow-sm flex items-center gap-1 font-mono">
+              <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              5-Yr Warranty
+            </span>
+            <button 
+              type="button" 
+              onclick="shareProductLink('${product.id}', event);" 
+              class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-stone-800 shadow-md flex items-center justify-center transition-all hover:scale-110 pointer-events-auto border border-black/5 cursor-pointer" 
+              title="Share ${product.name}" 
+              aria-label="Share ${product.name}"
+            >
+              <i class="fa-solid fa-share-nodes text-[11px] sm:text-xs text-[#9E6738]"></i>
+            </button>
+          </div>
         </div>
 
         <!-- Thumbnail Zoom / Quick View Overlay -->
@@ -1449,16 +1462,27 @@ function renderBentoGallery(filterCategory) {
             <span class="px-2 py-0.5 rounded-full text-[10px] font-bold font-mono bg-emerald-50 text-emerald-800 border border-emerald-200/90">
               Save ${savingsPercent}% Direct
             </span>
-            <a 
-              href="https://wa.me/${WORKSHOP_WHATSAPP}?text=${encodeURIComponent(`Hello Homeify Furniture (M E S Junction, Erattupetta)! I am interested in ${product.name} (Factory Price: ${product.factoryPrice}, MRP: ${product.mrp}).`)}" 
-              target="_blank" 
-              rel="noopener"
-              onclick="event.stopPropagation();"
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#25D366]/10 text-[#075E54] hover:bg-[#25D366] hover:text-white transition-all text-[11px] font-bold font-mono border border-[#25D366]/20 btn-3d"
-            >
-              <i class="fa-brands fa-whatsapp text-xs"></i>
-              <span>Inquire</span>
-            </a>
+            <div class="flex items-center gap-1.5">
+              <button 
+                type="button" 
+                onclick="shareProductLink('${product.id}', event);" 
+                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 hover:bg-teak hover:text-white text-stone-600 transition-colors border border-stone-200/90 shadow-sm cursor-pointer" 
+                title="Share ${product.name}"
+                aria-label="Share ${product.name}"
+              >
+                <i class="fa-solid fa-share-nodes text-xs"></i>
+              </button>
+              <a 
+                href="https://wa.me/${WORKSHOP_WHATSAPP}?text=${encodeURIComponent(`Hello Homeify Furniture (M E S Junction, Erattupetta)! I am interested in ${product.name} (Factory Price: ${product.factoryPrice}, MRP: ${product.mrp}).`)}" 
+                target="_blank" 
+                rel="noopener"
+                onclick="event.stopPropagation();"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#25D366]/10 text-[#075E54] hover:bg-[#25D366] hover:text-white transition-all text-[11px] font-bold font-mono border border-[#25D366]/20 btn-3d"
+              >
+                <i class="fa-brands fa-whatsapp text-xs"></i>
+                <span>Inquire</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -1507,6 +1531,14 @@ function openProductModal(product) {
   selectedProductForModal = product;
   const modal = document.getElementById('product-lightbox-modal');
   if (!modal) return;
+
+  // Update browser URL with canonical product link without reloading page
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set('product', product.id);
+    window.history.replaceState({ productId: product.id }, '', url.toString());
+    document.title = `${product.name} | Homeify Furniture Erattupetta`;
+  } catch (e) {}
 
   const modalImg = document.getElementById('modal-product-img');
   if (modalImg) {
@@ -1578,8 +1610,9 @@ function openProductModal(product) {
 
   const waBtn = document.getElementById('modal-whatsapp-btn');
   if (waBtn) {
+    const directUrl = getCanonicalProductShareUrl(product.id);
     const message = encodeURIComponent(
-      `Hello Homeify Furniture (M E S Junction, Erattupetta)! 🌳\n\nI am interested in customizing:\n*${product.name}*\n• Factory Offer Price: ${product.factoryPrice} (Showroom MRP: ${product.mrp})\n• Material: ${product.materialType}\n• Category: ${product.categoryName}\n• 5-Year Guaranteed Warranty Included\n\nPlease share availability, finishes, and delivery timeline to my address.`
+      `Hello Homeify Furniture (M E S Junction, Erattupetta)! 🌳\n\nI am interested in customizing:\n*${product.name}*\n• Factory Offer Price: ${product.factoryPrice} (Showroom MRP: ${product.mrp})\n• Material: ${product.materialType}\n• Category: ${product.categoryName}\n• 5-Year Guaranteed Warranty Included\n• Direct Link: ${directUrl}\n\nPlease share availability, finishes, and delivery timeline to my address.`
     );
     waBtn.href = `https://wa.me/${WORKSHOP_WHATSAPP}?text=${message}`;
   }
@@ -1616,12 +1649,22 @@ function closeProductModal() {
   modal.classList.add('modal-hidden');
   modal.classList.remove('modal-visible');
   document.body.style.overflow = 'auto';
+
+  // Restore clean URL without product parameter
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('product');
+    const cleanUrl = url.pathname + (url.search ? url.search : '') + (url.hash ? url.hash : '');
+    window.history.replaceState({}, '', cleanUrl);
+    document.title = 'Homeify Furniture | Erattupetta, Kottayam | Direct Kerala Woodwork Workshop';
+  } catch (e) {}
 }
 
 function initModalListeners() {
   const closeBtn = document.getElementById('modal-close-btn');
   const modalOverlay = document.getElementById('product-lightbox-modal');
   const quoteActionBtn = document.getElementById('modal-add-to-quote-btn');
+  const shareModalOverlay = document.getElementById('product-share-modal');
 
   if (closeBtn) closeBtn.addEventListener('click', closeProductModal);
 
@@ -1631,10 +1674,30 @@ function initModalListeners() {
     });
   }
 
+  if (shareModalOverlay) {
+    shareModalOverlay.addEventListener('click', (e) => {
+      if (e.target === shareModalOverlay) closeShareModal();
+    });
+  }
+
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
+      closeShareModal();
       closeProductModal();
       closeCustomizer();
+    }
+  });
+
+  // Browser Back/Forward navigation listener for deep-linked modals
+  window.addEventListener('popstate', () => {
+    const params = new URLSearchParams(window.location.search);
+    const prodId = params.get('product');
+    if (prodId) {
+      const p = PRODUCTS.find(item => item.id === prodId);
+      if (p) openProductModal(p);
+    } else {
+      closeProductModal();
+      closeShareModal();
     }
   });
 
@@ -1651,6 +1714,239 @@ function initModalListeners() {
       }
     });
   }
+}
+
+// ==========================================================================
+// 3b. DIRECT PRODUCT LINK SHARING & DEEP-LINKING ENGINE
+// ==========================================================================
+let currentShareProduct = null;
+let currentShareUrl = '';
+
+function getCanonicalProductShareUrl(productId) {
+  const origin = (window.location.origin && window.location.origin !== 'null') 
+    ? window.location.origin 
+    : 'https://homeifyfurniture.in';
+  const pathname = window.location.pathname || '/';
+  return `${origin}${pathname}?product=${encodeURIComponent(productId)}`;
+}
+
+// Universal product share trigger (used across cards, modals, and overlays)
+window.shareProductLink = async function(productId, event) {
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  const product = PRODUCTS.find(p => p.id === productId);
+  if (!product) return;
+
+  const shareUrl = getCanonicalProductShareUrl(product.id);
+  const shareTitle = `${product.name} | Homeify Furniture Erattupetta`;
+  const shareText = `Check out "${product.name}" at Homeify Furniture!\n• Direct Factory Price: ${product.factoryPrice} (Showroom MRP: ${product.mrp})\n• Material: ${product.materialType}\n• 5-Year Full Warranty Handcrafted in Erattupetta Workshop\n\nView piece & photos here:`;
+
+  // On touch / mobile devices, try native Web Share API first for instant WhatsApp/Instagram sharing
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if (isMobile && navigator.share && typeof navigator.share === 'function') {
+    try {
+      await navigator.share({
+        title: shareTitle,
+        text: `${shareText}\n${shareUrl}`,
+        url: shareUrl
+      });
+      showToast(`Shared "${product.name}"!`);
+      return;
+    } catch (err) {
+      if (err.name === 'AbortError') return; // User closed native sheet
+      console.warn('Native share failed, opening share modal:', err);
+    }
+  }
+
+  // Open the luxury product share modal
+  openShareModal(product, shareUrl, shareText);
+};
+
+// Share current product in the lightbox modal
+window.shareCurrentModalProduct = function(event) {
+  if (selectedProductForModal) {
+    shareProductLink(selectedProductForModal.id, event);
+  }
+};
+
+window.openShareModal = function(product, shareUrl, shareText) {
+  currentShareProduct = product;
+  currentShareUrl = shareUrl;
+
+  const modal = document.getElementById('product-share-modal');
+  if (!modal) return;
+
+  const imgEl = document.getElementById('share-modal-img');
+  if (imgEl) imgEl.src = product.image;
+
+  const catEl = document.getElementById('share-modal-category');
+  if (catEl) catEl.textContent = product.categoryName;
+
+  const titleEl = document.getElementById('share-modal-title');
+  if (titleEl) titleEl.textContent = product.name;
+
+  const priceEl = document.getElementById('share-modal-price');
+  if (priceEl) priceEl.textContent = product.factoryPrice;
+
+  const mrpEl = document.getElementById('share-modal-mrp');
+  if (mrpEl) mrpEl.textContent = product.mrp;
+
+  const inputEl = document.getElementById('share-modal-link-input');
+  if (inputEl) inputEl.value = shareUrl;
+
+  const copyBtnText = document.getElementById('share-modal-copy-btn-text');
+  if (copyBtnText) copyBtnText.textContent = 'Copy';
+
+  // Social Links
+  const waBtn = document.getElementById('share-social-whatsapp');
+  if (waBtn) {
+    const waText = encodeURIComponent(`${shareText}\n${shareUrl}`);
+    waBtn.href = `https://wa.me/?text=${waText}`;
+  }
+
+  const fbBtn = document.getElementById('share-social-facebook');
+  if (fbBtn) {
+    fbBtn.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+  }
+
+  const twBtn = document.getElementById('share-social-twitter');
+  if (twBtn) {
+    twBtn.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${encodeURIComponent(shareUrl)}`;
+  }
+
+  const nativeContainer = document.getElementById('share-modal-native-container');
+  if (nativeContainer) {
+    if (navigator.share) {
+      nativeContainer.classList.remove('hidden');
+    } else {
+      nativeContainer.classList.add('hidden');
+    }
+  }
+
+  modal.classList.remove('modal-hidden');
+  modal.classList.add('modal-visible');
+};
+
+window.closeShareModal = function() {
+  const modal = document.getElementById('product-share-modal');
+  if (!modal) return;
+  modal.classList.add('modal-hidden');
+  modal.classList.remove('modal-visible');
+};
+
+function copyTextToClipboard(text, onSuccess) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      if (onSuccess) onSuccess();
+    }).catch(() => {
+      fallbackCopyText(text, onSuccess);
+    });
+  } else {
+    fallbackCopyText(text, onSuccess);
+  }
+}
+
+function fallbackCopyText(text, onSuccess) {
+  try {
+    const tempInput = document.createElement('textarea');
+    tempInput.value = text;
+    tempInput.style.position = 'fixed';
+    tempInput.style.left = '-9999px';
+    tempInput.style.top = '0';
+    document.body.appendChild(tempInput);
+    tempInput.focus();
+    tempInput.select();
+    const successful = document.execCommand('copy');
+    document.body.removeChild(tempInput);
+    if (successful && onSuccess) onSuccess();
+  } catch (err) {
+    prompt('Copy direct product link:', text);
+  }
+}
+
+window.copyShareModalLink = function() {
+  if (!currentShareUrl) return;
+  copyTextToClipboard(currentShareUrl, () => {
+    const btnText = document.getElementById('share-modal-copy-btn-text');
+    const copyBtn = document.getElementById('share-modal-copy-btn');
+    if (btnText) btnText.textContent = 'Copied! ✓';
+    if (copyBtn) {
+      copyBtn.classList.remove('bg-[#0D0C0B]', 'hover:bg-teak');
+      copyBtn.classList.add('bg-emerald-600');
+    }
+    setTimeout(() => {
+      if (btnText) btnText.textContent = 'Copy';
+      if (copyBtn) {
+        copyBtn.classList.add('bg-[#0D0C0B]', 'hover:bg-teak');
+        copyBtn.classList.remove('bg-emerald-600');
+      }
+    }, 2000);
+    showToast(`🔗 Copied direct link to "${currentShareProduct ? currentShareProduct.name : 'product'}"!`);
+  });
+};
+
+window.shareToInstagram = function() {
+  if (!currentShareUrl) return;
+  copyTextToClipboard(currentShareUrl, () => {
+    showToast(`📸 Link copied! Open Instagram and paste in your Story or DM.`);
+    setTimeout(() => {
+      window.open('https://www.instagram.com/homeify.furniture/', '_blank', 'noopener');
+    }, 500);
+  });
+};
+
+window.triggerNativeShareFromModal = async function() {
+  if (!currentShareProduct || !navigator.share) return;
+  const shareTitle = `${currentShareProduct.name} | Homeify Furniture Erattupetta`;
+  const shareText = `Check out "${currentShareProduct.name}" at Homeify Furniture - Direct Workshop Price: ${currentShareProduct.factoryPrice}:\n${currentShareUrl}`;
+  try {
+    await navigator.share({
+      title: shareTitle,
+      text: shareText,
+      url: currentShareUrl
+    });
+    closeShareModal();
+  } catch (e) {}
+};
+
+// Check incoming URL for product deep link (?product=item-id or #product=item-id)
+function checkUrlForProductDeepLink() {
+  try {
+    let targetId = null;
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('product')) {
+      targetId = urlParams.get('product');
+    } else if (urlParams.has('p')) {
+      targetId = urlParams.get('p');
+    } else if (window.location.hash) {
+      const cleanHash = window.location.hash.replace(/^#/, '');
+      if (cleanHash.startsWith('product=')) {
+        targetId = cleanHash.replace('product=', '');
+      } else if (PRODUCTS.some(p => p.id === cleanHash)) {
+        targetId = cleanHash;
+      }
+    }
+
+    if (!targetId) return false;
+
+    const matchedProduct = PRODUCTS.find(p => p.id === targetId || p.id === targetId.trim());
+    if (matchedProduct) {
+      const catalogEl = document.getElementById('catalog');
+      if (catalogEl) {
+        catalogEl.scrollIntoView({ behavior: 'smooth' });
+      }
+      setTimeout(() => {
+        openProductModal(matchedProduct);
+      }, 350);
+      return true;
+    }
+  } catch (err) {
+    console.warn('Deep link lookup error:', err);
+  }
+  return false;
 }
 
 // ==========================================================================

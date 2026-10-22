@@ -1726,9 +1726,21 @@
   <div id="product-lightbox-modal" class="modal-overlay modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#0D0C0B]/80 backdrop-blur-md">
     <div class="modal-container relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-stone-200 flex flex-col md:flex-row overflow-hidden">
       
-      <button id="modal-close-btn" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-[#0D0C0B]/80 hover:bg-[#0D0C0B] text-white flex items-center justify-center transition-colors shadow-md" aria-label="Close modal">
-        <i class="fa-solid fa-xmark text-sm"></i>
-      </button>
+      <div class="absolute top-4 right-4 z-20 flex items-center gap-2">
+        <button 
+          id="modal-quick-share-btn" 
+          type="button" 
+          onclick="shareCurrentModalProduct(event)" 
+          class="w-10 h-10 rounded-full bg-white/90 hover:bg-white text-stone-800 flex items-center justify-center transition-all hover:scale-105 shadow-md border border-stone-200/80 cursor-pointer" 
+          title="Share direct link to this piece" 
+          aria-label="Share product"
+        >
+          <i class="fa-solid fa-share-nodes text-sm text-[#9E6738]"></i>
+        </button>
+        <button id="modal-close-btn" class="w-10 h-10 rounded-full bg-[#0D0C0B]/80 hover:bg-[#0D0C0B] text-white flex items-center justify-center transition-colors shadow-md cursor-pointer" aria-label="Close modal">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
 
       <div class="md:w-1/2 relative bg-stone-900 min-h-[300px] sm:min-h-[380px] md:min-h-[500px] flex items-center justify-center p-0 overflow-hidden">
         <img 
@@ -1803,7 +1815,7 @@
           </div>
         </div>
 
-        <div class="pt-4 border-t border-stone-200 flex flex-col sm:flex-row gap-3 font-mono">
+        <div class="pt-4 border-t border-stone-200 flex flex-col sm:flex-row gap-2.5 font-mono">
           <a 
             id="modal-whatsapp-btn" 
             href="#" 
@@ -1814,6 +1826,17 @@
             <i class="fa-brands fa-whatsapp text-base"></i>
             <span>WhatsApp (97784 46620)</span>
           </a>
+
+          <button 
+            id="modal-share-btn" 
+            type="button" 
+            onclick="shareCurrentModalProduct(event)"
+            class="py-3.5 px-4 rounded-2xl font-bold text-xs uppercase tracking-wider bg-stone-100 hover:bg-teak hover:text-white text-stone-800 transition-all shadow-sm border border-stone-200 flex items-center justify-center gap-2 cursor-pointer group"
+            title="Share direct product link"
+          >
+            <i class="fa-solid fa-share-nodes text-teak group-hover:text-white transition-colors"></i>
+            <span>Share</span>
+          </button>
 
           <button 
             id="modal-add-to-quote-btn" 
@@ -1838,6 +1861,139 @@
           </div>
         </div>
 
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       11b. LUXURY PRODUCT SHARING MODAL DIALOG
+       ========================================================================= -->
+  <div id="product-share-modal" class="modal-overlay modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0D0C0B]/85 backdrop-blur-md">
+    <div class="modal-container relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-stone-200 p-6 sm:p-7 flex flex-col space-y-5 text-[#0D0C0B]">
+      
+      <button id="share-modal-close-btn" type="button" onclick="closeShareModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 flex items-center justify-center transition-colors cursor-pointer" aria-label="Close share dialog">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
+      <!-- Header -->
+      <div class="flex items-center gap-3 pr-8">
+        <div class="w-11 h-11 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-teak text-lg shadow-sm flex-shrink-0">
+          <i class="fa-solid fa-share-nodes"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-mono uppercase tracking-widest text-teak font-bold block">Direct Product Sharing</span>
+          <h3 class="font-heading text-lg font-bold text-[#0D0C0B] leading-tight">Share This Piece</h3>
+        </div>
+      </div>
+
+      <!-- Product Summary Card -->
+      <div class="flex items-center gap-3.5 p-3 rounded-2xl bg-[#FAF8F5] border border-stone-200/80">
+        <div class="w-16 h-16 rounded-xl overflow-hidden bg-stone-900 border border-stone-200 flex-shrink-0">
+          <img id="share-modal-img" src="assets/slated-coffee-table.jpg" alt="Product" class="w-full h-full object-cover">
+        </div>
+        <div class="min-w-0 flex-1">
+          <span id="share-modal-category" class="text-[10px] font-mono text-teak font-bold block uppercase tracking-wider line-clamp-1">Category</span>
+          <h4 id="share-modal-title" class="font-heading text-sm font-bold text-[#0D0C0B] line-clamp-1">Product Title</h4>
+          <div class="flex items-center gap-2 mt-0.5">
+            <span id="share-modal-price" class="text-xs font-mono font-black text-emerald-800">₹0</span>
+            <span id="share-modal-mrp" class="text-[10px] font-mono text-stone-400 line-through">₹0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Link Copy Box -->
+      <div class="space-y-1.5">
+        <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-stone-600">
+          Direct Product Link
+        </label>
+        <div class="flex items-center gap-2">
+          <input 
+            id="share-modal-link-input" 
+            type="text" 
+            readonly 
+            class="flex-1 text-xs p-3 rounded-xl border border-stone-300 bg-stone-50 font-mono text-stone-700 select-all focus:outline-none focus:border-teak"
+          />
+          <button 
+            id="share-modal-copy-btn" 
+            type="button" 
+            onclick="copyShareModalLink()" 
+            class="px-4 py-3 rounded-xl bg-[#0D0C0B] hover:bg-teak text-white font-mono text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm flex-shrink-0"
+          >
+            <i class="fa-solid fa-copy text-xs"></i>
+            <span id="share-modal-copy-btn-text">Copy</span>
+          </button>
+        </div>
+        <p class="text-[10px] font-mono text-stone-400">
+          Anyone opening this link will view this exact product, pricing, and workshop specifications.
+        </p>
+      </div>
+
+      <!-- Social Channels Grid -->
+      <div class="space-y-2 pt-1 border-t border-stone-100">
+        <span class="block text-[10px] font-mono font-bold uppercase tracking-wider text-stone-500">
+          Share directly to:
+        </span>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-xs">
+          <!-- WhatsApp -->
+          <a 
+            id="share-social-whatsapp" 
+            href="#" 
+            target="_blank" 
+            rel="noopener" 
+            class="p-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-800 border border-emerald-200 transition-colors flex flex-col items-center justify-center gap-1 text-center font-bold"
+          >
+            <i class="fa-brands fa-whatsapp text-lg"></i>
+            <span class="text-[10px]">WhatsApp</span>
+          </a>
+
+          <!-- Copy for Instagram -->
+          <button 
+            type="button" 
+            onclick="shareToInstagram()" 
+            class="p-2.5 rounded-xl bg-pink-50 hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:text-white text-pink-700 border border-pink-200 transition-all flex flex-col items-center justify-center gap-1 text-center font-bold cursor-pointer"
+          >
+            <i class="fa-brands fa-instagram text-lg"></i>
+            <span class="text-[10px]">Instagram</span>
+          </button>
+
+          <!-- Facebook -->
+          <a 
+            id="share-social-facebook" 
+            href="#" 
+            target="_blank" 
+            rel="noopener" 
+            class="p-2.5 rounded-xl bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-800 border border-blue-200 transition-colors flex flex-col items-center justify-center gap-1 text-center font-bold"
+          >
+            <i class="fa-brands fa-facebook-f text-lg"></i>
+            <span class="text-[10px]">Facebook</span>
+          </a>
+
+          <!-- X / Twitter -->
+          <a 
+            id="share-social-twitter" 
+            href="#" 
+            target="_blank" 
+            rel="noopener" 
+            class="p-2.5 rounded-xl bg-stone-100 hover:bg-stone-900 hover:text-white text-stone-800 border border-stone-200 transition-colors flex flex-col items-center justify-center gap-1 text-center font-bold"
+          >
+            <i class="fa-brands fa-x-twitter text-lg"></i>
+            <span class="text-[10px]">X / Twitter</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Mobile Web Share Button if supported -->
+      <div id="share-modal-native-container" class="pt-1">
+        <button 
+          id="share-modal-native-btn" 
+          type="button" 
+          onclick="triggerNativeShareFromModal()" 
+          class="w-full py-2.5 px-4 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-700 font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-colors"
+        >
+          <i class="fa-solid fa-arrow-up-from-bracket text-xs text-teak"></i>
+          <span>More Share Options (System Menu)</span>
+        </button>
       </div>
 
     </div>
