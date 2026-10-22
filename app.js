@@ -14,8 +14,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "custom-1792640905187",
     "name": "RIPPER MODEL 5 FEET TEAK COT",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "bedroom",
+    "categoryName": "Bedroom & Cots",
     "materialCategory": "natural-wood",
     "materialType": "100% Pure Kiln-Seasoned Solid Grade-A Natural Teak",
     "warranty": "5-Year Structural Integrity Warranty",
@@ -38,8 +38,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "custom-1792579673061",
     "name": "TEAK WOOD DINING TABLE AND CHAIRS SET",
-    "category": "living",
-    "categoryName": "Living & Sofas",
+    "category": "dining",
+    "categoryName": "Dining Suites",
     "materialCategory": "natural-wood",
     "materialType": "100% Pure Kiln-Seasoned Solid Grade-A Natural Teak",
     "warranty": "5-Year Structural Integrity Warranty",
@@ -86,8 +86,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "bed-premium-cot",
     "name": "Premium 6-Foot Wooden Cot",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "bedroom",
+    "categoryName": "Bedroom & Cots",
     "materialCategory": "natural-wood",
     "materialType": "100% Pure Kiln-Seasoned Solid Teak Wood",
     "warranty": "5-Year Manufacturing & Timber Warranty",
@@ -134,8 +134,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "bed-timber-cot",
     "name": "The Timber Cot (6 Feet of Natural Elegance)",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "bedroom",
+    "categoryName": "Bedroom & Cots",
     "materialCategory": "natural-wood",
     "materialType": "100% Seasoned Natural Teak Wood",
     "warranty": "5-Year Structural Integrity Warranty",
@@ -158,8 +158,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "dining-oval-marble",
     "name": "The Oval Dining Table (Marble & Teak)",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "dining",
+    "categoryName": "Dining Suites",
     "materialCategory": "natural-wood",
     "materialType": "Italian Polished White Marble Top & Monolithic Teak Pedestals",
     "warranty": "5-Year Craftsmanship & Material Warranty",
@@ -206,8 +206,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "dining-curve-chair",
     "name": "The Curve Dining Chair",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "dining",
+    "categoryName": "Dining Suites",
     "materialCategory": "natural-wood",
     "materialType": "Sculptured Solid Teak Wood & Heavy-Duty Cream Bouclé",
     "warranty": "5-Year Joint & Structural Warranty",
@@ -230,8 +230,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "dining-harmony-table",
     "name": "The Harmony Dining Table",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "dining",
+    "categoryName": "Dining Suites",
     "materialCategory": "natural-wood",
     "materialType": "White Calacatta Marble Top & Interlocking Cross-Curved Teak Legs",
     "warranty": "5-Year Full Workshop Warranty",
@@ -254,8 +254,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "dining-oval-set",
     "name": "The Oval Dining Set (Complete with 6 Chairs)",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "dining",
+    "categoryName": "Dining Suites",
     "materialCategory": "natural-wood",
     "materialType": "Oval Solid Wood Dining Table + 6 Curved Leatherette Chairs",
     "warranty": "5-Year Comprehensive Suite Warranty",
@@ -278,8 +278,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "dining-oval-teak",
     "name": "The Oval Dining Table (Natural Teak Edition)",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "dining",
+    "categoryName": "Dining Suites",
     "materialCategory": "natural-wood",
     "materialType": "100% Solid Grade-A Natural Teak Wood (Zero Veneers)",
     "warranty": "5-Year Timber & Manufacturing Warranty",
@@ -303,7 +303,7 @@ const DEFAULT_PRODUCTS = [
     "id": "custom-royal-jhoola",
     "name": "The Royal Jhoola (Kerala Verandah Oonjal)",
     "category": "custom-woodwork",
-    "categoryName": "Custom Woodwork",
+    "categoryName": "Custom Bespoke Kerala Woodwork",
     "materialCategory": "natural-wood",
     "materialType": "Solid Grade-A Natural Teak Wood Planks & Handcrafted Brass/Steel Chains",
     "warranty": "5-Year Heavy-Duty Structural Warranty",
@@ -326,8 +326,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "dining-oval-fluted",
     "name": "The Oval Fluted Dining Table",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "dining",
+    "categoryName": "Dining Suites",
     "materialCategory": "natural-wood",
     "materialType": "White Italian Marble Top & Fluted Teak Cylindrical Pillar Base",
     "warranty": "5-Year Masterpiece Guarantee",
@@ -494,8 +494,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "bed-royal-carved-cot",
     "name": "Royal Carved Solid Teak King Cot (6×6.5 Ft)",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "bedroom",
+    "categoryName": "Bedroom & Cots",
     "materialCategory": "natural-wood",
     "materialType": "Grade-A Natural Teak Wood",
     "warranty": "5-Year Structural Integrity Warranty",
@@ -518,8 +518,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "bed-solid-teak-wardrobe",
     "name": "Master 3-Door Solid Teak Wardrobe",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "bedroom",
+    "categoryName": "Bedroom & Cots",
     "materialCategory": "natural-wood",
     "materialType": "Grade-A Natural Teak Wood",
     "warranty": "5-Year Structural Integrity Warranty",
@@ -542,8 +542,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "dining-teak-6seater-set",
     "name": "6-Seater Solid Teak Wood Dining Suite",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "dining",
+    "categoryName": "Dining Suites",
     "materialCategory": "natural-wood",
     "materialType": "Grade-A Natural Teak Wood",
     "warranty": "5-Year Structural Integrity Warranty",
@@ -758,8 +758,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "bed-teak-panel-king-cot",
     "name": "Classic Raised-Panel Solid Teak King Cot",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "bedroom",
+    "categoryName": "Bedroom & Cots",
     "materialCategory": "natural-wood",
     "materialType": "Grade-A Natural Teak Wood",
     "warranty": "5-Year Structural Integrity Warranty",
@@ -782,8 +782,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "bed-fluted-teak-cot",
     "name": "The Fluted Headboard Teak King Cot",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "bedroom",
+    "categoryName": "Bedroom & Cots",
     "materialCategory": "natural-wood",
     "materialType": "Grade-A Natural Teak Wood",
     "warranty": "5-Year Structural Integrity Warranty",
@@ -806,8 +806,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "bed-minimalist-teak-cot",
     "name": "Minimalist Platform Teak Cot (6×6 Ft)",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "bedroom",
+    "categoryName": "Bedroom & Cots",
     "materialCategory": "natural-wood",
     "materialType": "Grade-A Natural Teak Wood",
     "warranty": "5-Year Structural Integrity Warranty",
@@ -830,8 +830,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "bed-heritage-carved-cot",
     "name": "Heritage Floral Carved Teak King Cot",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "bedroom",
+    "categoryName": "Bedroom & Cots",
     "materialCategory": "natural-wood",
     "materialType": "Grade-A Natural Teak Wood",
     "warranty": "5-Year Structural Integrity Warranty",
@@ -854,8 +854,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "dining-royal-suite",
     "name": "The Royal 6-Seater Teak Dining Suite",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "dining",
+    "categoryName": "Dining Suites",
     "materialCategory": "natural-wood",
     "materialType": "Grade-A Natural Teak Wood",
     "warranty": "5-Year Structural Integrity Warranty",
@@ -878,8 +878,8 @@ const DEFAULT_PRODUCTS = [
   {
     "id": "dining-teak-oval-craft-table",
     "name": "Artisan Oval Teak Pedestal Dining Table",
-    "category": "bedroom-dining",
-    "categoryName": "Bedroom & Dining",
+    "category": "dining",
+    "categoryName": "Dining Suites",
     "materialCategory": "natural-wood",
     "materialType": "Grade-A Natural Teak Wood",
     "warranty": "5-Year Structural Integrity Warranty",
@@ -1106,7 +1106,7 @@ const DEFAULT_HERO_SLIDES = [
 // Active State
 let PRODUCTS = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
 let HERO_SLIDES = JSON.parse(JSON.stringify(DEFAULT_HERO_SLIDES));
-let currentFilter = 'all';
+let currentFilter = 'living';
 let selectedProductForModal = null;
 let currentHeroSlideIndex = 0;
 let heroSlideTimer = null;
@@ -1370,7 +1370,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroParallax();
   initHeroCarousel();
   renderCuratedHighlights();
-  renderBentoGallery('all');
+  renderBentoGallery('living');
   initFilterButtons();
   initModalListeners();
   initMaterialComparator();
@@ -2025,9 +2025,31 @@ function renderBentoGallery(filterCategory) {
   const gridContainer = document.getElementById('bento-grid-container');
   if (!gridContainer) return;
 
-  const filtered = filterCategory === 'all' 
-    ? PRODUCTS 
-    : PRODUCTS.filter(p => p.category === filterCategory);
+  const activeCategory = filterCategory || currentFilter || 'living';
+  currentFilter = activeCategory;
+
+  const isBedroom = (p) => {
+    const text = (p.name + ' ' + (p.dimensions || '') + ' ' + (p.description || '')).toLowerCase();
+    return text.includes('cot') || text.includes('bed') || text.includes('wardrobe') || text.includes('almirah');
+  };
+
+  const filtered = PRODUCTS.filter(p => {
+    if (activeCategory === 'all') return true;
+    if (activeCategory === 'living') return p.category === 'living';
+    if (activeCategory === 'bedroom') {
+      return p.category === 'bedroom' || (p.category === 'bedroom-dining' && isBedroom(p));
+    }
+    if (activeCategory === 'dining') {
+      return p.category === 'dining' || (p.category === 'bedroom-dining' && !isBedroom(p));
+    }
+    if (activeCategory === 'custom-woodwork') {
+      return p.category === 'custom-woodwork' || p.category === 'custom';
+    }
+    if (activeCategory === 'office') {
+      return p.category === 'office';
+    }
+    return p.category === activeCategory;
+  });
 
   gridContainer.innerHTML = '';
 
@@ -2195,10 +2217,14 @@ function initFilterButtons() {
   const filterBtns = document.querySelectorAll('.bento-filter-btn');
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active', 'bg-[#0D0C0B]', 'text-white'));
-      btn.classList.add('active', 'bg-[#0D0C0B]', 'text-white');
+      filterBtns.forEach(b => {
+        b.classList.remove('active', 'bg-[#0D0C0B]', 'text-white', 'shadow-md');
+        b.classList.add('border-stone-200', 'text-stone-700', 'bg-white');
+      });
+      btn.classList.remove('border-stone-200', 'text-stone-700', 'bg-white');
+      btn.classList.add('active', 'bg-[#0D0C0B]', 'text-white', 'shadow-md');
       
-      const category = btn.getAttribute('data-filter');
+      const category = btn.getAttribute('data-filter') || 'living';
       currentFilter = category;
       
       const grid = document.getElementById('bento-grid-container');
@@ -2940,12 +2966,18 @@ function selectConfiguratorItemFromProduct(product) {
 
   if (product.category === 'living') {
     matchItem = product.name.toLowerCase().includes('table') ? 'Frosted Glass Coffee Table' : 'Sofa Set';
+  } else if (product.category === 'bedroom') {
+    matchItem = 'Solid Wood Cot/Bed';
+  } else if (product.category === 'dining') {
+    matchItem = 'Dining Table & Cane Chairs';
   } else if (product.category === 'bedroom-dining') {
     matchItem = product.name.toLowerCase().includes('cot') || product.name.toLowerCase().includes('bed') 
       ? 'Solid Wood Cot/Bed' 
       : 'Dining Table & Cane Chairs';
   } else if (product.category === 'custom-woodwork') {
     matchItem = 'Custom Woodwork';
+  } else if (product.category === 'office') {
+    matchItem = 'Modular Office Desk';
   }
 
   if (!quoteState.items.includes(matchItem)) {
@@ -4011,6 +4043,8 @@ window.handleAddNewProduct = function(event) {
 
   const categoryNames = {
     'living': 'Living & Sofas',
+    'bedroom': 'Bedroom & Cots',
+    'dining': 'Dining Suites',
     'bedroom-dining': 'Bedroom & Dining',
     'office': 'Office & Modular',
     'custom-woodwork': 'Custom Bespoke Kerala Woodwork',

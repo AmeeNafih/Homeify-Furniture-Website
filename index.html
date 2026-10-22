@@ -511,38 +511,38 @@
       <!-- Category Filter Pills (Touch-swipeable on mobile, centered wrapped on desktop) -->
       <div class="flex items-center sm:justify-center gap-2 sm:gap-3 mb-8 sm:mb-12 overflow-x-auto no-scrollbar pb-2 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0 flex-nowrap sm:flex-wrap">
         <button 
-          class="bento-filter-btn active flex-shrink-0 whitespace-nowrap px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs font-bold uppercase tracking-wider border border-[#0D0C0B] bg-[#0D0C0B] text-white shadow-md font-mono"
-          data-filter="all"
-        >
-          <i class="fa-solid fa-shapes mr-1.5"></i> All Collections
-        </button>
-
-        <button 
-          class="bento-filter-btn flex-shrink-0 whitespace-nowrap px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs font-bold uppercase tracking-wider border border-stone-200 text-stone-700 hover:border-[#0D0C0B] hover:text-[#0D0C0B] transition-all bg-white font-mono"
+          class="bento-filter-btn active flex-shrink-0 whitespace-nowrap px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs font-bold uppercase tracking-wider border border-[#0D0C0B] bg-[#0D0C0B] text-white shadow-md font-mono transition-all duration-300"
           data-filter="living"
         >
           <i class="fa-solid fa-couch mr-1.5"></i> Living & Sofas
         </button>
 
         <button 
-          class="bento-filter-btn flex-shrink-0 whitespace-nowrap px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs font-bold uppercase tracking-wider border border-stone-200 text-stone-700 hover:border-[#0D0C0B] hover:text-[#0D0C0B] transition-all bg-white font-mono"
-          data-filter="bedroom-dining"
+          class="bento-filter-btn flex-shrink-0 whitespace-nowrap px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs font-bold uppercase tracking-wider border border-stone-200 text-stone-700 hover:border-[#0D0C0B] hover:text-[#0D0C0B] transition-all duration-300 bg-white font-mono"
+          data-filter="bedroom"
         >
-          <i class="fa-solid fa-bed mr-1.5"></i> Bedroom & Dining
+          <i class="fa-solid fa-bed mr-1.5"></i> Bedroom & Cots
         </button>
 
         <button 
-          class="bento-filter-btn flex-shrink-0 whitespace-nowrap px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs font-bold uppercase tracking-wider border border-stone-200 text-stone-700 hover:border-[#0D0C0B] hover:text-[#0D0C0B] transition-all bg-white font-mono"
-          data-filter="office"
+          class="bento-filter-btn flex-shrink-0 whitespace-nowrap px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs font-bold uppercase tracking-wider border border-stone-200 text-stone-700 hover:border-[#0D0C0B] hover:text-[#0D0C0B] transition-all duration-300 bg-white font-mono"
+          data-filter="dining"
         >
-          <i class="fa-solid fa-briefcase mr-1.5"></i> Office & Modular
+          <i class="fa-solid fa-utensils mr-1.5"></i> Dining Suites
         </button>
 
         <button 
-          class="bento-filter-btn flex-shrink-0 whitespace-nowrap px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs font-bold uppercase tracking-wider border border-stone-200 text-stone-700 hover:border-[#0D0C0B] hover:text-[#0D0C0B] transition-all bg-white font-mono"
+          class="bento-filter-btn flex-shrink-0 whitespace-nowrap px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs font-bold uppercase tracking-wider border border-stone-200 text-stone-700 hover:border-[#0D0C0B] hover:text-[#0D0C0B] transition-all duration-300 bg-white font-mono"
           data-filter="custom-woodwork"
         >
           <i class="fa-solid fa-hammer mr-1.5"></i> Custom Woodwork
+        </button>
+
+        <button 
+          class="bento-filter-btn flex-shrink-0 whitespace-nowrap px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs font-bold uppercase tracking-wider border border-stone-200 text-stone-700 hover:border-[#0D0C0B] hover:text-[#0D0C0B] transition-all duration-300 bg-white font-mono"
+          data-filter="office"
+        >
+          <i class="fa-solid fa-briefcase mr-1.5"></i> Office & Modular
         </button>
       </div>
 
@@ -2700,9 +2700,10 @@
                 class="w-full text-xs p-3 rounded-xl border border-stone-300 bg-[#FAF8F5] focus:outline-none focus:border-teak"
               >
                 <option value="living">Living & Sofas</option>
-                <option value="bedroom-dining">Bedroom & Dining</option>
-                <option value="office">Office & Modular</option>
+                <option value="bedroom">Bedroom & Cots</option>
+                <option value="dining">Dining Suites</option>
                 <option value="custom-woodwork">Custom Bespoke Kerala Woodwork</option>
+                <option value="office">Office & Modular</option>
               </select>
             </div>
           </div>
