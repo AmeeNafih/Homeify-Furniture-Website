@@ -243,7 +243,7 @@ const DEFAULT_PRODUCTS = [
     priceEstimate: '₹92,000 (Direct Workshop Price for Set of 6)',
     leadTime: '14 to 18 Working Days',
     image: 'assets/oval-dining-set-chairs.jpg',
-    description: 'The ultimate dining ensemble crafted in Erattupetta. An expansive oval solid wood dining table paired with 6 ergonomically curved dining armchairs in stain-resistant cream leatherette.',
+    description: 'The ultimate dining ensemble crafted in Gateway of Malanadu. An expansive oval solid wood dining table paired with 6 ergonomically curved dining armchairs in stain-resistant cream leatherette.',
     features: [
       'Curved oval table design facilitates natural conversation across all guests',
       'Includes 6 bespoke curved armchairs tailored to nest seamlessly under table',
@@ -344,7 +344,7 @@ const DEFAULT_PRODUCTS = [
       'Interlocking cross-lap solid timber joinery for indestructible stability',
       'Round solid wood top highlighting natural growth rings and golden woodgrain',
       'Compact footprint perfect for living lounge seating and reading nooks',
-      '100% seasoned solid timber crafted in Erattupetta'
+      '100% seasoned solid timber crafted in Gateway of Malanadu'
     ]
   },
   {
