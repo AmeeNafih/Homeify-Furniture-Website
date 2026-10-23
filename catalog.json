@@ -430,78 +430,6 @@
     ]
   },
   {
-    "id": "living-handcrafted-teapoy",
-    "name": "Artisan Solid Teak Teapoy / Coffee Table",
-    "category": "coffee-tables",
-    "categoryName": "Coffee Tables & Teapoys",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood",
-    "warranty": "5-Year Structural Integrity Warranty",
-    "dimensions": "42\"L × 24\"W × 18\"H",
-    "finish": "Organic Matte Natural Teak Polish",
-    "badge": "Workshop Handcrafted",
-    "mrp": "₹16,500",
-    "factoryPrice": "₹8,999",
-    "priceEstimate": "₹8,999 (Direct Workshop Price)",
-    "leadTime": "5 to 7 Working Days",
-    "image": "assets/handcrafted-teak-teapoy.jpg",
-    "description": "Sleek and functional center coffee table featuring clean solid teak perimeter profiling, integrated bottom magazine shelf, and heavy-duty corner support posts.",
-    "features": [
-      "Solid Grade-A natural teakwood construction",
-      "Lower slatted tier for books, decor, and remotes",
-      "Water and heat ring resistant surface protection",
-      "Crafted in Gateway of Malanadu"
-    ]
-  },
-  {
-    "id": "living-classic-teapoy",
-    "name": "The Classic Fluted Solid Teak Teapoy",
-    "category": "coffee-tables",
-    "categoryName": "Coffee Tables & Teapoys",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood",
-    "warranty": "5-Year Structural Integrity Warranty",
-    "dimensions": "40\"L × 22\"W × 18\"H",
-    "finish": "Satin Honey Teak Moisture Seal",
-    "badge": "Direct Workshop Price",
-    "mrp": "₹14,000",
-    "factoryPrice": "₹7,499",
-    "priceEstimate": "₹7,499 (Direct Workshop Price)",
-    "leadTime": "4 to 7 Working Days",
-    "image": "assets/classic-fluted-teapoy.jpg",
-    "description": "A timeless Kerala living room accent teapoy. Features hand-turned corner pillars, bevel-edged top framing, and a smooth bottom storage deck.",
-    "features": [
-      "Grade-A natural teak frame with hand-sculpted pillars",
-      "Dual-deck utility for daily living room needs",
-      "5-Year Full Structural Integrity Warranty",
-      "Direct factory pickup or delivery from Gateway of Malanadu"
-    ]
-  },
-  {
-    "id": "bed-royal-carved-cot",
-    "name": "Royal Carved Solid Teak King Cot (6×6.5 Ft)",
-    "category": "cots",
-    "categoryName": "Cots & Beds",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood",
-    "warranty": "5-Year Structural Integrity Warranty",
-    "dimensions": "78\"L × 72\"W × 48\"H (Fits King Mattress)",
-    "finish": "Warm Golden Teak Hand Polish",
-    "badge": "Master Craftsman Series",
-    "mrp": "₹85,000",
-    "factoryPrice": "₹58,999",
-    "priceEstimate": "₹58,999 (Direct Workshop Price)",
-    "leadTime": "12 to 16 Working Days",
-    "image": "assets/royal-carved-teak-cot.jpg",
-    "description": "A statement master bedroom cot carved from massive Grade-A solid teak. Boasts a crowned arch headboard with fluted floral relief accents and reinforced monolithic support pillars.",
-    "features": [
-      "Heavy monolithic corner posts with noiseless mortise joinery",
-      "Hand-carved architectural crown on seasoned teak headboard",
-      "Internal cross-braced solid wood foundation for ultimate mattress support",
-      "Direct factory price from the Gateway of Malanadu"
-    ]
-  },
-  {
     "id": "bed-solid-teak-wardrobe",
     "name": "Master 3-Door Solid Teak Wardrobe",
     "category": "wardrobes",
@@ -547,30 +475,6 @@
       "6 high-back comfort chairs with high-resilience foam cushioning",
       "Spill-proof and hot dish heat-resistant top finish",
       "Handcrafted in Gateway of Malanadu"
-    ]
-  },
-  {
-    "id": "custom-architectural-teak-door",
-    "name": "Grand Padippura Solid Teak Main Entrance Door",
-    "category": "doors-custom",
-    "categoryName": "Doors & Custom Woodwork",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood",
-    "warranty": "10-Year Timber Durability Guarantee",
-    "dimensions": "84\"H × 42\"W × 2\" Thickness",
-    "finish": "Weatherproof Exterior Polyurethane Teak Seal",
-    "badge": "Bespoke Architectural",
-    "mrp": "₹55,000",
-    "factoryPrice": "₹34,500",
-    "priceEstimate": "₹34,500 (Direct Workshop Price)",
-    "leadTime": "12 to 15 Working Days",
-    "image": "assets/architectural-teak-door.jpg",
-    "description": "Custom architectural villa entrance door meticulously carved from Grade-A mature natural teak. Deep dimensional paneling designed to greet guests with stately prestige.",
-    "features": [
-      "Substantial 2-inch thick solid seasoned teak planks",
-      "Deep carved geometric relief panels with traditional Kerala motifs",
-      "Treated with weather-resistant exterior sealant against sun & heavy monsoon rains",
-      "Custom dimensions crafted to your architect's frame opening"
     ]
   },
   {
@@ -643,30 +547,6 @@
       "Monolithic solid teak pedestals engineered for heavy-duty stability with hidden wire raceway options",
       "Stain-resistant and scratch-resistant Italian marble top ideal for intensive daily use",
       "Custom dimensions and integrated power/data box options available on order"
-    ]
-  },
-  {
-    "id": "office-modular-workstations",
-    "name": "Modular Office Workstations & Storage Credenza",
-    "category": "doors-custom",
-    "categoryName": "Doors & Custom Woodwork",
-    "materialCategory": "particle-board",
-    "materialType": "Premium Grade-E1 Moisture-Resistant Particle Board & Teak Accents",
-    "warranty": "5-Year Hardware & Delamination Warranty",
-    "dimensions": "Custom Modular Configurations (2-Pod, 4-Pod & Linear)",
-    "finish": "Textured Melamine Anti-Scratch Finish with 2mm Impact Edge Banding",
-    "badge": "Modular Ergonomics",
-    "mrp": "₹45,000 / pod",
-    "factoryPrice": "₹29,500 / pod",
-    "priceEstimate": "₹29,500 / pod (Direct Workshop Price)",
-    "leadTime": "10 to 14 Working Days",
-    "image": "assets/artisanal-slated-workshop.jpg",
-    "description": "High-performance modular office setups engineered for Kerala commercial spaces, creative studios, and corporate cabins. Manufactured with zero formaldehyde Grade-E1 engineered boards and precision German hardware.",
-    "features": [
-      "Moisture-resistant Grade-E1 engineered particle boards with heavy-duty 2mm PVC edge banding",
-      "Integrated under-desk wire management raceways and silent soft-close drawer slides",
-      "Customizable privacy acoustic screens, CPU holders, and credenza storage pedestals",
-      "Turnkey delivery and on-site assembly across Kottayam, Cochin, and all Kerala districts"
     ]
   },
   {
@@ -833,54 +713,6 @@
     ]
   },
   {
-    "id": "dining-royal-suite",
-    "name": "The Royal 6-Seater Teak Dining Suite",
-    "category": "dining-tables",
-    "categoryName": "Dining Tables & Suites",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood",
-    "warranty": "5-Year Structural Integrity Warranty",
-    "dimensions": "Table: 66\"L × 36\"W × 30\"H + 6 Chairs",
-    "finish": "Heat & Moisture Sealed Teak Matt",
-    "badge": "Complete Dining Set",
-    "mrp": "₹74,000",
-    "factoryPrice": "₹48,500",
-    "priceEstimate": "₹48,500 (Direct Workshop Price)",
-    "leadTime": "10 to 14 Working Days",
-    "image": "assets/royal-teak-dining-suite.jpg",
-    "description": "Solid teak 6-seater dining table with six hand-planed curved ergonomic dining chairs with water-resistant upholstery.",
-    "features": [
-      "Seamless solid teak dining surface with stain-shield polyurethane",
-      "6 ergonomic dining chairs with high-density padded seats",
-      "Interlocking cross-braced table foundation for rock-solid stability",
-      "Handcrafted in Gateway of Malanadu"
-    ]
-  },
-  {
-    "id": "dining-teak-oval-craft-table",
-    "name": "Artisan Oval Teak Pedestal Dining Table",
-    "category": "dining-tables",
-    "categoryName": "Dining Tables & Suites",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood",
-    "warranty": "5-Year Structural Integrity Warranty",
-    "dimensions": "72\"L × 40\"W × 30\"H (6 to 8 Seater)",
-    "finish": "Hand-Rubbed Organic Teak Satin Finish",
-    "badge": "Pedestal Luxury",
-    "mrp": "₹56,000",
-    "factoryPrice": "₹36,999",
-    "priceEstimate": "₹36,999 (Direct Workshop Price)",
-    "leadTime": "10 to 14 Working Days",
-    "image": "assets/teak-oval-craft-table.jpg",
-    "description": "Seamless oval dining table showcasing bookmatched natural teak grain with twin sturdy pedestals maximizing leg clearance.",
-    "features": [
-      "Curved oval silhouette preventing sharp corner collisions",
-      "Dual solid teak center pedestals leaving corners completely open",
-      "100% Grade-A kiln-seasoned natural teakwood",
-      "Crafted in Gateway of Malanadu"
-    ]
-  },
-  {
     "id": "living-traditional-verandah-chair",
     "name": "Traditional Kerala Easy Verandah Chair",
     "category": "chairs",
@@ -905,54 +737,6 @@
     ]
   },
   {
-    "id": "living-teak-easy-armchair",
-    "name": "Hand-Sculpted Teak Sitout Armchair",
-    "category": "chairs",
-    "categoryName": "Sitout & Dining Chairs",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood",
-    "warranty": "5-Year Structural Integrity Warranty",
-    "dimensions": "32\"L × 26\"W × 35\"H",
-    "finish": "Deep Honey Teak Weatherproof Polish",
-    "badge": "Sitout Lounger",
-    "mrp": "₹25,000",
-    "factoryPrice": "₹15,500",
-    "priceEstimate": "₹15,500 (Direct Workshop Price)",
-    "leadTime": "5 to 8 Working Days",
-    "image": "assets/teak-easy-armchair.jpg",
-    "description": "Heavy-duty outdoor-indoor verandah armchair crafted from Grade-A natural teak with weather-resistant satin PU finish.",
-    "features": [
-      "Heavy-section timber posts built for open-air verandahs",
-      "Solid wood slatted seat with natural airflow ventilation",
-      "Handcrafted in Gateway of Malanadu",
-      "5-Year Full Structural Integrity Warranty"
-    ]
-  },
-  {
-    "id": "living-sculpted-teapoy",
-    "name": "The Sculpted Solid Teak Teapoy",
-    "category": "coffee-tables",
-    "categoryName": "Coffee Tables & Teapoys",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood",
-    "warranty": "5-Year Structural Integrity Warranty",
-    "dimensions": "38\"L × 22\"W × 18\"H",
-    "finish": "Satin Honey Teak Moisture Seal",
-    "badge": "Living Room Accent",
-    "mrp": "₹15,000",
-    "factoryPrice": "₹8,499",
-    "priceEstimate": "₹8,499 (Direct Workshop Price)",
-    "leadTime": "4 to 7 Working Days",
-    "image": "assets/sculpted-teak-teapoy.jpg",
-    "description": "Artisan coffee table with chamfered perimeter edging, sturdy solid wood legs, and convenient lower storage shelf.",
-    "features": [
-      "Smooth rounded top edges with natural teak woodgrain",
-      "Integrated bottom shelf for reading materials and decor",
-      "Heat and water-ring resistant topcoat protection",
-      "Crafted in Gateway of Malanadu"
-    ]
-  },
-  {
     "id": "living-glass-top-teapoy",
     "name": "Glass-Top Teak Wood Coffee Table",
     "category": "coffee-tables",
@@ -974,30 +758,6 @@
       "Interlocking solid teak joinery with lower magazine shelf",
       "5-Year Full Warranty included",
       "Direct factory pickup or delivery from Gateway of Malanadu"
-    ]
-  },
-  {
-    "id": "custom-ornate-entrance-door",
-    "name": "Ornate Hand-Carved Teak Villa Entrance Door",
-    "category": "doors-custom",
-    "categoryName": "Doors & Custom Woodwork",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood",
-    "warranty": "10-Year Timber Durability Guarantee",
-    "dimensions": "84\"H × 42\"W × 2\" Thickness",
-    "finish": "Weatherproof Exterior Polyurethane Teak Seal",
-    "badge": "Villa Heritage",
-    "mrp": "₹62,000",
-    "factoryPrice": "₹38,000",
-    "priceEstimate": "₹38,000 (Direct Workshop Price)",
-    "leadTime": "14 to 18 Working Days",
-    "image": "assets/ornate-teak-entrance-door.jpg",
-    "description": "Bespoke Kerala villa main door carved from 2-inch thick seasoned natural teak with dimensional raised panels and brass studs.",
-    "features": [
-      "Massive 2-inch thick solid seasoned Grade-A teak construction",
-      "Traditional carved central rosette panels with heavy-duty framing",
-      "Weather-shield exterior barrier against sun and heavy monsoon rainfall",
-      "Custom dimensions tailored to your architect's masonry opening"
     ]
   },
   {
@@ -1216,54 +976,6 @@
     ]
   },
   {
-    "id": "dining-rectangular-table",
-    "name": "Solid Teak 8-Seater Rectangular Dining Table",
-    "category": "dining-tables",
-    "categoryName": "Dining Tables & Suites",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood",
-    "warranty": "5-Year Structural Integrity Warranty",
-    "dimensions": "84\"L × 42\"W × 30\"H",
-    "finish": "Heat & Spill Proof Satin Teak PU",
-    "badge": "Grand Feast Table",
-    "mrp": "₹75,000",
-    "factoryPrice": "₹49,000",
-    "priceEstimate": "₹49,000 (Direct Workshop Price)",
-    "leadTime": "10 to 14 Working Days",
-    "image": "assets/teak-rectangular-dining-table.jpg",
-    "description": "Massive 8-seater solid wood dining table constructed from 1.5-inch thick Grade-A natural teak planks with chamfered edge profiling.",
-    "features": [
-      "Continuous solid teak timber top planks with natural grain",
-      "Interlocking corner aprons and monolithic legs",
-      "5-Year Full Structural Warranty",
-      "Handcrafted in Gateway of Malanadu"
-    ]
-  },
-  {
-    "id": "dining-round-table",
-    "name": "Round Solid Teak Family Dining Table (54 Inch)",
-    "category": "dining-tables",
-    "categoryName": "Dining Tables & Suites",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood",
-    "warranty": "5-Year Structural Integrity Warranty",
-    "dimensions": "54\" Diameter × 30\" Height",
-    "finish": "Warm Teak Polyurethane Seal",
-    "badge": "Intimate Dining",
-    "mrp": "₹52,000",
-    "factoryPrice": "₹34,500",
-    "priceEstimate": "₹34,500 (Direct Workshop Price)",
-    "leadTime": "8 to 12 Working Days",
-    "image": "assets/teak-round-dining-table.jpg",
-    "description": "Circular solid wood dining table creating warm conversational dining for 6 persons. Supported by a sculpted central pedestal base.",
-    "features": [
-      "54-inch round solid teak top with beveled edges",
-      "Center spider-pedestal eliminates corner leg obstacles",
-      "Spill-proof and hot food heat resistant topcoat",
-      "Direct factory price from Gateway of Malanadu"
-    ]
-  },
-  {
     "id": "dining-architectural-table",
     "name": "Architectural Fluted Pedestal Dining Table",
     "category": "dining-tables",
@@ -1333,30 +1045,6 @@
       "100% Grade-A seasoned natural teak",
       "Brass swivel pins and reinforced joints",
       "Direct factory price from Gateway of Malanadu"
-    ]
-  },
-  {
-    "id": "chair-slat-verandah",
-    "name": "Contoured Slat Porch Lounger Chair",
-    "category": "chairs",
-    "categoryName": "Sitout & Dining Chairs",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood",
-    "warranty": "5-Year Structural Integrity Warranty",
-    "dimensions": "34\"L × 25\"W × 35\"H",
-    "finish": "Weather-Shield Satin Teak PU",
-    "badge": "Outdoor Lounger",
-    "mrp": "₹22,000",
-    "factoryPrice": "₹14,500",
-    "priceEstimate": "₹14,500 (Direct Workshop Price)",
-    "leadTime": "5 to 7 Working Days",
-    "image": "assets/teak-slat-verandah-chair.jpg",
-    "description": "Streamlined outdoor sitout armchair featuring calibrated wooden airflow slats, broad armrests, and weather-resistant satin sealant.",
-    "features": [
-      "Slat spacing designed for continuous tropical ventilation",
-      "Water and humidity resistant exterior polyurethane",
-      "5-Year Full Structural Warranty",
-      "Crafted in Gateway of Malanadu"
     ]
   },
   {
@@ -1432,30 +1120,6 @@
     ]
   },
   {
-    "id": "teapoy-round-table",
-    "name": "Round Solid Teakwood Center Table",
-    "category": "coffee-tables",
-    "categoryName": "Coffee Tables & Teapoys",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood",
-    "warranty": "5-Year Structural Integrity Warranty",
-    "dimensions": "32\" Diameter × 18\" Height",
-    "finish": "Organic Teak Matt Lacquer",
-    "badge": "Circular Centerpiece",
-    "mrp": "₹15,000",
-    "factoryPrice": "₹8,500",
-    "priceEstimate": "₹8,500 (Direct Workshop Price)",
-    "leadTime": "5 to 7 Working Days",
-    "image": "assets/round-teak-coffee-table.jpg",
-    "description": "Round coffee table showing natural radial teak grain with tapered solid wood splay legs and bottom shelf.",
-    "features": [
-      "Circular tabletop safe from sharp edges in family living rooms",
-      "Sturdy splayed tripod leg structure",
-      "5-Year Structural Guarantee",
-      "Direct workshop price from Gateway of Malanadu"
-    ]
-  },
-  {
     "id": "teapoy-oval-glass",
     "name": "The Oval Beveled Glass Teak Teapoy",
     "category": "coffee-tables",
@@ -1477,102 +1141,6 @@
       "Solid teak frame with lower open slatted tier",
       "Water-ring proof and easy to wipe clean",
       "Crafted in Gateway of Malanadu"
-    ]
-  },
-  {
-    "id": "wardrobe-2door",
-    "name": "Classic 2-Door Solid Teak Almirah",
-    "category": "wardrobes",
-    "categoryName": "Wardrobes & Storage",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood",
-    "warranty": "5-Year Structural Integrity Warranty",
-    "dimensions": "75\"H × 38\"W × 21\"D",
-    "finish": "Silk Teak Matte PU with Brass Latches",
-    "badge": "Compact Storage",
-    "mrp": "₹65,000",
-    "factoryPrice": "₹44,000",
-    "priceEstimate": "₹44,000 (Direct Workshop Price)",
-    "leadTime": "10 to 14 Working Days",
-    "image": "assets/solid-teak-wardrobe.jpg",
-    "description": "Solid natural teak 2-door bedroom almirah built with internal clothes hanging rail, locker drawer, and heavy-gauge brass latch locks.",
-    "features": [
-      "100% kiln-seasoned natural teak frame and doors",
-      "Internal lockable valuables drawer and shelf dividers",
-      "Termite-resistant and zero swelling in monsoons",
-      "Crafted in Gateway of Malanadu"
-    ]
-  },
-  {
-    "id": "wardrobe-4door-modular",
-    "name": "4-Door Master Teak Wardrobe Suite",
-    "category": "wardrobes",
-    "categoryName": "Wardrobes & Storage",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood",
-    "warranty": "5-Year Structural Integrity Warranty",
-    "dimensions": "84\"H × 76\"W × 24\"D",
-    "finish": "Deep Honey Teak Polyurethane Seal",
-    "badge": "Master Almirah",
-    "mrp": "₹1,40,000",
-    "factoryPrice": "₹95,000",
-    "priceEstimate": "₹95,000 (Direct Workshop Price)",
-    "leadTime": "16 to 20 Working Days",
-    "image": "assets/solid-teak-wardrobe.jpg",
-    "description": "Grand 4-door master bedroom wardrobe crafted completely from solid Grade-A teakwood. Features twin full-length hanging bays, six deep internal pull-out drawers, and upper overhead loft compartments.",
-    "features": [
-      "Monumental 4-door storage capacity with integrated lofts",
-      "Heavy-duty solid brass hinges, locks, and handles",
-      "5-Year Full Structural Integrity Warranty",
-      "Handcrafted in Gateway of Malanadu"
-    ]
-  },
-  {
-    "id": "swing-platter-oonjal",
-    "name": "Traditional Kerala Wooden Platter Oonjal",
-    "category": "swings",
-    "categoryName": "Kerala Swings & Jhoola",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood & Solid Cast Brass",
-    "warranty": "5-Year Structural Integrity Warranty",
-    "dimensions": "48\"L × 24\"W × 3\" Plank Thickness",
-    "finish": "Organic Teak Satin Polish with Brass Accents",
-    "badge": "Verandah Oonjal",
-    "mrp": "₹38,000",
-    "factoryPrice": "₹24,500",
-    "priceEstimate": "₹24,500 (Direct Workshop Price)",
-    "leadTime": "7 to 10 Working Days",
-    "image": "assets/royal-jhoola-swing.jpg",
-    "description": "Quintessential Kerala verandah wooden swing crafted from a monolithic 3-inch thick seasoned teak wood plank, suspended with pure cast brass peacock interlocking chains.",
-    "features": [
-      "Solid monolithic 3-inch thick Grade-A natural teak plank",
-      "Includes heavy-gauge pure brass interlocking hanging chains & ceiling hooks",
-      "Tested to support up to 450 kg safe working load",
-      "Crafted in Gateway of Malanadu"
-    ]
-  },
-  {
-    "id": "swing-carved-back",
-    "name": "Heritage Carved-Back Verandah Swing",
-    "category": "swings",
-    "categoryName": "Kerala Swings & Jhoola",
-    "materialCategory": "natural-wood",
-    "materialType": "Grade-A Natural Teak Wood & Brass Chains",
-    "warranty": "5-Year Structural Integrity Warranty",
-    "dimensions": "52\"L × 26\"W × 22\" Backrest Height",
-    "finish": "Honey Teak PU Polish with Brass Hardware",
-    "badge": "Crowned Swing",
-    "mrp": "₹45,000",
-    "factoryPrice": "₹29,999",
-    "priceEstimate": "₹29,999 (Direct Workshop Price)",
-    "leadTime": "10 to 14 Working Days",
-    "image": "assets/royal-jhoola-swing.jpg",
-    "description": "Luxury swinging sofa bench featuring a supportive carved teak backrest, brass corner brackets, and comfortable cushioned seat for breezy Kerala balconies.",
-    "features": [
-      "Ergonomic backrest with traditional hand-carved floral crown",
-      "Complete heavy-duty pure brass chain suspension kit included",
-      "5-Year Full Structural Warranty",
-      "Handcrafted in Gateway of Malanadu"
     ]
   },
   {
