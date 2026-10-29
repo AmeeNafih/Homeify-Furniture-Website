@@ -1774,9 +1774,24 @@ const DEFAULT_HERO_SLIDES = [
   }
 ];
 
+// Default 10 flagship products featured in the Curated Highlights section
+const DEFAULT_HIGHLIGHT_IDS = [
+  'living-royal-teak-sofa-set',
+  'bed-royal-carved-cot',
+  'dining-oval-marble',
+  'dining-curve-chair',
+  'living-slated-table',
+  'custom-royal-jhoola',
+  'bed-solid-teak-wardrobe',
+  'custom-architectural-teak-door',
+  'custom-heritage-grandfather-clock',
+  'living-kerala-sitout-chair'
+];
+
 // Active State
 let PRODUCTS = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
 let HERO_SLIDES = JSON.parse(JSON.stringify(DEFAULT_HERO_SLIDES));
+let curatedHighlightIds = [...DEFAULT_HIGHLIGHT_IDS];
 let currentFilter = 'sofas';
 let selectedProductForModal = null;
 let currentHeroSlideIndex = 0;
@@ -1956,6 +1971,16 @@ function loadCustomAssets() {
       PRODUCTS = PRODUCTS.filter(p => !hiddenProductIds.includes(p.id));
     }
 
+    // 2e. Load curated 10 highlight product IDs from localStorage
+    try {
+      const savedHighlights = JSON.parse(localStorage.getItem('homeify_curated_highlight_ids'));
+      if (Array.isArray(savedHighlights) && savedHighlights.length > 0) {
+        curatedHighlightIds = savedHighlights.slice(0, 10);
+      }
+    } catch (e) {
+      console.warn('Could not parse homeify_curated_highlight_ids:', e);
+    }
+
     // 3. Apply any user-uploaded dataUrl or custom photo overrides (supports data:, assets/, https://, http://, blob:)
     PRODUCTS.forEach(p => {
       const customImg = localStorage.getItem('homeify_prod_img_' + p.id);
@@ -2033,6 +2058,11 @@ async function loadAuthoritativeCatalog() {
           Object.assign(p, idbOverrides[id]);
         }
       });
+    }
+
+    const idbHighlights = await idbGet('homeify_curated_highlight_ids');
+    if (Array.isArray(idbHighlights) && idbHighlights.length > 0) {
+      curatedHighlightIds = idbHighlights.slice(0, 10);
     }
   } catch (e) {}
 
@@ -2663,28 +2693,16 @@ window.openProductModalById = function(productId) {
   }
 };
 
-// Curated Highlights Bar: Showcases only the most good looking products in small professional thumbnails
+// Curated Highlights Bar: Showcases the 10 most good looking flagship products
 function renderCuratedHighlights() {
   const container = document.getElementById('curated-highlights-strip');
   if (!container) return;
 
-  // Selected top most good looking flagship products from Google Drive & workshop
-  const highlightIds = [
-    'bed-royal-carved-cot',
-    'living-royal-teak-sofa-set',
-    'dining-teak-6seater-set',
-    'living-kerala-sitout-chair',
-    'custom-architectural-teak-door',
-    'custom-heritage-grandfather-clock',
-    'bed-solid-teak-wardrobe',
-    'custom-royal-jhoola'
-  ];
-
-  const highlightItems = highlightIds
-    .map(id => PRODUCTS.find(p => p.id === id))
+  const highlightItems = curatedHighlightIds
+    .map(id => PRODUCTS.find(p => p.id === id) || DEFAULT_PRODUCTS.find(p => p.id === id))
     .filter(Boolean);
 
-  container.innerHTML = highlightItems.map(item => {
+  container.innerHTML = highlightItems.map((item, idx) => {
     let shortName = item.name;
     if (shortName.includes('(')) shortName = shortName.split('(')[0].trim();
     if (shortName.length > 17) shortName = shortName.slice(0, 15) + '...';
@@ -2696,18 +2714,18 @@ function renderCuratedHighlights() {
         class="group flex flex-col items-center flex-shrink-0 cursor-pointer focus:outline-none transition-transform duration-300 hover:-translate-y-1"
         title="${item.name} • Direct Workshop Price: ${item.factoryPrice}"
       >
-        <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-2xl p-0.5 bg-gradient-to-tr from-amber-400 via-amber-200 to-stone-300 shadow-sm group-hover:shadow-md group-hover:ring-2 group-hover:ring-amber-400 transition-all">
+        <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl p-0.5 bg-gradient-to-tr from-amber-400 via-amber-200 to-stone-300 shadow-sm group-hover:shadow-md group-hover:ring-2 group-hover:ring-amber-400 transition-all">
           <div class="w-full h-full rounded-[14px] overflow-hidden bg-stone-900 border border-white/60">
-            <img src="${item.image}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-115" />
+            <img src="${item.image}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-115" onerror="this.src='assets/slated-coffee-table.jpg'" />
           </div>
-          <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-stone-950 flex items-center justify-center text-[8px] font-bold shadow-sm">
-            <i class="fa-solid fa-crown text-[7px]"></i>
+          <span class="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-amber-500 text-stone-950 flex items-center justify-center text-[9px] font-mono font-extrabold shadow-sm border border-white">
+            #${idx + 1}
           </span>
         </div>
-        <span class="mt-1.5 text-[11px] font-bold text-stone-800 group-hover:text-teak transition-colors font-sans max-w-[80px] truncate text-center leading-tight">
+        <span class="mt-1.5 text-[11px] font-bold text-stone-800 group-hover:text-teak transition-colors font-sans max-w-[85px] truncate text-center leading-tight">
           ${shortName}
         </span>
-        <span class="text-[9px] font-mono text-emerald-800 font-bold">
+        <span class="text-[10px] font-mono text-emerald-800 font-bold">
           ${item.factoryPrice}
         </span>
       </button>
@@ -2724,6 +2742,9 @@ function renderBentoGallery(filterCategory) {
 
   const filtered = PRODUCTS.filter(p => {
     const cat = p.category;
+    if (activeCategory === 'highlights') {
+      return curatedHighlightIds.includes(p.id);
+    }
     if (activeCategory === 'sofas') {
       return cat === 'sofas';
     }
@@ -2750,6 +2771,10 @@ function renderBentoGallery(filterCategory) {
     }
     return cat === activeCategory;
   });
+
+  if (activeCategory === 'highlights') {
+    filtered.sort((a, b) => curatedHighlightIds.indexOf(a.id) - curatedHighlightIds.indexOf(b.id));
+  }
 
   gridContainer.innerHTML = '';
 
@@ -4114,6 +4139,7 @@ function openCustomizer() {
   updateCustomizerLogoPreview(currentLogo);
   updateHighlightsToggleButtonUI();
   updateRestoreCollectionButtonUI();
+  renderAdminHighlightsEditor();
   populateCustomizerProductList();
   
   const tokenInput = document.getElementById('admin-github-token');
@@ -4199,7 +4225,10 @@ function populateCustomizerProductList() {
 
   // Filter products by category and search query
   let filtered = PRODUCTS;
-  if (adminCatalogCategoryFilter !== 'all') {
+  if (adminCatalogCategoryFilter === 'highlights') {
+    filtered = filtered.filter(p => curatedHighlightIds.includes(p.id));
+    filtered.sort((a, b) => curatedHighlightIds.indexOf(a.id) - curatedHighlightIds.indexOf(b.id));
+  } else if (adminCatalogCategoryFilter !== 'all') {
     filtered = filtered.filter(p => p.category === adminCatalogCategoryFilter);
   }
   if (adminCatalogSearchQuery) {
@@ -4246,6 +4275,8 @@ function populateCustomizerProductList() {
       ? highlightedBento.includes(product.id)
       : (product.id === 'living-slated-table' || product.id === 'handcrafted-sofa');
     const featCount = (product.features || []).length;
+    const hIdx = curatedHighlightIds.indexOf(product.id);
+    const isInHighlights = hIdx !== -1;
 
     itemEl.innerHTML = `
       <div class="flex items-center justify-between text-xs font-mono">
@@ -4254,7 +4285,16 @@ function populateCustomizerProductList() {
           ${product.isCustom ? '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-bold">CUSTOM</span>' : ''}
           ${product.badge ? `<span class="px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 text-[9px] font-medium">${product.badge}</span>` : ''}
         </div>
-        <div class="flex items-center gap-1.5">
+        <div class="flex items-center gap-1.5 flex-wrap justify-end">
+          <button 
+            type="button" 
+            onclick="toggleHighlightPin('${product.id}')" 
+            class="px-2 py-1 rounded-lg border text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer ${isInHighlights ? 'bg-amber-100 border-amber-400 text-amber-950 font-extrabold shadow-sm' : 'bg-stone-50 border-stone-200 text-stone-600 hover:border-amber-400 hover:text-amber-800'}"
+            title="${isInHighlights ? 'Currently in Top 10 Highlights (Click to remove)' : 'Click to add to Top 10 Highlights'}"
+          >
+            <i class="fa-solid fa-crown ${isInHighlights ? 'text-amber-600' : 'text-stone-400'} text-[9px]"></i>
+            <span>${isInHighlights ? `Highlight #${hIdx + 1}` : 'Pin Highlight'}</span>
+          </button>
           <button 
             type="button" 
             onclick="openProductEditModal('${product.id}')" 
@@ -4406,6 +4446,227 @@ function populateCustomizerProductList() {
     `;
     listContainer.appendChild(itemEl);
   });
+}
+
+// ==========================================================================
+// 12. ADMIN CURATED TOP 10 HIGHLIGHTS SECTION MANAGER
+// ==========================================================================
+
+function renderAdminHighlightsEditor() {
+  const grid = document.getElementById('admin-highlights-slots-grid');
+  const countTag = document.getElementById('admin-highlight-count-tag');
+  if (!grid) return;
+
+  if (countTag) {
+    countTag.textContent = `${curatedHighlightIds.length} / 10 Selected`;
+  }
+
+  // Pre-generate grouped product options for quick slot switching
+  const categoryOrder = [
+    { key: 'sofas', name: 'Sofas & Couches' },
+    { key: 'cots', name: 'Cots & Beds' },
+    { key: 'dining-tables', name: 'Dining Tables & Suites' },
+    { key: 'chairs', name: 'Sitout & Dining Chairs' },
+    { key: 'coffee-tables', name: 'Coffee Tables & Teapoys' },
+    { key: 'wardrobes', name: 'Wardrobes & Storage' },
+    { key: 'swings', name: 'Swings & Oonjal' },
+    { key: 'doors-custom', name: 'Doors & Custom Woodwork' }
+  ];
+
+  function buildProductOptions(currentSelectedId) {
+    return categoryOrder.map(group => {
+      const items = PRODUCTS.filter(p => p.category === group.key);
+      if (items.length === 0) return '';
+      const options = items.map(p => {
+        const isSel = p.id === currentSelectedId ? 'selected' : '';
+        const cleanName = p.name.length > 34 ? p.name.slice(0, 32) + '...' : p.name;
+        return `<option value="${p.id}" ${isSel}>${cleanName} (${p.factoryPrice})</option>`;
+      }).join('');
+      return `<optgroup label="${group.name}">${options}</optgroup>`;
+    }).join('');
+  }
+
+  grid.innerHTML = '';
+
+  curatedHighlightIds.forEach((prodId, idx) => {
+    const prod = PRODUCTS.find(p => p.id === prodId) || DEFAULT_PRODUCTS.find(p => p.id === prodId) || {
+      id: prodId,
+      name: 'Custom Product',
+      categoryName: 'Furniture',
+      factoryPrice: '₹0',
+      image: 'assets/slated-coffee-table.jpg'
+    };
+
+    const slotCard = document.createElement('div');
+    slotCard.className = 'p-3 rounded-2xl bg-white border border-amber-300/80 shadow-sm flex flex-col justify-between gap-2.5 transition-all hover:border-amber-400 hover:shadow-md';
+    slotCard.innerHTML = `
+      <div class="flex items-center justify-between text-xs font-mono">
+        <span class="font-extrabold text-amber-950 flex items-center gap-1">
+          <i class="fa-solid fa-crown text-amber-500 text-[10px]"></i>
+          <span>Slot #${idx + 1}</span>
+        </span>
+        <div class="flex items-center gap-1">
+          <button 
+            type="button" 
+            onclick="moveHighlightSlot(${idx}, -1)" 
+            ${idx === 0 ? 'disabled' : ''}
+            class="w-6 h-6 rounded-lg border border-stone-200 text-stone-600 hover:bg-stone-100 flex items-center justify-center text-[10px] disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+            title="Move previous"
+          >
+            <i class="fa-solid fa-chevron-left text-[9px]"></i>
+          </button>
+          <button 
+            type="button" 
+            onclick="moveHighlightSlot(${idx}, 1)" 
+            ${idx === curatedHighlightIds.length - 1 ? 'disabled' : ''}
+            class="w-6 h-6 rounded-lg border border-stone-200 text-stone-600 hover:bg-stone-100 flex items-center justify-center text-[10px] disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+            title="Move next"
+          >
+            <i class="fa-solid fa-chevron-right text-[9px]"></i>
+          </button>
+          <button 
+            type="button" 
+            onclick="removeHighlightSlot(${idx})" 
+            class="w-6 h-6 rounded-lg border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center text-[10px] cursor-pointer"
+            title="Remove from highlights"
+          >
+            <i class="fa-solid fa-xmark text-[10px]"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <div class="w-12 h-12 rounded-xl overflow-hidden bg-stone-900 border border-stone-200 flex-shrink-0">
+          <img src="${prod.image}" alt="${prod.name}" class="w-full h-full object-cover" onerror="this.src='assets/slated-coffee-table.jpg'" />
+        </div>
+        <div class="min-w-0 flex-1">
+          <h5 class="text-[11px] font-bold text-stone-900 line-clamp-1" title="${prod.name}">${prod.name}</h5>
+          <span class="text-[10px] font-mono text-emerald-800 font-bold block">${prod.factoryPrice}</span>
+        </div>
+      </div>
+
+      <div class="pt-1 border-t border-stone-100 font-sans">
+        <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-stone-500 mb-1">
+          Switch Product:
+        </label>
+        <select 
+          class="w-full text-[11px] p-1.5 rounded-lg border border-stone-300 bg-stone-50 hover:bg-white focus:bg-white focus:border-amber-500 outline-none font-sans"
+          onchange="changeHighlightSlot(${idx}, this.value)"
+        >
+          ${buildProductOptions(prod.id)}
+        </select>
+      </div>
+    `;
+    grid.appendChild(slotCard);
+  });
+
+  // If less than 10, render an Add Slot placeholder card
+  if (curatedHighlightIds.length < 10) {
+    const addCard = document.createElement('div');
+    addCard.className = 'p-3 rounded-2xl bg-amber-50/50 border-2 border-dashed border-amber-300 flex flex-col justify-center items-center gap-2 text-center text-xs font-mono min-h-[140px]';
+    addCard.innerHTML = `
+      <div class="w-8 h-8 rounded-full bg-amber-200 text-amber-900 flex items-center justify-center font-bold">
+        <i class="fa-solid fa-plus text-xs"></i>
+      </div>
+      <span class="font-bold text-amber-900 text-[11px]">Add Slot #${curatedHighlightIds.length + 1}</span>
+      <select 
+        class="w-full text-[10px] p-1.5 rounded-lg border border-amber-300 bg-white text-stone-800 font-sans outline-none"
+        onchange="if(this.value){ addHighlightSlot(this.value); this.value=''; }"
+      >
+        <option value="">Select product to add...</option>
+        ${buildProductOptions('')}
+      </select>
+    `;
+    grid.appendChild(addCard);
+  }
+}
+
+window.changeHighlightSlot = function(slotIndex, newProductId) {
+  if (!newProductId) return;
+  curatedHighlightIds[slotIndex] = newProductId;
+  saveHighlightsState();
+  const prod = PRODUCTS.find(p => p.id === newProductId);
+  showToast(`Updated Highlight Slot #${slotIndex + 1} to "${prod ? prod.name : 'product'}"!`);
+};
+
+window.moveHighlightSlot = function(slotIndex, direction) {
+  const targetIndex = slotIndex + direction;
+  if (targetIndex < 0 || targetIndex >= curatedHighlightIds.length) return;
+  const temp = curatedHighlightIds[slotIndex];
+  curatedHighlightIds[slotIndex] = curatedHighlightIds[targetIndex];
+  curatedHighlightIds[targetIndex] = temp;
+  saveHighlightsState();
+};
+
+window.removeHighlightSlot = function(slotIndex) {
+  if (curatedHighlightIds.length <= 1) {
+    alert('At least one highlighted product must remain selected.');
+    return;
+  }
+  const removedId = curatedHighlightIds[slotIndex];
+  curatedHighlightIds.splice(slotIndex, 1);
+  saveHighlightsState();
+  const prod = PRODUCTS.find(p => p.id === removedId);
+  showToast(`Removed "${prod ? prod.name : 'product'}" from highlights.`);
+};
+
+window.addHighlightSlot = function(productId) {
+  if (curatedHighlightIds.length >= 10) {
+    alert('Maximum 10 highlighted products allowed.');
+    return;
+  }
+  if (curatedHighlightIds.includes(productId)) {
+    alert('This product is already in the highlights list.');
+    return;
+  }
+  curatedHighlightIds.push(productId);
+  saveHighlightsState();
+  const prod = PRODUCTS.find(p => p.id === productId);
+  showToast(`Added "${prod ? prod.name : 'product'}" to Highlight Slot #${curatedHighlightIds.length}!`);
+};
+
+window.toggleHighlightPin = function(productId) {
+  const existingIdx = curatedHighlightIds.indexOf(productId);
+  if (existingIdx !== -1) {
+    if (curatedHighlightIds.length <= 1) {
+      alert('At least one highlighted product must remain selected.');
+      return;
+    }
+    curatedHighlightIds.splice(existingIdx, 1);
+    saveHighlightsState();
+    const prod = PRODUCTS.find(p => p.id === productId);
+    showToast(`Removed "${prod ? prod.name : 'product'}" from highlights.`);
+  } else {
+    if (curatedHighlightIds.length >= 10) {
+      alert('You already have 10 highlighted products selected! Please replace an existing highlight in Section 3 first.');
+      return;
+    }
+    curatedHighlightIds.push(productId);
+    saveHighlightsState();
+    const prod = PRODUCTS.find(p => p.id === productId);
+    showToast(`Added "${prod ? prod.name : 'product'}" to Highlight Slot #${curatedHighlightIds.length}!`);
+  }
+};
+
+window.restoreDefaultHighlights = function() {
+  if (!confirm('Restore the default 10 factory highlight products?')) return;
+  curatedHighlightIds = [...DEFAULT_HIGHLIGHT_IDS];
+  saveHighlightsState();
+  showToast('Restored default 10 factory highlights!');
+};
+
+function saveHighlightsState() {
+  try {
+    localStorage.setItem('homeify_curated_highlight_ids', JSON.stringify(curatedHighlightIds));
+  } catch (e) {}
+  idbSet('homeify_curated_highlight_ids', curatedHighlightIds);
+  markCatalogDirty();
+  renderCuratedHighlights();
+  renderAdminHighlightsEditor();
+  populateCustomizerProductList();
+  if (currentFilter === 'highlights') {
+    renderBentoGallery('highlights');
+  }
 }
 
 // ==========================================================================
