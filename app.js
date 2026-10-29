@@ -12,6 +12,30 @@ const DEFAULT_LOGO = 'assets/homeify-logo-dark-text.png';
 // --- REAL LOCAL ASSETS PRODUCT CATALOG ---
 const DEFAULT_PRODUCTS = [
   {
+    "id": "custom-1792742947835",
+    "name": "WOODEN TEAK KITCHEN STOOL",
+    "category": "chairs",
+    "categoryName": "Sitout & Dining Chairs",
+    "materialCategory": "natural-wood",
+    "materialType": "100% Pure Kiln-Seasoned Solid Grade-A Natural Teak",
+    "warranty": "5-Year Structural Integrity Warranty",
+    "dimensions": "22x16",
+    "finish": "Organic Matte teak",
+    "badge": "New Workshop Addition",
+    "mrp": "₹8,999",
+    "factoryPrice": "₹3,999",
+    "priceEstimate": "₹3,999 (Direct Workshop Price)",
+    "leadTime": "7 to 12 Working Days",
+    "image": "assets/wooden-teak-kitchen-stool.jpg",
+    "description": "Experience organic modernism with this artisanal solid teak wood stool, seamlessly blending natural materials with functional artistry. Featuring an ergonomically curved saddle seat and rich wood grain textures, it offers comfortable seating while serving as a statement accent piece for any contemporary home.",
+    "features": [
+      "100% Natural Grade-A Teak Wood",
+      "Ergonomically curved saddle seat with sturdy structural base",
+      "Handcrafted directly at our workshop in the Gateway of Malanadu"
+    ],
+    "isCustom": true
+  },
+  {
     "id": "custom-1792640905187",
     "name": "RIPPER MODEL 5 FEET TEAK COT",
     "category": "cots",
