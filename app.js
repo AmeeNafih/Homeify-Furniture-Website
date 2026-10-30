@@ -2729,30 +2729,65 @@ function renderCuratedHighlights() {
   container.innerHTML = highlightItems.map((item, idx) => {
     let shortName = item.name;
     if (shortName.includes('(')) shortName = shortName.split('(')[0].trim();
-    if (shortName.length > 17) shortName = shortName.slice(0, 15) + '...';
+
+    const tagText = item.tag ? item.tag.toUpperCase() : 'GRADE-A NATURAL TEAK';
 
     return `
-      <button 
-        type="button" 
+      <div 
         onclick="openProductModalById('${item.id}')"
-        class="group flex flex-col items-center flex-shrink-0 cursor-pointer focus:outline-none transition-transform duration-300 hover:-translate-y-1"
+        class="group w-[230px] sm:w-[260px] flex-shrink-0 cursor-pointer bg-white dark:bg-[#161514] border border-stone-200/90 dark:border-white/10 rounded-2xl p-3 shadow-sm hover:shadow-xl hover:border-teak/50 dark:hover:border-champagne/40 transition-all duration-300 flex flex-col justify-between"
         title="${item.name} • Direct Workshop Price: ${item.factoryPrice}"
+        role="button"
+        tabindex="0"
+        onkeydown="if(event.key==='Enter'||event.key===' ')openProductModalById('${item.id}')"
       >
-        <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl p-0.5 bg-gradient-to-tr from-amber-400 via-amber-200 to-stone-300 shadow-sm group-hover:shadow-md group-hover:ring-2 group-hover:ring-amber-400 transition-all">
-          <div class="w-full h-full rounded-[14px] overflow-hidden bg-stone-900 border border-white/60">
-            <img src="${item.image}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-115" onerror="this.src='assets/slated-coffee-table.jpg'" />
+        <div>
+          <!-- Thumbnail with Monolithic Index Badge -->
+          <div class="aspect-[4/3] rounded-xl overflow-hidden relative bg-stone-100 dark:bg-stone-900 border border-stone-100 dark:border-white/5">
+            <img 
+              src="${item.image}" 
+              alt="${item.name}" 
+              loading="lazy" 
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+              onerror="this.src='assets/slated-coffee-table.jpg'" 
+            />
+            <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-[#0D0C0B]/90 text-champagne text-[10px] font-mono font-bold tracking-wider backdrop-blur-sm border border-champagne/30 shadow-sm">
+              #${String(idx + 1).padStart(2, '0')}
+            </span>
+            <span class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-[#0D0C0B]/80 text-white text-[9px] font-mono tracking-wide backdrop-blur-sm">
+              5-Yr Warranty
+            </span>
           </div>
-          <span class="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-amber-500 text-stone-950 flex items-center justify-center text-[9px] font-mono font-extrabold shadow-sm border border-white">
-            #${idx + 1}
+
+          <!-- Editorial Meta & Title -->
+          <div class="mt-3">
+            <span class="text-[9px] font-mono uppercase tracking-[0.16em] text-teak font-bold block truncate">
+              ${tagText}
+            </span>
+            <h4 class="font-heading font-bold text-sm text-[#0D0C0B] dark:text-white group-hover:text-teak transition-colors truncate mt-0.5">
+              ${shortName}
+            </h4>
+            <div class="flex items-baseline gap-2 mt-1">
+              <span class="font-mono text-sm font-bold text-[#0D0C0B] dark:text-champagne">
+                ${item.factoryPrice}
+              </span>
+              <span class="text-[10px] font-mono text-stone-400 line-through">
+                ${item.mrp}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sleek Corporate Action Row -->
+        <div class="mt-3 pt-2.5 border-t border-stone-100 dark:border-white/10 flex items-center justify-between text-[11px] font-mono">
+          <span class="text-stone-500 dark:text-stone-400 group-hover:text-teak transition-colors flex items-center gap-1 font-semibold">
+            View Details <i class="fa-solid fa-arrow-right text-[8px] group-hover:translate-x-0.5 transition-transform"></i>
+          </span>
+          <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 font-bold border border-emerald-200/50 dark:border-emerald-800/40">
+            Factory Direct
           </span>
         </div>
-        <span class="mt-1.5 text-[11px] font-bold text-stone-800 group-hover:text-teak transition-colors font-sans max-w-[85px] truncate text-center leading-tight">
-          ${shortName}
-        </span>
-        <span class="text-[10px] font-mono text-emerald-800 font-bold">
-          ${item.factoryPrice}
-        </span>
-      </button>
+      </div>
     `;
   }).join('');
 }

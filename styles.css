@@ -946,3 +946,183 @@ html.dark .google-review-card:hover {
 
 
 
+
+/* ==========================================================================
+   20-YEAR VETERAN PRINCIPAL DESIGNER CORPORATE ARCHITECTURAL SYSTEM
+   Inspired by European contract manufacturing & monolithic timber studios:
+   Poltrona Frau, Vitra, B&B Italia, Knoll, and Carl Hansen & Søn.
+   ========================================================================== */
+
+.corp-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-heading);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8C6239;
+}
+
+html.dark .corp-eyebrow {
+  color: #D4AF37;
+}
+
+.corp-stat-cell {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(20, 18, 16, 0.08);
+  border-radius: 1rem;
+  padding: 1rem 0.75rem;
+  text-align: center;
+  transition: all 0.25s ease;
+}
+
+html.dark .corp-stat-cell {
+  background: rgba(22, 21, 20, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.corp-stat-cell:hover {
+  border-color: #9E6738;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.08);
+}
+
+.corp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  font-family: var(--font-heading);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #141210;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+html.dark .corp-badge {
+  background: rgba(22, 21, 20, 0.9);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #FAF8F5;
+}
+
+.corp-hero-frame {
+  position: relative;
+  border-radius: 1.75rem;
+  overflow: hidden;
+  background: #141210;
+  border: 1px solid rgba(20, 18, 16, 0.12);
+  box-shadow: 0 25px 60px -15px rgba(20, 18, 16, 0.22);
+}
+
+html.dark .corp-hero-frame {
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.7);
+}
+
+.corp-spec-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.625rem;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.corp-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: 9999px;
+  background: #0D0C0B;
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 25px -8px rgba(13, 12, 11, 0.4);
+}
+
+.corp-btn-primary:hover {
+  background: #9E6738;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px -8px rgba(158, 103, 56, 0.45);
+}
+
+.corp-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: 9999px;
+  background: #FFFFFF;
+  color: #0D0C0B;
+  border: 1px solid rgba(20, 18, 16, 0.15);
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.corp-btn-secondary:hover {
+  background: #FAF8F5;
+  border-color: #0D0C0B;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.1);
+}
+
+html.dark .corp-btn-secondary {
+  background: #1C1917;
+  color: #FAF8F5;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+html.dark .corp-btn-secondary:hover {
+  background: #292524;
+  border-color: #D4AF37;
+}
+
+/* Refined Bento Product Card corporate shadow */
+.bento-card {
+  border: 1px solid rgba(20, 18, 16, 0.08);
+  box-shadow: 0 4px 20px -4px rgba(20, 18, 16, 0.05);
+}
+
+html.dark .bento-card {
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.5);
+}
+
+.bento-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(158, 103, 56, 0.4);
+  box-shadow: 0 20px 40px -12px rgba(158, 103, 56, 0.16);
+}
+
+html.dark .bento-card:hover {
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.7);
+}
