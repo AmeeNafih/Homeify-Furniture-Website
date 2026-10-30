@@ -1816,7 +1816,7 @@ const DEFAULT_HIGHLIGHT_IDS = [
 let PRODUCTS = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
 let HERO_SLIDES = JSON.parse(JSON.stringify(DEFAULT_HERO_SLIDES));
 let curatedHighlightIds = [...DEFAULT_HIGHLIGHT_IDS];
-let currentFilter = 'sofas';
+let currentFilter = 'highlights';
 let selectedProductForModal = null;
 let currentHeroSlideIndex = 0;
 let heroSlideTimer = null;
@@ -2118,7 +2118,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroParallax();
   initHeroCarousel();
   renderCuratedHighlights();
-  renderBentoGallery('sofas');
+  renderBentoGallery('highlights');
   initFilterButtons();
   initModalListeners();
   initMaterialComparator();
@@ -2761,7 +2761,7 @@ function renderBentoGallery(filterCategory) {
   const gridContainer = document.getElementById('bento-grid-container');
   if (!gridContainer) return;
 
-  const activeCategory = filterCategory || currentFilter || 'sofas';
+  const activeCategory = filterCategory || currentFilter || 'highlights';
   currentFilter = activeCategory;
 
   const filtered = PRODUCTS.filter(p => {
@@ -2816,6 +2816,8 @@ function renderBentoGallery(filterCategory) {
     return;
   }
 
+  const isAdmin = sessionStorage.getItem('homeify_admin_authenticated') === 'true';
+
   filtered.forEach((product, index) => {
     let spanClasses = 'col-span-12 sm:col-span-6 lg:col-span-4';
     let isLarge = false;
@@ -2828,6 +2830,9 @@ function renderBentoGallery(filterCategory) {
       spanClasses = 'col-span-12 md:col-span-12 lg:col-span-8';
       isLarge = true;
     }
+
+    const hIdx = curatedHighlightIds.indexOf(product.id);
+    const isInHighlights = hIdx !== -1;
 
     const card = document.createElement('div');
     card.className = `${spanClasses} bento-card card-3d-tilt depth-3d-surface bg-white rounded-3xl overflow-hidden border border-stone-200/90 shadow-sm transition-all duration-400 flex flex-col group cursor-pointer preserve-3d`;
@@ -2851,6 +2856,35 @@ function renderBentoGallery(filterCategory) {
       <!-- 3D Cursor-driven Specular Glare -->
       <div class="card-sheen"></div>
 
+      ${isAdmin ? `
+        <!-- Admin Bar: Add/Remove from Highlights and Quick Edit -->
+        <div class="px-3.5 py-2 bg-gradient-to-r from-amber-50 to-orange-50 border-b border-amber-200/90 flex items-center justify-between gap-2 z-20" onclick="event.stopPropagation();">
+          <div class="flex items-center gap-1.5 text-[11px] font-mono font-bold text-amber-950">
+            <i class="fa-solid fa-crown ${isInHighlights ? 'text-amber-500' : 'text-stone-400'} text-xs"></i>
+            <span>${isInHighlights ? `Highlight Slot #${hIdx + 1}` : 'Catalog Piece'}</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button 
+              type="button" 
+              onclick="event.stopPropagation(); toggleHighlightPin('${product.id}');" 
+              class="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all shadow-sm flex items-center gap-1 cursor-pointer ${isInHighlights ? 'bg-amber-200 hover:bg-amber-300 text-amber-950 border border-amber-400' : 'bg-white hover:bg-amber-100 text-stone-800 hover:text-amber-950 border border-amber-300'}"
+              title="${isInHighlights ? 'Click to remove from highlights' : 'Click to add to top 10 highlights'}"
+            >
+              <i class="fa-solid ${isInHighlights ? 'fa-circle-xmark text-rose-600' : 'fa-circle-plus text-amber-600'} text-[10px]"></i>
+              <span>${isInHighlights ? 'In Highlights' : '+ Add to Highlights'}</span>
+            </button>
+            <button 
+              type="button" 
+              onclick="event.stopPropagation(); openProductEditModal('${product.id}');" 
+              class="w-7 h-7 rounded-lg bg-stone-900 hover:bg-amber-600 text-white flex items-center justify-center transition-colors shadow-sm cursor-pointer"
+              title="Admin: Edit product prices & photo"
+            >
+              <i class="fa-solid fa-pen text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+      ` : ''}
+
       <!-- Product Photo Thumbnail Frame (Full Size Edge-to-Edge) -->
       <div class="relative overflow-hidden ${isLarge ? 'h-64 sm:h-72 md:h-80' : 'h-52 sm:h-60 md:h-64'} bg-stone-900 border-b border-stone-100 dark:border-white/10 group/thumb">
         <img 
@@ -2863,9 +2897,17 @@ function renderBentoGallery(filterCategory) {
         
         <!-- Top Badges with 3D Z-Lift -->
         <div class="absolute top-2.5 sm:top-4 left-2.5 sm:left-4 right-2.5 sm:right-4 flex items-center justify-between gap-1.5 sm:gap-2 pointer-events-none z-10 float-3d-element">
-          <span class="px-2.5 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold rounded-full ${materialBadgeBg} shadow-sm backdrop-blur-md">
-            ${materialLabel}
-          </span>
+          <div class="flex items-center gap-1.5">
+            <span class="px-2.5 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold rounded-full ${materialBadgeBg} shadow-sm backdrop-blur-md">
+              ${materialLabel}
+            </span>
+            ${isInHighlights ? `
+              <span class="px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-xs font-mono font-bold rounded-full bg-amber-400 text-stone-950 shadow-sm flex items-center gap-1 border border-amber-300">
+                <i class="fa-solid fa-crown text-[9px]"></i>
+                <span>#${hIdx + 1} Flagship</span>
+              </span>
+            ` : ''}
+          </div>
           <div class="flex items-center gap-1.5">
             <span class="px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-xs font-bold rounded-full bg-[#D4AF37] text-[#0D0C0B] shadow-sm flex items-center gap-1 font-mono">
               <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -3104,14 +3146,9 @@ function openProductModal(product) {
     });
   }
 
-  // Show Admin Quick-Edit button if authenticated
-  const adminEditBtn = document.getElementById('modal-quick-edit-btn');
-  if (adminEditBtn) {
-    if (sessionStorage.getItem('homeify_admin_authenticated') === 'true') {
-      adminEditBtn.classList.remove('hidden');
-    } else {
-      adminEditBtn.classList.add('hidden');
-    }
+  // Update Admin-Only Quick Controls inside modal
+  if (typeof updateModalHighlightButton === 'function') {
+    updateModalHighlightButton();
   }
 
   modal.classList.remove('modal-hidden');
@@ -3126,6 +3163,75 @@ window.openProductEditModalFromQuickView = function() {
     setTimeout(() => {
       openProductEditModal(editId);
     }, 150);
+  }
+};
+
+window.toggleHighlightPinFromModal = function() {
+  if (!selectedProductForModal) return;
+  toggleHighlightPin(selectedProductForModal.id);
+  updateModalHighlightButton();
+};
+
+window.updateModalHighlightButton = function() {
+  if (!selectedProductForModal) return;
+  const isAdmin = sessionStorage.getItem('homeify_admin_authenticated') === 'true';
+  const prodId = selectedProductForModal.id;
+  const hIdx = curatedHighlightIds.indexOf(prodId);
+  const isInHighlights = hIdx !== -1;
+
+  // Header quick edit button
+  const adminEditBtn = document.getElementById('modal-quick-edit-btn');
+  if (adminEditBtn) {
+    if (isAdmin) {
+      adminEditBtn.classList.remove('hidden');
+    } else {
+      adminEditBtn.classList.add('hidden');
+    }
+  }
+
+  // Header quick highlight button
+  const quickHlBtn = document.getElementById('modal-quick-highlight-btn');
+  if (quickHlBtn) {
+    if (isAdmin) {
+      quickHlBtn.classList.remove('hidden');
+      quickHlBtn.classList.add('flex');
+      if (isInHighlights) {
+        quickHlBtn.className = 'flex items-center gap-1.5 px-3.5 h-10 rounded-full text-xs font-mono font-bold transition-all shadow-md cursor-pointer bg-amber-400 hover:bg-amber-500 text-stone-950 border border-amber-500';
+        quickHlBtn.innerHTML = `<i class="fa-solid fa-crown text-xs"></i><span>Highlight #${hIdx + 1}</span>`;
+        quickHlBtn.title = 'In Top 10 Highlights (Click to remove)';
+      } else {
+        quickHlBtn.className = 'flex items-center gap-1.5 px-3.5 h-10 rounded-full text-xs font-mono font-bold transition-all shadow-md cursor-pointer bg-white/95 hover:bg-amber-100 text-stone-800 border border-amber-300';
+        quickHlBtn.innerHTML = `<i class="fa-solid fa-plus text-amber-600 text-xs"></i><span>+ Highlight</span>`;
+        quickHlBtn.title = 'Click to feature in Top 10 Highlights';
+      }
+    } else {
+      quickHlBtn.classList.add('hidden');
+      quickHlBtn.classList.remove('flex');
+    }
+  }
+
+  // Admin Quick Controls Panel inside modal
+  const adminPanel = document.getElementById('modal-admin-panel');
+  const pillBtn = document.getElementById('modal-admin-highlight-pill');
+  if (adminPanel) {
+    if (isAdmin) {
+      adminPanel.classList.remove('hidden');
+      adminPanel.classList.add('flex');
+      if (pillBtn) {
+        if (isInHighlights) {
+          pillBtn.className = 'px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shadow-sm flex items-center gap-1.5 bg-amber-200 text-amber-950 border border-amber-400 hover:bg-amber-300';
+          pillBtn.innerHTML = `<i class="fa-solid fa-crown text-amber-700 text-xs"></i><span>In Top 10 (#${hIdx + 1})</span>`;
+          pillBtn.title = 'Click to remove from highlights';
+        } else {
+          pillBtn.className = 'px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shadow-sm flex items-center gap-1.5 bg-amber-500 text-stone-950 hover:bg-amber-600 border border-amber-400';
+          pillBtn.innerHTML = `<i class="fa-solid fa-plus text-xs"></i><span>Add to Highlights</span>`;
+          pillBtn.title = 'Click to feature in Top 10 Highlights';
+        }
+      }
+    } else {
+      adminPanel.classList.add('hidden');
+      adminPanel.classList.remove('flex');
+    }
   }
 };
 
@@ -3987,6 +4093,8 @@ function initAdminAuth() {
       if (enteredPin === currentPin) {
         sessionStorage.setItem('homeify_admin_authenticated', 'true');
         closeAdminAuthGateway();
+        updateAdminUIState();
+        renderBentoGallery(currentFilter);
         openCustomizer();
         showToast('Admin authenticated successfully. Welcome, Ameen!');
       } else {
@@ -4010,6 +4118,11 @@ function initAdminAuth() {
     logoutBtn.addEventListener('click', () => {
       sessionStorage.removeItem('homeify_admin_authenticated');
       closeCustomizer();
+      updateAdminUIState();
+      renderBentoGallery(currentFilter);
+      if (selectedProductForModal) {
+        updateModalHighlightButton();
+      }
       showToast('Admin session locked and logged out.');
     });
   }
@@ -4046,6 +4159,9 @@ function initAdminAuth() {
   if (window.location.hash === '#admin' || window.location.search.includes('admin')) {
     setTimeout(openAdminAuthGateway, 400);
   }
+
+  // Initialize and apply Admin UI elements based on session
+  updateAdminUIState();
 }
 
 function openAdminAuthGateway() {
@@ -4078,6 +4194,71 @@ function closeAdminAuthGateway() {
   authModal.classList.remove('modal-visible');
   document.body.style.overflow = 'auto';
 }
+
+window.updateAdminUIState = function() {
+  const isAdmin = sessionStorage.getItem('homeify_admin_authenticated') === 'true';
+
+  // 1. Bottom persistent admin mode toolbar
+  const liveBar = document.getElementById('admin-live-mode-bar');
+  if (liveBar) {
+    if (isAdmin) {
+      liveBar.classList.remove('hidden');
+      liveBar.classList.add('flex');
+    } else {
+      liveBar.classList.add('hidden');
+      liveBar.classList.remove('flex');
+    }
+  }
+
+  // 2. Highlights header admin edit button
+  const hlAdminBtn = document.getElementById('catalog-admin-highlights-btn');
+  if (hlAdminBtn) {
+    if (isAdmin) {
+      hlAdminBtn.classList.remove('hidden');
+      hlAdminBtn.classList.add('flex');
+    } else {
+      hlAdminBtn.classList.add('hidden');
+      hlAdminBtn.classList.remove('flex');
+    }
+  }
+
+  // 3. Modal quick edit & highlight buttons if modal is open
+  const modalQuickEdit = document.getElementById('modal-quick-edit-btn');
+  if (modalQuickEdit) {
+    if (isAdmin) {
+      modalQuickEdit.classList.remove('hidden');
+    } else {
+      modalQuickEdit.classList.add('hidden');
+    }
+  }
+  if (typeof window.updateModalHighlightButton === 'function') {
+    window.updateModalHighlightButton();
+  }
+};
+
+window.adminQuickLogout = function() {
+  sessionStorage.removeItem('homeify_admin_authenticated');
+  updateAdminUIState();
+  renderBentoGallery(currentFilter);
+  if (selectedProductForModal) {
+    updateModalHighlightButton();
+  }
+  showToast('Admin session logged out. Switched to public view.');
+};
+
+window.openHighlightsManagerInAdmin = function() {
+  if (sessionStorage.getItem('homeify_admin_authenticated') !== 'true') {
+    openAdminAuthGateway();
+    return;
+  }
+  openCustomizer();
+  setTimeout(() => {
+    const editorEl = document.getElementById('admin-highlights-slots-grid');
+    if (editorEl) {
+      editorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, 200);
+};
 
 // ==========================================================================
 // 11. PHOTO & LOGO CUSTOMIZER STUDIO (Restricted to Authenticated Admin)
@@ -4650,6 +4831,11 @@ window.addHighlightSlot = function(productId) {
 };
 
 window.toggleHighlightPin = function(productId) {
+  if (sessionStorage.getItem('homeify_admin_authenticated') !== 'true') {
+    openAdminAuthGateway();
+    return;
+  }
+
   const existingIdx = curatedHighlightIds.indexOf(productId);
   if (existingIdx !== -1) {
     if (curatedHighlightIds.length <= 1) {
@@ -4662,7 +4848,17 @@ window.toggleHighlightPin = function(productId) {
     showToast(`Removed "${prod ? prod.name : 'product'}" from highlights.`);
   } else {
     if (curatedHighlightIds.length >= 10) {
-      alert('You already have 10 highlighted products selected! Please replace an existing highlight in Section 3 first.');
+      const confirmReplace = confirm(
+        'All 10 Highlight slots are currently full.\n\nWould you like to replace Highlight Slot #10 with this product?\n\n(Click OK to replace #10, or Cancel to open the Highlights Manager)'
+      );
+      if (confirmReplace) {
+        curatedHighlightIds[9] = productId;
+        saveHighlightsState();
+        const prod = PRODUCTS.find(p => p.id === productId);
+        showToast(`Replaced Highlight Slot #10 with "${prod ? prod.name : 'product'}"!`);
+      } else {
+        openHighlightsManagerInAdmin();
+      }
       return;
     }
     curatedHighlightIds.push(productId);
@@ -4688,8 +4884,9 @@ function saveHighlightsState() {
   renderCuratedHighlights();
   renderAdminHighlightsEditor();
   populateCustomizerProductList();
-  if (currentFilter === 'highlights') {
-    renderBentoGallery('highlights');
+  renderBentoGallery(currentFilter);
+  if (typeof updateAdminUIState === 'function') {
+    updateAdminUIState();
   }
 }
 

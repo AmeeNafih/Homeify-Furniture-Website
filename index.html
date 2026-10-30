@@ -170,8 +170,13 @@
 
       <!-- Desktop Nav -->
       <nav class="hidden lg:flex items-center gap-8 text-xs uppercase tracking-widest font-semibold text-stone-700 font-sans">
+        <a href="#highlights" class="hover:text-teak transition-colors py-2 relative group flex items-center gap-1.5">
+          <i class="fa-solid fa-crown text-[10px] text-amber-500"></i>
+          <span>Highlights</span>
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-teak group-hover:w-full transition-all duration-300"></span>
+        </a>
         <a href="#gallery" class="hover:text-teak transition-colors py-2 relative group">
-          Collections
+          Catalog
           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-teak group-hover:w-full transition-all duration-300"></span>
         </a>
         <a href="#material-comparator" class="hover:text-teak transition-colors py-2 relative group flex items-center gap-1.5">
@@ -264,8 +269,12 @@
     </div>
 
     <nav class="flex flex-col gap-4 py-6 text-sm font-semibold text-stone-800 uppercase tracking-wider font-sans">
+      <a href="#highlights" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
+        <span class="flex items-center gap-2"><i class="fa-solid fa-crown text-amber-500 text-xs"></i><span>Top 10 Highlights</span></span>
+        <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold font-mono">10 Pieces</span>
+      </a>
       <a href="#gallery" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
-        <span>Bento Collections</span>
+        <span>Full Catalog (72 Pieces)</span>
         <i class="fa-solid fa-chevron-right text-xs text-stone-400"></i>
       </a>
       <a href="#material-comparator" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
@@ -351,10 +360,11 @@
 
           <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4 pt-2">
             <a 
-              href="#gallery" 
+              href="#highlights" 
               class="w-full sm:w-auto px-7 py-3.5 sm:px-8 sm:py-4 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0D0C0B] text-white hover:bg-teak transition-all duration-300 shadow-xl shadow-stone-900/15 transform hover:-translate-y-1 flex items-center justify-center gap-2 font-mono btn-3d"
             >
-              <span>Explore Bento Gallery</span>
+              <i class="fa-solid fa-crown text-amber-400 text-xs"></i>
+              <span>Explore Highlights (10)</span>
               <i class="fa-solid fa-arrow-down-long text-xs"></i>
             </a>
 
@@ -478,51 +488,83 @@
   </section>
 
   <!-- =========================================================================
-       4. BENTO GRID GALLERY (Interactive Category Filtering + Quick-View Modal)
+       4. CURATED WORKSHOP HIGHLIGHTS (10 Masterpieces - First on Scroll)
        ========================================================================= -->
-  <section id="gallery" class="py-20 lg:py-28 bg-white border-y border-stone-200 relative overflow-hidden">
+  <section id="highlights" class="py-12 sm:py-16 bg-gradient-to-b from-[#FFFDF9] via-amber-50/40 to-white border-y border-stone-200/90 relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <!-- Section Header -->
-      <div class="text-center max-w-3xl mx-auto mb-12">
-        <span class="text-xs font-bold uppercase tracking-widest text-teak font-mono block mb-2">Curated Portfolio</span>
-        <h2 class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0D0C0B]">
-          The Homeify Collection
-        </h2>
-        <p class="text-stone-600 text-sm sm:text-base mt-3 font-sans">
-          Engineered and handcrafted in our Erattupetta workshop. Filter collections to explore solid wood cots, cane-weave dining tables, modular workstations, and decorative wall louvers.
-        </p>
-      </div>
-
-      <!-- Curated Factory Highlights: 10 Featured Masterpieces -->
-      <div id="highlights-section" class="mb-10 max-w-5xl mx-auto">
-        <div class="flex items-center justify-between mb-3 px-2">
-          <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
-            <span class="text-xs font-mono font-bold uppercase tracking-wider text-[#0D0C0B] flex items-center gap-1.5">
-              <i class="fa-solid fa-crown text-amber-500 text-xs"></i>
-              <span>Curated Workshop Highlights</span>
-            </span>
-            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">10 Masterpieces</span>
+      <div id="highlights-section" class="max-w-5xl mx-auto">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 px-2">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
+              <span class="text-xs font-mono font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1.5">
+                <i class="fa-solid fa-crown text-amber-500 text-xs"></i>
+                <span>Flagship Showcase</span>
+              </span>
+              <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">10 Masterpieces</span>
+            </div>
+            <h2 class="font-heading text-2xl sm:text-3xl font-extrabold text-[#0D0C0B] mt-1.5">
+              Curated Workshop Highlights
+            </h2>
+            <p class="text-xs sm:text-sm text-stone-600 mt-1 font-sans">
+              Handpicked flagship solid Grade-A teak pieces direct from our Erattupetta workshop.
+            </p>
           </div>
-          <span class="text-[11px] font-mono text-stone-500 font-medium">Quick Preview</span>
+          <div class="flex items-center gap-2.5 self-start sm:self-auto flex-wrap">
+            <button 
+              id="catalog-admin-highlights-btn" 
+              type="button" 
+              onclick="openHighlightsManagerInAdmin()" 
+              class="hidden px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-amber-400 hover:bg-amber-500 text-stone-950 border border-amber-500 shadow-sm transition-all cursor-pointer items-center gap-1.5"
+              title="Admin: Open Highlights Manager in Studio"
+            >
+              <i class="fa-solid fa-sliders text-[11px]"></i>
+              <span>Edit 10 Highlights (Admin)</span>
+            </button>
+            <a 
+              href="#gallery" 
+              class="px-3.5 py-1.5 rounded-full text-xs font-mono font-bold bg-stone-100 hover:bg-stone-200 text-stone-800 transition-colors border border-stone-200 flex items-center gap-1.5"
+            >
+              <span>Explore All 72 Pieces</span>
+              <i class="fa-solid fa-arrow-down text-[10px]"></i>
+            </a>
+          </div>
         </div>
         <div id="curated-highlights-strip" class="flex items-start gap-3 sm:gap-4 overflow-x-auto no-scrollbar py-2.5 px-2 -mx-2 flex-nowrap sm:justify-center">
           <!-- Populated via app.js with small thumbnails of top products -->
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       5. BENTO GRID GALLERY (Interactive Category Filtering + Quick-View Modal)
+       ========================================================================= -->
+  <section id="gallery" class="py-16 sm:py-24 bg-white border-b border-stone-200 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="text-xs font-bold uppercase tracking-widest text-teak font-mono block mb-2">Curated Portfolio</span>
+        <h2 class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0D0C0B]">
+          The Homeify Collection
+        </h2>
+        <p class="text-stone-600 text-sm sm:text-base mt-3 font-sans">
+          Engineered and handcrafted in our Erattupetta workshop. Filter collections to explore solid wood cots, dining tables, chairs, coffee tables, wardrobes, swings, and custom woodwork.
+        </p>
+      </div>
 
       <!-- Category Filter Pills (Touch-swipeable on mobile, centered wrapped on desktop) -->
       <div class="flex items-center sm:justify-center gap-2 sm:gap-2.5 mb-8 sm:mb-12 overflow-x-auto no-scrollbar pb-2 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0 flex-nowrap sm:flex-wrap">
         <button 
-          class="bento-filter-btn flex-shrink-0 whitespace-nowrap px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs font-bold uppercase tracking-wider border border-amber-300 bg-amber-50/80 text-amber-950 hover:bg-amber-100 transition-all duration-300 font-mono shadow-sm"
+          class="bento-filter-btn active flex-shrink-0 whitespace-nowrap px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs font-bold uppercase tracking-wider border border-[#0D0C0B] bg-[#0D0C0B] text-white shadow-md font-mono transition-all duration-300"
           data-filter="highlights"
         >
           <i class="fa-solid fa-crown text-amber-500 mr-1.5"></i> Top 10 Highlights
         </button>
 
         <button 
-          class="bento-filter-btn active flex-shrink-0 whitespace-nowrap px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs font-bold uppercase tracking-wider border border-[#0D0C0B] bg-[#0D0C0B] text-white shadow-md font-mono transition-all duration-300"
+          class="bento-filter-btn flex-shrink-0 whitespace-nowrap px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs font-bold uppercase tracking-wider border border-stone-200 text-stone-700 hover:border-[#0D0C0B] hover:text-[#0D0C0B] transition-all duration-300 bg-white font-mono"
           data-filter="sofas"
         >
           <i class="fa-solid fa-couch mr-1.5"></i> Sofas
@@ -2084,6 +2126,17 @@
       
       <div class="absolute top-4 right-4 z-20 flex items-center gap-2">
         <button 
+          id="modal-quick-highlight-btn" 
+          type="button" 
+          onclick="toggleHighlightPinFromModal()" 
+          class="hidden px-3.5 h-10 rounded-full text-xs font-mono font-bold items-center gap-1.5 transition-all hover:scale-105 shadow-md border cursor-pointer" 
+          title="Admin: Toggle this product in Top 10 Highlights" 
+          aria-label="Toggle highlight"
+        >
+          <i class="fa-solid fa-crown text-xs"></i>
+          <span>Add to Highlights</span>
+        </button>
+        <button 
           id="modal-quick-edit-btn" 
           type="button" 
           onclick="openProductEditModalFromQuickView()" 
@@ -2178,6 +2231,33 @@
             <ul id="modal-product-features" class="space-y-1.5 font-sans">
               <!-- Injected via JS -->
             </ul>
+          </div>
+
+          <!-- Admin-Only Quick Controls Box in Modal -->
+          <div id="modal-admin-panel" class="hidden mt-3 p-3 rounded-2xl bg-amber-50/90 border border-amber-300 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5 text-xs font-mono font-bold text-amber-950">
+              <i class="fa-solid fa-shield-halved text-amber-600"></i>
+              <span>Admin Options:</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button 
+                id="modal-admin-highlight-pill" 
+                type="button" 
+                onclick="toggleHighlightPinFromModal()" 
+                class="px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer shadow-sm flex items-center gap-1.5"
+              >
+                <!-- Populated via updateModalHighlightButton -->
+              </button>
+              <button 
+                type="button" 
+                onclick="openProductEditModalFromQuickView()" 
+                class="px-3 py-1.5 rounded-xl bg-white hover:bg-stone-100 text-stone-800 border border-stone-300 text-xs font-mono font-bold transition-all cursor-pointer shadow-sm flex items-center gap-1"
+                title="Edit price, photos, and specs"
+              >
+                <i class="fa-solid fa-pen-to-square text-[11px] text-amber-600"></i>
+                <span>Edit Info</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -3623,6 +3703,39 @@
       <span class="text-[9px] sm:text-[10px] font-mono font-bold tracking-tight">Quote</span>
     </a>
   </nav>
+
+  <!-- Persistent Admin Mode Indicator Bar (Visible ONLY when admin is authenticated) -->
+  <aside 
+    id="admin-live-mode-bar" 
+    class="hidden fixed bottom-20 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[#0D0C0B]/95 text-white border-2 border-amber-400/90 px-4 py-2 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-3 transition-all"
+    aria-label="Admin quick toolbar"
+  >
+    <div class="flex items-center gap-2 text-xs font-mono">
+      <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+      <span class="font-bold text-amber-300">Admin Mode:</span>
+      <span class="text-stone-300 text-[11px] hidden sm:inline">Click "+ Highlight" on any product card to feature it</span>
+    </div>
+    <div class="flex items-center gap-1.5 border-l border-white/20 pl-2">
+      <button 
+        type="button" 
+        onclick="openCustomizer()" 
+        class="px-2.5 py-1 rounded-full bg-amber-400 hover:bg-amber-500 text-stone-950 text-[11px] font-mono font-bold transition-colors cursor-pointer flex items-center gap-1"
+        title="Open Full Workshop Studio"
+      >
+        <i class="fa-solid fa-sliders text-[10px]"></i>
+        <span>Studio</span>
+      </button>
+      <button 
+        type="button" 
+        onclick="adminQuickLogout()" 
+        class="px-2.5 py-1 rounded-full bg-white/10 hover:bg-rose-600 text-stone-300 hover:text-white text-[11px] font-mono transition-colors cursor-pointer flex items-center gap-1"
+        title="Exit Admin Mode and return to standard visitor view"
+      >
+        <i class="fa-solid fa-arrow-right-from-bracket text-[10px]"></i>
+        <span class="hidden sm:inline">Exit</span>
+      </button>
+    </div>
+  </aside>
 
   <!-- JavaScript Engine -->
   <script src="app.js"></script>
