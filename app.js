@@ -2118,7 +2118,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroParallax();
   initHeroCarousel();
   renderCuratedHighlights();
-  renderBentoGallery('highlights');
+  renderBentoGallery('sofas');
   initFilterButtons();
   initModalListeners();
   initMaterialComparator();
@@ -2796,7 +2796,7 @@ function renderBentoGallery(filterCategory) {
   const gridContainer = document.getElementById('bento-grid-container');
   if (!gridContainer) return;
 
-  const activeCategory = filterCategory || currentFilter || 'highlights';
+  const activeCategory = filterCategory || currentFilter || 'sofas';
   currentFilter = activeCategory;
 
   const filtered = PRODUCTS.filter(p => {
@@ -2936,12 +2936,6 @@ function renderBentoGallery(filterCategory) {
             <span class="px-2.5 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold rounded-full ${materialBadgeBg} shadow-sm backdrop-blur-md">
               ${materialLabel}
             </span>
-            ${isInHighlights ? `
-              <span class="px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-xs font-mono font-bold rounded-full bg-amber-400 text-stone-950 shadow-sm flex items-center gap-1 border border-amber-300">
-                <i class="fa-solid fa-crown text-[9px]"></i>
-                <span>#${hIdx + 1} Flagship</span>
-              </span>
-            ` : ''}
           </div>
           <div class="flex items-center gap-1.5">
             <span class="px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-xs font-bold rounded-full bg-[#D4AF37] text-[#0D0C0B] shadow-sm flex items-center gap-1 font-mono">

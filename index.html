@@ -197,11 +197,6 @@
 
       <!-- Desktop Nav -->
       <nav class="hidden lg:flex items-center gap-8 text-xs uppercase tracking-widest font-semibold text-stone-700 font-sans">
-        <a href="#highlights" class="hover:text-teak transition-colors py-2 relative group flex items-center gap-1.5">
-          <i class="fa-solid fa-crown text-[10px] text-amber-500"></i>
-          <span>Highlights</span>
-          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-teak group-hover:w-full transition-all duration-300"></span>
-        </a>
         <a href="#gallery" class="hover:text-teak transition-colors py-2 relative group">
           Catalog
           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-teak group-hover:w-full transition-all duration-300"></span>
@@ -223,9 +218,6 @@
             <i class="fa-solid fa-star text-[8px] text-[#FBBC04]"></i> 5.0
           </span>
           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-teak group-hover:w-full transition-all duration-300"></span>
-        </a>
-        <a href="#custom-quote" class="hover:text-teak transition-colors py-2 relative group">
-          Configurator
         </a>
       </nav>
 
@@ -296,10 +288,6 @@
     </div>
 
     <nav class="flex flex-col gap-4 py-6 text-sm font-semibold text-stone-800 uppercase tracking-wider font-sans">
-      <a href="#highlights" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
-        <span class="flex items-center gap-2"><i class="fa-solid fa-crown text-amber-500 text-xs"></i><span>Top 10 Highlights</span></span>
-        <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold font-mono">10 Pieces</span>
-      </a>
       <a href="#gallery" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
         <span>Full Catalog (72 Pieces)</span>
         <i class="fa-solid fa-chevron-right text-xs text-stone-400"></i>
@@ -393,20 +381,21 @@
 
           <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4 pt-2">
             <a 
-              href="#highlights" 
+              href="#gallery" 
               class="corp-btn-primary w-full sm:w-auto"
             >
-              <i class="fa-solid fa-crown text-champagne text-xs"></i>
-              <span>Explore Highlights (10)</span>
+              <span>Explore Collection</span>
               <i class="fa-solid fa-arrow-down-long text-[10px]"></i>
             </a>
 
             <a 
-              href="#custom-quote" 
+              href="https://wa.me/919778446620?text=Hello%20Homeify%20Furniture!%20I%20would%20like%20to%20inquire%20about%20your%20custom%20furniture." 
+              target="_blank"
+              rel="noopener"
               class="corp-btn-secondary w-full sm:w-auto"
             >
-              <i class="fa-solid fa-sliders text-teak text-xs"></i>
-              <span>Quote Configurator</span>
+              <i class="fa-brands fa-whatsapp text-[#25D366] text-sm"></i>
+              <span>WhatsApp Inquiry</span>
             </a>
           </div>
 
@@ -515,55 +504,7 @@
   </section>
 
   <!-- =========================================================================
-       4. CURATED WORKSHOP HIGHLIGHTS (10 Masterpieces - First on Scroll)
-       ========================================================================= -->
-  <section id="highlights" class="py-14 sm:py-20 bg-gradient-to-b from-[#FFFDF9] via-amber-50/20 to-white dark:from-[#141210] dark:via-[#161412] dark:to-[#0D0C0B] border-y border-stone-200/80 dark:border-white/10 relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div id="highlights-section" class="max-w-6xl mx-auto">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 px-1">
-          <div>
-            <div class="flex items-center gap-2 mb-1.5">
-              <span class="corp-eyebrow">
-                <i class="fa-solid fa-crown text-champagne"></i> EXECUTIVE SHOWCASE · 10 MASTERPIECES
-              </span>
-              <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300/60">10 Flagships</span>
-            </div>
-            <h2 class="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0D0C0B] dark:text-white tracking-tight">
-              Curated Workshop Highlights
-            </h2>
-            <p class="text-xs sm:text-sm text-stone-600 dark:text-stone-300 mt-1 font-sans">
-              Handpicked flagship Grade-A natural teak collections engineered at our Erattupetta atelier.
-            </p>
-          </div>
-          <div class="flex items-center gap-2.5 self-start sm:self-auto flex-wrap">
-            <button 
-              id="catalog-admin-highlights-btn" 
-              type="button" 
-              onclick="openHighlightsManagerInAdmin()" 
-              class="hidden px-3.5 py-2 rounded-full text-xs font-mono font-bold bg-amber-400 hover:bg-amber-500 text-stone-950 border border-amber-500 shadow-sm transition-all cursor-pointer items-center gap-1.5"
-              title="Admin: Open Highlights Manager in Studio"
-            >
-              <i class="fa-solid fa-sliders text-[11px]"></i>
-              <span>Edit 10 Highlights (Admin)</span>
-            </button>
-            <a 
-              href="#gallery" 
-              class="px-4 py-2 rounded-full text-xs font-mono font-bold bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 transition-colors border border-stone-200 dark:border-white/10 flex items-center gap-1.5"
-            >
-              <span>Explore All 72 Pieces</span>
-              <i class="fa-solid fa-arrow-down text-[10px]"></i>
-            </a>
-          </div>
-        </div>
-        <div id="curated-highlights-strip" class="flex items-stretch gap-3.5 sm:gap-4 overflow-x-auto no-scrollbar py-2 px-1 -mx-1 flex-nowrap">
-          <!-- Populated via app.js with high-end corporate flagship cards -->
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =========================================================================
-       5. BENTO GRID GALLERY (Interactive Category Filtering + Quick-View Modal)
+       4. BENTO GRID GALLERY (Interactive Category Filtering + Quick-View Modal)
        ========================================================================= -->
   <section id="gallery" class="py-16 sm:py-24 bg-white border-b border-stone-200 relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -587,13 +528,6 @@
       <div class="flex items-center sm:justify-center gap-2 sm:gap-2.5 mb-8 sm:mb-12 overflow-x-auto no-scrollbar pb-2 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0 flex-nowrap sm:flex-wrap">
         <button 
           class="bento-filter-btn active flex-shrink-0 whitespace-nowrap px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs font-bold uppercase tracking-wider border border-[#0D0C0B] bg-[#0D0C0B] text-white shadow-md font-mono transition-all duration-300"
-          data-filter="highlights"
-        >
-          <i class="fa-solid fa-crown text-amber-500 mr-1.5"></i> Top 10 Highlights
-        </button>
-
-        <button 
-          class="bento-filter-btn flex-shrink-0 whitespace-nowrap px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs font-bold uppercase tracking-wider border border-stone-200 text-stone-700 hover:border-[#0D0C0B] hover:text-[#0D0C0B] transition-all duration-300 bg-white font-mono"
           data-filter="sofas"
         >
           <i class="fa-solid fa-couch mr-1.5"></i> Sofas
