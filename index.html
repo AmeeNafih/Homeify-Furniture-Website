@@ -289,7 +289,7 @@
 
     <nav class="flex flex-col gap-4 py-6 text-sm font-semibold text-stone-800 uppercase tracking-wider font-sans">
       <a href="#gallery" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
-        <span>Full Catalog (72 Pieces)</span>
+        <span>Full Catalog</span>
         <i class="fa-solid fa-chevron-right text-xs text-stone-400"></i>
       </a>
       <a href="#material-comparator" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
@@ -510,18 +510,51 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Section Header -->
-      <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+      <div class="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
         <div class="flex items-center justify-center gap-2 mb-2.5">
           <span class="corp-eyebrow">
             <i class="fa-solid fa-shapes text-teak"></i> ARCHITECTURAL CONTRACT & RESIDENTIAL CATALOG
           </span>
         </div>
         <h2 class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0D0C0B] dark:text-white tracking-tight">
-          The Homeify Collection <span class="font-mono text-xl sm:text-2xl font-normal text-stone-400">/ 72 Masterpieces</span>
+          The Homeify Collection
         </h2>
         <p class="text-stone-600 dark:text-stone-300 text-sm sm:text-base mt-3 font-sans max-w-2xl mx-auto leading-relaxed">
           Engineered and handcrafted at our Erattupetta atelier. Filter across contract millwork, solid Grade-A natural teak cots, monolithic dining tables, ergonomic cane chairs, and custom architectural woodwork.
         </p>
+      </div>
+
+      <!-- Highlights Showcase inside The Homeify Collection (10 Top Products Shown First) -->
+      <div id="collection-highlights-wrapper" class="mb-10 sm:mb-14 p-4 sm:p-6 rounded-3xl bg-gradient-to-b from-stone-50/80 via-white to-stone-50/40 dark:from-stone-900/60 dark:via-stone-900/30 dark:to-stone-900/60 border border-stone-200/80 dark:border-white/10 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 px-1">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="corp-eyebrow text-xs">
+                <i class="fa-solid fa-crown text-champagne"></i> CURATED FLAGSHIP HIGHLIGHTS
+              </span>
+              <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300/50">Top 10 Picks</span>
+            </div>
+            <h3 class="font-heading text-lg sm:text-xl font-bold text-[#0D0C0B] dark:text-white">
+              Featured Workshop Highlights
+            </h3>
+          </div>
+          <div class="flex items-center gap-2 self-start sm:self-auto">
+            <button 
+              id="catalog-admin-highlights-btn" 
+              type="button" 
+              onclick="openHighlightsManagerInAdmin()" 
+              class="hidden px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-amber-400 hover:bg-amber-500 text-stone-950 border border-amber-500 shadow-sm transition-all cursor-pointer items-center gap-1.5"
+              title="Admin: Edit 10 Highlights"
+            >
+              <i class="fa-solid fa-sliders text-[11px]"></i>
+              <span>Edit 10 Highlights (Admin)</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="curated-highlights-strip" class="flex items-stretch gap-3.5 sm:gap-4 overflow-x-auto no-scrollbar py-2 px-1 -mx-1 flex-nowrap">
+          <!-- Populated via app.js with the 10 top products -->
+        </div>
       </div>
 
       <!-- Category Filter Pills (Touch-swipeable on mobile, centered wrapped on desktop) -->
