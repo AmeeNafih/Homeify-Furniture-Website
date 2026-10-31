@@ -36,7 +36,7 @@
   <link rel="dns-prefetch" href="//cdn.tailwindcss.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -101,28 +101,54 @@
       theme: {
         extend: {
           colors: {
-            alabaster: '#FAF8F5',
-            espresso: '#0D0C0B',
+            cream: '#FAF7F2',
+            alabaster: '#FAF7F2',
+            warmwhite: '#FCFBF9',
+            sand: '#F5EFEB',
+            espresso: '#161412',
+            obsidian: '#0D0C0B',
+            charcoal: '#1C1917',
+            bronze: {
+              DEFAULT: '#3E342B',
+              dark: '#26201B',
+              light: '#5E5144'
+            },
+            walnut: {
+              DEFAULT: '#6B4423',
+              dark: '#452A15',
+              light: '#8E5D34'
+            },
             teak: {
-              DEFAULT: '#9E6738',
-              light: '#B57945',
-              dark: '#6E4018',
+              DEFAULT: '#8C5630',
+              light: '#A76D43',
+              dark: '#5C3418',
             },
             sage: {
-              DEFAULT: '#2C4A38',
-              light: '#3D634C',
+              DEFAULT: '#2F483A',
+              light: '#426351',
               dark: '#1C3125',
             },
             champagne: {
-              DEFAULT: '#D4AF37',
-              light: '#F3E5AB',
-              dark: '#AA771C',
+              DEFAULT: '#C5A059',
+              light: '#E8D5AB',
+              dark: '#9E7832',
+            },
+            gold: {
+              DEFAULT: '#C5A059',
+              light: '#E8D5AB',
+              dark: '#9E7832',
+            },
+            terracotta: {
+              DEFAULT: '#C25D42',
+              light: '#DC7E65',
+              dark: '#9A412A'
             }
           },
           fontFamily: {
-            heading: ['Manrope', 'Plus Jakarta Sans', 'Inter', '-apple-system', 'sans-serif'],
-            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
-            sans: ['Inter', 'Plus Jakarta Sans', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            heading: ['Playfair Display', 'Plus Jakarta Sans', 'Inter', 'serif'],
+            serif: ['Playfair Display', 'Cormorant Garamond', 'Georgia', 'serif'],
+            cinzel: ['Cinzel', 'serif'],
+            sans: ['Plus Jakarta Sans', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
             mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
           }
         }
@@ -207,81 +233,174 @@
         </div>
       </a>
 
-      <!-- Desktop Nav -->
-      <nav class="hidden lg:flex items-center gap-8 text-xs uppercase tracking-widest font-semibold text-stone-700 font-sans">
-        <a href="#gallery" class="hover:text-teak transition-colors py-2 relative group">
-          Catalog
-          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-teak group-hover:w-full transition-all duration-300"></span>
+      <!-- Desktop Nav with Room Categories & Quick Links -->
+      <nav class="hidden lg:flex items-center gap-6 xl:gap-7 text-xs uppercase tracking-widest font-semibold text-stone-700 dark:text-stone-300 font-sans">
+        <!-- Room Categories Dropdown / Links -->
+        <div class="relative group py-2">
+          <a href="#gallery" class="hover:text-teak transition-colors flex items-center gap-1.5 py-1">
+            <span>Categories</span>
+            <i class="fa-solid fa-chevron-down text-[9px] text-stone-400 group-hover:rotate-180 transition-transform duration-200"></i>
+          </a>
+          <!-- Luxury Glass Dropdown -->
+          <div class="absolute top-full left-0 w-64 p-3 bg-white/95 dark:bg-[#181614]/95 backdrop-blur-xl rounded-2xl border border-stone-200/90 dark:border-white/10 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 space-y-1">
+            <a href="#gallery" onclick="setRoomFilter('living')" class="p-2.5 rounded-xl hover:bg-stone-50 dark:hover:bg-stone-800 flex items-center gap-3 transition-colors">
+              <span class="w-8 h-8 rounded-lg bg-teak/10 text-teak flex items-center justify-center text-sm"><i class="fa-solid fa-couch"></i></span>
+              <div>
+                <span class="block text-xs font-bold text-stone-900 dark:text-white capitalize">Living Room</span>
+                <span class="block text-[10px] text-stone-500 font-sans lowercase">Sofas, tables, swings & chairs</span>
+              </div>
+            </a>
+            <a href="#gallery" onclick="setRoomFilter('bedroom')" class="p-2.5 rounded-xl hover:bg-stone-50 dark:hover:bg-stone-800 flex items-center gap-3 transition-colors">
+              <span class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center text-sm"><i class="fa-solid fa-bed"></i></span>
+              <div>
+                <span class="block text-xs font-bold text-stone-900 dark:text-white capitalize">Bedroom Suites</span>
+                <span class="block text-[10px] text-stone-500 font-sans lowercase">Teak king cots & wardrobes</span>
+              </div>
+            </a>
+            <a href="#gallery" onclick="setRoomFilter('dining')" class="p-2.5 rounded-xl hover:bg-stone-50 dark:hover:bg-stone-800 flex items-center gap-3 transition-colors">
+              <span class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-sm"><i class="fa-solid fa-utensils"></i></span>
+              <div>
+                <span class="block text-xs font-bold text-stone-900 dark:text-white capitalize">Dining Room</span>
+                <span class="block text-[10px] text-stone-500 font-sans lowercase">Solid wood & marble tables</span>
+              </div>
+            </a>
+            <a href="#gallery" onclick="setRoomFilter('office')" class="p-2.5 rounded-xl hover:bg-stone-50 dark:hover:bg-stone-800 flex items-center gap-3 transition-colors">
+              <span class="w-8 h-8 rounded-lg bg-sky-500/10 text-sky-600 flex items-center justify-center text-sm"><i class="fa-solid fa-briefcase"></i></span>
+              <div>
+                <span class="block text-xs font-bold text-stone-900 dark:text-white capitalize">Office & Custom</span>
+                <span class="block text-[10px] text-stone-500 font-sans lowercase">Workstations & doors</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <a href="#collection-highlights-wrapper" class="hover:text-teak transition-colors py-2 relative group flex items-center gap-1.5">
+          <span>Best Sellers</span>
+          <span class="px-1.5 py-0.2 rounded-full bg-amber-400 text-stone-950 font-bold text-[9px] font-mono">Top 10</span>
         </a>
+
+        <a href="#room-visualizer" class="hover:text-teak transition-colors py-2 relative group flex items-center gap-1.5">
+          <i class="fa-solid fa-cube text-amber-500 text-[11px]"></i>
+          <span>3D Visualizer</span>
+        </a>
+
         <a href="#material-comparator" class="hover:text-teak transition-colors py-2 relative group flex items-center gap-1.5">
           <span>Materials</span>
-          <span class="px-2 py-0.5 text-[9px] rounded-full bg-sage/10 text-sage font-bold font-mono">Wood vs Board</span>
         </a>
-        <a href="#warranty-promise" class="hover:text-teak transition-colors py-2 relative group flex items-center gap-1.5">
-          <span>5-Year Warranty</span>
-          <span class="w-1.5 h-1.5 rounded-full bg-champagne animate-pulse"></span>
-        </a>
+
         <a href="#workshop-heritage" class="hover:text-teak transition-colors py-2 relative group">
-          Workshop
+          About Us
         </a>
+
         <a href="#reviews" class="hover:text-teak transition-colors py-2 relative group flex items-center gap-1.5">
           <span>Reviews</span>
           <span class="px-1.5 py-0.5 text-[9px] rounded-full bg-amber-500/10 text-amber-600 font-bold font-mono flex items-center gap-0.5">
             <i class="fa-solid fa-star text-[8px] text-[#FBBC04]"></i> 5.0
           </span>
-          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-teak group-hover:w-full transition-all duration-300"></span>
+        </a>
+
+        <a href="#footer" class="hover:text-teak transition-colors py-2 relative group">
+          Contact
         </a>
       </nav>
 
-      <!-- Desktop CTAs with updated WhatsApp 9778446620 -->
-      <div class="hidden sm:flex items-center gap-3">
+      <!-- Desktop Action Icons: Search, Wishlist, Cart & Consultation CTA -->
+      <div class="hidden sm:flex items-center gap-2.5 xl:gap-3">
+        <!-- Quick Search Icon Button -->
+        <button 
+          type="button" 
+          onclick="openSearchModal()" 
+          class="w-10 h-10 rounded-full border border-stone-200 dark:border-white/10 bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:text-teak hover:border-teak transition-all shadow-xs flex items-center justify-center cursor-pointer active:scale-95" 
+          title="Search Catalog (Press /)"
+          aria-label="Search Catalog"
+        >
+          <i class="fa-solid fa-magnifying-glass text-xs"></i>
+        </button>
+
+        <!-- Saved Wishlist Icon Button -->
+        <button 
+          type="button" 
+          onclick="openWishlistDrawer()" 
+          class="relative w-10 h-10 rounded-full border border-stone-200 dark:border-white/10 bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:text-amber-600 hover:border-amber-400 transition-all shadow-xs flex items-center justify-center cursor-pointer active:scale-95" 
+          title="Saved Wishlist Pieces"
+          aria-label="Saved Wishlist"
+        >
+          <i class="fa-regular fa-heart text-xs"></i>
+          <span id="header-wishlist-count" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-600 text-white text-[9px] font-bold font-mono flex items-center justify-center shadow-sm">0</span>
+        </button>
+
+        <!-- Consultation Inquiry Cart Icon Button -->
+        <button 
+          type="button" 
+          onclick="openConsultationModal()" 
+          class="relative w-10 h-10 rounded-full border border-stone-200 dark:border-white/10 bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 hover:text-emerald-600 hover:border-emerald-400 transition-all shadow-xs flex items-center justify-center cursor-pointer active:scale-95" 
+          title="Consultation Request"
+          aria-label="Consultation Request"
+        >
+          <i class="fa-solid fa-bag-shopping text-xs"></i>
+          <span id="header-inquiry-count" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-600 text-white text-[9px] font-bold font-mono flex items-center justify-center shadow-sm">0</span>
+        </button>
+
         <!-- Theme Mode Switcher -->
         <button 
           id="desktop-theme-toggle" 
           type="button" 
-          class="theme-toggle-btn p-2.5 rounded-full border border-stone-200 dark:border-white/10 bg-white dark:bg-stone-800 text-stone-700 dark:text-champagne hover:scale-105 active:scale-95 transition-all shadow-sm flex items-center justify-center cursor-pointer"
+          class="theme-toggle-btn w-10 h-10 rounded-full border border-stone-200 dark:border-white/10 bg-white dark:bg-stone-800 text-stone-700 dark:text-champagne hover:scale-105 active:scale-95 transition-all shadow-xs flex items-center justify-center cursor-pointer"
           title="Toggle Light / Dark Mode" 
           aria-label="Toggle Light / Dark Mode"
         >
-          <i class="fa-solid fa-moon text-sm dark-toggle-moon"></i>
-          <i class="fa-solid fa-sun text-sm dark-toggle-sun text-champagne hidden"></i>
+          <i class="fa-solid fa-moon text-xs dark-toggle-moon"></i>
+          <i class="fa-solid fa-sun text-xs dark-toggle-sun text-champagne hidden"></i>
         </button>
 
-        <a 
-          href="https://wa.me/919778446620?text=Hello%20Homeify%20Furniture%20(Erattupetta)!%20I%20would%20like%20to%20inquire%20about%20your%20custom%20furniture." 
-          target="_blank" 
-          rel="noopener"
-          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold bg-[#25D366]/10 text-[#075E54] hover:bg-[#25D366] hover:text-white transition-all duration-300 border border-[#25D366]/30 shadow-sm font-mono"
+        <!-- Book Free Consultation CTA -->
+        <button 
+          type="button" 
+          onclick="openConsultationModal()" 
+          class="hidden xl:inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold bg-[#1C1917] dark:bg-amber-500 text-white dark:text-[#1C1917] hover:bg-teak dark:hover:bg-amber-400 transition-all duration-300 shadow-md transform hover:-translate-y-0.5 uppercase tracking-wider font-sans cursor-pointer active:scale-95"
         >
-          <i class="fa-brands fa-whatsapp text-sm text-[#25D366] group-hover:text-white"></i>
-          <span>97784 46620</span>
-        </a>
-
-        <a 
-          href="#custom-quote" 
-          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold bg-[#0D0C0B] text-white hover:bg-teak transition-all duration-300 shadow-md transform hover:-translate-y-0.5 uppercase tracking-wider font-mono"
-        >
-          <span>Get Free Estimate</span>
-          <i class="fa-solid fa-arrow-right text-[10px]"></i>
-        </a>
+          <i class="fa-solid fa-calendar-check text-[10px]"></i>
+          <span>Free Consultation</span>
+        </button>
       </div>
 
-      <!-- Mobile Quick Actions: Theme Toggle + Menu Button -->
-      <div class="flex items-center gap-2 lg:hidden">
+      <!-- Mobile Quick Actions: Search + Wishlist + Theme Toggle + Menu Button -->
+      <div class="flex items-center gap-1.5 lg:hidden">
+        <button 
+          type="button" 
+          onclick="openSearchModal()" 
+          class="w-10 h-10 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-white/10 shadow-xs flex items-center justify-center active:scale-95 transition-transform cursor-pointer"
+          title="Search"
+          aria-label="Search"
+        >
+          <i class="fa-solid fa-magnifying-glass text-xs"></i>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="openWishlistDrawer()" 
+          class="relative w-10 h-10 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-white/10 shadow-xs flex items-center justify-center active:scale-95 transition-transform cursor-pointer"
+          title="Wishlist"
+          aria-label="Wishlist"
+        >
+          <i class="fa-regular fa-heart text-xs"></i>
+          <span id="mobile-header-wishlist-count" class="hidden absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-amber-600 text-white text-[8px] font-bold flex items-center justify-center">0</span>
+        </button>
+
         <button 
           id="mobile-theme-toggle" 
           type="button" 
-          class="theme-toggle-btn w-10 h-10 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-champagne border border-stone-200 dark:border-white/10 shadow-sm flex items-center justify-center active:scale-95 transition-transform cursor-pointer"
+          class="theme-toggle-btn w-10 h-10 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-champagne border border-stone-200 dark:border-white/10 shadow-xs flex items-center justify-center active:scale-95 transition-transform cursor-pointer"
           title="Toggle Light / Dark Mode" 
           aria-label="Toggle Light / Dark Mode"
         >
-          <i class="fa-solid fa-moon text-sm dark-toggle-moon"></i>
-          <i class="fa-solid fa-sun text-sm dark-toggle-sun text-champagne hidden"></i>
+          <i class="fa-solid fa-moon text-xs dark-toggle-moon"></i>
+          <i class="fa-solid fa-sun text-xs dark-toggle-sun text-champagne hidden"></i>
         </button>
 
         <button 
           id="mobile-menu-btn" 
-          class="w-10 h-10 rounded-xl bg-[#0D0C0B] text-white dark:bg-white dark:text-[#0D0C0B] border border-stone-200/20 shadow-sm flex items-center justify-center active:scale-95 transition-transform cursor-pointer" 
+          class="w-11 h-11 min-h-[48px] rounded-xl bg-[#1C1917] text-white dark:bg-white dark:text-[#1C1917] border border-stone-200/20 shadow-xs flex items-center justify-center active:scale-95 transition-transform cursor-pointer" 
           aria-label="Toggle Navigation"
         >
           <i class="fa-solid fa-bars-staggered text-sm"></i>
@@ -304,13 +423,52 @@
     </div>
 
     <!-- Navigation Items styled like sleek iOS cards -->
-    <nav class="flex flex-col gap-2 py-5 font-sans">
-      <a href="#gallery" class="mobile-drawer-link p-3 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center justify-between transition-colors">
+    <nav class="flex flex-col gap-1.5 py-4 font-sans">
+      <!-- Room Categories Group -->
+      <div class="px-1 pb-1">
+        <span class="text-[10px] font-mono font-bold text-stone-400 uppercase tracking-widest block mb-2">Shop by Room</span>
+        <div class="grid grid-cols-2 gap-2">
+          <a href="#gallery" onclick="setRoomFilter('living'); document.getElementById('drawer-close-btn').click();" class="p-2.5 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 flex items-center gap-2 text-xs font-bold text-stone-800 dark:text-stone-200">
+            <i class="fa-solid fa-couch text-teak text-xs"></i>
+            <span>Living</span>
+          </a>
+          <a href="#gallery" onclick="setRoomFilter('bedroom'); document.getElementById('drawer-close-btn').click();" class="p-2.5 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 flex items-center gap-2 text-xs font-bold text-stone-800 dark:text-stone-200">
+            <i class="fa-solid fa-bed text-amber-600 text-xs"></i>
+            <span>Bedroom</span>
+          </a>
+          <a href="#gallery" onclick="setRoomFilter('dining'); document.getElementById('drawer-close-btn').click();" class="p-2.5 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 flex items-center gap-2 text-xs font-bold text-stone-800 dark:text-stone-200">
+            <i class="fa-solid fa-utensils text-emerald-600 text-xs"></i>
+            <span>Dining</span>
+          </a>
+          <a href="#gallery" onclick="setRoomFilter('office'); document.getElementById('drawer-close-btn').click();" class="p-2.5 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 flex items-center gap-2 text-xs font-bold text-stone-800 dark:text-stone-200">
+            <i class="fa-solid fa-briefcase text-sky-600 text-xs"></i>
+            <span>Office</span>
+          </a>
+        </div>
+      </div>
+
+      <a href="#collection-highlights-wrapper" class="mobile-drawer-link p-3 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center justify-between transition-colors">
         <span class="flex items-center gap-2.5 font-bold text-xs uppercase tracking-wider text-stone-800 dark:text-stone-200">
-          <i class="fa-solid fa-shapes text-teak text-sm"></i>
-          <span>The Collection</span>
+          <i class="fa-solid fa-crown text-amber-500 text-sm"></i>
+          <span>Best Sellers (Top 10)</span>
         </span>
-        <i class="fa-solid fa-chevron-right text-xs text-stone-400"></i>
+        <span class="text-[9px] px-2 py-0.5 rounded-full bg-amber-400 text-stone-950 font-bold font-mono">Flagship</span>
+      </a>
+
+      <button type="button" onclick="openWishlistDrawer(); document.getElementById('drawer-close-btn').click();" class="w-full text-left p-3 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center justify-between transition-colors cursor-pointer">
+        <span class="flex items-center gap-2.5 font-bold text-xs uppercase tracking-wider text-stone-800 dark:text-stone-200">
+          <i class="fa-solid fa-heart text-rose-500 text-sm"></i>
+          <span>My Saved Wishlist</span>
+        </span>
+        <span id="drawer-wishlist-count" class="text-[9px] px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 font-bold font-mono">0 saved</span>
+      </button>
+
+      <a href="#room-visualizer" class="mobile-drawer-link p-3 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center justify-between transition-colors">
+        <span class="flex items-center gap-2.5 font-bold text-xs uppercase tracking-wider text-stone-800 dark:text-stone-200">
+          <i class="fa-solid fa-cube text-amber-500 text-sm"></i>
+          <span>3D Space Visualizer</span>
+        </span>
+        <span class="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 font-bold font-mono">New</span>
       </a>
 
       <a href="#material-comparator" class="mobile-drawer-link p-3 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center justify-between transition-colors">
@@ -345,14 +503,6 @@
         <span class="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 font-bold font-mono flex items-center gap-1">
           5.0 ★
         </span>
-      </a>
-
-      <a href="#custom-quote" class="mobile-drawer-link p-3 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center justify-between transition-colors">
-        <span class="flex items-center gap-2.5 font-bold text-xs uppercase tracking-wider text-stone-800 dark:text-stone-200">
-          <i class="fa-solid fa-calculator text-teak text-sm"></i>
-          <span>Price Estimator</span>
-        </span>
-        <i class="fa-solid fa-arrow-right text-xs text-stone-400"></i>
       </a>
     </nav>
 
@@ -411,32 +561,31 @@
             </span>
           </div>
 
-          <h1 class="font-heading text-3xl sm:text-5xl md:text-6xl xl:text-7xl font-extrabold tracking-tight text-[#0D0C0B] dark:text-white leading-[1.05] break-words">
-            Bespoke Timber Living & <span class="italic font-serif font-normal gradient-text-teak">Monolithic</span> Millwork.
+          <h1 class="font-heading text-3xl sm:text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight text-[#1C1917] dark:text-white leading-[1.08] break-words">
+            Heirloom Craftsmanship for <span class="italic font-serif font-normal text-teak">Modern Luxury</span> Living.
           </h1>
 
           <p class="text-sm sm:text-base md:text-lg text-stone-600 dark:text-stone-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-sans">
-            Homeify engineers bespoke architectural furnishings, monolithic contract joinery, and heirloom solid wood collections directly from our Kerala workshop. Built with kiln-seasoned Grade-A natural teak and precision joinery, backed by an official <span class="text-[#0D0C0B] dark:text-white font-bold underline decoration-champagne decoration-2">5-year manufacturing warranty</span>.
+            Homeify crafts bespoke architectural furnishings, monolithic contract joinery, and heirloom solid wood collections directly from our Erattupetta atelier. Built from kiln-seasoned Grade-A natural teak and precision joinery, backed by an official <span class="text-[#1C1917] dark:text-white font-bold underline decoration-champagne decoration-2">5-year structural warranty</span>.
           </p>
 
           <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4 pt-2">
             <a 
               href="#gallery" 
-              class="corp-btn-primary w-full sm:w-auto"
+              class="px-8 py-3.5 min-h-[48px] rounded-full bg-[#1C1917] dark:bg-amber-500 hover:bg-teak dark:hover:bg-amber-400 text-white dark:text-[#1C1917] font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg hover:shadow-xl transition-all cursor-pointer active:scale-95 w-full sm:w-auto"
             >
               <span>Explore Collection</span>
-              <i class="fa-solid fa-arrow-down-long text-[10px]"></i>
+              <i class="fa-solid fa-arrow-down-long text-[11px]"></i>
             </a>
 
-            <a 
-              href="https://wa.me/919778446620?text=Hello%20Homeify%20Furniture!%20I%20would%20like%20to%20inquire%20about%20your%20custom%20furniture." 
-              target="_blank"
-              rel="noopener"
-              class="corp-btn-secondary w-full sm:w-auto"
+            <button 
+              type="button" 
+              onclick="openConsultationModal()" 
+              class="px-8 py-3.5 min-h-[48px] rounded-full bg-white dark:bg-stone-800 hover:bg-stone-50 border border-stone-300 dark:border-white/15 text-[#1C1917] dark:text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-all cursor-pointer active:scale-95 w-full sm:w-auto"
             >
-              <i class="fa-brands fa-whatsapp text-[#25D366] text-sm"></i>
-              <span>WhatsApp Inquiry</span>
-            </a>
+              <i class="fa-solid fa-calendar-check text-teak text-xs"></i>
+              <span>Book Free Consultation</span>
+            </button>
           </div>
 
           <!-- Executive 4-Column KPI Grid -->
@@ -624,6 +773,102 @@
         </div>
       </div>
 
+      <!-- Luxury Interactive Filters: Room Space & Material Type -->
+      <div class="mb-6 space-y-3.5">
+        <!-- Room Space Filter Bar (Living, Bedroom, Dining, Office) -->
+        <div class="flex items-center justify-start sm:justify-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1 px-1 -mx-2 sm:mx-0 flex-nowrap">
+          <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 mr-1 flex items-center gap-1 flex-shrink-0">
+            <i class="fa-solid fa-house-chimney text-teak"></i> Room:
+          </span>
+          <button 
+            type="button" 
+            onclick="setRoomFilter('all', this)" 
+            class="room-filter-btn active flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold tracking-wide border border-[#1C1917] dark:border-white bg-[#1C1917] text-white shadow-sm font-sans transition-all duration-200 cursor-pointer min-h-[40px] flex items-center gap-1.5"
+            data-room="all"
+          >
+            <span>All Spaces</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="setRoomFilter('living', this)" 
+            class="room-filter-btn flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold tracking-wide border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 hover:border-stone-400 bg-white dark:bg-[#181614] shadow-xs font-sans transition-all duration-200 cursor-pointer min-h-[40px] flex items-center gap-1.5"
+            data-room="living"
+          >
+            <i class="fa-solid fa-couch text-teak"></i>
+            <span>Living Room</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="setRoomFilter('bedroom', this)" 
+            class="room-filter-btn flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold tracking-wide border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 hover:border-stone-400 bg-white dark:bg-[#181614] shadow-xs font-sans transition-all duration-200 cursor-pointer min-h-[40px] flex items-center gap-1.5"
+            data-room="bedroom"
+          >
+            <i class="fa-solid fa-bed text-amber-600"></i>
+            <span>Bedroom</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="setRoomFilter('dining', this)" 
+            class="room-filter-btn flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold tracking-wide border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 hover:border-stone-400 bg-white dark:bg-[#181614] shadow-xs font-sans transition-all duration-200 cursor-pointer min-h-[40px] flex items-center gap-1.5"
+            data-room="dining"
+          >
+            <i class="fa-solid fa-utensils text-emerald-600"></i>
+            <span>Dining</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="setRoomFilter('office', this)" 
+            class="room-filter-btn flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold tracking-wide border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 hover:border-stone-400 bg-white dark:bg-[#181614] shadow-xs font-sans transition-all duration-200 cursor-pointer min-h-[40px] flex items-center gap-1.5"
+            data-room="office"
+          >
+            <i class="fa-solid fa-briefcase text-sky-600"></i>
+            <span>Office & Custom</span>
+          </button>
+        </div>
+
+        <!-- Material Specification Filter Bar (Solid Wood, Engineered Wood, Hybrid) -->
+        <div class="flex items-center justify-start sm:justify-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1 px-1 -mx-2 sm:mx-0 flex-nowrap">
+          <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 mr-1 flex items-center gap-1 flex-shrink-0">
+            <i class="fa-solid fa-layer-group text-amber-500"></i> Material:
+          </span>
+          <button 
+            type="button" 
+            onclick="setMaterialFilter('all', this)" 
+            class="material-filter-btn active flex-shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-mono font-bold border border-[#1C1917] dark:border-white bg-[#1C1917] text-white shadow-xs transition-all duration-200 cursor-pointer min-h-[36px]"
+            data-material="all"
+          >
+            All Materials
+          </button>
+          <button 
+            type="button" 
+            onclick="setMaterialFilter('natural-wood', this)" 
+            class="material-filter-btn flex-shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-mono font-bold border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 hover:border-emerald-600 bg-white dark:bg-[#181614] shadow-xs transition-all duration-200 cursor-pointer min-h-[36px] flex items-center gap-1.5"
+            data-material="natural-wood"
+          >
+            <span class="w-2 h-2 rounded-full bg-emerald-600 inline-block"></span>
+            100% Solid Teak
+          </button>
+          <button 
+            type="button" 
+            onclick="setMaterialFilter('particle-board', this)" 
+            class="material-filter-btn flex-shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-mono font-bold border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 hover:border-amber-600 bg-white dark:bg-[#181614] shadow-xs transition-all duration-200 cursor-pointer min-h-[36px] flex items-center gap-1.5"
+            data-material="particle-board"
+          >
+            <span class="w-2 h-2 rounded-full bg-amber-600 inline-block"></span>
+            E1 Engineered Board
+          </button>
+          <button 
+            type="button" 
+            onclick="setMaterialFilter('hybrid', this)" 
+            class="material-filter-btn flex-shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-mono font-bold border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 hover:border-purple-600 bg-white dark:bg-[#181614] shadow-xs transition-all duration-200 cursor-pointer min-h-[36px] flex items-center gap-1.5"
+            data-material="hybrid"
+          >
+            <span class="w-2 h-2 rounded-full bg-purple-600 inline-block"></span>
+            Hybrid Craft
+          </button>
+        </div>
+      </div>
+
       <!-- Category Filter Pills (Touch-swipeable on mobile, centered wrapped on desktop) -->
       <div class="flex items-center sm:justify-center gap-2 sm:gap-2.5 mb-8 sm:mb-12 overflow-x-auto no-scrollbar pb-2 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0 flex-nowrap sm:flex-wrap">
         <button 
@@ -706,6 +951,148 @@
         >
           Request Custom Blueprint
         </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       4B. ROOM VISUALIZER & 3D AR PREVIEW SECTION
+       ========================================================================= -->
+  <section id="room-visualizer" class="py-20 lg:py-28 bg-[#141210] text-[#FAF8F5] relative overflow-hidden">
+    <!-- Ambient luxury radial background glow -->
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-teak/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/15 border border-amber-400/30 text-[11px] font-mono font-bold uppercase tracking-wider text-amber-300 mb-3 shadow-xs">
+          <i class="fa-solid fa-cube text-amber-400"></i>
+          <span>True-To-Scale Interior Planning</span>
+        </div>
+        <h2 class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+          Visualize Luxury Pieces in Your Home
+        </h2>
+        <p class="text-stone-300 text-sm sm:text-base mt-3.5 font-sans max-w-2xl mx-auto leading-relaxed">
+          Never worry about size, clearance, or wood finishes. Use our virtual space calculator or scan with your smartphone to project 1:1 true-scale Grade-A Teak creations directly onto your floor plan.
+        </p>
+      </div>
+
+      <!-- 3 Visualizer Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-12">
+        
+        <!-- Card 1: 3D Dimension & Clearance Calculator -->
+        <div class="p-6 sm:p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-amber-400/40 transition-all duration-300 flex flex-col justify-between group hover:bg-white/[0.07]">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-compass-drafting"></i>
+            </div>
+            <h3 class="font-heading text-xl font-bold text-white mb-2.5">
+              Room Clearance Planner
+            </h3>
+            <p class="text-xs sm:text-sm text-stone-300 font-sans leading-relaxed">
+              Input your room measurements (e.g. 14×16 ft Living Room). Instantly verify minimum 36-inch walkaways, sofa proportions, and dining table seating radius before placing your custom order.
+            </p>
+          </div>
+          <div class="pt-6 mt-6 border-t border-white/10 flex items-center justify-between">
+            <span class="text-[11px] font-mono text-amber-300 font-semibold">Ergonomic Ratios</span>
+            <button 
+              type="button" 
+              onclick="openRoomVisualizerModal()" 
+              class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-white hover:text-amber-300 transition-colors cursor-pointer"
+            >
+              <span>Calculate Scale</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 2: Atelier Wood Grain & Fabric Studio -->
+        <div class="p-6 sm:p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-teak/40 transition-all duration-300 flex flex-col justify-between group hover:bg-white/[0.07]">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-teak/20 text-teak-light flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-swatchbook"></i>
+            </div>
+            <h3 class="font-heading text-xl font-bold text-white mb-2.5">
+              Live Grain & Tone Swatches
+            </h3>
+            <p class="text-xs sm:text-sm text-stone-300 font-sans leading-relaxed">
+              Preview real Nilambur Grade-A Teak wood grain under warm 3000K vs natural daylight lighting. Match with Italian Bouclé, stain-resistant velvet, or handwoven Kerala cane work.
+            </p>
+          </div>
+          <div class="pt-6 mt-6 border-t border-white/10 flex items-center justify-between">
+            <span class="text-[11px] font-mono text-teak-light font-semibold">100% Real Timber</span>
+            <a 
+              href="#material-comparator" 
+              class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-white hover:text-teak-light transition-colors"
+            >
+              <span>Compare Specs</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 3: Augmented Reality Smartphone Preview -->
+        <div class="p-6 sm:p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-emerald-400/40 transition-all duration-300 flex flex-col justify-between group hover:bg-white/[0.07]">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-mobile-screen-button"></i>
+            </div>
+            <h3 class="font-heading text-xl font-bold text-white mb-2.5">
+              AR In-Room Camera Preview
+            </h3>
+            <p class="text-xs sm:text-sm text-stone-300 font-sans leading-relaxed">
+              Point your iPhone or Android phone camera at any spot in your villa or apartment to drop full 3D spatial models of our king cots, dining tables, and sectional sofas right in place.
+            </p>
+          </div>
+          <div class="pt-6 mt-6 border-t border-white/10 flex items-center justify-between">
+            <span class="text-[11px] font-mono text-emerald-300 font-semibold">WebXR / QuickLook Ready</span>
+            <button 
+              type="button" 
+              onclick="openRoomVisualizerModal()" 
+              class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-white hover:text-emerald-300 transition-colors cursor-pointer"
+            >
+              <span>Launch Camera</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action Banner inside Visualizer -->
+      <div class="p-6 sm:p-10 rounded-3xl bg-gradient-to-r from-stone-900 to-[#1e1c19] border border-amber-400/20 flex flex-col lg:flex-row items-center justify-between gap-6 shadow-2xl">
+        <div class="flex items-center gap-5 text-center lg:text-left flex-col sm:flex-row">
+          <div class="w-16 h-16 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center font-bold text-2xl flex-shrink-0 shadow-lg">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </div>
+          <div>
+            <h4 class="font-heading text-xl sm:text-2xl font-bold text-white">Need a Tailored Architectural Layout?</h4>
+            <p class="text-xs sm:text-sm text-stone-300 mt-1 font-sans max-w-xl">
+              Send your CAD floor plan or rough room sketch directly to our master craftsmen in Erattupetta. We will draft exact 3D furniture blueprints at zero charge.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 flex-wrap justify-center flex-shrink-0">
+          <button 
+            type="button" 
+            onclick="openRoomVisualizerModal()" 
+            class="px-6 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-400 hover:bg-amber-300 text-stone-950 transition-all font-mono shadow-md cursor-pointer active:scale-95 flex items-center gap-2"
+          >
+            <i class="fa-solid fa-ruler-combined text-sm"></i>
+            <span>Interactive Room Planner</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="openConsultationModal()" 
+            class="px-6 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white transition-all font-mono border border-white/15 cursor-pointer active:scale-95 flex items-center gap-2"
+          >
+            <i class="fa-solid fa-calendar-check text-sm"></i>
+            <span>Book Consultation</span>
+          </button>
+        </div>
       </div>
 
     </div>
@@ -2099,6 +2486,65 @@
   </section>
 
   <!-- =========================================================================
+       9C. LUXURY TRUST BADGES STRIP (Pepperfry / West Elm Standard Guarantees)
+       ========================================================================= -->
+  <section class="py-14 sm:py-16 bg-[#141210] text-[#FAF8F5] border-t border-b border-white/10 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        
+        <!-- Trust Badge 1: Free Delivery & Setup -->
+        <div class="flex items-start gap-4 p-5 rounded-3xl bg-white/[0.04] border border-white/10 hover:border-teak/40 hover:bg-white/[0.07] transition-all duration-300">
+          <div class="w-13 h-13 rounded-2xl bg-teak/20 text-teak-light flex items-center justify-center text-xl flex-shrink-0 shadow-sm">
+            <i class="fa-solid fa-truck-ramp-box"></i>
+          </div>
+          <div>
+            <h4 class="font-heading font-bold text-base text-white">Free Delivery & Setup</h4>
+            <p class="text-xs text-stone-300 font-sans mt-1 leading-relaxed">Direct white-glove transport across Kerala with skilled carpenter installation.</p>
+            <span class="inline-block mt-2 text-[10px] font-mono font-semibold text-teak-light">Kerala-Wide Dispatch</span>
+          </div>
+        </div>
+
+        <!-- Trust Badge 2: 5-Year Comprehensive Warranty -->
+        <div class="flex items-start gap-4 p-5 rounded-3xl bg-white/[0.04] border border-white/10 hover:border-amber-400/40 hover:bg-white/[0.07] transition-all duration-300">
+          <div class="w-13 h-13 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-xl flex-shrink-0 shadow-sm">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div>
+            <h4 class="font-heading font-bold text-base text-white">5-Year Warranty</h4>
+            <p class="text-xs text-stone-300 font-sans mt-1 leading-relaxed">Official written atelier warranty covering 100% seasoned timber & structural hardware.</p>
+            <span class="inline-block mt-2 text-[10px] font-mono font-semibold text-amber-300">Official Factory Seal</span>
+          </div>
+        </div>
+
+        <!-- Trust Badge 3: Sustainable Kiln-Seasoned Wood -->
+        <div class="flex items-start gap-4 p-5 rounded-3xl bg-white/[0.04] border border-white/10 hover:border-emerald-400/40 hover:bg-white/[0.07] transition-all duration-300">
+          <div class="w-13 h-13 rounded-2xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xl flex-shrink-0 shadow-sm">
+            <i class="fa-solid fa-leaf"></i>
+          </div>
+          <div>
+            <h4 class="font-heading font-bold text-base text-white">Sustainable Materials</h4>
+            <p class="text-xs text-stone-300 font-sans mt-1 leading-relaxed">Ethically harvested Grade-A teak kiln-dried under 12% moisture to eliminate warping.</p>
+            <span class="inline-block mt-2 text-[10px] font-mono font-semibold text-emerald-300">Zero Warping Guarantee</span>
+          </div>
+        </div>
+
+        <!-- Trust Badge 4: Direct Factory Pricing & Easy EMI -->
+        <div class="flex items-start gap-4 p-5 rounded-3xl bg-white/[0.04] border border-white/10 hover:border-purple-400/40 hover:bg-white/[0.07] transition-all duration-300">
+          <div class="w-13 h-13 rounded-2xl bg-purple-500/20 text-purple-300 flex items-center justify-center text-xl flex-shrink-0 shadow-sm">
+            <i class="fa-solid fa-credit-card"></i>
+          </div>
+          <div>
+            <h4 class="font-heading font-bold text-base text-white">Direct Rates & Easy EMI</h4>
+            <p class="text-xs text-stone-300 font-sans mt-1 leading-relaxed">35% savings over city showrooms with flexible payment installments & zero hidden fees.</p>
+            <span class="inline-block mt-2 text-[10px] font-mono font-semibold text-purple-300">No Middlemen Margin</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
        10. MODERN FOOTER
        ========================================================================= -->
   <footer class="bg-[#0D0C0B] text-[#FAF8F5] pt-16 pb-12 border-t border-white/10">
@@ -2754,8 +3200,387 @@
   </div>
 
   <!-- =========================================================================
-       12. ADMIN AUTHENTICATION GATEWAY MODAL (Restricted Access)
+       11D. LUXURY QUICK SEARCH MODAL DIALOG
        ========================================================================= -->
+  <div id="quick-search-modal" class="modal-overlay modal-hidden fixed inset-0 z-50 flex items-start sm:items-center justify-center p-3 sm:p-6 bg-[#0D0C0B]/85 backdrop-blur-md transition-all duration-300">
+    <div class="modal-container relative w-full max-w-2xl bg-white dark:bg-[#161412] text-stone-900 dark:text-white rounded-3xl shadow-2xl border border-stone-200 dark:border-white/10 overflow-hidden flex flex-col max-h-[90vh]">
+      
+      <!-- Search Input Header -->
+      <div class="p-4 sm:p-5 border-b border-stone-100 dark:border-white/10 flex items-center gap-3">
+        <i class="fa-solid fa-magnifying-glass text-teak dark:text-amber-400 text-lg sm:text-xl pl-1"></i>
+        <input 
+          id="quick-search-input" 
+          type="search" 
+          placeholder="Search by furniture name, teak, cot, sofa, dining..." 
+          oninput="handleLiveSearch(this.value)" 
+          class="flex-1 bg-transparent border-0 text-base sm:text-lg font-sans placeholder-stone-400 focus:outline-none focus:ring-0 text-stone-900 dark:text-white"
+          autocomplete="off"
+        />
+        <button 
+          type="button" 
+          onclick="closeSearchModal()" 
+          class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-500 hover:text-stone-900 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+          aria-label="Close search"
+        >
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Quick Category Suggestions -->
+      <div class="px-4 py-2.5 bg-stone-50 dark:bg-[#1a1816] border-b border-stone-100 dark:border-white/5 flex items-center gap-2 overflow-x-auto no-scrollbar font-mono text-xs flex-nowrap">
+        <span class="text-[10px] text-stone-400 uppercase tracking-wider flex-shrink-0">Suggestions:</span>
+        <button type="button" onclick="setSearchFilterTerm('Teak Cot')" class="px-2.5 py-1 rounded-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 hover:border-teak hover:text-teak transition-colors flex-shrink-0 cursor-pointer">
+          🛏️ Teak Cot
+        </button>
+        <button type="button" onclick="setSearchFilterTerm('Sofa')" class="px-2.5 py-1 rounded-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 hover:border-teak hover:text-teak transition-colors flex-shrink-0 cursor-pointer">
+          🛋️ Sofa
+        </button>
+        <button type="button" onclick="setSearchFilterTerm('Dining')" class="px-2.5 py-1 rounded-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 hover:border-teak hover:text-teak transition-colors flex-shrink-0 cursor-pointer">
+          🍽️ Dining Table
+        </button>
+        <button type="button" onclick="setSearchFilterTerm('Wardrobe')" class="px-2.5 py-1 rounded-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 hover:border-teak hover:text-teak transition-colors flex-shrink-0 cursor-pointer">
+          🚪 Wardrobe
+        </button>
+        <button type="button" onclick="setSearchFilterTerm('Natural Wood')" class="px-2.5 py-1 rounded-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 hover:border-teak hover:text-teak transition-colors flex-shrink-0 cursor-pointer">
+          🌳 100% Solid Teak
+        </button>
+      </div>
+
+      <!-- Live Search Results Container -->
+      <div id="quick-search-results" class="p-4 sm:p-5 overflow-y-auto divide-y divide-stone-100 dark:divide-white/5 space-y-2 max-h-[60vh]">
+        <!-- Injected via app.js -->
+      </div>
+
+      <!-- Footer Help Hint -->
+      <div class="p-3 bg-stone-50 dark:bg-[#121110] border-t border-stone-100 dark:border-white/10 flex items-center justify-between text-[11px] font-mono text-stone-500">
+        <span class="flex items-center gap-1.5">
+          <kbd class="px-1.5 py-0.5 rounded bg-white dark:bg-stone-800 border border-stone-300 dark:border-stone-700 text-[10px]">ESC</kbd> to close
+        </span>
+        <span>Homeify Workshop Catalog</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       11E. LUXURY WISHLIST SLIDE-OVER DRAWER
+       ========================================================================= -->
+  <div id="wishlist-overlay" class="modal-overlay modal-hidden fixed inset-0 z-50 bg-[#0D0C0B]/70 backdrop-blur-sm transition-opacity duration-300" onclick="closeWishlistDrawer()"></div>
+  <aside id="wishlist-drawer" class="fixed top-0 right-0 bottom-0 w-96 max-w-[92vw] bg-white dark:bg-[#141210] text-stone-900 dark:text-white z-50 transform translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col border-l border-stone-200 dark:border-white/10">
+    
+    <!-- Wishlist Header -->
+    <div class="p-5 border-b border-stone-100 dark:border-white/10 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <span class="w-8 h-8 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center text-sm">
+          <i class="fa-solid fa-heart"></i>
+        </span>
+        <div>
+          <h3 class="font-heading font-bold text-lg leading-tight">Saved Pieces</h3>
+          <span id="wishlist-count-badge" class="text-[11px] font-mono text-stone-500">0 items selected</span>
+        </div>
+      </div>
+      <button 
+        type="button" 
+        onclick="closeWishlistDrawer()" 
+        class="w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-500 hover:text-stone-900 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+        aria-label="Close wishlist"
+      >
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+    </div>
+
+    <!-- Wishlist Items List Container -->
+    <div id="wishlist-items-container" class="flex-1 p-4 overflow-y-auto space-y-3">
+      <!-- Injected via app.js -->
+    </div>
+
+    <!-- Wishlist Footer Actions -->
+    <div class="p-5 border-t border-stone-100 dark:border-white/10 bg-stone-50 dark:bg-[#181614] space-y-3">
+      <div class="flex items-center justify-between text-xs font-mono">
+        <span class="text-stone-500 uppercase">Estimated Factory Total:</span>
+        <span id="wishlist-total-price" class="font-black text-emerald-600 dark:text-emerald-400 text-base">₹0</span>
+      </div>
+      <button 
+        type="button" 
+        id="wishlist-whatsapp-inquire-btn"
+        onclick="sendWishlistInquiryWhatsApp()" 
+        class="w-full py-3.5 px-4 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer"
+      >
+        <i class="fa-brands fa-whatsapp text-base"></i>
+        <span>Inquire All via WhatsApp</span>
+      </button>
+      <div class="flex items-center justify-between pt-1 text-[11px] font-mono text-stone-400">
+        <button type="button" onclick="clearWishlist()" class="hover:text-rose-500 transition-colors cursor-pointer">
+          <i class="fa-solid fa-trash-can mr-1"></i> Clear Wishlist
+        </button>
+        <span>Direct Atelier Pricing</span>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- =========================================================================
+       11F. INTERACTIVE ROOM VISUALIZER & CLEARANCE CALCULATOR MODAL
+       ========================================================================= -->
+  <div id="room-visualizer-modal" class="modal-overlay modal-hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-[#0D0C0B]/85 backdrop-blur-md">
+    <div class="modal-container relative w-full max-w-2xl bg-white dark:bg-[#141210] text-stone-900 dark:text-white rounded-3xl shadow-2xl border border-stone-200 dark:border-white/10 overflow-hidden flex flex-col max-h-[92vh]">
+      
+      <!-- Header -->
+      <div class="p-5 sm:p-6 border-b border-stone-100 dark:border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center text-lg flex-shrink-0 shadow-sm">
+            <i class="fa-solid fa-cube"></i>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-xl leading-tight">3D Room Scale & Clearance Planner</h3>
+            <span class="text-xs text-stone-500 font-sans">Verify furniture sizing before atelier crafting</span>
+          </div>
+        </div>
+        <button 
+          type="button" 
+          onclick="closeRoomVisualizerModal()" 
+          class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-500 hover:text-stone-900 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+          aria-label="Close visualizer"
+        >
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Body / Calculator Controls -->
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-5 font-sans text-sm">
+        
+        <!-- Step 1: Room Space Selection -->
+        <div>
+          <label class="block text-xs font-mono font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 mb-2">
+            1. Select Room Space
+          </label>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button type="button" onclick="setVisualizerRoomType('living', 14, 16)" class="visualizer-room-btn active p-2.5 rounded-xl border border-teak bg-teak/10 text-teak font-bold text-xs text-center transition-all">
+              🛋️ Living Room
+            </button>
+            <button type="button" onclick="setVisualizerRoomType('bedroom', 12, 14)" class="visualizer-room-btn p-2.5 rounded-xl border border-stone-200 dark:border-white/10 hover:border-teak text-stone-700 dark:text-stone-300 text-xs text-center transition-all">
+              🛏️ Bedroom
+            </button>
+            <button type="button" onclick="setVisualizerRoomType('dining', 10, 12)" class="visualizer-room-btn p-2.5 rounded-xl border border-stone-200 dark:border-white/10 hover:border-teak text-stone-700 dark:text-stone-300 text-xs text-center transition-all">
+              🍽️ Dining Room
+            </button>
+            <button type="button" onclick="setVisualizerRoomType('office', 10, 10)" class="visualizer-room-btn p-2.5 rounded-xl border border-stone-200 dark:border-white/10 hover:border-teak text-stone-700 dark:text-stone-300 text-xs text-center transition-all">
+              💼 Home Office
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Dimensions Slider -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-stone-50 dark:bg-white/5 border border-stone-100 dark:border-white/5">
+          <div>
+            <div class="flex items-center justify-between text-xs font-mono mb-1.5">
+              <span>Room Length:</span>
+              <span id="viz-length-val" class="font-bold text-teak">14 Feet</span>
+            </div>
+            <input 
+              id="viz-length-slider" 
+              type="range" 
+              min="8" 
+              max="30" 
+              value="14" 
+              oninput="updateVisualizerCalculation()" 
+              class="w-full accent-teak"
+            />
+          </div>
+          <div>
+            <div class="flex items-center justify-between text-xs font-mono mb-1.5">
+              <span>Room Width:</span>
+              <span id="viz-width-val" class="font-bold text-teak">16 Feet</span>
+            </div>
+            <input 
+              id="viz-width-slider" 
+              type="range" 
+              min="8" 
+              max="30" 
+              value="16" 
+              oninput="updateVisualizerCalculation()" 
+              class="w-full accent-teak"
+            />
+          </div>
+        </div>
+
+        <!-- Step 3: Piece Selection -->
+        <div>
+          <label class="block text-xs font-mono font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 mb-2">
+            2. Furniture Piece to Place
+          </label>
+          <select id="viz-furniture-select" onchange="updateVisualizerCalculation()" class="w-full p-3 rounded-xl border border-stone-200 dark:border-white/15 bg-white dark:bg-[#1a1816] text-stone-900 dark:text-white text-xs font-mono focus:outline-none focus:ring-1 focus:ring-teak">
+            <option value="sofa-311">Luxury Royal Teak Sofa Set (3 + 1 + 1) — 65 sq ft</option>
+            <option value="sofa-lshape">Modern Sectional L-Shape Sofa with Ottoman — 55 sq ft</option>
+            <option value="cot-king">Solid Teak Royal King Cot (78×72 inch) — 52 sq ft</option>
+            <option value="cot-queen">Minimalist Floating Queen Cot (78×60 inch) — 44 sq ft</option>
+            <option value="dining-6seater">Handcrafted 6-Seater Cane Dining Suite — 48 sq ft</option>
+            <option value="dining-8seater">Architectural 8-Seater Solid Teak Dining Suite — 68 sq ft</option>
+            <option value="office-desk">Executive Teak & Fluted Glass Workstation — 32 sq ft</option>
+          </select>
+        </div>
+
+        <!-- Calculation Diagnostic Card -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-stone-900 to-[#1e1c19] text-white border border-white/10 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono text-stone-400">Total Floor Area:</span>
+            <span id="viz-room-area" class="text-sm font-mono font-bold text-white">224 sq ft</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono text-stone-400">Estimated Walking Clearance:</span>
+            <span id="viz-clearance-status" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+              ✓ Optimal (48+ inches space)
+            </span>
+          </div>
+          <div class="pt-2 border-t border-white/10">
+            <p id="viz-advice-text" class="text-xs text-stone-300 leading-relaxed font-sans">
+              This piece fits harmoniously with generous perimeter walking clearance and optimal natural daylight flow.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer CTA -->
+      <div class="p-5 border-t border-stone-100 dark:border-white/10 bg-stone-50 dark:bg-[#181614] flex flex-col sm:flex-row items-center justify-between gap-3 font-mono">
+        <a 
+          id="viz-whatsapp-link"
+          href="https://wa.me/919778446620?text=Hello%20Homeify!%20I%20used%20the%20Room%20Clearance%20Visualizer%20for%20my%20room%20(14x16%20ft)%20and%20would%20like%20a%20custom%20blueprint." 
+          target="_blank" 
+          rel="noopener"
+          class="w-full sm:w-auto flex-1 py-3 px-5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition-all"
+        >
+          <i class="fa-solid fa-compass-drafting"></i>
+          <span>Send Layout to Craftsman</span>
+        </a>
+        <button 
+          type="button" 
+          onclick="openConsultationModal()" 
+          class="w-full sm:w-auto py-3 px-5 rounded-xl border border-stone-200 dark:border-white/10 hover:border-teak text-stone-700 dark:text-stone-300 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+        >
+          Book In-Home Consultation
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       11G. LUXURY FREE DESIGN CONSULTATION BOOKING MODAL
+       ========================================================================= -->
+  <div id="consultation-modal" class="modal-overlay modal-hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-[#0D0C0B]/85 backdrop-blur-md">
+    <div class="modal-container relative w-full max-w-lg bg-white dark:bg-[#141210] text-stone-900 dark:text-white rounded-3xl shadow-2xl border border-stone-200 dark:border-white/10 overflow-hidden flex flex-col max-h-[92vh]">
+      
+      <!-- Header -->
+      <div class="p-5 sm:p-6 border-b border-stone-100 dark:border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-[#1C1917] text-champagne dark:bg-amber-400 dark:text-stone-950 flex items-center justify-center text-lg flex-shrink-0 shadow-sm">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-xl leading-tight">Book Free Design Consultation</h3>
+            <span class="text-xs text-stone-500 font-sans">Direct with our master craftsmen in Erattupetta</span>
+          </div>
+        </div>
+        <button 
+          type="button" 
+          onclick="closeConsultationModal()" 
+          class="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-500 hover:text-stone-900 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+          aria-label="Close consultation modal"
+        >
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Form -->
+      <form id="consultation-form" onsubmit="submitConsultationRequest(event)" class="p-5 sm:p-6 overflow-y-auto space-y-4 font-sans text-xs">
+        <div>
+          <label class="block font-mono font-bold uppercase text-stone-600 dark:text-stone-300 mb-1">Your Full Name *</label>
+          <input 
+            type="text" 
+            id="consult-name" 
+            required 
+            placeholder="e.g. Rahul Varma" 
+            class="w-full p-3 rounded-xl border border-stone-200 dark:border-white/15 bg-stone-50 dark:bg-white/5 text-stone-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-teak"
+          />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-mono font-bold uppercase text-stone-600 dark:text-stone-300 mb-1">Phone / WhatsApp *</label>
+            <input 
+              type="tel" 
+              id="consult-phone" 
+              required 
+              placeholder="+91 98765 43210" 
+              class="w-full p-3 rounded-xl border border-stone-200 dark:border-white/15 bg-stone-50 dark:bg-white/5 text-stone-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-teak"
+            />
+          </div>
+          <div>
+            <label class="block font-mono font-bold uppercase text-stone-600 dark:text-stone-300 mb-1">Location / Town *</label>
+            <input 
+              type="text" 
+              id="consult-location" 
+              required 
+              placeholder="e.g. Erattupetta / Kottayam" 
+              class="w-full p-3 rounded-xl border border-stone-200 dark:border-white/15 bg-stone-50 dark:bg-white/5 text-stone-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-teak"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-mono font-bold uppercase text-stone-600 dark:text-stone-300 mb-1">Furniture Requirement *</label>
+          <select 
+            id="consult-room-type" 
+            class="w-full p-3 rounded-xl border border-stone-200 dark:border-white/15 bg-white dark:bg-[#1a1816] text-stone-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-teak"
+          >
+            <option value="Living Room Furniture">Living Room (Sofas, Teak Tables & TV Unit)</option>
+            <option value="Bedroom Suites">Bedroom (Solid Teak Cots & Wardrobes)</option>
+            <option value="Dining Suite">Dining Suite (Solid Wood / Marble Table)</option>
+            <option value="Whole Villa Furnishing">Full Residence / Villa Bespoke Interior</option>
+            <option value="Commercial / Office">Office, Clinic or Commercial Workstations</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-mono font-bold uppercase text-stone-600 dark:text-stone-300 mb-1">Preferred Consultation Type</label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="p-2.5 rounded-xl border border-stone-200 dark:border-white/10 flex items-center gap-2 cursor-pointer hover:border-teak">
+              <input type="radio" name="consult-type" value="Workshop Visit (Erattupetta)" checked class="accent-teak">
+              <span class="text-[11px] font-medium">Workshop Visit</span>
+            </label>
+            <label class="p-2.5 rounded-xl border border-stone-200 dark:border-white/10 flex items-center gap-2 cursor-pointer hover:border-teak">
+              <input type="radio" name="consult-type" value="WhatsApp Video Call" class="accent-teak">
+              <span class="text-[11px] font-medium">WhatsApp Call</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-mono font-bold uppercase text-stone-600 dark:text-stone-300 mb-1">Additional Dimensions or Notes (Optional)</label>
+          <textarea 
+            id="consult-notes" 
+            rows="2" 
+            placeholder="Room dimensions, wood preference (Teak / Mahogany), or preferred visit date..."
+            class="w-full p-3 rounded-xl border border-stone-200 dark:border-white/15 bg-stone-50 dark:bg-white/5 text-stone-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-teak"
+          ></textarea>
+        </div>
+
+        <button 
+          type="submit" 
+          class="w-full py-3.5 px-4 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95 cursor-pointer mt-4"
+        >
+          <i class="fa-brands fa-whatsapp text-base"></i>
+          <span>Confirm Consultation via WhatsApp</span>
+        </button>
+
+        <p class="text-[10px] text-center text-stone-400 font-mono">
+          Zero commitment • Direct workshop guidance from M E S Junction, Erattupetta
+        </p>
+      </form>
+
+    </div>
+  </div>
   <div id="admin-auth-modal" class="modal-overlay modal-hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0D0C0B]/85 backdrop-blur-md">
     <div class="modal-container relative w-full max-w-md bg-[#141210] border border-white/10 rounded-3xl shadow-2xl p-6 sm:p-8 text-white">
       <button id="admin-auth-close-btn" type="button" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 flex items-center justify-center transition-colors">

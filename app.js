@@ -1817,6 +1817,8 @@ let PRODUCTS = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
 let HERO_SLIDES = JSON.parse(JSON.stringify(DEFAULT_HERO_SLIDES));
 let curatedHighlightIds = [...DEFAULT_HIGHLIGHT_IDS];
 let currentFilter = 'highlights';
+let currentRoomFilter = 'all';
+let currentMaterialFilter = 'all';
 let selectedProductForModal = null;
 let currentHeroSlideIndex = 0;
 let heroSlideTimer = null;
@@ -2199,6 +2201,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCuratedHighlights();
   renderBentoGallery('sofas');
   initFilterButtons();
+  updateWishlistBadges();
   initModalListeners();
   initMaterialComparator();
   initAnimatedCounters();
@@ -2882,6 +2885,39 @@ function renderBentoGallery(filterCategory) {
 
   const filtered = PRODUCTS.filter(p => {
     const cat = p.category;
+
+    // 1. Room Space Filtering
+    if (currentRoomFilter && currentRoomFilter !== 'all') {
+      if (currentRoomFilter === 'living') {
+        const livingCats = ['sofas', 'coffee-tables', 'chairs', 'swings'];
+        if (!livingCats.includes(cat)) return false;
+      } else if (currentRoomFilter === 'bedroom') {
+        const bedroomCats = ['cots', 'wardrobes'];
+        if (!bedroomCats.includes(cat)) return false;
+      } else if (currentRoomFilter === 'dining') {
+        const diningCats = ['dining-tables', 'chairs'];
+        if (!diningCats.includes(cat)) return false;
+      } else if (currentRoomFilter === 'office') {
+        const officeCats = ['doors-custom', 'custom-woodwork', 'custom', 'office'];
+        if (!officeCats.includes(cat)) return false;
+      }
+    }
+
+    // 2. Material Specification Filtering
+    if (currentMaterialFilter && currentMaterialFilter !== 'all') {
+      if (currentMaterialFilter === 'natural-wood') {
+        if (p.materialCategory !== 'natural-wood') return false;
+      } else if (currentMaterialFilter === 'particle-board') {
+        if (p.materialCategory !== 'particle-board') return false;
+      } else if (currentMaterialFilter === 'hybrid') {
+        if (p.materialCategory !== 'hybrid' && p.materialCategory !== 'natural-wood-board-mix') return false;
+      }
+    }
+
+    // 3. Category / Flagship Filter
+    if (activeCategory === 'all') {
+      return true;
+    }
     if (activeCategory === 'highlights') {
       return curatedHighlightIds.includes(p.id);
     }
@@ -2920,19 +2956,27 @@ function renderBentoGallery(filterCategory) {
 
   if (filtered.length === 0) {
     gridContainer.innerHTML = `
-      <div class="col-span-12 py-16 px-6 text-center rounded-3xl bg-stone-50 border border-stone-200">
+      <div class="col-span-12 py-16 px-6 text-center rounded-3xl bg-stone-50 dark:bg-white/5 border border-stone-200 dark:border-white/10">
         <i class="fa-solid fa-compass-drafting text-4xl text-teak mb-4"></i>
-        <h3 class="font-heading text-2xl font-bold text-[#0D0C0B]">Custom Made-To-Order Projects</h3>
-        <p class="text-sm text-stone-600 max-w-md mx-auto mt-2 font-sans">We build custom pieces tailored to your exact floor plan and interior specifications at our Erattupetta workshop.</p>
-        <a href="https://wa.me/919778446620?text=Hello%20Homeify!%20I%20want%20to%20discuss%20a%20custom%20order." target="_blank" rel="noopener" class="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-full bg-[#25D366] text-white font-mono text-xs font-bold uppercase tracking-wider shadow-md hover:bg-emerald-600 transition-colors">
-          <i class="fa-brands fa-whatsapp text-base"></i> Chat on WhatsApp (97784 46620)
-        </a>
+        <h3 class="font-heading text-2xl font-bold text-[#0D0C0B] dark:text-white">Custom Bespoke Atelier Commission</h3>
+        <p class="text-sm text-stone-600 dark:text-stone-300 max-w-md mx-auto mt-2 font-sans">
+          No standard catalog items match these exact room & material filters. Our Erattupetta master craftsmen can handcraft bespoke pieces tailored to your exact floor plan.
+        </p>
+        <div class="flex items-center justify-center gap-3 mt-6 flex-wrap">
+          <button type="button" onclick="setRoomFilter('all'); setMaterialFilter('all');" class="px-5 py-2.5 rounded-full bg-stone-800 text-white font-mono text-xs font-bold uppercase tracking-wider hover:bg-black transition-colors cursor-pointer">
+            Reset Filters
+          </button>
+          <a href="https://wa.me/919778446620?text=Hello%20Homeify!%20I%20want%20to%20commission%20a%20bespoke%20piece%20in%20Grade-A%20Teak." target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#25D366] text-white font-mono text-xs font-bold uppercase tracking-wider shadow-md hover:bg-emerald-600 transition-colors">
+            <i class="fa-brands fa-whatsapp text-base"></i> Chat with Atelier (97784 46620)
+          </a>
+        </div>
       </div>
     `;
     return;
   }
 
   const isAdmin = sessionStorage.getItem('homeify_admin_authenticated') === 'true';
+  const wishlistIds = getWishlistIds();
 
   filtered.forEach((product, index) => {
     let spanClasses = 'col-span-12 sm:col-span-6 lg:col-span-4';
@@ -2949,9 +2993,10 @@ function renderBentoGallery(filterCategory) {
 
     const hIdx = curatedHighlightIds.indexOf(product.id);
     const isInHighlights = hIdx !== -1;
+    const isWishlisted = wishlistIds.includes(product.id);
 
     const card = document.createElement('div');
-    card.className = `${spanClasses} bento-card card-3d-tilt depth-3d-surface bg-white rounded-3xl overflow-hidden border border-stone-200/90 shadow-sm transition-all duration-400 flex flex-col group cursor-pointer preserve-3d`;
+    card.className = `${spanClasses} bento-card card-3d-tilt depth-3d-surface bg-white dark:bg-[#161412] rounded-3xl overflow-hidden border border-stone-200/90 dark:border-white/10 shadow-sm hover:shadow-xl transition-all duration-400 flex flex-col group cursor-pointer preserve-3d`;
     card.setAttribute('data-id', product.id);
 
     const materialBadgeBg = product.materialCategory === 'natural-wood' 
@@ -2961,7 +3006,7 @@ function renderBentoGallery(filterCategory) {
         : 'bg-[#0D0C0B] text-[#D4AF37]';
 
     const materialLabel = product.materialCategory === 'natural-wood'
-      ? '🌳 100% Pure Natural Wood'
+      ? '🌳 100% Solid Teak'
       : product.materialCategory === 'particle-board'
         ? '⚙️ Particle Board E1'
         : '✨ Hybrid Architecture';
@@ -3023,10 +3068,24 @@ function renderBentoGallery(filterCategory) {
               <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
               5-Yr Warranty
             </span>
+
+            <!-- Wishlist Heart Toggle Button -->
+            <button 
+              type="button" 
+              data-wishlist-id="${product.id}"
+              onclick="toggleWishlist('${product.id}', event);" 
+              class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 dark:bg-stone-800/90 hover:bg-white text-stone-800 dark:text-stone-200 shadow-md flex items-center justify-center transition-all hover:scale-110 pointer-events-auto border border-black/5 cursor-pointer ${isWishlisted ? 'text-rose-500 fill-current' : ''}" 
+              title="${isWishlisted ? 'Remove from Wishlist' : 'Save to Wishlist'}" 
+              aria-label="Wishlist ${product.name}"
+            >
+              <i class="${isWishlisted ? 'fa-solid text-rose-500' : 'fa-regular'} fa-heart text-xs"></i>
+            </button>
+
+            <!-- Share Button -->
             <button 
               type="button" 
               onclick="shareProductLink('${product.id}', event);" 
-              class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 hover:bg-white text-stone-800 shadow-md flex items-center justify-center transition-all hover:scale-110 pointer-events-auto border border-black/5 cursor-pointer" 
+              class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 dark:bg-stone-800/90 hover:bg-white text-stone-800 dark:text-stone-200 shadow-md flex items-center justify-center transition-all hover:scale-110 pointer-events-auto border border-black/5 cursor-pointer" 
               title="Share ${product.name}" 
               aria-label="Share ${product.name}"
             >
@@ -3049,18 +3108,20 @@ function renderBentoGallery(filterCategory) {
         <div>
           <div class="flex items-center justify-between text-xs text-[#9E6738] font-bold uppercase tracking-widest mb-1.5 font-mono">
             <span>${product.categoryName}</span>
-            <span class="text-stone-400 font-sans font-medium text-[11px]">${product.badge}</span>
+            <div class="flex items-center gap-1 text-[#FBBC04] text-[11px] font-bold">
+              <i class="fa-solid fa-star"></i> 5.0 <span class="text-stone-400 font-normal text-[10px]">(48)</span>
+            </div>
           </div>
-          <h3 class="font-heading text-lg sm:text-xl font-bold text-[#141210] mb-2 leading-snug group-hover:text-[#9E6738] transition-colors">
+          <h3 class="font-heading text-lg sm:text-xl font-bold text-[#141210] dark:text-white mb-2 leading-snug group-hover:text-teak transition-colors">
             ${product.name}
           </h3>
-          <p class="text-xs text-[#665F57] line-clamp-2 mb-4 leading-relaxed font-sans">
+          <p class="text-xs text-[#665F57] dark:text-stone-300 line-clamp-2 mb-4 leading-relaxed font-sans">
             ${product.description}
           </p>
         </div>
 
         <!-- Pricing with MRP and Direct Factory Price -->
-        <div class="pt-4 border-t border-stone-200/90 flex flex-col gap-2.5">
+        <div class="pt-4 border-t border-stone-200/90 dark:border-white/10 flex flex-col gap-2.5">
           <div class="flex items-baseline justify-between">
             <div>
               <span class="block text-[10px] text-stone-400 font-bold uppercase tracking-wider font-mono">Showroom MRP</span>
@@ -3068,19 +3129,19 @@ function renderBentoGallery(filterCategory) {
             </div>
             <div class="text-right">
               <span class="block text-[10px] text-teak font-bold uppercase tracking-wider font-mono">Direct Workshop Price</span>
-              <span class="text-base sm:text-lg font-black text-[#2C4A38] font-mono">${product.factoryPrice}</span>
+              <span class="text-base sm:text-lg font-black text-[#2C4A38] dark:text-emerald-400 font-mono">${product.factoryPrice}</span>
             </div>
           </div>
 
           <div class="flex items-center justify-between pt-1">
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold font-mono bg-emerald-50 text-emerald-800 border border-emerald-200/90">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold font-mono bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200/90 dark:border-emerald-800/40">
               Save ${savingsPercent}% Direct
             </span>
             <div class="flex items-center gap-1.5">
               <button 
                 type="button" 
                 onclick="shareProductLink('${product.id}', event);" 
-                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 hover:bg-teak hover:text-white text-stone-600 transition-colors border border-stone-200/90 shadow-sm cursor-pointer" 
+                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 hover:bg-teak hover:text-white text-stone-600 dark:text-stone-300 transition-colors border border-stone-200/90 dark:border-white/10 shadow-sm cursor-pointer" 
                 title="Share ${product.name}"
                 aria-label="Share ${product.name}"
               >
@@ -3091,7 +3152,7 @@ function renderBentoGallery(filterCategory) {
                 target="_blank" 
                 rel="noopener"
                 onclick="event.stopPropagation();"
-                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#25D366]/10 text-[#075E54] hover:bg-[#25D366] hover:text-white transition-all text-[11px] font-bold font-mono border border-[#25D366]/20 btn-3d"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#25D366]/10 text-[#075E54] dark:text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all text-[11px] font-bold font-mono border border-[#25D366]/20 btn-3d"
               >
                 <i class="fa-brands fa-whatsapp text-xs"></i>
                 <span>Inquire</span>
@@ -3111,6 +3172,73 @@ function renderBentoGallery(filterCategory) {
 
   if (typeof window.refresh3DTilt === 'function') {
     window.refresh3DTilt();
+  }
+}
+
+// Room & Material Filter Handlers
+function setRoomFilter(roomType, btn) {
+  currentRoomFilter = roomType || 'all';
+
+  const roomBtns = document.querySelectorAll('.room-filter-btn');
+  roomBtns.forEach(b => {
+    const isTarget = b.getAttribute('data-room') === roomType;
+    if (isTarget) {
+      b.classList.add('active', 'bg-[#1C1917]', 'text-white', 'border-[#1C1917]');
+      b.classList.remove('bg-white', 'dark:bg-[#181614]', 'text-stone-700', 'dark:text-stone-300', 'border-stone-200');
+    } else {
+      b.classList.remove('active', 'bg-[#1C1917]', 'text-white', 'border-[#1C1917]');
+      b.classList.add('bg-white', 'dark:bg-[#181614]', 'text-stone-700', 'dark:text-stone-300', 'border-stone-200');
+    }
+  });
+
+  // Smooth scroll to gallery if header link clicked
+  if (!btn) {
+    const galleryEl = document.getElementById('gallery');
+    if (galleryEl) {
+      galleryEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  const grid = document.getElementById('bento-grid-container');
+  if (grid) {
+    grid.style.opacity = '0.3';
+    grid.style.transform = 'translateY(8px)';
+    setTimeout(() => {
+      renderBentoGallery(currentFilter);
+      grid.style.opacity = '1';
+      grid.style.transform = 'translateY(0)';
+    }, 150);
+  } else {
+    renderBentoGallery(currentFilter);
+  }
+}
+
+function setMaterialFilter(materialType, btn) {
+  currentMaterialFilter = materialType || 'all';
+
+  const matBtns = document.querySelectorAll('.material-filter-btn');
+  matBtns.forEach(b => {
+    const isTarget = b.getAttribute('data-material') === materialType;
+    if (isTarget) {
+      b.classList.add('active', 'bg-[#1C1917]', 'text-white', 'border-[#1C1917]');
+      b.classList.remove('bg-white', 'dark:bg-[#181614]', 'text-stone-700', 'dark:text-stone-300', 'border-stone-200');
+    } else {
+      b.classList.remove('active', 'bg-[#1C1917]', 'text-white', 'border-[#1C1917]');
+      b.classList.add('bg-white', 'dark:bg-[#181614]', 'text-stone-700', 'dark:text-stone-300', 'border-stone-200');
+    }
+  });
+
+  const grid = document.getElementById('bento-grid-container');
+  if (grid) {
+    grid.style.opacity = '0.3';
+    grid.style.transform = 'translateY(8px)';
+    setTimeout(() => {
+      renderBentoGallery(currentFilter);
+      grid.style.opacity = '1';
+      grid.style.transform = 'translateY(0)';
+    }, 150);
+  } else {
+    renderBentoGallery(currentFilter);
   }
 }
 
@@ -3140,6 +3268,462 @@ function initFilterButtons() {
       }
     });
   });
+}
+
+// ==========================================================================
+// 2B. LUXURY WISHLIST ENGINE (Local Persistence & WhatsApp Batch Inquiry)
+// ==========================================================================
+function getWishlistIds() {
+  try {
+    return JSON.parse(localStorage.getItem('homeify_wishlist') || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveWishlistIds(ids) {
+  try {
+    localStorage.setItem('homeify_wishlist', JSON.stringify(ids));
+  } catch (e) {}
+}
+
+function toggleWishlist(productId, event) {
+  if (event) event.stopPropagation();
+  let ids = getWishlistIds();
+  const index = ids.indexOf(productId);
+  let isAdded = false;
+  if (index === -1) {
+    ids.push(productId);
+    isAdded = true;
+  } else {
+    ids.splice(index, 1);
+    isAdded = false;
+  }
+  saveWishlistIds(ids);
+  updateWishlistBadges();
+  renderWishlist();
+
+  // Update heart icons on cards
+  document.querySelectorAll(`[data-wishlist-id="${productId}"]`).forEach(btn => {
+    const icon = btn.querySelector('i');
+    if (icon) {
+      if (isAdded) {
+        icon.className = 'fa-solid fa-heart text-rose-500';
+      } else {
+        icon.className = 'fa-regular fa-heart text-stone-600 dark:text-stone-300';
+      }
+    }
+  });
+
+  showToast(isAdded ? 'Added to Saved Wishlist' : 'Removed from Wishlist');
+}
+
+function updateWishlistBadges() {
+  const ids = getWishlistIds();
+  const count = ids.length;
+
+  const headerBadge = document.getElementById('header-wishlist-count');
+  if (headerBadge) {
+    headerBadge.textContent = count;
+    headerBadge.classList.toggle('hidden', count === 0);
+  }
+
+  const mobileBadge = document.getElementById('mobile-header-wishlist-count');
+  if (mobileBadge) {
+    mobileBadge.textContent = count;
+    mobileBadge.classList.toggle('hidden', count === 0);
+  }
+
+  const countBadge = document.getElementById('wishlist-count-badge');
+  if (countBadge) {
+    countBadge.textContent = `${count} piece${count === 1 ? '' : 's'} saved`;
+  }
+}
+
+function openWishlistDrawer() {
+  renderWishlist();
+  const overlay = document.getElementById('wishlist-overlay');
+  const drawer = document.getElementById('wishlist-drawer');
+  if (overlay) overlay.classList.remove('modal-hidden');
+  if (drawer) drawer.classList.remove('translate-x-full');
+  document.body.classList.add('overflow-hidden');
+}
+
+function closeWishlistDrawer() {
+  const overlay = document.getElementById('wishlist-overlay');
+  const drawer = document.getElementById('wishlist-drawer');
+  if (overlay) overlay.classList.add('modal-hidden');
+  if (drawer) drawer.classList.add('translate-x-full');
+  document.body.classList.remove('overflow-hidden');
+}
+
+function renderWishlist() {
+  const container = document.getElementById('wishlist-items-container');
+  const totalEl = document.getElementById('wishlist-total-price');
+  if (!container) return;
+
+  const ids = getWishlistIds();
+  const items = PRODUCTS.filter(p => ids.includes(p.id));
+
+  let totalEstimate = 0;
+  items.forEach(item => {
+    const num = parseInt((item.factoryPrice || '').replace(/[^0-9]/g, ''), 10) || 0;
+    totalEstimate += num;
+  });
+
+  if (totalEl) {
+    totalEl.textContent = `₹${totalEstimate.toLocaleString('en-IN')}`;
+  }
+
+  if (items.length === 0) {
+    container.innerHTML = `
+      <div class="py-14 px-4 text-center space-y-3">
+        <div class="w-14 h-14 mx-auto rounded-full bg-stone-100 dark:bg-stone-800 text-stone-400 flex items-center justify-center text-xl">
+          <i class="fa-regular fa-heart"></i>
+        </div>
+        <h4 class="font-heading font-bold text-base text-stone-900 dark:text-white">Your Wishlist is Empty</h4>
+        <p class="text-xs text-stone-500 font-sans max-w-xs mx-auto leading-relaxed">
+          Explore our collection and click the heart icon on any sofa, cot, or dining suite to save and compare.
+        </p>
+        <button type="button" onclick="closeWishlistDrawer(); window.location.hash = '#gallery';" class="mt-2 px-5 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-[#1C1917] text-white hover:bg-teak transition-colors cursor-pointer">
+          Browse Catalog
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = items.map(item => `
+    <div class="p-3 rounded-2xl bg-stone-50 dark:bg-white/5 border border-stone-200/80 dark:border-white/5 flex items-center gap-3">
+      <div class="w-16 h-16 rounded-xl overflow-hidden bg-stone-900 flex-shrink-0 cursor-pointer" onclick="closeWishlistDrawer(); openProductModal(PRODUCTS.find(p => p.id === '${item.id}'))">
+        <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+      </div>
+      <div class="flex-1 min-w-0">
+        <span class="block text-[10px] font-mono text-teak font-semibold uppercase">${item.categoryName}</span>
+        <h5 class="text-xs font-bold text-stone-900 dark:text-white truncate cursor-pointer hover:text-teak" onclick="closeWishlistDrawer(); openProductModal(PRODUCTS.find(p => p.id === '${item.id}'))">
+          ${item.name}
+        </h5>
+        <div class="flex items-center gap-2 mt-1">
+          <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">${item.factoryPrice}</span>
+          <span class="text-[10px] font-mono text-stone-400 line-through">${item.mrp}</span>
+        </div>
+      </div>
+      <button 
+        type="button" 
+        onclick="toggleWishlist('${item.id}', event)" 
+        class="w-7 h-7 rounded-full bg-white dark:bg-stone-800 text-stone-400 hover:text-rose-500 flex items-center justify-center transition-colors shadow-xs cursor-pointer flex-shrink-0"
+        title="Remove"
+      >
+        <i class="fa-solid fa-trash-can text-xs"></i>
+      </button>
+    </div>
+  `).join('');
+}
+
+function clearWishlist() {
+  saveWishlistIds([]);
+  updateWishlistBadges();
+  renderWishlist();
+  renderBentoGallery(currentFilter);
+}
+
+function sendWishlistInquiryWhatsApp() {
+  const ids = getWishlistIds();
+  const items = PRODUCTS.filter(p => ids.includes(p.id));
+  if (items.length === 0) {
+    alert('Please save at least one furniture piece to your wishlist first.');
+    return;
+  }
+  let message = `Hello Homeify Furniture (Erattupetta Workshop)!\n\nI have saved ${items.length} piece(s) in my wishlist and would like factory pricing and delivery schedule:\n`;
+  items.forEach((item, i) => {
+    message += `\n${i + 1}. *${item.name}* (${item.categoryName})\n   Direct Factory Price: ${item.factoryPrice} (MRP: ${item.mrp})\n   Material: ${item.materialCategory}\n`;
+  });
+  message += `\nPlease share custom sizing and delivery timeline to my address. Thank you!`;
+  const url = `https://wa.me/${WORKSHOP_WHATSAPP}?text=${encodeURIComponent(message)}`;
+  window.open(url, '_blank', 'noopener');
+}
+
+// ==========================================================================
+// 2C. LUXURY QUICK SEARCH ENGINE
+// ==========================================================================
+function openSearchModal() {
+  const modal = document.getElementById('quick-search-modal');
+  if (modal) {
+    modal.classList.remove('modal-hidden');
+    document.body.classList.add('overflow-hidden');
+    const input = document.getElementById('quick-search-input');
+    if (input) {
+      input.value = '';
+      setTimeout(() => input.focus(), 80);
+      handleLiveSearch('');
+    }
+  }
+}
+
+function closeSearchModal() {
+  const modal = document.getElementById('quick-search-modal');
+  if (modal) {
+    modal.classList.add('modal-hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+}
+
+function setSearchFilterTerm(term) {
+  const input = document.getElementById('quick-search-input');
+  if (input) {
+    input.value = term;
+    handleLiveSearch(term);
+  }
+}
+
+function handleLiveSearch(query) {
+  const resultsContainer = document.getElementById('quick-search-results');
+  if (!resultsContainer) return;
+
+  const q = (query || '').toLowerCase().trim();
+  const matches = PRODUCTS.filter(p => {
+    if (!q) return true;
+    return (
+      (p.name || '').toLowerCase().includes(q) ||
+      (p.category || '').toLowerCase().includes(q) ||
+      (p.categoryName || '').toLowerCase().includes(q) ||
+      (p.description || '').toLowerCase().includes(q) ||
+      (p.materialCategory || '').toLowerCase().includes(q) ||
+      (p.badge || '').toLowerCase().includes(q)
+    );
+  }).slice(0, 15);
+
+  if (matches.length === 0) {
+    resultsContainer.innerHTML = `
+      <div class="py-12 text-center text-stone-400">
+        <i class="fa-solid fa-magnifying-glass text-2xl mb-2 text-stone-300"></i>
+        <p class="text-xs font-sans">No matching pieces found for "${query}".</p>
+        <p class="text-[11px] font-mono mt-1 text-teak">Try searching for "teak cot", "sofa", or "dining".</p>
+      </div>
+    `;
+    return;
+  }
+
+  resultsContainer.innerHTML = matches.map(p => {
+    const savings = calculateSavingsPercent(p.mrp, p.factoryPrice);
+    return `
+      <div class="p-2.5 sm:p-3 rounded-2xl hover:bg-stone-50 dark:hover:bg-white/5 flex items-center justify-between gap-3 cursor-pointer transition-colors group" onclick="closeSearchModal(); openProductModal(PRODUCTS.find(item => item.id === '${p.id}'))">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-14 h-14 rounded-xl overflow-hidden bg-stone-900 border border-stone-200 dark:border-white/10 flex-shrink-0">
+            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-teak/10 text-teak uppercase">${p.categoryName}</span>
+              <span class="text-[10px] font-mono text-stone-400">${p.materialCategory === 'natural-wood' ? '🌳 Solid Teak' : '⚙️ Engineered'}</span>
+            </div>
+            <h4 class="text-xs sm:text-sm font-bold text-stone-900 dark:text-white truncate group-hover:text-teak transition-colors mt-0.5">
+              ${p.name}
+            </h4>
+            <div class="flex items-center gap-2 mt-0.5">
+              <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">${p.factoryPrice}</span>
+              <span class="text-[10px] font-mono text-stone-400 line-through">${p.mrp}</span>
+              <span class="text-[9px] font-mono text-emerald-600 font-bold">Save ${savings}%</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span class="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 text-xs font-mono font-bold group-hover:bg-[#1C1917] group-hover:text-white transition-colors">
+            View Specs <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ==========================================================================
+// 2D. INTERACTIVE 3D ROOM VISUALIZER & CLEARANCE CALCULATOR
+// ==========================================================================
+function openRoomVisualizerModal() {
+  const modal = document.getElementById('room-visualizer-modal');
+  if (modal) {
+    modal.classList.remove('modal-hidden');
+    document.body.classList.add('overflow-hidden');
+    updateVisualizerCalculation();
+  }
+}
+
+function closeRoomVisualizerModal() {
+  const modal = document.getElementById('room-visualizer-modal');
+  if (modal) {
+    modal.classList.add('modal-hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+}
+
+function setVisualizerRoomType(roomType, defaultL, defaultW) {
+  const btns = document.querySelectorAll('.visualizer-room-btn');
+  btns.forEach(b => {
+    b.classList.remove('active', 'border-teak', 'bg-teak/10', 'text-teak', 'font-bold');
+    b.classList.add('border-stone-200', 'dark:border-white/10', 'text-stone-700', 'dark:text-stone-300');
+  });
+  if (window.event && window.event.currentTarget) {
+    window.event.currentTarget.classList.add('active', 'border-teak', 'bg-teak/10', 'text-teak', 'font-bold');
+    window.event.currentTarget.classList.remove('border-stone-200', 'dark:border-white/10', 'text-stone-700', 'dark:text-stone-300');
+  }
+
+  const sliderL = document.getElementById('viz-length-slider');
+  const sliderW = document.getElementById('viz-width-slider');
+  if (sliderL && sliderW) {
+    sliderL.value = defaultL;
+    sliderW.value = defaultW;
+  }
+  updateVisualizerCalculation();
+}
+
+function updateVisualizerCalculation() {
+  const sliderL = document.getElementById('viz-length-slider');
+  const sliderW = document.getElementById('viz-width-slider');
+  const pieceSelect = document.getElementById('viz-furniture-select');
+  if (!sliderL || !sliderW || !pieceSelect) return;
+
+  const length = parseInt(sliderL.value, 10);
+  const width = parseInt(sliderW.value, 10);
+
+  const lengthVal = document.getElementById('viz-length-val');
+  const widthVal = document.getElementById('viz-width-val');
+  if (lengthVal) lengthVal.textContent = `${length} Feet`;
+  if (widthVal) widthVal.textContent = `${width} Feet`;
+
+  const totalArea = length * width;
+  const areaEl = document.getElementById('viz-room-area');
+  if (areaEl) areaEl.textContent = `${totalArea} sq ft (${length}′ × ${width}′)`;
+
+  const pieceAreas = {
+    'sofa-311': 65,
+    'sofa-lshape': 55,
+    'cot-king': 52,
+    'cot-queen': 44,
+    'dining-6seater': 48,
+    'dining-8seater': 68,
+    'office-desk': 32
+  };
+
+  const selectedPiece = pieceSelect.value;
+  const pieceFootprint = pieceAreas[selectedPiece] || 50;
+  const occupancyRatio = pieceFootprint / totalArea;
+
+  const statusBadge = document.getElementById('viz-clearance-status');
+  const adviceEl = document.getElementById('viz-advice-text');
+  const whatsappLink = document.getElementById('viz-whatsapp-link');
+
+  let statusText = '';
+  let statusClass = '';
+  let advice = '';
+
+  if (occupancyRatio <= 0.28) {
+    statusText = '✓ Optimal Clearance (48+ inches space)';
+    statusClass = 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30';
+    advice = `Excellent spatial proportion! This furniture piece occupies ${Math.round(occupancyRatio * 100)}% of your room, leaving generous walking space and natural light flow. Ideal for luxury residential spaces.`;
+  } else if (occupancyRatio <= 0.42) {
+    statusText = 'Comfortable Fit (36 - 42 inches clearance)';
+    statusClass = 'bg-amber-500/20 text-amber-300 border border-amber-400/30';
+    advice = `Fits nicely! This piece will occupy ${Math.round(occupancyRatio * 100)}% of your space with standard ergonomic clearance. We recommend pairing with minimalist wall units or slim coffee tables.`;
+  } else {
+    statusText = '⚠ Compact Clearance (< 32 inches space)';
+    statusClass = 'bg-rose-500/20 text-rose-300 border border-rose-400/30';
+    advice = `Room is snug for this size (${Math.round(occupancyRatio * 100)}% occupied). Our Erattupetta craftsmen can customize the exact outer dimensions or build a space-saving modular edition.`;
+  }
+
+  if (statusBadge) {
+    statusBadge.textContent = statusText;
+    statusBadge.className = `px-2.5 py-0.5 rounded-full text-xs font-mono font-bold ${statusClass}`;
+  }
+  if (adviceEl) {
+    adviceEl.textContent = advice;
+  }
+  if (whatsappLink) {
+    const selectedText = pieceSelect.options[pieceSelect.selectedIndex].text;
+    const msg = `Hello Homeify! I used your 3D Room Visualizer for my room (${length}x${width} ft, ${totalArea} sq ft) with ${selectedText}. Please advise custom dimensions and pricing.`;
+    whatsappLink.href = `https://wa.me/${WORKSHOP_WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  }
+}
+
+// ==========================================================================
+// 2E. LUXURY FREE DESIGN CONSULTATION ENGINE
+// ==========================================================================
+function openConsultationModal() {
+  const modal = document.getElementById('consultation-modal');
+  if (modal) {
+    modal.classList.remove('modal-hidden');
+    document.body.classList.add('overflow-hidden');
+  }
+}
+
+function closeConsultationModal() {
+  const modal = document.getElementById('consultation-modal');
+  if (modal) {
+    modal.classList.add('modal-hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+}
+
+function submitConsultationRequest(event) {
+  if (event) event.preventDefault();
+  const name = document.getElementById('consult-name')?.value.trim() || 'Valued Client';
+  const phone = document.getElementById('consult-phone')?.value.trim() || '';
+  const location = document.getElementById('consult-location')?.value.trim() || '';
+  const roomType = document.getElementById('consult-room-type')?.value || 'Furniture Consultation';
+  const consultTypeRadio = document.querySelector('input[name="consult-type"]:checked');
+  const consultType = consultTypeRadio ? consultTypeRadio.value : 'Workshop Visit';
+  const notes = document.getElementById('consult-notes')?.value.trim() || '';
+
+  const booking = {
+    id: 'consult_' + Date.now(),
+    name,
+    phone,
+    location,
+    roomType,
+    consultType,
+    notes,
+    timestamp: new Date().toISOString()
+  };
+
+  try {
+    const existing = JSON.parse(localStorage.getItem('homeify_consultations') || '[]');
+    existing.push(booking);
+    localStorage.setItem('homeify_consultations', JSON.stringify(existing));
+  } catch (e) {}
+
+  let message = `Hello Homeify Furniture (Erattupetta Workshop)!\n\nI would like to book a *Free Design Consultation*:\n`;
+  message += `• *Client Name:* ${name}\n`;
+  message += `• *Phone / WhatsApp:* ${phone}\n`;
+  message += `• *Location:* ${location}\n`;
+  message += `• *Project Requirement:* ${roomType}\n`;
+  message += `• *Consultation Type:* ${consultType}\n`;
+  if (notes) {
+    message += `• *Notes:* ${notes}\n`;
+  }
+  message += `\nPlease confirm an appointment slot with your master craftsman. Thank you!`;
+
+  closeConsultationModal();
+  showToast('Consultation request prepared! Connecting to WhatsApp...');
+  const url = `https://wa.me/${WORKSHOP_WHATSAPP}?text=${encodeURIComponent(message)}`;
+  window.open(url, '_blank', 'noopener');
+}
+
+// Subtle luxury toast notification
+function showToast(message) {
+  let toast = document.getElementById('homeify-luxury-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'homeify-luxury-toast';
+    toast.className = 'fixed bottom-24 sm:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-[#1C1917]/95 text-white border border-amber-400/40 px-5 py-2.5 rounded-full shadow-2xl backdrop-blur-md text-xs font-mono font-bold flex items-center gap-2 transition-all duration-300 pointer-events-none opacity-0 translate-y-3';
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `<i class="fa-solid fa-circle-check text-amber-400 text-sm"></i><span>${message}</span>`;
+  toast.classList.remove('opacity-0', 'translate-y-3');
+  toast.classList.add('opacity-100', 'translate-y-0');
+  setTimeout(() => {
+    toast.classList.remove('opacity-100', 'translate-y-0');
+    toast.classList.add('opacity-0', 'translate-y-3');
+  }, 2600);
 }
 
 // ==========================================================================
@@ -3367,6 +3951,9 @@ function initModalListeners() {
   const modalOverlay = document.getElementById('product-lightbox-modal');
   const quoteActionBtn = document.getElementById('modal-add-to-quote-btn');
   const shareModalOverlay = document.getElementById('product-share-modal');
+  const searchModalOverlay = document.getElementById('quick-search-modal');
+  const vizModalOverlay = document.getElementById('room-visualizer-modal');
+  const consultModalOverlay = document.getElementById('consultation-modal');
 
   if (closeBtn) closeBtn.addEventListener('click', closeProductModal);
 
@@ -3379,6 +3966,24 @@ function initModalListeners() {
   if (shareModalOverlay) {
     shareModalOverlay.addEventListener('click', (e) => {
       if (e.target === shareModalOverlay) closeShareModal();
+    });
+  }
+
+  if (searchModalOverlay) {
+    searchModalOverlay.addEventListener('click', (e) => {
+      if (e.target === searchModalOverlay) closeSearchModal();
+    });
+  }
+
+  if (vizModalOverlay) {
+    vizModalOverlay.addEventListener('click', (e) => {
+      if (e.target === vizModalOverlay) closeRoomVisualizerModal();
+    });
+  }
+
+  if (consultModalOverlay) {
+    consultModalOverlay.addEventListener('click', (e) => {
+      if (e.target === consultModalOverlay) closeConsultationModal();
     });
   }
 
@@ -3395,6 +4000,15 @@ function initModalListeners() {
       closeShareModal();
       closeProductModal();
       closeCustomizer();
+      closeSearchModal();
+      closeWishlistDrawer();
+      closeRoomVisualizerModal();
+      closeConsultationModal();
+    }
+    // Global hotkey '/' to open search (if not typing in input)
+    if (e.key === '/' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) {
+      e.preventDefault();
+      openSearchModal();
     }
   });
 

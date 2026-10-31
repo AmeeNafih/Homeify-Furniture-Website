@@ -5,23 +5,26 @@
    ========================================================================== */
 
 :root {
-  --bg-primary: #FAF8F5;
-  --bg-secondary: #0D0C0B;
+  --bg-primary: #FAF7F2;
+  --bg-secondary: #161412;
   --bg-surface: #FFFFFF;
-  --bg-surface-elevated: #161514;
-  --accent-teak: #9E6738;
-  --accent-teak-hover: #B57945;
-  --accent-sage: #2C4A38;
-  --accent-gold: #D4AF37;
-  --accent-gold-glow: rgba(212, 175, 55, 0.25);
-  --text-main: #141210;
-  --text-sub: #665F57;
-  --text-inverse: #FAF8F5;
-  --border-glass: rgba(20, 18, 16, 0.08);
-  --border-glass-dark: rgba(212, 175, 55, 0.16);
-  --font-heading: 'Manrope', 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --bg-surface-elevated: #1F1C18;
+  --accent-walnut: #5C3826;
+  --accent-teak: #8C5630;
+  --accent-teak-hover: #A76D43;
+  --accent-sage: #2F483A;
+  --accent-gold: #C5A059;
+  --accent-gold-glow: rgba(197, 160, 89, 0.28);
+  --accent-terracotta: #C25D42;
+  --text-main: #1C1917;
+  --text-sub: #57534E;
+  --text-inverse: #FAF7F2;
+  --border-glass: rgba(28, 25, 23, 0.08);
+  --border-glass-dark: rgba(197, 160, 89, 0.18);
+  --font-heading: 'Playfair Display', 'Plus Jakarta Sans', 'Inter', serif;
+  --font-serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-cinzel: 'Cinzel', serif;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* Global Reset */
@@ -79,6 +82,9 @@ img, video, canvas, svg {
 }
 .font-serif {
   font-family: var(--font-serif);
+}
+.font-cinzel {
+  font-family: var(--font-cinzel);
 }
 .font-sans {
   font-family: var(--font-sans);
@@ -1213,4 +1219,88 @@ html.dark .bento-card:hover {
   .corp-stat-cell {
     padding: 0.75rem 0.5rem !important;
   }
+}
+
+/* ==========================================================================
+   LUXURY BRAND DESIGN SYSTEM EXTENSIONS
+   ========================================================================== */
+
+/* Luxury Button Elevation & Glow */
+.btn-luxury-primary {
+  background: #1C1917;
+  color: #FAF7F2;
+  border-radius: 9999px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 25px -5px rgba(28, 25, 23, 0.25);
+}
+.btn-luxury-primary:hover {
+  background: var(--accent-teak);
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px -5px rgba(140, 86, 48, 0.35);
+}
+
+.btn-luxury-secondary {
+  background: #FFFFFF;
+  color: #1C1917;
+  border: 1px solid rgba(28, 25, 23, 0.15);
+  border-radius: 9999px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(28, 25, 23, 0.05);
+}
+.btn-luxury-secondary:hover {
+  border-color: var(--accent-teak);
+  color: var(--accent-teak);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(140, 86, 48, 0.15);
+}
+
+/* Room Category Filter Active States */
+.room-filter-btn {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.room-filter-btn.active {
+  background: #1C1917;
+  color: #FAF7F2;
+  border-color: #1C1917;
+  box-shadow: 0 8px 24px rgba(28, 25, 23, 0.2);
+}
+.dark .room-filter-btn.active {
+  background: #C5A059;
+  color: #161412;
+  border-color: #C5A059;
+  box-shadow: 0 8px 24px rgba(197, 160, 89, 0.25);
+}
+
+/* Material Filter Pills */
+.material-filter-btn {
+  transition: all 0.25s ease;
+}
+.material-filter-btn.active {
+  background: var(--accent-teak);
+  color: #FFFFFF;
+  border-color: var(--accent-teak);
+}
+
+/* Wishlist Slide-Over Drawer Smooth Slide Transition */
+#wishlist-drawer {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Quick Search Dialog Dropdown Transitions */
+#quick-search-modal .modal-container {
+  transform: translateY(0);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+
+#quick-search-modal.modal-hidden .modal-container {
+  transform: translateY(-20px);
+  opacity: 0;
 }
