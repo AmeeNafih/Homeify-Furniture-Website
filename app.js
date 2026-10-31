@@ -4121,6 +4121,294 @@ window.captureARSnapshot = function() {
 };
 
 // ==========================================================================
+// 2F. LIVE GRAIN & TONE SWATCHES ATELIER STUDIO ENGINE
+// ==========================================================================
+let swatchState = {
+  species: 'teak',
+  finish: 'natural-matte',
+  lighting: 'daylight',
+  fabric: 'cane'
+};
+
+const SWATCH_SPECIES_DATA = {
+  teak: {
+    title: 'Nilambur Grade-A Natural Teak',
+    subtitle: '100% Solid Kiln-Seasoned Timber',
+    description: 'Golden-amber honey hue with dark structural grain streaks. High natural tectoquinone oil content protects against tropical humidity, borers, and termites.',
+    image: 'assets/erattupetta-workshop-craftsman.jpg',
+    hardness: '1,155 lbf (Janka Rating)',
+    moisture: '8% - 12% (Kiln-Seasoned)',
+    immunity: '100% Termite & Borer Proof',
+    accentColor: '#8C5630'
+  },
+  rosewood: {
+    title: 'Kerala Rosewood (Royal Eeti)',
+    subtitle: 'Dense Heirloom Hardwood',
+    description: 'Deep chocolate-purplish black grain with rich golden undertones. Revered for centuries in Kerala royal architecture and heirloom cots.',
+    image: 'assets/rosewood-coffee-table.jpg',
+    hardness: '1,780 lbf (Janka Rating)',
+    moisture: '9% - 11% (Seasoned)',
+    immunity: 'Extreme Density (Borer Proof)',
+    accentColor: '#452A15'
+  },
+  anjili: {
+    title: 'Anjili Wood (Wild Jackfruit)',
+    subtitle: 'Indigenous Western Ghats Timber',
+    description: 'Warm reddish-amber grain that oxidizes into a rich antique bronze luster over time. Monolithic stability with natural resin resistance.',
+    image: 'assets/traditional-palakkad-teak-door.jpg',
+    hardness: '1,100 lbf (Janka Rating)',
+    moisture: '10% - 12% (Seasoned)',
+    immunity: 'Natural Resin (Water Resistant)',
+    accentColor: '#A76D43'
+  },
+  engineered: {
+    title: 'Grade-E1 High-Density Engineered Board',
+    subtitle: 'Precision Architectural Core',
+    description: 'High-density fiber core with hot-melt 2mm seamless PVC edge banding. Resistant to warping and ideal for modern office workstations and modular wardrobes.',
+    image: 'assets/modern-teak-sofa-set.jpg',
+    hardness: 'Modular Structural Core',
+    moisture: 'Moisture Sealed (2mm Edge)',
+    immunity: 'Formaldehyde E1 Safe & Treated',
+    accentColor: '#3E342B'
+  }
+};
+
+const SWATCH_FINISH_NAMES = {
+  'natural-matte': 'Silk Matte PU',
+  'dark-walnut': 'Dark Walnut Stain',
+  'honey-amber': 'Honey Amber Gloss',
+  'raw-seasoned': 'Raw Organic Grain',
+  'smoked-espresso': 'Smoked Espresso',
+  'palace-gloss': 'Royal Palace Gloss'
+};
+
+const SWATCH_LIGHTING_DATA = {
+  warm: {
+    name: 'Warm Sunset 3000K',
+    icon: 'fa-fire',
+    overlayColor: 'rgba(245, 158, 11, 0.22)',
+    filter: 'sepia(0.35) saturate(1.4) brightness(0.96) contrast(1.05)'
+  },
+  daylight: {
+    name: 'Daylight 5500K',
+    icon: 'fa-sun',
+    overlayColor: 'rgba(255, 255, 255, 0.04)',
+    filter: 'saturate(1.05) brightness(1.04) contrast(1.02)'
+  },
+  studio: {
+    name: 'Studio 4000K',
+    icon: 'fa-building',
+    overlayColor: 'rgba(56, 189, 248, 0.12)',
+    filter: 'saturate(0.98) brightness(1.0) contrast(1.12)'
+  }
+};
+
+const SWATCH_FABRIC_DATA = {
+  cane: {
+    name: 'Kerala Cane Weave',
+    type: 'Natural Rattan Mesh',
+    icon: '🧺',
+    color: '#e3bc7c'
+  },
+  boucle: {
+    name: 'Italian Bouclé',
+    type: 'Alabaster Textured',
+    icon: '☁️',
+    color: '#f4ede4'
+  },
+  velvet: {
+    name: 'Stain-Resistant Velvet',
+    type: 'Forest Green / Plush',
+    icon: '✨',
+    color: '#2b4c37'
+  },
+  leather: {
+    name: 'Saddle Tan Leather',
+    type: 'Top-Grain Aniline',
+    icon: '🛋️',
+    color: '#82441f'
+  }
+};
+
+window.openLiveSwatchesModal = function() {
+  const modal = document.getElementById('live-swatches-modal');
+  if (!modal) return;
+
+  modal.classList.remove('modal-hidden');
+  modal.classList.add('modal-visible');
+  document.body.style.overflow = 'hidden';
+
+  updateSwatchViewer();
+};
+
+window.closeLiveSwatchesModal = function() {
+  const modal = document.getElementById('live-swatches-modal');
+  if (!modal) return;
+
+  modal.classList.remove('modal-visible');
+  modal.classList.add('modal-hidden');
+  document.body.style.overflow = 'auto';
+};
+
+window.setSwatchSpecies = function(species) {
+  if (!SWATCH_SPECIES_DATA[species]) return;
+  swatchState.species = species;
+
+  const btns = document.querySelectorAll('.swatch-species-btn');
+  btns.forEach(b => {
+    if (b.getAttribute('data-species') === species) {
+      b.classList.add('active', 'border-amber-400', 'bg-amber-400/20', 'text-white', 'shadow-sm');
+      b.classList.remove('border-white/15', 'bg-white/5', 'text-stone-300');
+    } else {
+      b.classList.remove('active', 'border-amber-400', 'bg-amber-400/20', 'text-white', 'shadow-sm');
+      b.classList.add('border-white/15', 'bg-white/5', 'text-stone-300');
+    }
+  });
+
+  updateSwatchViewer();
+};
+
+window.setSwatchFinish = function(finish) {
+  if (!SWATCH_FINISH_NAMES[finish]) return;
+  swatchState.finish = finish;
+
+  const btns = document.querySelectorAll('.swatch-finish-btn');
+  btns.forEach(b => {
+    if (b.getAttribute('data-finish') === finish) {
+      b.classList.add('active', 'border-amber-400', 'bg-amber-400/20', 'text-white', 'font-semibold');
+      b.classList.remove('border-white/15', 'bg-white/5', 'text-stone-300');
+    } else {
+      b.classList.remove('active', 'border-amber-400', 'bg-amber-400/20', 'text-white', 'font-semibold');
+      b.classList.add('border-white/15', 'bg-white/5', 'text-stone-300');
+    }
+  });
+
+  updateSwatchViewer();
+};
+
+window.setSwatchLighting = function(light) {
+  if (!SWATCH_LIGHTING_DATA[light]) return;
+  swatchState.lighting = light;
+
+  const btns = document.querySelectorAll('.swatch-light-btn');
+  btns.forEach(b => {
+    if (b.getAttribute('data-light') === light) {
+      b.classList.add('active', 'border-amber-400', 'bg-amber-400', 'text-stone-950', 'shadow-md');
+      b.classList.remove('border-white/15', 'bg-white/10', 'text-stone-300');
+    } else {
+      b.classList.remove('active', 'border-amber-400', 'bg-amber-400', 'text-stone-950', 'shadow-md');
+      b.classList.add('border-white/15', 'bg-white/10', 'text-stone-300');
+    }
+  });
+
+  updateSwatchViewer();
+};
+
+window.setSwatchFabric = function(fabric) {
+  if (!SWATCH_FABRIC_DATA[fabric]) return;
+  swatchState.fabric = fabric;
+
+  const btns = document.querySelectorAll('.swatch-fabric-btn');
+  btns.forEach(b => {
+    if (b.getAttribute('data-fabric') === fabric) {
+      b.classList.add('active', 'border-amber-400', 'bg-amber-400/20', 'text-white', 'shadow-sm');
+      b.classList.remove('border-white/15', 'bg-white/5', 'text-stone-300');
+    } else {
+      b.classList.remove('active', 'border-amber-400', 'bg-amber-400/20', 'text-white', 'shadow-sm');
+      b.classList.add('border-white/15', 'bg-white/5', 'text-stone-300');
+    }
+  });
+
+  updateSwatchViewer();
+};
+
+function updateSwatchViewer() {
+  const stage = document.getElementById('swatch-viewer-stage');
+  const overlay = document.getElementById('swatch-lighting-overlay');
+  const lightBadge = document.getElementById('swatch-live-lighting-badge');
+  const finishBadge = document.getElementById('swatch-live-finish-badge');
+  const speciesTitle = document.getElementById('swatch-species-title');
+  const speciesSubtitle = document.getElementById('swatch-species-subtitle');
+  const speciesDesc = document.getElementById('swatch-species-description');
+  const accentBadge = document.getElementById('swatch-accent-badge');
+  const accentSwatch = document.getElementById('swatch-accent-swatch');
+  const accentTitle = document.getElementById('swatch-accent-title');
+  const specHardness = document.getElementById('swatch-spec-hardness');
+  const specMoisture = document.getElementById('swatch-spec-moisture');
+  const specImmunity = document.getElementById('swatch-spec-immunity');
+  const whatsappBtn = document.getElementById('swatch-whatsapp-btn');
+
+  const species = SWATCH_SPECIES_DATA[swatchState.species] || SWATCH_SPECIES_DATA.teak;
+  const finishName = SWATCH_FINISH_NAMES[swatchState.finish] || 'Silk Matte PU';
+  const lighting = SWATCH_LIGHTING_DATA[swatchState.lighting] || SWATCH_LIGHTING_DATA.daylight;
+  const fabric = SWATCH_FABRIC_DATA[swatchState.fabric] || SWATCH_FABRIC_DATA.cane;
+
+  // 1. Stage Background & Lighting Filter
+  if (stage) {
+    stage.style.backgroundImage = `url('${species.image}')`;
+    
+    // Dynamic finish filter modifier combined with lighting
+    let finishFilter = '';
+    if (swatchState.finish === 'dark-walnut') {
+      finishFilter = 'contrast(1.15) brightness(0.82) sepia(0.2)';
+    } else if (swatchState.finish === 'honey-amber') {
+      finishFilter = 'saturate(1.4) brightness(1.08) sepia(0.25)';
+    } else if (swatchState.finish === 'raw-seasoned') {
+      finishFilter = 'saturate(0.9) brightness(1.02) contrast(0.95)';
+    } else if (swatchState.finish === 'smoked-espresso') {
+      finishFilter = 'contrast(1.25) brightness(0.7) grayscale(0.2)';
+    } else if (swatchState.finish === 'palace-gloss') {
+      finishFilter = 'contrast(1.2) brightness(1.1) saturate(1.3)';
+    } else {
+      finishFilter = 'none';
+    }
+
+    stage.style.filter = `${lighting.filter} ${finishFilter !== 'none' ? finishFilter : ''}`;
+  }
+
+  if (overlay) {
+    overlay.style.backgroundColor = lighting.overlayColor;
+  }
+
+  // 2. Badges
+  if (lightBadge) {
+    lightBadge.innerHTML = `<i class="fa-solid ${lighting.icon} text-amber-400"></i> <span>${lighting.name}</span>`;
+  }
+  if (finishBadge) {
+    finishBadge.textContent = finishName;
+  }
+
+  // 3. Species Info
+  if (speciesTitle) speciesTitle.textContent = species.title;
+  if (speciesSubtitle) speciesSubtitle.textContent = species.subtitle;
+  if (speciesDesc) speciesDesc.textContent = species.description;
+
+  // 4. Accent Fabric
+  if (accentBadge) {
+    accentBadge.classList.remove('hidden');
+    accentBadge.classList.add('flex');
+  }
+  if (accentSwatch) {
+    accentSwatch.style.backgroundColor = fabric.color;
+    accentSwatch.textContent = fabric.icon;
+  }
+  if (accentTitle) {
+    accentTitle.textContent = fabric.name;
+  }
+
+  // 5. Tech Specs
+  if (specHardness) specHardness.textContent = species.hardness;
+  if (specMoisture) specMoisture.textContent = species.moisture;
+  if (specImmunity) specImmunity.textContent = species.immunity;
+
+  // 6. WhatsApp Inquiry CTA Link
+  if (whatsappBtn) {
+    const text = `Hello Homeify Furniture (Erattupetta)! I explored your Live Grain & Tone Swatches Studio and selected:\n\n• Wood: ${species.title}\n• Polish Finish: ${finishName}\n• Matched Upholstery: ${fabric.name} (${fabric.type})\n• Light Inspection: ${lighting.name}\n\nPlease share high-definition atelier photographs and sample swatch details for my custom project.`;
+    whatsappBtn.href = `https://wa.me/${WORKSHOP_WHATSAPP}?text=${encodeURIComponent(text)}`;
+  }
+}
+
+// ==========================================================================
 // 2D. INTERACTIVE 3D ROOM VISUALIZER & CLEARANCE CALCULATOR
 // ==========================================================================
 function openRoomVisualizerModal() {
@@ -4587,6 +4875,7 @@ function initModalListeners() {
       closeWishlistDrawer();
       closeRoomVisualizerModal();
       closeARRoomCamera();
+      closeLiveSwatchesModal();
       closeConsultationModal();
     }
     // Global hotkey '/' to open search (if not typing in input)

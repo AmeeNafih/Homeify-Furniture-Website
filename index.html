@@ -909,9 +909,14 @@
         </div>
 
         <!-- Card 2: Atelier Wood Grain & Fabric Studio -->
-        <div class="p-6 sm:p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-teak/40 transition-all duration-300 flex flex-col justify-between group hover:bg-white/[0.07]">
+        <div class="p-6 sm:p-8 rounded-3xl bg-white/5 border border-amber-400/30 hover:border-amber-400/60 transition-all duration-300 flex flex-col justify-between group hover:bg-white/[0.07] relative overflow-hidden shadow-lg">
+          <div class="absolute top-3 right-3">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-400/20 text-amber-300 border border-amber-400/40 animate-pulse">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Active Studio
+            </span>
+          </div>
           <div>
-            <div class="w-14 h-14 rounded-2xl bg-teak/20 text-teak-light flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform shadow-md">
               <i class="fa-solid fa-swatchbook"></i>
             </div>
             <h3 class="font-heading text-xl font-bold text-white mb-2.5">
@@ -922,14 +927,18 @@
             </p>
           </div>
           <div class="pt-6 mt-6 border-t border-white/10 flex items-center justify-between">
-            <span class="text-[11px] font-mono text-teak-light font-semibold">100% Real Timber</span>
-            <a 
-              href="#material-comparator" 
-              class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-white hover:text-teak-light transition-colors"
+            <span class="text-[11px] font-mono text-amber-300 font-semibold flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-dot text-[8px] text-amber-400 animate-pulse"></i>
+              Interactive Swatches
+            </span>
+            <button 
+              type="button" 
+              onclick="openLiveSwatchesModal()" 
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400 hover:bg-amber-300 text-stone-950 text-xs font-mono font-bold transition-all shadow-md active:scale-95 cursor-pointer"
             >
-              <span>Compare Specs</span>
-              <i class="fa-solid fa-arrow-right text-[10px]"></i>
-            </a>
+              <i class="fa-solid fa-swatchbook text-xs"></i>
+              <span>Explore Swatches</span>
+            </button>
           </div>
         </div>
 
@@ -998,6 +1007,14 @@
           >
             <i class="fa-solid fa-ruler-combined text-sm"></i>
             <span>Clearance Calculator</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="openLiveSwatchesModal()" 
+            class="px-6 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white transition-all font-mono border border-white/20 cursor-pointer active:scale-95 flex items-center gap-2"
+          >
+            <i class="fa-solid fa-swatchbook text-sm text-amber-400"></i>
+            <span>Live Grain Swatches</span>
           </button>
           <button 
             type="button" 
@@ -3255,6 +3272,346 @@
     </div>
 
   </aside>
+
+  <!-- =========================================================================
+       11D. LIVE GRAIN & TONE SWATCHES ATELIER STUDIO MODAL
+       ========================================================================= -->
+  <div id="live-swatches-modal" class="modal-overlay modal-hidden fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-6 bg-[#0D0C0B]/90 backdrop-blur-md">
+    <div class="modal-container relative w-full max-w-4xl max-h-[94vh] bg-[#141210] text-white rounded-3xl shadow-2xl border border-white/15 overflow-hidden flex flex-col">
+      
+      <!-- Studio Header -->
+      <div class="p-4 sm:p-6 border-b border-white/10 flex items-center justify-between bg-black/40">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-400 text-stone-950 flex items-center justify-center text-lg flex-shrink-0 shadow-sm">
+            <i class="fa-solid fa-swatchbook"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-heading font-extrabold text-lg sm:text-xl text-white leading-tight">Live Grain & Tone Swatches Studio</h3>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-400/20 text-amber-300 border border-amber-400/40 hidden sm:inline-block">Atelier Kerala</span>
+            </div>
+            <p class="text-xs text-stone-400 font-sans">Inspect authentic Nilambur Teak wood grain, polish finishes, and lighting temperature in real time</p>
+          </div>
+        </div>
+        <button 
+          type="button" 
+          onclick="closeLiveSwatchesModal()" 
+          class="w-10 h-10 rounded-full bg-white/10 hover:bg-rose-600 text-white flex items-center justify-center transition-all cursor-pointer shadow-md"
+          aria-label="Close swatches studio"
+        >
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Studio Body (Split View: Preview Stage on Left, Interactive Controls on Right) -->
+      <div class="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          
+          <!-- Left: High-Definition Live Swatch Preview Stage -->
+          <div class="lg:col-span-7 flex flex-col space-y-3">
+            <div 
+              id="swatch-viewer-stage" 
+              class="relative aspect-[4/3] sm:aspect-[16/10] rounded-2xl overflow-hidden border border-white/15 shadow-2xl transition-all duration-500 bg-cover bg-center flex items-end p-4 group select-none"
+              style="background-image: url('assets/erattupetta-workshop-craftsman.jpg');"
+            >
+              <!-- Dynamic Lighting Filter Overlay -->
+              <div id="swatch-lighting-overlay" class="absolute inset-0 pointer-events-none transition-all duration-700 bg-amber-500/10 mix-blend-color"></div>
+              
+              <!-- Subtle Vignette & Specular Gradient -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none"></div>
+
+              <!-- Top Lighting & Finish Badge Indicator -->
+              <div class="absolute top-3 left-3 z-10 flex items-center gap-2 flex-wrap">
+                <span id="swatch-live-lighting-badge" class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-black/75 backdrop-blur-md border border-amber-400/60 text-amber-300 flex items-center gap-1.5 shadow-md">
+                  <i class="fa-solid fa-sun text-amber-400"></i>
+                  <span>Daylight 5500K</span>
+                </span>
+                <span id="swatch-live-finish-badge" class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-black/75 backdrop-blur-md border border-white/20 text-stone-200 shadow-md">
+                  Silk Matte PU
+                </span>
+              </div>
+
+              <!-- Matching Accent Split Preview (e.g. Cane Weave or Bouclé Fabric) -->
+              <div id="swatch-accent-badge" class="absolute top-3 right-3 z-10 hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-black/80 backdrop-blur-md border border-white/20 shadow-xl">
+                <div id="swatch-accent-swatch" class="w-6 h-6 rounded-lg bg-[#e3bc7c] border border-white/30 flex items-center justify-center text-[11px]">🧺</div>
+                <div class="text-left text-[10px] font-mono leading-tight">
+                  <span class="text-stone-400 block">Matched Upholstery</span>
+                  <span id="swatch-accent-title" class="font-bold text-white">Kerala Cane Weave</span>
+                </div>
+              </div>
+
+              <!-- Bottom Wood Spec Overlay Info -->
+              <div class="relative z-10 text-white w-full flex items-end justify-between gap-4">
+                <div>
+                  <span id="swatch-species-subtitle" class="text-[10px] font-mono uppercase tracking-widest text-amber-400 font-bold block">100% Solid Seasoned Timber</span>
+                  <h4 id="swatch-species-title" class="font-heading text-xl sm:text-2xl font-black text-white leading-tight">Nilambur Grade-A Natural Teak</h4>
+                  <p id="swatch-species-description" class="text-xs text-stone-300 mt-1 font-sans line-clamp-2 max-w-md">
+                    Golden-honey tone with dark structural grain streaks. High natural oil protects permanently against moisture and termites.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Lighting Temperature Control Strip -->
+            <div class="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between gap-2 flex-wrap">
+              <span class="text-[11px] font-mono font-bold text-stone-300 uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-lightbulb text-amber-400"></i> Light Temp:
+              </span>
+              <div class="flex items-center gap-1.5 flex-1 justify-end flex-wrap">
+                <button 
+                  type="button" 
+                  onclick="setSwatchLighting('warm')" 
+                  class="swatch-light-btn px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border border-white/15 bg-white/10 text-stone-300 hover:text-white hover:bg-white/20 flex items-center gap-1.5 cursor-pointer"
+                  data-light="warm"
+                >
+                  <i class="fa-solid fa-fire text-amber-400 text-[10px]"></i>
+                  <span>Warm 3000K (Sunset)</span>
+                </button>
+                <button 
+                  type="button" 
+                  onclick="setSwatchLighting('daylight')" 
+                  class="swatch-light-btn active px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border border-amber-400 bg-amber-400 text-stone-950 shadow-md flex items-center gap-1.5 cursor-pointer"
+                  data-light="daylight"
+                >
+                  <i class="fa-solid fa-sun text-[10px]"></i>
+                  <span>Daylight 5500K</span>
+                </button>
+                <button 
+                  type="button" 
+                  onclick="setSwatchLighting('studio')" 
+                  class="swatch-light-btn px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border border-white/15 bg-white/10 text-stone-300 hover:text-white hover:bg-white/20 flex items-center gap-1.5 cursor-pointer"
+                  data-light="studio"
+                >
+                  <i class="fa-solid fa-building text-sky-400 text-[10px]"></i>
+                  <span>Studio 4000K</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right: Interactive Switcher Controls (Species, Finish Tones, Fabrics) -->
+          <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
+            
+            <!-- 1. Wood Species Switcher -->
+            <div>
+              <label class="block text-xs font-mono font-bold uppercase tracking-wider text-amber-400 mb-2 flex items-center justify-between">
+                <span>1. Select Wood Species</span>
+                <span class="text-[10px] text-stone-400 lowercase font-normal">pure timber varieties</span>
+              </label>
+              <div class="grid grid-cols-2 gap-2">
+                <button 
+                  type="button" 
+                  onclick="setSwatchSpecies('teak')" 
+                  class="swatch-species-btn active p-2.5 rounded-xl border border-amber-400 bg-amber-400/20 text-white font-bold text-xs text-left transition-all flex items-center gap-2 cursor-pointer shadow-sm"
+                  data-species="teak"
+                >
+                  <span class="w-4 h-4 rounded-full bg-[#8C5630] border border-amber-400 flex-shrink-0"></span>
+                  <div class="truncate">
+                    <span class="block truncate">Nilambur Teak</span>
+                    <span class="block text-[9px] text-amber-200/80 font-mono font-normal">Grade-A Golden</span>
+                  </div>
+                </button>
+                <button 
+                  type="button" 
+                  onclick="setSwatchSpecies('rosewood')" 
+                  class="swatch-species-btn p-2.5 rounded-xl border border-white/15 bg-white/5 text-stone-300 hover:text-white font-bold text-xs text-left transition-all flex items-center gap-2 cursor-pointer"
+                  data-species="rosewood"
+                >
+                  <span class="w-4 h-4 rounded-full bg-[#452A15] border border-white/30 flex-shrink-0"></span>
+                  <div class="truncate">
+                    <span class="block truncate">Kerala Rosewood</span>
+                    <span class="block text-[9px] text-stone-400 font-mono font-normal">Royal Eeti Dark</span>
+                  </div>
+                </button>
+                <button 
+                  type="button" 
+                  onclick="setSwatchSpecies('anjili')" 
+                  class="swatch-species-btn p-2.5 rounded-xl border border-white/15 bg-white/5 text-stone-300 hover:text-white font-bold text-xs text-left transition-all flex items-center gap-2 cursor-pointer"
+                  data-species="anjili"
+                >
+                  <span class="w-4 h-4 rounded-full bg-[#A76D43] border border-white/30 flex-shrink-0"></span>
+                  <div class="truncate">
+                    <span class="block truncate">Anjili Wood</span>
+                    <span class="block text-[9px] text-stone-400 font-mono font-normal">Wild Jackfruit Timber</span>
+                  </div>
+                </button>
+                <button 
+                  type="button" 
+                  onclick="setSwatchSpecies('engineered')" 
+                  class="swatch-species-btn p-2.5 rounded-xl border border-white/15 bg-white/5 text-stone-300 hover:text-white font-bold text-xs text-left transition-all flex items-center gap-2 cursor-pointer"
+                  data-species="engineered"
+                >
+                  <span class="w-4 h-4 rounded-full bg-[#3E342B] border border-white/30 flex-shrink-0"></span>
+                  <div class="truncate">
+                    <span class="block truncate">Engineered Board</span>
+                    <span class="block text-[9px] text-stone-400 font-mono font-normal">Grade-E1 Laminate</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- 2. Polish / Finish Tone Switches -->
+            <div>
+              <label class="block text-xs font-mono font-bold uppercase tracking-wider text-amber-400 mb-2 flex items-center justify-between">
+                <span>2. Atelier Finish & Polish Tone</span>
+                <span class="text-[10px] text-stone-400 lowercase font-normal">hand-rubbed textures</span>
+              </label>
+              <div class="grid grid-cols-3 gap-2">
+                <button 
+                  type="button" 
+                  onclick="setSwatchFinish('natural-matte')" 
+                  class="swatch-finish-btn active p-2 rounded-xl border border-amber-400 bg-amber-400/20 text-white font-semibold text-[11px] text-center transition-all cursor-pointer"
+                  data-finish="natural-matte"
+                >
+                  Silk Matte PU
+                </button>
+                <button 
+                  type="button" 
+                  onclick="setSwatchFinish('dark-walnut')" 
+                  class="swatch-finish-btn p-2 rounded-xl border border-white/15 bg-white/5 text-stone-300 hover:text-white text-[11px] text-center transition-all cursor-pointer"
+                  data-finish="dark-walnut"
+                >
+                  Dark Walnut
+                </button>
+                <button 
+                  type="button" 
+                  onclick="setSwatchFinish('honey-amber')" 
+                  class="swatch-finish-btn p-2 rounded-xl border border-white/15 bg-white/5 text-stone-300 hover:text-white text-[11px] text-center transition-all cursor-pointer"
+                  data-finish="honey-amber"
+                >
+                  Honey Amber
+                </button>
+                <button 
+                  type="button" 
+                  onclick="setSwatchFinish('raw-seasoned')" 
+                  class="swatch-finish-btn p-2 rounded-xl border border-white/15 bg-white/5 text-stone-300 hover:text-white text-[11px] text-center transition-all cursor-pointer"
+                  data-finish="raw-seasoned"
+                >
+                  Raw Organic
+                </button>
+                <button 
+                  type="button" 
+                  onclick="setSwatchFinish('smoked-espresso')" 
+                  class="swatch-finish-btn p-2 rounded-xl border border-white/15 bg-white/5 text-stone-300 hover:text-white text-[11px] text-center transition-all cursor-pointer"
+                  data-finish="smoked-espresso"
+                >
+                  Smoked Espresso
+                </button>
+                <button 
+                  type="button" 
+                  onclick="setSwatchFinish('palace-gloss')" 
+                  class="swatch-finish-btn p-2 rounded-xl border border-white/15 bg-white/5 text-stone-300 hover:text-white text-[11px] text-center transition-all cursor-pointer"
+                  data-finish="palace-gloss"
+                >
+                  Royal Gloss
+                </button>
+              </div>
+            </div>
+
+            <!-- 3. Fabric & Cane Upholstery Pairing -->
+            <div>
+              <label class="block text-xs font-mono font-bold uppercase tracking-wider text-amber-400 mb-2 flex items-center justify-between">
+                <span>3. Pair With Upholstery / Accent</span>
+                <span class="text-[10px] text-stone-400 lowercase font-normal">weave & fabric textures</span>
+              </label>
+              <div class="grid grid-cols-2 gap-2">
+                <button 
+                  type="button" 
+                  onclick="setSwatchFabric('cane')" 
+                  class="swatch-fabric-btn active p-2.5 rounded-xl border border-amber-400 bg-amber-400/20 text-white font-bold text-xs text-left transition-all flex items-center gap-2 cursor-pointer shadow-sm"
+                  data-fabric="cane"
+                >
+                  <span class="w-5 h-5 rounded-md bg-[#e3bc7c] border border-white/30 flex-shrink-0 flex items-center justify-center text-[10px]">🧺</span>
+                  <div class="truncate">
+                    <span class="block truncate">Kerala Cane Weave</span>
+                    <span class="block text-[9px] text-stone-400 font-mono font-normal">Natural Rattan Mesh</span>
+                  </div>
+                </button>
+                <button 
+                  type="button" 
+                  onclick="setSwatchFabric('boucle')" 
+                  class="swatch-fabric-btn p-2.5 rounded-xl border border-white/15 bg-white/5 text-stone-300 hover:text-white font-bold text-xs text-left transition-all flex items-center gap-2 cursor-pointer"
+                  data-fabric="boucle"
+                >
+                  <span class="w-5 h-5 rounded-md bg-[#f4ede4] border border-white/30 flex-shrink-0 flex items-center justify-center text-[10px]">☁️</span>
+                  <div class="truncate">
+                    <span class="block truncate">Italian Bouclé</span>
+                    <span class="block text-[9px] text-stone-400 font-mono font-normal">Alabaster Textured</span>
+                  </div>
+                </button>
+                <button 
+                  type="button" 
+                  onclick="setSwatchFabric('velvet')" 
+                  class="swatch-fabric-btn p-2.5 rounded-xl border border-white/15 bg-white/5 text-stone-300 hover:text-white font-bold text-xs text-left transition-all flex items-center gap-2 cursor-pointer"
+                  data-fabric="velvet"
+                >
+                  <span class="w-5 h-5 rounded-md bg-[#2b4c37] border border-white/30 flex-shrink-0 flex items-center justify-center text-[10px]">✨</span>
+                  <div class="truncate">
+                    <span class="block truncate">Stain-Resist Velvet</span>
+                    <span class="block text-[9px] text-stone-400 font-mono font-normal">Forest Green / Plush</span>
+                  </div>
+                </button>
+                <button 
+                  type="button" 
+                  onclick="setSwatchFabric('leather')" 
+                  class="swatch-fabric-btn p-2.5 rounded-xl border border-white/15 bg-white/5 text-stone-300 hover:text-white font-bold text-xs text-left transition-all flex items-center gap-2 cursor-pointer"
+                  data-fabric="leather"
+                >
+                  <span class="w-5 h-5 rounded-md bg-[#82441f] border border-white/30 flex-shrink-0 flex items-center justify-center text-[10px]">🛋️</span>
+                  <div class="truncate">
+                    <span class="block truncate">Saddle Tan Leather</span>
+                    <span class="block text-[9px] text-stone-400 font-mono font-normal">Top-Grain Aniline</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Timber Technical Specs Micro Grid -->
+            <div class="p-3.5 rounded-2xl bg-black/50 border border-white/10 space-y-1.5 text-xs font-mono">
+              <div class="flex items-center justify-between text-stone-400">
+                <span>Hardness / Density:</span>
+                <span id="swatch-spec-hardness" class="text-amber-300 font-bold">1,155 lbf (Janka Rating)</span>
+              </div>
+              <div class="flex items-center justify-between text-stone-400">
+                <span>Moisture Content:</span>
+                <span id="swatch-spec-moisture" class="text-emerald-300 font-bold">8% - 12% (Kiln-Seasoned)</span>
+              </div>
+              <div class="flex items-center justify-between text-stone-400">
+                <span>Natural Immunity:</span>
+                <span id="swatch-spec-immunity" class="text-white font-semibold">100% Termite & Borer Proof</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Studio Footer (WhatsApp Sample Swatches Action) -->
+      <div class="p-4 sm:p-5 border-t border-white/10 bg-black/60 flex flex-col sm:flex-row items-center justify-between gap-3 font-mono">
+        <div class="text-xs text-stone-400 flex items-center gap-2">
+          <i class="fa-solid fa-truck-fast text-amber-400"></i>
+          <span>Sample wood & fabric swatches available for site visits across Kerala.</span>
+        </div>
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <a 
+            id="swatch-whatsapp-btn" 
+            href="https://wa.me/919778446620" 
+            target="_blank" 
+            rel="noopener"
+            class="w-full sm:w-auto px-5 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all active:scale-95"
+          >
+            <i class="fa-brands fa-whatsapp text-sm"></i>
+            <span>Order Swatches / Inquire</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
   <!-- =========================================================================
        11E. LIVE AR IN-ROOM CAMERA 3D SPATIAL PREVIEW MODAL
