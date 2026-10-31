@@ -32,11 +32,10 @@ This single-page showcase has been completely upgraded with a **cutting-edge Mod
   - Forest Sage (`#2C4A38`) — representing Grade-A natural seasoned timber & organic sustainability
   - Champagne Gold (`#D4AF37`) — highlighting the **5-Year Warranty** seals and badges
 
-### 2. Typography
-- **Primary Display & Headings:** *Manrope* & *Plus Jakarta Sans* (Modern Corporate Geometric Sans)
-- **Body & Interface:** *Inter* & *Plus Jakarta Sans* (Modern Corporate Standard)
-- **Editorial Sub-Headings:** *Cormorant Garamond* (Google Fonts)
-- **UI Elements, Metrics & Mono Labels:** Technical Monospace & *Inter*
+### 2. Corporate Typography System
+- **Primary Display & Executive Headings:** *Plus Jakarta Sans* & *Inter* (Tight Corporate Geometric Neo-Grotesque)
+- **Body, Copy & Interface:** *Inter* & *Plus Jakarta Sans* (High-Legibility Corporate Standard with Stylistic Sets)
+- **Data, Pricing & Tabular Metrics:** *Plus Jakarta Sans* with Tabular Figures (`tnum`) & *JetBrains Mono*
 
 ---
 
