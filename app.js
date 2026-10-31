@@ -2045,7 +2045,7 @@ function loadCustomAssets() {
   }
 }
 
-// Authoritative Catalog Hydration: Fetches live catalog.json deployed on Vercel
+// Authoritative Catalog Hydration: Fetches live catalog.json & highlights.json deployed on Vercel
 // and merges with IndexedDB & localStorage so all visitors see the latest updates.
 async function loadAuthoritativeCatalog() {
   try {
@@ -2058,6 +2058,30 @@ async function loadAuthoritativeCatalog() {
     }
   } catch (e) {
     // Normal in local file:// mode or when offline
+  }
+
+  // Authoritative Highlights Hydration: Fetches live highlights.json deployed on Vercel
+  // so ALL website visitors and all devices immediately see the admin's chosen 10 highlights!
+  const isHighlightsDirty = localStorage.getItem('homeify_highlights_dirty') === 'true';
+  if (!isHighlightsDirty) {
+    try {
+      const hlRes = await fetch('highlights.json?v=' + Date.now(), { cache: 'no-cache' });
+      if (hlRes.ok) {
+        const liveHighlights = await hlRes.json();
+        const ids = Array.isArray(liveHighlights) 
+          ? liveHighlights 
+          : (liveHighlights && Array.isArray(liveHighlights.highlights) ? liveHighlights.highlights : null);
+        if (Array.isArray(ids) && ids.length > 0) {
+          curatedHighlightIds = ids.slice(0, 10);
+          try {
+            localStorage.setItem('homeify_curated_highlight_ids', JSON.stringify(curatedHighlightIds));
+          } catch (e) {}
+          idbSet('homeify_curated_highlight_ids', curatedHighlightIds);
+        }
+      }
+    } catch (e) {
+      // Fallback to local cache or defaults
+    }
   }
 
   // Load any IndexedDB custom products & overrides
@@ -2084,9 +2108,11 @@ async function loadAuthoritativeCatalog() {
       });
     }
 
-    const idbHighlights = await idbGet('homeify_curated_highlight_ids');
-    if (Array.isArray(idbHighlights) && idbHighlights.length > 0) {
-      curatedHighlightIds = idbHighlights.slice(0, 10);
+    if (isHighlightsDirty) {
+      const idbHighlights = await idbGet('homeify_curated_highlight_ids');
+      if (Array.isArray(idbHighlights) && idbHighlights.length > 0) {
+        curatedHighlightIds = idbHighlights.slice(0, 10);
+      }
     }
   } catch (e) {}
 
@@ -2097,6 +2123,9 @@ async function loadAuthoritativeCatalog() {
   renderCuratedHighlights();
   renderBentoGallery(currentFilter);
   populateCustomizerProductList();
+  renderAdminHighlightsEditor();
+  renderHighlightsManagerModal();
+  updateHighlightsSyncUI();
   updateSyncStatusUI();
   checkUrlForProductDeepLink();
 }
@@ -4124,7 +4153,12 @@ function initAdminAuth() {
         closeAdminAuthGateway();
         updateAdminUIState();
         renderBentoGallery(currentFilter);
-        openCustomizer();
+        if (window._pendingAdminAction === 'highlightsModal') {
+          window._pendingAdminAction = null;
+          openHighlightsManagerModal();
+        } else {
+          openCustomizer();
+        }
         showToast('Admin authenticated successfully. Welcome, Ameen!');
       } else {
         if (errorMsg) {
@@ -4241,13 +4275,16 @@ window.updateAdminUIState = function() {
 
   // 2. Highlights header admin edit button
   const hlAdminBtn = document.getElementById('catalog-admin-highlights-btn');
+  const hlBtnText = document.getElementById('catalog-admin-highlights-btn-text');
   if (hlAdminBtn) {
+    hlAdminBtn.classList.remove('hidden');
+    hlAdminBtn.classList.add('flex');
     if (isAdmin) {
-      hlAdminBtn.classList.remove('hidden');
-      hlAdminBtn.classList.add('flex');
+      hlAdminBtn.className = 'px-3.5 py-1.5 rounded-full text-xs font-mono font-bold bg-amber-400 hover:bg-amber-300 text-stone-950 border border-amber-500 shadow-sm transition-all cursor-pointer flex items-center gap-1.5 active:scale-95';
+      if (hlBtnText) hlBtnText.textContent = 'Edit Highlights (Admin Active)';
     } else {
-      hlAdminBtn.classList.add('hidden');
-      hlAdminBtn.classList.remove('flex');
+      hlAdminBtn.className = 'px-3.5 py-1.5 rounded-full text-xs font-mono font-bold bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-white/10 shadow-sm transition-all cursor-pointer flex items-center gap-1.5 active:scale-95';
+      if (hlBtnText) hlBtnText.textContent = 'Edit Highlights (Admin)';
     }
   }
 
@@ -4276,17 +4313,7 @@ window.adminQuickLogout = function() {
 };
 
 window.openHighlightsManagerInAdmin = function() {
-  if (sessionStorage.getItem('homeify_admin_authenticated') !== 'true') {
-    openAdminAuthGateway();
-    return;
-  }
-  openCustomizer();
-  setTimeout(() => {
-    const editorEl = document.getElementById('admin-highlights-slots-grid');
-    if (editorEl) {
-      editorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, 200);
+  openHighlightsManagerModal();
 };
 
 // ==========================================================================
@@ -4301,6 +4328,13 @@ function initCustomizerManager() {
   if (modal) {
     modal.addEventListener('click', (e) => {
       if (e.target === modal) closeCustomizer();
+    });
+  }
+
+  const hlModal = document.getElementById('highlights-manager-modal');
+  if (hlModal) {
+    hlModal.addEventListener('click', (e) => {
+      if (e.target === hlModal) closeHighlightsManagerModal();
     });
   }
 
@@ -4683,8 +4717,42 @@ function populateCustomizerProductList() {
 }
 
 // ==========================================================================
-// 12. ADMIN CURATED TOP 10 HIGHLIGHTS SECTION MANAGER
+// 12. ADMIN CURATED TOP 10 HIGHLIGHTS SECTION & DEDICATED MODAL MANAGER
 // ==========================================================================
+
+const HIGHLIGHT_CATEGORY_ORDER = [
+  { key: 'sofas', name: 'Sofas & Couches' },
+  { key: 'cots', name: 'Cots & Beds' },
+  { key: 'dining-tables', name: 'Dining Tables & Suites' },
+  { key: 'chairs', name: 'Sitout & Dining Chairs' },
+  { key: 'coffee-tables', name: 'Coffee Tables & Teapoys' },
+  { key: 'wardrobes', name: 'Wardrobes & Storage' },
+  { key: 'swings', name: 'Swings & Oonjal' },
+  { key: 'doors-custom', name: 'Doors & Custom Woodwork' },
+  { key: 'living-dining', name: 'Living & Dining' },
+  { key: 'bedroom-dining', name: 'Bedroom & Dining' }
+];
+
+function buildCategoryProductOptions(currentSelectedId) {
+  const allCategories = new Set(PRODUCTS.map(p => p.category));
+  const order = [...HIGHLIGHT_CATEGORY_ORDER];
+  allCategories.forEach(cat => {
+    if (!order.some(o => o.key === cat)) {
+      order.push({ key: cat, name: (cat || 'other').replace('-', ' ').toUpperCase() });
+    }
+  });
+
+  return order.map(group => {
+    const items = PRODUCTS.filter(p => p.category === group.key);
+    if (items.length === 0) return '';
+    const options = items.map(p => {
+      const isSel = p.id === currentSelectedId ? 'selected' : '';
+      const cleanName = p.name.length > 34 ? p.name.slice(0, 32) + '...' : p.name;
+      return `<option value="${p.id}" ${isSel}>${cleanName} (${p.factoryPrice})</option>`;
+    }).join('');
+    return `<optgroup label="${group.name}">${options}</optgroup>`;
+  }).join('');
+}
 
 function renderAdminHighlightsEditor() {
   const grid = document.getElementById('admin-highlights-slots-grid');
@@ -4693,31 +4761,6 @@ function renderAdminHighlightsEditor() {
 
   if (countTag) {
     countTag.textContent = `${curatedHighlightIds.length} / 10 Selected`;
-  }
-
-  // Pre-generate grouped product options for quick slot switching
-  const categoryOrder = [
-    { key: 'sofas', name: 'Sofas & Couches' },
-    { key: 'cots', name: 'Cots & Beds' },
-    { key: 'dining-tables', name: 'Dining Tables & Suites' },
-    { key: 'chairs', name: 'Sitout & Dining Chairs' },
-    { key: 'coffee-tables', name: 'Coffee Tables & Teapoys' },
-    { key: 'wardrobes', name: 'Wardrobes & Storage' },
-    { key: 'swings', name: 'Swings & Oonjal' },
-    { key: 'doors-custom', name: 'Doors & Custom Woodwork' }
-  ];
-
-  function buildProductOptions(currentSelectedId) {
-    return categoryOrder.map(group => {
-      const items = PRODUCTS.filter(p => p.category === group.key);
-      if (items.length === 0) return '';
-      const options = items.map(p => {
-        const isSel = p.id === currentSelectedId ? 'selected' : '';
-        const cleanName = p.name.length > 34 ? p.name.slice(0, 32) + '...' : p.name;
-        return `<option value="${p.id}" ${isSel}>${cleanName} (${p.factoryPrice})</option>`;
-      }).join('');
-      return `<optgroup label="${group.name}">${options}</optgroup>`;
-    }).join('');
   }
 
   grid.innerHTML = '';
@@ -4787,7 +4830,7 @@ function renderAdminHighlightsEditor() {
           class="w-full text-[11px] p-1.5 rounded-lg border border-stone-300 bg-stone-50 hover:bg-white focus:bg-white focus:border-amber-500 outline-none font-sans"
           onchange="changeHighlightSlot(${idx}, this.value)"
         >
-          ${buildProductOptions(prod.id)}
+          ${buildCategoryProductOptions(prod.id)}
         </select>
       </div>
     `;
@@ -4808,11 +4851,245 @@ function renderAdminHighlightsEditor() {
         onchange="if(this.value){ addHighlightSlot(this.value); this.value=''; }"
       >
         <option value="">Select product to add...</option>
-        ${buildProductOptions('')}
+        ${buildCategoryProductOptions('')}
       </select>
     `;
     grid.appendChild(addCard);
   }
+}
+
+// --------------------------------------------------------------------------
+// DEDICATED HIGHLIGHTS MANAGER MODAL CONTROLS & SYNC ENGINE
+// --------------------------------------------------------------------------
+
+window.openHighlightsManagerModal = function() {
+  if (sessionStorage.getItem('homeify_admin_authenticated') !== 'true') {
+    window._pendingAdminAction = 'highlightsModal';
+    openAdminAuthGateway();
+    return;
+  }
+
+  const modal = document.getElementById('highlights-manager-modal');
+  if (!modal) return;
+
+  // Close mobile drawer if open
+  const drawer = document.getElementById('mobile-drawer');
+  const drawerOverlay = document.getElementById('drawer-overlay');
+  if (drawer) drawer.classList.add('translate-x-full');
+  if (drawerOverlay) drawerOverlay.classList.add('hidden');
+
+  modal.classList.remove('modal-hidden');
+  modal.classList.add('modal-visible');
+  document.body.style.overflow = 'hidden';
+
+  renderHighlightsManagerModal();
+  renderHighlightsCatalogQuickPicker('');
+  updateHighlightsSyncUI();
+};
+
+window.closeHighlightsManagerModal = function() {
+  const modal = document.getElementById('highlights-manager-modal');
+  if (!modal) return;
+
+  modal.classList.remove('modal-visible');
+  modal.classList.add('modal-hidden');
+  document.body.style.overflow = 'auto';
+};
+
+function updateHighlightsSyncUI() {
+  const isDirty = localStorage.getItem('homeify_highlights_dirty') === 'true';
+  const syncBadge = document.getElementById('highlights-modal-sync-badge');
+  const countBadge = document.getElementById('highlights-modal-count-badge');
+  const deployBtn = document.getElementById('highlights-git-deploy-btn');
+  const tokenInput = document.getElementById('highlights-github-token-input');
+
+  const token = localStorage.getItem('homeify_gh_token') || '';
+  if (tokenInput && !tokenInput.value && token) {
+    tokenInput.value = token;
+  }
+
+  if (countBadge) {
+    countBadge.textContent = `${curatedHighlightIds.length} / 10 Flagships`;
+  }
+
+  if (syncBadge) {
+    if (isDirty) {
+      syncBadge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-400/40 animate-pulse';
+      syncBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span> Pending Git Deploy';
+    } else {
+      syncBadge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30';
+      syncBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Live Synced';
+    }
+  }
+
+  if (deployBtn) {
+    if (isDirty) {
+      deployBtn.classList.add('ring-2', 'ring-amber-400', 'animate-pulse');
+      deployBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i><span>Deploy Highlights (Pending Git Push)</span>';
+    } else {
+      deployBtn.classList.remove('ring-2', 'ring-amber-400', 'animate-pulse');
+      deployBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i><span>Deploy Highlights to Live Website (Git)</span>';
+    }
+  }
+}
+
+function renderHighlightsManagerModal() {
+  const grid = document.getElementById('highlights-modal-slots-grid');
+  if (!grid) return;
+
+  grid.innerHTML = '';
+
+  curatedHighlightIds.forEach((prodId, idx) => {
+    const prod = PRODUCTS.find(p => p.id === prodId) || DEFAULT_PRODUCTS.find(p => p.id === prodId) || {
+      id: prodId,
+      name: 'Custom Product',
+      categoryName: 'Furniture',
+      factoryPrice: '₹0',
+      image: 'assets/slated-coffee-table.jpg'
+    };
+
+    const isFirst = idx === 0;
+    const isLast = idx === curatedHighlightIds.length - 1;
+
+    const slotCard = document.createElement('div');
+    slotCard.className = 'p-3 rounded-2xl bg-[#1B1917] border border-amber-400/25 shadow-md flex flex-col justify-between gap-2.5 transition-all hover:border-amber-400/60 hover:shadow-xl';
+    slotCard.innerHTML = `
+      <div class="flex items-center justify-between text-xs font-mono">
+        <span class="font-extrabold ${isFirst ? 'text-amber-400' : 'text-stone-300'} flex items-center gap-1.5">
+          <i class="fa-solid fa-crown ${isFirst ? 'text-amber-400 animate-pulse' : 'text-amber-500/70'} text-[10px]"></i>
+          <span>Slot #${idx + 1}${isFirst ? ' (Lead)' : ''}</span>
+        </span>
+        <div class="flex items-center gap-1">
+          <button 
+            type="button" 
+            onclick="moveHighlightSlot(${idx}, -1)" 
+            ${isFirst ? 'disabled' : ''}
+            class="w-6 h-6 rounded-lg bg-white/10 hover:bg-white/20 text-stone-200 flex items-center justify-center text-[10px] disabled:opacity-20 disabled:pointer-events-none cursor-pointer transition-colors"
+            title="Move previous"
+          >
+            <i class="fa-solid fa-chevron-left text-[9px]"></i>
+          </button>
+          <button 
+            type="button" 
+            onclick="moveHighlightSlot(${idx}, 1)" 
+            ${isLast ? 'disabled' : ''}
+            class="w-6 h-6 rounded-lg bg-white/10 hover:bg-white/20 text-stone-200 flex items-center justify-center text-[10px] disabled:opacity-20 disabled:pointer-events-none cursor-pointer transition-colors"
+            title="Move next"
+          >
+            <i class="fa-solid fa-chevron-right text-[9px]"></i>
+          </button>
+          <button 
+            type="button" 
+            onclick="removeHighlightSlot(${idx})" 
+            class="w-6 h-6 rounded-lg bg-rose-500/20 hover:bg-rose-600 text-rose-300 hover:text-white flex items-center justify-center text-[10px] cursor-pointer transition-colors"
+            title="Remove from highlights"
+          >
+            <i class="fa-solid fa-xmark text-[10px]"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <div class="w-12 h-12 rounded-xl overflow-hidden bg-stone-900 border border-white/10 flex-shrink-0">
+          <img src="${prod.image}" alt="${prod.name}" class="w-full h-full object-cover" onerror="this.src='assets/slated-coffee-table.jpg'" />
+        </div>
+        <div class="min-w-0 flex-1">
+          <h5 class="text-[11px] font-bold text-white line-clamp-1" title="${prod.name}">${prod.name}</h5>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span class="text-[10px] font-mono text-emerald-400 font-bold">${prod.factoryPrice}</span>
+            <span class="text-[9px] font-mono text-stone-500 line-through">${prod.mrp || ''}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-1.5 border-t border-white/10 font-sans">
+        <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-stone-400 mb-1">
+          Switch Product:
+        </label>
+        <select 
+          class="w-full text-[11px] p-1.5 rounded-lg border border-white/15 bg-black/60 text-stone-200 hover:border-amber-400 focus:border-amber-400 focus:outline-none font-sans"
+          onchange="changeHighlightSlot(${idx}, this.value)"
+        >
+          ${buildCategoryProductOptions(prod.id)}
+        </select>
+      </div>
+    `;
+    grid.appendChild(slotCard);
+  });
+
+  if (curatedHighlightIds.length < 10) {
+    const addCard = document.createElement('div');
+    addCard.className = 'p-3.5 rounded-2xl bg-amber-500/10 border-2 border-dashed border-amber-400/40 flex flex-col justify-center items-center gap-2 text-center text-xs font-mono min-h-[140px]';
+    addCard.innerHTML = `
+      <div class="w-8 h-8 rounded-full bg-amber-400 text-stone-950 flex items-center justify-center font-bold text-sm shadow">
+        <i class="fa-solid fa-plus"></i>
+      </div>
+      <span class="font-bold text-amber-300 text-[11px]">Add Slot #${curatedHighlightIds.length + 1}</span>
+      <select 
+        class="w-full text-[10px] p-1.5 rounded-lg border border-amber-400/50 bg-black/70 text-white font-sans focus:outline-none focus:border-amber-400"
+        onchange="if(this.value){ addHighlightSlot(this.value); this.value=''; }"
+      >
+        <option value="">Select product to add...</option>
+        ${buildCategoryProductOptions('')}
+      </select>
+    `;
+    grid.appendChild(addCard);
+  }
+}
+
+function renderHighlightsCatalogQuickPicker(searchQuery) {
+  const container = document.getElementById('highlights-modal-catalog-picker');
+  if (!container) return;
+
+  const q = (searchQuery || '').toLowerCase().trim();
+  const matched = PRODUCTS.filter(p => {
+    if (!q) return true;
+    return p.name.toLowerCase().includes(q) || (p.categoryName && p.categoryName.toLowerCase().includes(q));
+  }).slice(0, 36);
+
+  container.innerHTML = matched.map(product => {
+    const hIdx = curatedHighlightIds.indexOf(product.id);
+    const isInHighlights = hIdx !== -1;
+
+    return `
+      <div class="p-2 rounded-xl bg-[#1A1816] border border-white/5 flex items-center justify-between gap-2 transition-colors hover:border-white/15">
+        <div class="flex items-center gap-2 min-w-0">
+          <img src="${product.image}" alt="${product.name}" class="w-9 h-9 rounded-lg object-cover flex-shrink-0 bg-stone-900" onerror="this.src='assets/slated-coffee-table.jpg'" />
+          <div class="min-w-0">
+            <h6 class="text-[11px] font-bold text-stone-200 line-clamp-1" title="${product.name}">${product.name}</h6>
+            <span class="text-[10px] font-mono text-emerald-400 font-bold">${product.factoryPrice}</span>
+          </div>
+        </div>
+        <div class="flex-shrink-0">
+          ${isInHighlights ? `
+            <div class="flex items-center gap-1">
+              <span class="px-2 py-0.5 rounded-md bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] font-mono font-bold">
+                Slot #${hIdx + 1}
+              </span>
+              <button 
+                type="button" 
+                onclick="removeHighlightSlot(${hIdx})" 
+                class="w-6 h-6 rounded-md bg-rose-500/20 hover:bg-rose-600 text-rose-300 hover:text-white flex items-center justify-center text-[10px] transition-colors cursor-pointer"
+                title="Remove from highlights"
+              >
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          ` : `
+            <button 
+              type="button" 
+              onclick="addHighlightSlot('${product.id}')" 
+              class="px-2.5 py-1 rounded-lg bg-amber-400 hover:bg-amber-300 text-stone-950 text-[10px] font-mono font-bold transition-all flex items-center gap-1 active:scale-95 cursor-pointer"
+              title="Add to Highlights"
+            >
+              <i class="fa-solid fa-plus text-[9px]"></i>
+              <span>Pin</span>
+            </button>
+          `}
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 window.changeHighlightSlot = function(slotIndex, newProductId) {
@@ -4886,7 +5163,7 @@ window.toggleHighlightPin = function(productId) {
         const prod = PRODUCTS.find(p => p.id === productId);
         showToast(`Replaced Highlight Slot #10 with "${prod ? prod.name : 'product'}"!`);
       } else {
-        openHighlightsManagerInAdmin();
+        openHighlightsManagerModal();
       }
       return;
     }
@@ -4904,20 +5181,192 @@ window.restoreDefaultHighlights = function() {
   showToast('Restored default 10 factory highlights!');
 };
 
+function markHighlightsDirty() {
+  localStorage.setItem('homeify_highlights_dirty', 'true');
+  localStorage.setItem('homeify_catalog_dirty', 'true');
+  updateHighlightsSyncUI();
+  updateSyncStatusUI();
+}
+
 function saveHighlightsState() {
   try {
     localStorage.setItem('homeify_curated_highlight_ids', JSON.stringify(curatedHighlightIds));
   } catch (e) {}
   idbSet('homeify_curated_highlight_ids', curatedHighlightIds);
-  markCatalogDirty();
+  markHighlightsDirty();
   renderCuratedHighlights();
   renderAdminHighlightsEditor();
+  renderHighlightsManagerModal();
+  renderHighlightsCatalogQuickPicker('');
   populateCustomizerProductList();
   renderBentoGallery(currentFilter);
   if (typeof updateAdminUIState === 'function') {
     updateAdminUIState();
   }
 }
+
+// --------------------------------------------------------------------------
+// 1-CLICK GIT DEPLOY FOR FEATURED WORKSHOP HIGHLIGHTS (highlights.json -> Vercel)
+// --------------------------------------------------------------------------
+
+window.publishHighlightsToGitHub = async function() {
+  const modalTokenInput = document.getElementById('highlights-github-token-input');
+  const studioTokenInput = document.getElementById('admin-github-token');
+  let token = (modalTokenInput ? modalTokenInput.value.trim() : '') || 
+              (studioTokenInput ? studioTokenInput.value.trim() : '') || 
+              localStorage.getItem('homeify_gh_token') || '';
+
+  if (!token) {
+    token = prompt(
+      'Enter your GitHub Personal Access Token to deploy Featured Highlights live to homeifyfurniture.in:\n\n' +
+      '(Requires "repo" permission on AmeeNafih/Homeify-Furniture-Website)'
+    );
+    if (!token || !token.trim()) {
+      alert('GitHub token is required to deploy permanently to homeifyfurniture.in.');
+      return;
+    }
+    token = token.trim();
+  }
+
+  localStorage.setItem('homeify_gh_token', token);
+  if (modalTokenInput) modalTokenInput.value = token;
+  if (studioTokenInput) studioTokenInput.value = token;
+
+  const deployBtn = document.getElementById('highlights-git-deploy-btn');
+  const statusEl = document.getElementById('highlights-deploy-status');
+
+  if (deployBtn) {
+    deployBtn.disabled = true;
+    deployBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Deploying Highlights to Live Website...';
+  }
+  if (statusEl) {
+    statusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-amber-400"></i> <span class="text-amber-300">Connecting to GitHub repository (AmeeNafih/Homeify-Furniture-Website)...</span>';
+  }
+
+  try {
+    const owner = 'AmeeNafih';
+    const repo = 'Homeify-Furniture-Website';
+    const branch = 'main';
+
+    // 1. Get current SHA of highlights.json from GitHub
+    let hlSha = null;
+    try {
+      const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/highlights.json?ref=${branch}`, {
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+      if (getRes.ok) {
+        const fileData = await getRes.json();
+        hlSha = fileData.sha;
+      }
+    } catch (e) {
+      console.warn('Could not read existing highlights.json SHA:', e);
+    }
+
+    if (statusEl) {
+      statusEl.innerHTML = `<i class="fa-solid fa-cloud-arrow-up text-amber-400"></i> <span class="text-amber-300">Writing highlights.json with ${curatedHighlightIds.length} featured flagships...</span>`;
+    }
+
+    // 2. Format JSON string and encode to Base64
+    const jsonStr = JSON.stringify(curatedHighlightIds, null, 2);
+    const base64Content = window.btoa(unescape(encodeURIComponent(jsonStr)));
+
+    // 3. Commit highlights.json to GitHub main branch
+    const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/highlights.json`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify({
+        message: `Admin update Featured Workshop Highlights: ${curatedHighlightIds.length} products [skip ci]`,
+        content: base64Content,
+        sha: hlSha || undefined,
+        branch: branch
+      })
+    });
+
+    if (!putRes.ok) {
+      const errData = await putRes.json().catch(() => ({}));
+      throw new Error(errData.message || `GitHub error ${putRes.status}`);
+    }
+
+    // 4. Also commit catalog.json if dirty
+    const isCatalogDirty = localStorage.getItem('homeify_catalog_dirty') === 'true';
+    if (isCatalogDirty) {
+      try {
+        let catSha = null;
+        const getCatRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/catalog.json?ref=${branch}`, {
+          headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+        if (getCatRes.ok) {
+          const catData = await getCatRes.json();
+          catSha = catData.sha;
+        }
+
+        const catJsonStr = JSON.stringify(PRODUCTS, null, 2);
+        const catBase64 = window.btoa(unescape(encodeURIComponent(catJsonStr)));
+        await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/catalog.json`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github.v3+json'
+          },
+          body: JSON.stringify({
+            message: `Admin update catalog: ${PRODUCTS.length} products & updated pricing [skip ci]`,
+            content: catBase64,
+            sha: catSha || undefined,
+            branch: branch
+          })
+        });
+        localStorage.setItem('homeify_catalog_dirty', 'false');
+      } catch (catErr) {
+        console.warn('Catalog companion commit notice:', catErr);
+      }
+    }
+
+    localStorage.setItem('homeify_highlights_dirty', 'false');
+    updateHighlightsSyncUI();
+    updateSyncStatusUI();
+
+    showToast('🚀 Featured Workshop Highlights deployed live! Vercel is building and updating all visitors (~15-20s).');
+    if (statusEl) {
+      statusEl.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i> <span class="text-emerald-400 font-bold">✓ Successfully Deployed! Live across all devices on homeifyfurniture.in in ~15 seconds.</span>';
+    }
+  } catch (err) {
+    console.error('Highlights deployment failed:', err);
+    alert(`Could not deploy highlights to GitHub:\n${err.message}\n\nPlease verify your GitHub Token has "repo" permissions enabled.`);
+    if (statusEl) {
+      statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-400 text-sm"></i> <span class="text-rose-400 font-bold">Deploy failed: ${err.message}</span>`;
+    }
+  } finally {
+    if (deployBtn) {
+      deployBtn.disabled = false;
+      deployBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i><span>Deploy Highlights to Live Website (Git)</span>';
+    }
+  }
+};
+
+window.downloadHighlightsJson = function() {
+  const jsonStr = JSON.stringify(curatedHighlightIds, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'highlights.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Downloaded authoritative highlights.json file!');
+};
 
 // ==========================================================================
 // FULL PRODUCT EDIT MODAL, PHOTO UPLOAD & CATALOG JSON MANAGEMENT
@@ -6056,6 +6505,41 @@ window.publishCatalogToGitHub = async function() {
     if (!putRes.ok) {
       const errData = await putRes.json().catch(() => ({}));
       throw new Error(errData.message || `GitHub error ${putRes.status}`);
+    }
+
+    // 4. Also commit highlights.json so both catalog and highlights are synchronized
+    try {
+      let hlSha = null;
+      const getHlRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/highlights.json?ref=${branch}`, {
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+      if (getHlRes.ok) {
+        const hlData = await getHlRes.json();
+        hlSha = hlData.sha;
+      }
+      const hlJsonStr = JSON.stringify(curatedHighlightIds, null, 2);
+      const hlBase64 = window.btoa(unescape(encodeURIComponent(hlJsonStr)));
+      await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/highlights.json`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify({
+          message: `Admin update Featured Workshop Highlights: ${curatedHighlightIds.length} products [skip ci]`,
+          content: hlBase64,
+          sha: hlSha || undefined,
+          branch: branch
+        })
+      });
+      localStorage.setItem('homeify_highlights_dirty', 'false');
+      if (typeof updateHighlightsSyncUI === 'function') updateHighlightsSyncUI();
+    } catch (hlErr) {
+      console.warn('Highlights companion commit notice:', hlErr);
     }
 
     localStorage.setItem('homeify_gh_token', token);
