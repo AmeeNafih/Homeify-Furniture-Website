@@ -2020,6 +2020,11 @@ function loadCustomAssets() {
       }
     });
 
+    const workshopImg1 = localStorage.getItem('homeify_workshop_img_1');
+    if (workshopImg1) applyWorkshopPhoto(1, workshopImg1);
+    const workshopImg2 = localStorage.getItem('homeify_workshop_img_2');
+    if (workshopImg2) applyWorkshopPhoto(2, workshopImg2);
+
     // 4. Apply any saved custom MRP and Factory Price overrides
     PRODUCTS.forEach(p => {
       const customMrp = localStorage.getItem('homeify_prod_mrp_' + p.id);
@@ -2045,7 +2050,7 @@ function loadCustomAssets() {
   }
 }
 
-// Authoritative Catalog Hydration: Fetches live catalog.json & highlights.json deployed on Vercel
+// Authoritative Catalog Hydration: Fetches live catalog.json, highlights.json, hero_slides.json, and site_media.json deployed on Vercel
 // and merges with IndexedDB & localStorage so all visitors see the latest updates.
 async function loadAuthoritativeCatalog() {
   try {
@@ -2084,6 +2089,36 @@ async function loadAuthoritativeCatalog() {
     }
   }
 
+  // Authoritative Hero Slides Hydration: Fetches live hero_slides.json deployed on Vercel
+  const isHeroDirty = localStorage.getItem('homeify_hero_dirty') === 'true';
+  if (!isHeroDirty) {
+    try {
+      const heroRes = await fetch('hero_slides.json?v=' + Date.now(), { cache: 'no-cache' });
+      if (heroRes.ok) {
+        const liveHero = await heroRes.json();
+        if (Array.isArray(liveHero) && liveHero.length > 0) {
+          HERO_SLIDES = liveHero;
+        }
+      }
+    } catch (e) {}
+  }
+
+  // Authoritative Site Media Hydration (Workshop Photos, Brand Logo)
+  const isMediaDirty = localStorage.getItem('homeify_media_dirty') === 'true';
+  if (!isMediaDirty) {
+    try {
+      const mediaRes = await fetch('site_media.json?v=' + Date.now(), { cache: 'no-cache' });
+      if (mediaRes.ok) {
+        const liveMedia = await mediaRes.json();
+        if (liveMedia) {
+          if (liveMedia.workshopPhoto1) applyWorkshopPhoto(1, liveMedia.workshopPhoto1);
+          if (liveMedia.workshopPhoto2) applyWorkshopPhoto(2, liveMedia.workshopPhoto2);
+          if (liveMedia.logo) applyLogoToDOM(liveMedia.logo);
+        }
+      }
+    } catch (e) {}
+  }
+
   // Load any IndexedDB custom products & overrides
   try {
     const idbCustom = await idbGet('homeify_custom_products');
@@ -2114,12 +2149,27 @@ async function loadAuthoritativeCatalog() {
         curatedHighlightIds = idbHighlights.slice(0, 10);
       }
     }
+
+    // Load any hero slides IndexedDB overrides
+    for (const s of HERO_SLIDES) {
+      const idbHero = await idbGet('homeify_hero_img_' + s.id);
+      if (idbHero) s.image = idbHero;
+    }
+
+    // Load any workshop photos IndexedDB overrides
+    const idbW1 = await idbGet('homeify_workshop_img_1');
+    if (idbW1) applyWorkshopPhoto(1, idbW1);
+    const idbW2 = await idbGet('homeify_workshop_img_2');
+    if (idbW2) applyWorkshopPhoto(2, idbW2);
   } catch (e) {}
 
   // Apply localStorage overlays on top
   loadCustomAssets();
 
-  // Re-render gallery & customizer with authoritative catalog
+  // Re-render gallery & customizer with authoritative catalog & media
+  initHeroCarousel();
+  setHeroSlide(0);
+  renderHeroCustomizerGrid();
   renderCuratedHighlights();
   renderBentoGallery(currentFilter);
   populateCustomizerProductList();
@@ -4300,6 +4350,45 @@ window.updateAdminUIState = function() {
   if (typeof window.updateModalHighlightButton === 'function') {
     window.updateModalHighlightButton();
   }
+
+  // 4. Hero slide floating camera button
+  const heroAdminPhotoBtn = document.getElementById('hero-admin-photo-btn');
+  if (heroAdminPhotoBtn) {
+    if (isAdmin) {
+      heroAdminPhotoBtn.classList.remove('hidden');
+      heroAdminPhotoBtn.classList.add('inline-flex');
+    } else {
+      heroAdminPhotoBtn.classList.add('hidden');
+      heroAdminPhotoBtn.classList.remove('inline-flex');
+    }
+  }
+
+  // 5. Product modal quick change photo button
+  const modalAdminPhotoBtn = document.getElementById('modal-admin-photo-btn');
+  if (modalAdminPhotoBtn) {
+    if (isAdmin) {
+      modalAdminPhotoBtn.classList.remove('hidden');
+      modalAdminPhotoBtn.classList.add('inline-flex');
+    } else {
+      modalAdminPhotoBtn.classList.add('hidden');
+      modalAdminPhotoBtn.classList.remove('inline-flex');
+    }
+  }
+
+  // 6. Workshop heritage floating camera buttons
+  const workshopBtn1 = document.getElementById('workshop-admin-photo-btn-1');
+  const workshopBtn2 = document.getElementById('workshop-admin-photo-btn-2');
+  [workshopBtn1, workshopBtn2].forEach(btn => {
+    if (btn) {
+      if (isAdmin) {
+        btn.classList.remove('hidden');
+        btn.classList.add('inline-flex');
+      } else {
+        btn.classList.add('hidden');
+        btn.classList.remove('inline-flex');
+      }
+    }
+  });
 };
 
 window.adminQuickLogout = function() {
@@ -4408,6 +4497,15 @@ function openCustomizer() {
   updateHighlightsToggleButtonUI();
   updateRestoreCollectionButtonUI();
   renderAdminHighlightsEditor();
+  renderHeroCustomizerGrid();
+
+  const workshopImg1 = localStorage.getItem('homeify_workshop_img_1') || 'assets/artisanal-slated-workshop.jpg';
+  const workshopImg2 = localStorage.getItem('homeify_workshop_img_2') || 'assets/timber-cot-6ft.jpg';
+  const previewW1 = document.getElementById('custom-preview-workshop-1');
+  if (previewW1) previewW1.src = workshopImg1;
+  const previewW2 = document.getElementById('custom-preview-workshop-2');
+  if (previewW2) previewW2.src = workshopImg2;
+
   populateCustomizerProductList();
   
   const tokenInput = document.getElementById('admin-github-token');
@@ -4460,36 +4558,6 @@ function populateCustomizerProductList() {
   if (!listContainer) return;
 
   listContainer.innerHTML = '';
-
-  // Show hero banner slides only when viewing All or Sofas and no search query is active
-  if ((adminCatalogCategoryFilter === 'all' || adminCatalogCategoryFilter === 'sofas') && !adminCatalogSearchQuery) {
-    HERO_SLIDES.forEach((slide, idx) => {
-      const itemEl = document.createElement('div');
-      itemEl.className = 'p-4 rounded-2xl bg-[#FAF8F5] border border-stone-200 flex flex-col gap-3 shadow-sm';
-      itemEl.innerHTML = `
-        <div class="flex items-center justify-between text-xs font-mono">
-          <span class="font-bold text-teak">HERO BANNER SLIDE #${idx + 1}</span>
-          <span class="text-stone-400 font-semibold">${slide.tag}</span>
-        </div>
-        <div class="aspect-video rounded-xl overflow-hidden bg-stone-900 relative border border-stone-800">
-          <img id="custom-preview-hero-${slide.id}" src="${slide.image}" class="w-full h-full object-cover object-top" onerror="this.src='assets/handcrafted-wooden-sofa.jpg'">
-        </div>
-        <div class="text-xs font-bold text-[#0D0C0B] font-heading">${slide.title}</div>
-        
-        <div class="space-y-2 mt-auto">
-          <label class="w-full py-2 px-3 rounded-xl bg-[#0D0C0B] text-white text-[11px] font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer hover:bg-teak transition-colors shadow-sm">
-            <i class="fa-solid fa-cloud-arrow-up"></i> Upload Slide Image
-            <input type="file" accept="image/*" class="hidden" onchange="handleHeroPhotoUpload(event, '${slide.id}')">
-          </label>
-          <div class="flex gap-2">
-            <input type="text" placeholder="assets/..." value="${slide.image.startsWith('data:') ? '' : slide.image}" class="flex-1 text-[11px] px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white font-mono" onchange="handleHeroPhotoUrlChange(event, '${slide.id}')">
-            <button type="button" class="px-2 py-1 text-[10px] text-stone-500 hover:text-red-600 font-mono" onclick="resetHeroPhoto('${slide.id}')">Reset</button>
-          </div>
-        </div>
-      `;
-      listContainer.appendChild(itemEl);
-    });
-  }
 
   // Filter products by category and search query
   let filtered = PRODUCTS;
@@ -5332,6 +5400,85 @@ window.publishHighlightsToGitHub = async function() {
       }
     }
 
+    // Also commit hero_slides.json if dirty
+    const isHeroDirty = localStorage.getItem('homeify_hero_dirty') === 'true';
+    if (isHeroDirty) {
+      try {
+        let heroSha = null;
+        const getHeroRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/hero_slides.json?ref=${branch}`, {
+          headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+        if (getHeroRes.ok) {
+          const heroData = await getHeroRes.json();
+          heroSha = heroData.sha;
+        }
+        const heroJsonStr = JSON.stringify(HERO_SLIDES, null, 2);
+        const heroBase64 = window.btoa(unescape(encodeURIComponent(heroJsonStr)));
+        await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/hero_slides.json`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github.v3+json'
+          },
+          body: JSON.stringify({
+            message: `Admin update hero banner sliding photos [skip ci]`,
+            content: heroBase64,
+            sha: heroSha || undefined,
+            branch: branch
+          })
+        });
+        localStorage.setItem('homeify_hero_dirty', 'false');
+      } catch (heroErr) {
+        console.warn('Hero slides companion commit notice:', heroErr);
+      }
+    }
+
+    // Also commit site_media.json if dirty
+    const isMediaDirty = localStorage.getItem('homeify_media_dirty') === 'true';
+    if (isMediaDirty) {
+      try {
+        let mediaSha = null;
+        const getMediaRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/site_media.json?ref=${branch}`, {
+          headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+        if (getMediaRes.ok) {
+          const mediaData = await getMediaRes.json();
+          mediaSha = mediaData.sha;
+        }
+        const mediaPayload = {
+          workshopPhoto1: localStorage.getItem('homeify_workshop_img_1') || 'assets/artisanal-slated-workshop.jpg',
+          workshopPhoto2: localStorage.getItem('homeify_workshop_img_2') || 'assets/timber-cot-6ft.jpg',
+          logo: localStorage.getItem('homeify_custom_logo') || 'assets/homeify-logo-cropped.png'
+        };
+        const mediaJsonStr = JSON.stringify(mediaPayload, null, 2);
+        const mediaBase64 = window.btoa(unescape(encodeURIComponent(mediaJsonStr)));
+        await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/site_media.json`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.github.v3+json'
+          },
+          body: JSON.stringify({
+            message: `Admin update site media (workshop & logo) [skip ci]`,
+            content: mediaBase64,
+            sha: mediaSha || undefined,
+            branch: branch
+          })
+        });
+        localStorage.setItem('homeify_media_dirty', 'false');
+      } catch (mediaErr) {
+        console.warn('Site media companion commit notice:', mediaErr);
+      }
+    }
+
     localStorage.setItem('homeify_highlights_dirty', 'false');
     updateHighlightsSyncUI();
     updateSyncStatusUI();
@@ -5915,18 +6062,97 @@ window.resetProductPhoto = function(productId) {
   }
 };
 
-window.handleHeroPhotoUpload = async function(slideId) {
-  const file = event.target.files && event.target.files[0];
+// ==========================================================================
+// HERO CAROUSEL SLIDES CUSTOMIZER & UPLOAD ENGINE
+// ==========================================================================
+
+window.renderHeroCustomizerGrid = function() {
+  const container = document.getElementById('customizer-hero-slides-grid');
+  if (!container) return;
+
+  container.innerHTML = HERO_SLIDES.map((slide, idx) => {
+    return `
+      <div class="p-4 rounded-xl bg-white border border-stone-200 shadow-sm flex flex-col gap-3">
+        <div class="flex items-center justify-between text-xs font-mono">
+          <span class="font-bold text-teak">HERO SLIDE #${idx + 1}</span>
+          <span class="text-stone-400 font-semibold uppercase text-[10px]">${slide.tag}</span>
+        </div>
+        
+        <div class="aspect-video rounded-xl overflow-hidden bg-stone-900 border border-stone-200 relative">
+          <img 
+            id="custom-preview-hero-${slide.id}" 
+            src="${slide.image}" 
+            alt="${slide.title}" 
+            class="w-full h-full object-cover" 
+            onerror="this.src='assets/handcrafted-wooden-sofa.jpg'"
+          />
+        </div>
+
+        <div>
+          <div class="text-xs font-bold text-[#0D0C0B] font-heading line-clamp-1">${slide.title}</div>
+          <div class="text-[10px] text-stone-500 font-mono line-clamp-1 mt-0.5">${slide.specs}</div>
+        </div>
+
+        <div class="space-y-2 mt-auto pt-1">
+          <label class="w-full py-2 px-3 rounded-xl bg-[#0D0C0B] hover:bg-teak text-white text-[11px] font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-sm">
+            <i class="fa-solid fa-cloud-arrow-up text-amber-400"></i>
+            <span>Upload Slide Photo</span>
+            <input type="file" accept="image/*" class="hidden" onchange="handleHeroPhotoUpload(event, '${slide.id}')">
+          </label>
+          <div class="flex items-center gap-1.5">
+            <input 
+              type="text" 
+              placeholder="assets/... or https://" 
+              value="${slide.image.startsWith('data:') ? '' : slide.image}" 
+              class="flex-1 text-[11px] px-2.5 py-1.5 rounded-lg border border-stone-200 bg-stone-50 font-mono text-stone-700 focus:bg-white focus:border-teak focus:outline-none" 
+              onchange="handleHeroPhotoUrlChange(event, '${slide.id}')"
+            />
+            <button 
+              type="button" 
+              class="px-2.5 py-1.5 text-[10px] text-stone-500 hover:text-rose-600 font-mono font-bold rounded-lg border border-stone-200 hover:border-rose-300 transition-colors cursor-pointer" 
+              onclick="resetHeroPhoto('${slide.id}')"
+              title="Reset this slide to default factory photo"
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+};
+
+window.handleHeroPhotoUpload = async function(arg1, arg2) {
+  let evt = null;
+  let targetSlideId = null;
+
+  if (arg1 && arg1.target && arg1.target.files) {
+    evt = arg1;
+    targetSlideId = arg2;
+  } else if (typeof arg1 === 'string') {
+    targetSlideId = arg1;
+    evt = (arg2 && arg2.target && arg2.target.files) ? arg2 : window.event;
+  } else {
+    evt = window.event;
+    targetSlideId = arg2 || arg1;
+  }
+
+  const file = evt && evt.target && evt.target.files && evt.target.files[0];
   if (!file) return;
+
+  if (!targetSlideId && HERO_SLIDES[currentHeroSlideIndex]) {
+    targetSlideId = HERO_SLIDES[currentHeroSlideIndex].id;
+  }
 
   showToast('Optimizing hero banner photo...');
   try {
-    const compressed = await compressImageFile(file, 1400, 900, 0.82);
-    setHeroPhoto(slideId, compressed);
+    const compressed = await compressImageFile(file, 1600, 1000, 0.85);
+    setHeroPhoto(targetSlideId, compressed);
   } catch (err) {
+    console.error('Hero photo compression error:', err);
     const reader = new FileReader();
     reader.onload = (e) => {
-      setHeroPhoto(slideId, e.target.result);
+      setHeroPhoto(targetSlideId, e.target.result);
     };
     reader.readAsDataURL(file);
   }
@@ -5939,7 +6165,13 @@ window.handleHeroPhotoUrlChange = function(event, slideId) {
   }
 };
 
-function setHeroPhoto(slideId, newUrl) {
+window.uploadCurrentHeroSlidePhoto = async function(event) {
+  const currentSlide = HERO_SLIDES[currentHeroSlideIndex];
+  if (!currentSlide) return;
+  await window.handleHeroPhotoUpload(event, currentSlide.id);
+};
+
+window.setHeroPhoto = function(slideId, newUrl) {
   try { localStorage.setItem('homeify_hero_img_' + slideId, newUrl); } catch (e) {}
   idbSet('homeify_hero_img_' + slideId, newUrl);
 
@@ -5949,9 +6181,11 @@ function setHeroPhoto(slideId, newUrl) {
   const preview = document.getElementById('custom-preview-hero-' + slideId);
   if (preview) preview.src = newUrl;
 
+  initHeroCarousel();
   setHeroSlide(currentHeroSlideIndex);
-  showToast(`Updated hero slide photo!`);
-}
+  markHeroDirty();
+  showToast('Updated hero slide photo!');
+};
 
 window.resetHeroPhoto = function(slideId) {
   try { localStorage.removeItem('homeify_hero_img_' + slideId); } catch (e) {}
@@ -5962,16 +6196,109 @@ window.resetHeroPhoto = function(slideId) {
     slide.image = def.image;
     const preview = document.getElementById('custom-preview-hero-' + slideId);
     if (preview) preview.src = def.image;
+    initHeroCarousel();
     setHeroSlide(currentHeroSlideIndex);
-    showToast(`Restored default photo for hero slide`);
+    markHeroDirty();
+    showToast('Restored default photo for hero slide');
+  }
+};
+
+window.resetAllHeroPhotos = function() {
+  if (confirm('Restore all 6 hero sliding banners to default factory photos?')) {
+    DEFAULT_HERO_SLIDES.forEach(def => {
+      try { localStorage.removeItem('homeify_hero_img_' + def.id); } catch (e) {}
+      idbDelete('homeify_hero_img_' + def.id);
+      const slide = HERO_SLIDES.find(s => s.id === def.id);
+      if (slide) slide.image = def.image;
+      const preview = document.getElementById('custom-preview-hero-' + def.id);
+      if (preview) preview.src = def.image;
+    });
+    initHeroCarousel();
+    setHeroSlide(0);
+    markHeroDirty();
+    showToast('Restored all 6 default hero banner photos!');
+  }
+};
+
+// ==========================================================================
+// WORKSHOP HERITAGE PHOTOS & MODAL QUICK PHOTO UPLOADER
+// ==========================================================================
+
+window.applyWorkshopPhoto = function(photoIndex, url) {
+  const imgEl = document.getElementById(`workshop-heritage-img-${photoIndex}`);
+  if (imgEl) imgEl.src = url;
+  const previewEl = document.getElementById(`custom-preview-workshop-${photoIndex}`);
+  if (previewEl) previewEl.src = url;
+};
+
+window.uploadWorkshopPhoto = async function(event, photoIndex) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  showToast(`Optimizing Workshop Photo ${photoIndex}...`);
+  try {
+    const compressed = await compressImageFile(file, 1200, 900, 0.82);
+    setWorkshopPhoto(photoIndex, compressed);
+  } catch (err) {
+    console.error('Workshop photo optimization error:', err);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setWorkshopPhoto(photoIndex, e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+window.setWorkshopPhoto = function(photoIndex, newUrl) {
+  try { localStorage.setItem('homeify_workshop_img_' + photoIndex, newUrl); } catch (e) {}
+  idbSet('homeify_workshop_img_' + photoIndex, newUrl);
+  applyWorkshopPhoto(photoIndex, newUrl);
+  markMediaDirty();
+  showToast(`Updated Workshop Photo ${photoIndex}!`);
+};
+
+window.resetWorkshopPhoto = function(photoIndex) {
+  try { localStorage.removeItem('homeify_workshop_img_' + photoIndex); } catch (e) {}
+  idbDelete('homeify_workshop_img_' + photoIndex);
+  const def = photoIndex === 1 ? 'assets/artisanal-slated-workshop.jpg' : 'assets/timber-cot-6ft.jpg';
+  applyWorkshopPhoto(photoIndex, def);
+  markMediaDirty();
+  showToast(`Restored default Workshop Photo ${photoIndex}`);
+};
+
+window.uploadCurrentModalProductPhoto = async function(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  if (!selectedProductForModal) {
+    showToast('Please open a product to change its photo.');
+    return;
+  }
+
+  const productId = selectedProductForModal.id;
+  showToast(`Optimizing photo for ${selectedProductForModal.name}...`);
+  try {
+    const compressed = await compressImageFile(file, 1000, 1000, 0.85);
+    setProductPhoto(productId, compressed);
+    const modalImg = document.getElementById('modal-product-img');
+    if (modalImg) modalImg.src = compressed;
+  } catch (err) {
+    console.error('Modal photo upload error:', err);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setProductPhoto(productId, e.target.result);
+      const modalImg = document.getElementById('modal-product-img');
+      if (modalImg) modalImg.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
 };
 
 window.resetAllCustomMedia = function() {
-  if (confirm('Are you sure you want to restore all product photos and logo to the default workshop assets? (Your custom products and pricing will be safely kept!)')) {
+  if (confirm('Are you sure you want to restore all product photos, hero banners, workshop photos, and logo to the default workshop assets? (Your custom products and pricing will be safely kept!)')) {
     try {
       Object.keys(localStorage).forEach(key => {
-        if (key.startsWith('homeify_prod_img_') || key.startsWith('homeify_hero_img_') || key === 'homeify_custom_logo') {
+        if (key.startsWith('homeify_prod_img_') || key.startsWith('homeify_hero_img_') || key.startsWith('homeify_workshop_img_') || key === 'homeify_custom_logo') {
           localStorage.removeItem(key);
         }
       });
@@ -6406,19 +6733,35 @@ window.toggleProductFeaturedBento = function(productId) {
 function markCatalogDirty() {
   localStorage.setItem('homeify_catalog_dirty', 'true');
   updateSyncStatusUI();
+  if (typeof updateHighlightsSyncUI === 'function') updateHighlightsSyncUI();
+}
+
+function markHeroDirty() {
+  localStorage.setItem('homeify_hero_dirty', 'true');
+  updateSyncStatusUI();
+  if (typeof updateHighlightsSyncUI === 'function') updateHighlightsSyncUI();
+}
+
+function markMediaDirty() {
+  localStorage.setItem('homeify_media_dirty', 'true');
+  updateSyncStatusUI();
+  if (typeof updateHighlightsSyncUI === 'function') updateHighlightsSyncUI();
 }
 
 function updateSyncStatusUI() {
-  const isDirty = localStorage.getItem('homeify_catalog_dirty') === 'true';
+  const isCatalogDirty = localStorage.getItem('homeify_catalog_dirty') === 'true';
+  const isHeroDirty = localStorage.getItem('homeify_hero_dirty') === 'true';
+  const isMediaDirty = localStorage.getItem('homeify_media_dirty') === 'true';
+  const isDirty = isCatalogDirty || isHeroDirty || isMediaDirty;
+
   const indicator = document.getElementById('admin-sync-indicator');
-  const text = document.getElementById('admin-sync-indicator-text');
   const tokenInput = document.getElementById('admin-github-token');
 
   if (tokenInput && !tokenInput.value) {
     tokenInput.value = localStorage.getItem('homeify_gh_token') || '';
   }
 
-  if (indicator && text) {
+  if (indicator) {
     if (isDirty) {
       indicator.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[11px] font-bold border border-amber-400/30 self-start sm:self-auto';
       indicator.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span><span>Pending Live Deploy</span>';
@@ -6542,8 +6885,83 @@ window.publishCatalogToGitHub = async function() {
       console.warn('Highlights companion commit notice:', hlErr);
     }
 
+    // 5. Also commit hero_slides.json so top sliding banners are synchronized
+    try {
+      let heroSha = null;
+      const getHeroRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/hero_slides.json?ref=${branch}`, {
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+      if (getHeroRes.ok) {
+        const heroData = await getHeroRes.json();
+        heroSha = heroData.sha;
+      }
+      const heroJsonStr = JSON.stringify(HERO_SLIDES, null, 2);
+      const heroBase64 = window.btoa(unescape(encodeURIComponent(heroJsonStr)));
+      await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/hero_slides.json`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify({
+          message: `Admin update hero banner sliding photos [skip ci]`,
+          content: heroBase64,
+          sha: heroSha || undefined,
+          branch: branch
+        })
+      });
+      localStorage.setItem('homeify_hero_dirty', 'false');
+    } catch (heroErr) {
+      console.warn('Hero slides companion commit notice:', heroErr);
+    }
+
+    // 6. Also commit site_media.json (Workshop photos & custom logo)
+    try {
+      let mediaSha = null;
+      const getMediaRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/site_media.json?ref=${branch}`, {
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+      if (getMediaRes.ok) {
+        const mediaData = await getMediaRes.json();
+        mediaSha = mediaData.sha;
+      }
+      const mediaPayload = {
+        workshopPhoto1: localStorage.getItem('homeify_workshop_img_1') || 'assets/artisanal-slated-workshop.jpg',
+        workshopPhoto2: localStorage.getItem('homeify_workshop_img_2') || 'assets/timber-cot-6ft.jpg',
+        logo: localStorage.getItem('homeify_custom_logo') || 'assets/homeify-logo-cropped.png'
+      };
+      const mediaJsonStr = JSON.stringify(mediaPayload, null, 2);
+      const mediaBase64 = window.btoa(unescape(encodeURIComponent(mediaJsonStr)));
+      await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/site_media.json`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify({
+          message: `Admin update site media (workshop & logo) [skip ci]`,
+          content: mediaBase64,
+          sha: mediaSha || undefined,
+          branch: branch
+        })
+      });
+      localStorage.setItem('homeify_media_dirty', 'false');
+    } catch (mediaErr) {
+      console.warn('Site media companion commit notice:', mediaErr);
+    }
+
     localStorage.setItem('homeify_gh_token', token);
     localStorage.setItem('homeify_catalog_dirty', 'false');
+    localStorage.setItem('homeify_hero_dirty', 'false');
+    localStorage.setItem('homeify_media_dirty', 'false');
     updateSyncStatusUI();
 
     showToast('🚀 Successfully Published! Vercel is now deploying your changes live to homeifyfurniture.in.');

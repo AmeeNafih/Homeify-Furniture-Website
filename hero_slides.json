@@ -1,0 +1,56 @@
+[
+  {
+    "id": "hero-sofa",
+    "title": "Handcrafted Teak Wood 3+1+1 Sofa Suite",
+    "tag": "Sofas",
+    "image": "assets/teak-wood-sofa-set.jpg",
+    "specs": "Kiln-Seasoned Teak Planks • Belgian Linen • 5-Year Warranty",
+    "quoteTarget": "sofa",
+    "productId": "living-royal-teak-sofa-set"
+  },
+  {
+    "id": "hero-cot",
+    "title": "Royal Carved Solid Teak King Cot",
+    "tag": "Cots",
+    "image": "assets/royal-carved-teak-cot.jpg",
+    "specs": "Grade-A Natural Teak • Architectural Crown • 5-Year Warranty",
+    "quoteTarget": "bed",
+    "productId": "bed-royal-carved-cot"
+  },
+  {
+    "id": "hero-dining",
+    "title": "6-Seater Solid Teak Dining Suite",
+    "tag": "Dining Tables",
+    "image": "assets/teak-dining-table-chairs-6seater.jpg",
+    "specs": "Solid Teak Table + 6 Cushioned Chairs • Direct Workshop Price",
+    "quoteTarget": "dining",
+    "productId": "dining-teak-6seater-set"
+  },
+  {
+    "id": "hero-sitout",
+    "title": "Traditional Kerala Teak Sitout Chair",
+    "tag": "Chairs",
+    "image": "assets/kerala-teak-sitout-chair.jpg",
+    "specs": "Dense Grade-A Teak • Ergonomic Lounging • Brass Joinery",
+    "quoteTarget": "custom",
+    "productId": "living-kerala-sitout-chair"
+  },
+  {
+    "id": "hero-door",
+    "title": "Grand Padippura Solid Teak Entrance Door",
+    "tag": "Doors & Custom",
+    "image": "assets/architectural-teak-door.jpg",
+    "specs": "2-Inch Mature Teak • Heritage Relief Carving • Weatherproof PU",
+    "quoteTarget": "custom",
+    "productId": "custom-architectural-teak-door"
+  },
+  {
+    "id": "hero-jhoola",
+    "title": "The Royal Kerala Jhoola (Oonjal)",
+    "tag": "Swings",
+    "image": "assets/royal-jhoola-swing.jpg",
+    "specs": "Authentic Kerala Verandah Oonjal • Pure Brass Interlocking Chains",
+    "quoteTarget": "custom",
+    "productId": "custom-royal-jhoola"
+  }
+]

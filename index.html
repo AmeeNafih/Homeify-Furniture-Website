@@ -478,6 +478,17 @@
                 class="w-full h-full object-cover transition-all duration-500"
               />
               
+              <!-- Floating Admin Quick-Upload Button for Active Hero Slide -->
+              <label 
+                id="hero-admin-photo-btn" 
+                class="hidden absolute bottom-20 sm:bottom-24 right-4 z-20 items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0D0C0B]/90 hover:bg-black text-white text-[11px] font-mono font-bold border border-amber-400 shadow-2xl cursor-pointer transition-all active:scale-95"
+                title="Admin: Upload new photo for this sliding banner"
+              >
+                <i class="fa-solid fa-camera text-amber-400 text-xs"></i>
+                <span>Change Slide Photo</span>
+                <input type="file" accept="image/*" class="hidden" onchange="uploadCurrentHeroSlidePhoto(event)">
+              </label>
+              
               <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B]/95 via-[#0D0C0B]/35 to-transparent"></div>
 
               <!-- Top Architectural Spec & Origin Tag -->
@@ -1380,14 +1391,24 @@
 
         <div class="lg:col-span-6 grid grid-cols-2 gap-4">
           <div class="space-y-4">
-            <div class="rounded-3xl overflow-hidden shadow-md aspect-[3/4] bg-stone-200">
+            <div class="rounded-3xl overflow-hidden shadow-md aspect-[3/4] bg-stone-200 relative group">
               <img 
+                id="workshop-heritage-img-1"
                 src="assets/artisanal-slated-workshop.jpg" 
                 alt="Craftsman planing seasoned wood at Erattupetta workshop" 
                 loading="lazy"
                 decoding="async"
                 class="w-full h-full object-cover object-top"
               />
+              <label 
+                id="workshop-admin-photo-btn-1" 
+                class="hidden absolute top-3 right-3 z-20 items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/80 hover:bg-black text-white text-[10px] font-mono font-bold border border-amber-400 shadow-xl cursor-pointer transition-all active:scale-95"
+                title="Admin: Change Workshop Photo 1"
+              >
+                <i class="fa-solid fa-camera text-amber-400"></i>
+                <span>Change Photo</span>
+                <input type="file" accept="image/*" class="hidden" onchange="uploadWorkshopPhoto(event, 1)">
+              </label>
             </div>
             <div class="p-5 rounded-2xl bg-white border border-stone-200 text-center">
               <span class="block font-heading text-xl font-bold text-teak">Grade-A Natural Teak</span>
@@ -1400,14 +1421,24 @@
               <span class="block font-heading text-xl font-bold text-sage">5-Year Warranty</span>
               <span class="text-[11px] text-stone-500 font-mono">Official certificate</span>
             </div>
-            <div class="rounded-3xl overflow-hidden shadow-md aspect-[3/4] bg-stone-200">
+            <div class="rounded-3xl overflow-hidden shadow-md aspect-[3/4] bg-stone-200 relative group">
               <img 
+                id="workshop-heritage-img-2"
                 src="assets/timber-cot-6ft.jpg" 
                 alt="Pure natural wood grain detail" 
                 loading="lazy"
                 decoding="async"
                 class="w-full h-full object-cover object-top"
               />
+              <label 
+                id="workshop-admin-photo-btn-2" 
+                class="hidden absolute top-3 right-3 z-20 items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/80 hover:bg-black text-white text-[10px] font-mono font-bold border border-amber-400 shadow-xl cursor-pointer transition-all active:scale-95"
+                title="Admin: Change Workshop Photo 2"
+              >
+                <i class="fa-solid fa-camera text-amber-400"></i>
+                <span>Change Photo</span>
+                <input type="file" accept="image/*" class="hidden" onchange="uploadWorkshopPhoto(event, 2)">
+              </label>
             </div>
           </div>
         </div>
@@ -2213,7 +2244,7 @@
         </button>
       </div>
 
-      <div class="md:w-1/2 relative bg-stone-900 min-h-[300px] sm:min-h-[380px] md:min-h-[500px] flex items-center justify-center p-0 overflow-hidden">
+      <div class="md:w-1/2 relative bg-stone-900 min-h-[300px] sm:min-h-[380px] md:min-h-[500px] flex items-center justify-center p-0 overflow-hidden group/modalimg">
         <img 
           id="modal-product-img" 
           src="" 
@@ -2225,6 +2256,17 @@
             100% Seasoned Natural Wood
           </span>
         </div>
+
+        <!-- Admin Quick Photo Upload Button directly on Modal Image -->
+        <label 
+          id="modal-admin-photo-btn" 
+          class="hidden absolute bottom-3.5 right-3.5 z-20 items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/85 hover:bg-black text-white text-[11px] font-mono font-bold border border-amber-400 shadow-xl cursor-pointer transition-all active:scale-95"
+          title="Admin: Upload new photo for this product"
+        >
+          <i class="fa-solid fa-camera text-amber-400 text-xs"></i>
+          <span>Change Photo</span>
+          <input type="file" accept="image/*" class="hidden" onchange="uploadCurrentModalProductPhoto(event)">
+        </label>
       </div>
 
       <div class="md:w-1/2 p-6 sm:p-8 flex flex-col justify-between space-y-5 bg-white">
@@ -2291,7 +2333,15 @@
               <i class="fa-solid fa-shield-halved text-amber-600"></i>
               <span>Admin Options:</span>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
+              <label 
+                class="px-3 py-1.5 rounded-xl bg-[#0D0C0B] hover:bg-teak text-white text-xs font-mono font-bold transition-all cursor-pointer shadow-sm flex items-center gap-1.5 active:scale-95"
+                title="Upload new photo for this product"
+              >
+                <i class="fa-solid fa-camera text-amber-400 text-[11px]"></i>
+                <span>Upload Photo</span>
+                <input type="file" accept="image/*" class="hidden" onchange="uploadCurrentModalProductPhoto(event)">
+              </label>
               <button 
                 id="modal-admin-highlight-pill" 
                 type="button" 
@@ -2822,6 +2872,84 @@
             <p class="text-[11px] text-stone-500 font-sans">
               Currently using official logo at <code class="bg-stone-200 px-1.5 py-0.5 rounded font-mono text-stone-800">assets/homeify-logo-dark-text.png</code>.
             </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: HERO CAROUSEL SLIDING PHOTOS (Full-Bleed Banners) -->
+      <div class="p-6 rounded-2xl bg-white border border-stone-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+              <h4 class="font-heading text-lg font-bold text-[#0D0C0B]">2. Hero Carousel Sliding Photos (6 Slides)</h4>
+            </div>
+            <p class="text-xs text-stone-500 mt-0.5 font-sans">
+              Change and upload high-resolution photos for the 6 top sliding banners. Upload directly from your phone/PC or select presets.
+            </p>
+          </div>
+          <button 
+            type="button" 
+            onclick="resetAllHeroPhotos()" 
+            class="px-3.5 py-1.5 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-700 text-xs font-mono font-bold transition-colors cursor-pointer flex items-center gap-1.5 self-start sm:self-auto shadow-sm"
+            title="Restore all default factory hero photos"
+          >
+            <i class="fa-solid fa-rotate-left text-[11px]"></i>
+            <span>Restore Default 6 Slides</span>
+          </button>
+        </div>
+
+        <!-- 6 Hero Slides Grid -->
+        <div id="customizer-hero-slides-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+          <!-- Dynamically populated via renderHeroCustomizerGrid() in app.js -->
+        </div>
+      </div>
+
+      <!-- SECTION 2.5: WORKSHOP HERITAGE & ATELIER PHOTOS -->
+      <div class="p-6 rounded-2xl bg-[#FAF8F5] border border-stone-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-teak animate-pulse"></span>
+              <h4 class="font-heading text-lg font-bold text-[#0D0C0B]">Workshop Heritage & Atelier Photos</h4>
+            </div>
+            <p class="text-xs text-stone-500 mt-0.5 font-sans">
+              Upload custom photos for the Erattupetta Workshop Heritage section on the homepage.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <!-- Workshop Photo 1 -->
+          <div class="p-4 rounded-xl bg-white border border-stone-200 space-y-3 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-xs font-bold text-stone-800">Workshop Photo 1 (Planing & Joinery)</span>
+              <button type="button" onclick="resetWorkshopPhoto(1)" class="text-[10px] font-mono text-stone-500 hover:text-rose-600 cursor-pointer">Reset</button>
+            </div>
+            <div class="aspect-[4/3] rounded-xl overflow-hidden bg-stone-900 border border-stone-200">
+              <img id="custom-preview-workshop-1" src="assets/artisanal-slated-workshop.jpg" alt="Workshop 1 Preview" class="w-full h-full object-cover">
+            </div>
+            <label class="w-full py-2 px-3 rounded-xl bg-[#0D0C0B] hover:bg-teak text-white text-[11px] font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-sm">
+              <i class="fa-solid fa-cloud-arrow-up text-amber-400"></i>
+              <span>Upload Photo 1</span>
+              <input type="file" accept="image/*" class="hidden" onchange="uploadWorkshopPhoto(event, 1)">
+            </label>
+          </div>
+
+          <!-- Workshop Photo 2 -->
+          <div class="p-4 rounded-xl bg-white border border-stone-200 space-y-3 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-xs font-bold text-stone-800">Workshop Photo 2 (Natural Timber Grain)</span>
+              <button type="button" onclick="resetWorkshopPhoto(2)" class="text-[10px] font-mono text-stone-500 hover:text-rose-600 cursor-pointer">Reset</button>
+            </div>
+            <div class="aspect-[4/3] rounded-xl overflow-hidden bg-stone-900 border border-stone-200">
+              <img id="custom-preview-workshop-2" src="assets/timber-cot-6ft.jpg" alt="Workshop 2 Preview" class="w-full h-full object-cover">
+            </div>
+            <label class="w-full py-2 px-3 rounded-xl bg-[#0D0C0B] hover:bg-teak text-white text-[11px] font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-sm">
+              <i class="fa-solid fa-cloud-arrow-up text-amber-400"></i>
+              <span>Upload Photo 2</span>
+              <input type="file" accept="image/*" class="hidden" onchange="uploadWorkshopPhoto(event, 2)">
+            </label>
           </div>
         </div>
       </div>
