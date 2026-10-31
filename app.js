@@ -4972,18 +4972,18 @@ window.updateAdminUIState = function() {
     }
   }
 
-  // 2. Highlights header admin edit button
+  // 2. Highlights header admin edit button (Strictly Admin Only)
   const hlAdminBtn = document.getElementById('catalog-admin-highlights-btn');
   const hlBtnText = document.getElementById('catalog-admin-highlights-btn-text');
   if (hlAdminBtn) {
-    hlAdminBtn.classList.remove('hidden');
-    hlAdminBtn.classList.add('flex');
     if (isAdmin) {
+      hlAdminBtn.classList.remove('hidden');
+      hlAdminBtn.classList.add('flex');
       hlAdminBtn.className = 'px-3.5 py-1.5 rounded-full text-xs font-mono font-bold bg-amber-400 hover:bg-amber-300 text-stone-950 border border-amber-500 shadow-sm transition-all cursor-pointer flex items-center gap-1.5 active:scale-95';
       if (hlBtnText) hlBtnText.textContent = 'Edit Highlights (Admin Active)';
     } else {
-      hlAdminBtn.className = 'px-3.5 py-1.5 rounded-full text-xs font-mono font-bold bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-white/10 shadow-sm transition-all cursor-pointer flex items-center gap-1.5 active:scale-95';
-      if (hlBtnText) hlBtnText.textContent = 'Edit Highlights (Admin)';
+      hlAdminBtn.classList.add('hidden');
+      hlAdminBtn.classList.remove('flex');
     }
   }
 
