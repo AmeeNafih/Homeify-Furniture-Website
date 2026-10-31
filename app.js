@@ -3205,17 +3205,28 @@ function renderBentoGallery(filterCategory) {
 
 // Room & Material Filter Handlers
 function setRoomFilter(roomType, btn) {
-  currentRoomFilter = roomType || 'all';
+  // Map room navigation from header/mobile drawer cleanly to collection categories
+  const roomCategoryMap = {
+    'living': 'sofas',
+    'bedroom': 'cots',
+    'dining': 'dining-tables',
+    'office': 'doors-custom',
+    'all': 'sofas'
+  };
 
-  const roomBtns = document.querySelectorAll('.room-filter-btn');
-  roomBtns.forEach(b => {
-    const isTarget = b.getAttribute('data-room') === roomType;
-    if (isTarget) {
-      b.classList.add('active', 'bg-[#1C1917]', 'text-white', 'border-[#1C1917]');
-      b.classList.remove('bg-white', 'dark:bg-[#181614]', 'text-stone-700', 'dark:text-stone-300', 'border-stone-200');
+  const targetCategory = roomCategoryMap[roomType] || 'sofas';
+  currentFilter = targetCategory;
+  currentRoomFilter = 'all';
+  currentMaterialFilter = 'all';
+
+  const filterBtns = document.querySelectorAll('.bento-filter-btn');
+  filterBtns.forEach(b => {
+    if (b.getAttribute('data-filter') === targetCategory) {
+      b.classList.add('active', 'bg-[#0D0C0B]', 'text-white', 'shadow-md');
+      b.classList.remove('border-stone-200', 'text-stone-700', 'bg-white');
     } else {
-      b.classList.remove('active', 'bg-[#1C1917]', 'text-white', 'border-[#1C1917]');
-      b.classList.add('bg-white', 'dark:bg-[#181614]', 'text-stone-700', 'dark:text-stone-300', 'border-stone-200');
+      b.classList.remove('active', 'bg-[#0D0C0B]', 'text-white', 'shadow-md');
+      b.classList.add('border-stone-200', 'text-stone-700', 'bg-white');
     }
   });
 
@@ -3224,12 +3235,12 @@ function setRoomFilter(roomType, btn) {
     grid.style.opacity = '0.3';
     grid.style.transform = 'translateY(8px)';
     setTimeout(() => {
-      renderBentoGallery(currentFilter);
+      renderBentoGallery(targetCategory);
       grid.style.opacity = '1';
       grid.style.transform = 'translateY(0)';
     }, 150);
   } else {
-    renderBentoGallery(currentFilter);
+    renderBentoGallery(targetCategory);
   }
 }
 
@@ -3275,6 +3286,8 @@ function initFilterButtons() {
       
       const category = btn.getAttribute('data-filter') || 'sofas';
       currentFilter = category;
+      currentRoomFilter = 'all';
+      currentMaterialFilter = 'all';
       
       const grid = document.getElementById('bento-grid-container');
       if (grid) {
