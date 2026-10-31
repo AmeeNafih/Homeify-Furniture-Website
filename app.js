@@ -2191,6 +2191,14 @@ function applyLogoToDOM(logoSrc) {
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
+  // Clear any residual #gallery hash to prevent unexpected jumping on refresh
+  if (!window.location.search && (window.location.hash === '#gallery' || window.location.hash === '#collection' || window.location.hash === '#')) {
+    try {
+      history.replaceState(null, '', window.location.pathname);
+    } catch (e) {}
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
   initThemeMode();
   loadCustomAssets();
   init3DAmbientCanvas();
@@ -2718,28 +2726,41 @@ function initHeroCarousel() {
   const heroImg = document.getElementById('hero-main-img');
   const heroBadgeTitle = document.getElementById('hero-slide-title');
   const indicatorsContainer = document.getElementById('hero-indicators');
+  const counterTotal = document.getElementById('hero-slide-counter-total');
 
   if (!heroImg || !indicatorsContainer) return;
 
+  if (counterTotal) {
+    counterTotal.textContent = String(HERO_SLIDES.length).padStart(2, '0');
+  }
+
+  // Modern Attractive Glassmorphic Dash Pill Indicators (NO bulky text, NO 'sofas/chairs' text)
   indicatorsContainer.innerHTML = HERO_SLIDES.map((slide, idx) => `
     <button 
       type="button"
       id="hero-indicator-btn-${idx}"
-      class="hero-indicator-btn flex-shrink-0 flex items-center gap-2.5 px-3 py-1.5 sm:py-2 rounded-xl border transition-all duration-300 cursor-pointer ${idx === 0 ? 'active bg-amber-500 text-[#0D0C0B] border-amber-400 font-extrabold shadow-lg shadow-amber-500/25 ring-2 ring-amber-400/60' : 'bg-white/10 text-stone-200 border-white/20 hover:border-amber-400/60 hover:bg-white/20'}"
+      class="hero-indicator-btn transition-all duration-300 cursor-pointer h-1.5 sm:h-2 rounded-full ${idx === 0 ? 'w-8 sm:w-10 bg-amber-400 shadow-md shadow-amber-400/50 ring-1 ring-amber-300' : 'w-2.5 sm:w-3 bg-white/40 hover:bg-white/80'}"
       data-slide="${idx}"
       onclick="setHeroSlide(${idx})"
+      aria-label="Slide ${idx + 1}: ${slide.title}"
       title="${slide.title}"
-    >
-      <div class="indicator-thumb w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden bg-stone-900 border ${idx === 0 ? 'border-[#0D0C0B] ring-1 ring-[#0D0C0B]/40' : 'border-white/30'} flex-shrink-0">
-        <img src="${slide.image}" alt="${slide.tag}" class="w-full h-full object-cover" />
-      </div>
-      <div class="text-left pr-1">
-        <span class="indicator-title block text-xs sm:text-[13px] font-bold leading-tight font-sans whitespace-nowrap">${slide.tag}</span>
-      </div>
-    </button>
+    ></button>
   `).join('');
 
+  resetHeroAutoplayTimer();
+}
+
+function resetHeroAutoplayTimer() {
   if (heroSlideTimer) clearInterval(heroSlideTimer);
+  const progressBar = document.getElementById('hero-progress-bar');
+  if (progressBar) {
+    progressBar.style.transition = 'none';
+    progressBar.style.width = '0%';
+    requestAnimationFrame(() => {
+      progressBar.style.transition = 'width 6500ms linear';
+      progressBar.style.width = '100%';
+    });
+  }
   heroSlideTimer = setInterval(() => {
     setHeroSlide((currentHeroSlideIndex + 1) % HERO_SLIDES.length);
   }, 6500);
@@ -2760,33 +2781,40 @@ window.setHeroSlide = function(index) {
   const slide = HERO_SLIDES[index];
   const heroImg = document.getElementById('hero-main-img');
   const heroBadgeTitle = document.getElementById('hero-slide-title');
+  const heroBadgeSpecs = document.getElementById('hero-slide-specs');
+  const counterCur = document.getElementById('hero-slide-counter-cur');
   const indicatorBtns = document.querySelectorAll('.hero-indicator-btn');
 
-  if (!heroImg) return;
+  if (!heroImg || !slide) return;
 
-  heroImg.style.opacity = '0.3';
-  heroImg.style.transform = 'scale(0.97)';
+  heroImg.style.opacity = '0.35';
+  heroImg.style.transform = 'scale(0.98)';
 
   setTimeout(() => {
     heroImg.src = slide.image;
     if (heroBadgeTitle) heroBadgeTitle.textContent = slide.title;
+    if (heroBadgeSpecs) {
+      heroBadgeSpecs.innerHTML = `<i class="fa-solid fa-certificate text-amber-400 text-[10px]"></i> ${slide.specs || 'Grade-A Natural Teak'}`;
+    }
+    if (counterCur) {
+      counterCur.textContent = String(index + 1).padStart(2, '0');
+    }
 
     heroImg.style.opacity = '1';
     heroImg.style.transform = 'scale(1)';
-  }, 240);
+  }, 200);
 
   indicatorBtns.forEach((btn, idx) => {
     const isCur = (idx === index);
-    const thumbBox = btn.querySelector('.indicator-thumb');
     if (isCur) {
-      btn.className = 'hero-indicator-btn flex-shrink-0 flex items-center gap-2.5 px-3 py-1.5 sm:py-2 rounded-xl border transition-all duration-300 cursor-pointer active bg-amber-500 text-[#0D0C0B] border-amber-400 font-extrabold shadow-lg shadow-amber-500/25 ring-2 ring-amber-400/60';
-      if (thumbBox) thumbBox.className = 'indicator-thumb w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden bg-stone-900 border border-[#0D0C0B] ring-1 ring-[#0D0C0B]/40 flex-shrink-0';
-      btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      btn.className = 'hero-indicator-btn transition-all duration-300 cursor-pointer h-1.5 sm:h-2 rounded-full w-8 sm:w-10 bg-amber-400 shadow-md shadow-amber-400/50 ring-1 ring-amber-300';
     } else {
-      btn.className = 'hero-indicator-btn flex-shrink-0 flex items-center gap-2.5 px-3 py-1.5 sm:py-2 rounded-xl border transition-all duration-300 cursor-pointer bg-white/10 text-stone-200 border-white/20 hover:border-amber-400/60 hover:bg-white/20';
-      if (thumbBox) thumbBox.className = 'indicator-thumb w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden bg-stone-900 border border-white/30 flex-shrink-0';
+      btn.className = 'hero-indicator-btn transition-all duration-300 cursor-pointer h-1.5 sm:h-2 rounded-full w-2.5 sm:w-3 bg-white/40 hover:bg-white/80';
     }
   });
+
+  // Zero window scrolling here!
+  resetHeroAutoplayTimer();
 };
 
 // ==========================================================================
@@ -3190,14 +3218,6 @@ function setRoomFilter(roomType, btn) {
       b.classList.add('bg-white', 'dark:bg-[#181614]', 'text-stone-700', 'dark:text-stone-300', 'border-stone-200');
     }
   });
-
-  // Smooth scroll to gallery if header link clicked
-  if (!btn) {
-    const galleryEl = document.getElementById('gallery');
-    if (galleryEl) {
-      galleryEl.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
 
   const grid = document.getElementById('bento-grid-container');
   if (grid) {

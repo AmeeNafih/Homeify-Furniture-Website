@@ -613,7 +613,7 @@
         <!-- Right: Modern Showcase Frame with Architectural Spec Strip -->
         <div id="hero-showcase-container" class="lg:col-span-6 relative perspective-1000">
           
-          <div class="corp-hero-frame relative mx-auto max-w-lg lg:max-w-none card-3d-tilt preserve-3d depth-3d-surface">
+          <div class="corp-hero-frame relative mx-auto max-w-lg lg:max-w-none card-3d-tilt preserve-3d depth-3d-surface group">
             <div class="card-sheen"></div>
             
             <div class="aspect-[4/3] sm:aspect-[16/11] relative overflow-hidden bg-stone-900">
@@ -625,7 +625,7 @@
                 decoding="async"
                 width="800"
                 height="550"
-                class="w-full h-full object-cover transition-all duration-500"
+                class="w-full h-full object-cover transition-all duration-700 ease-out"
               />
               
               <!-- Floating Admin Quick-Upload Button for Active Hero Slide (Top Right) -->
@@ -643,65 +643,57 @@
               <button 
                 type="button" 
                 onclick="prevHeroSlide()" 
-                class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center border border-white/20 hover:border-amber-400 transition-all cursor-pointer shadow-xl active:scale-95 group"
+                class="absolute left-3.5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/50 hover:bg-black/90 backdrop-blur-md text-white flex items-center justify-center border border-white/20 hover:border-amber-400 transition-all cursor-pointer shadow-xl active:scale-90 group/btn"
                 aria-label="Previous Slide"
                 title="Previous Slide"
               >
-                <i class="fa-solid fa-chevron-left text-xs sm:text-sm text-stone-200 group-hover:text-amber-400"></i>
+                <i class="fa-solid fa-chevron-left text-xs sm:text-sm text-stone-200 group-hover/btn:text-amber-400 transition-colors"></i>
               </button>
 
               <button 
                 type="button" 
                 onclick="nextHeroSlide()" 
-                class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center border border-white/20 hover:border-amber-400 transition-all cursor-pointer shadow-xl active:scale-95 group"
+                class="absolute right-3.5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/50 hover:bg-black/90 backdrop-blur-md text-white flex items-center justify-center border border-white/20 hover:border-amber-400 transition-all cursor-pointer shadow-xl active:scale-90 group/btn"
                 aria-label="Next Slide"
                 title="Next Slide"
               >
-                <i class="fa-solid fa-chevron-right text-xs sm:text-sm text-stone-200 group-hover:text-amber-400"></i>
+                <i class="fa-solid fa-chevron-right text-xs sm:text-sm text-stone-200 group-hover/btn:text-amber-400 transition-colors"></i>
               </button>
               
               <!-- Clean cinematic bottom gradient -->
-              <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B]/90 via-[#0D0C0B]/20 to-transparent pointer-events-none"></div>
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0B]/95 via-[#0D0C0B]/30 to-transparent pointer-events-none"></div>
 
-              <!-- Bottom Content Overlay: ONLY Title / Name as requested -->
-              <div class="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 text-white z-10 pointer-events-none">
-                <h3 id="hero-slide-title" class="font-heading text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight drop-shadow-xl line-clamp-2">
-                  Handcrafted Teak Wood 3+1+1 Sofa Suite
-                </h3>
+              <!-- Animated Auto-Play Progress Bar at Top Edge -->
+              <div class="absolute top-0 left-0 right-0 h-1 bg-white/10 z-20 overflow-hidden">
+                <div id="hero-progress-bar" class="h-full bg-gradient-to-r from-amber-500 to-amber-300 w-0"></div>
               </div>
-            </div>
 
-            <!-- Highly Visible Sliding Category Bar with Integrated Slide Navigation -->
-            <div class="p-2 sm:p-3 bg-[#0D0C0B] border-t-2 border-amber-500/70 shadow-2xl relative">
-              <div class="flex items-center gap-2">
-                <!-- Prev Arrow Button -->
-                <button 
-                  type="button" 
-                  onclick="prevHeroSlide()" 
-                  class="flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-[#0D0C0B] text-white flex items-center justify-center border border-white/15 transition-all cursor-pointer active:scale-95 shadow-sm"
-                  aria-label="Previous Slide"
-                  title="Previous Slide"
-                >
-                  <i class="fa-solid fa-chevron-left text-xs"></i>
-                </button>
-
-                <!-- Scrollable Sliding Indicators -->
-                <div class="overflow-x-auto no-scrollbar flex-1 py-1">
-                  <div id="hero-indicators" class="flex items-center gap-2 sm:gap-2.5 flex-nowrap min-w-max">
-                    <!-- Injected via JS -->
+              <!-- Bottom Content Overlay: Slide Title & Attractive Modern Sliding Dash Bar -->
+              <div class="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 text-white z-20 flex flex-col gap-3">
+                <div class="flex items-end justify-between gap-3">
+                  <h3 id="hero-slide-title" class="font-heading text-lg sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight drop-shadow-xl line-clamp-2">
+                    Handcrafted Teak Wood 3+1+1 Sofa Suite
+                  </h3>
+                  <!-- Slide counter badge e.g. 01 / 06 -->
+                  <div class="flex-shrink-0 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white font-mono text-[10px] sm:text-xs font-bold tracking-widest shadow-md">
+                    <span id="hero-slide-counter-cur" class="text-amber-400 font-extrabold">01</span>
+                    <span class="text-white/40">/</span>
+                    <span id="hero-slide-counter-total" class="text-white/70">06</span>
                   </div>
                 </div>
 
-                <!-- Next Arrow Button -->
-                <button 
-                  type="button" 
-                  onclick="nextHeroSlide()" 
-                  class="flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/10 hover:bg-amber-500 hover:text-[#0D0C0B] text-white flex items-center justify-center border border-white/15 transition-all cursor-pointer active:scale-95 shadow-sm"
-                  aria-label="Next Slide"
-                  title="Next Slide"
-                >
-                  <i class="fa-solid fa-chevron-right text-xs"></i>
-                </button>
+                <!-- Modern Attractive Glassmorphic Dash Pill Indicator Bar (NO sofas/chairs text) -->
+                <div class="flex items-center justify-between pt-1">
+                  <div id="hero-indicators" class="flex items-center gap-2 sm:gap-2.5">
+                    <!-- Dynamic sleek dash pills injected via JS -->
+                  </div>
+
+                  <!-- Quick Spec Pill -->
+                  <span id="hero-slide-specs" class="text-[10px] sm:text-[11px] text-amber-200/90 font-mono tracking-wide hidden sm:inline-flex items-center gap-1.5 drop-shadow-md">
+                    <i class="fa-solid fa-certificate text-amber-400 text-[10px]"></i>
+                    Grade-A Natural Teak
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -824,48 +816,6 @@
           >
             <i class="fa-solid fa-briefcase text-sky-600"></i>
             <span>Office & Custom</span>
-          </button>
-        </div>
-
-        <!-- Material Specification Filter Bar (Solid Wood, Engineered Wood, Hybrid) -->
-        <div class="flex items-center justify-start sm:justify-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1 px-1 -mx-2 sm:mx-0 flex-nowrap">
-          <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 mr-1 flex items-center gap-1 flex-shrink-0">
-            <i class="fa-solid fa-layer-group text-amber-500"></i> Material:
-          </span>
-          <button 
-            type="button" 
-            onclick="setMaterialFilter('all', this)" 
-            class="material-filter-btn active flex-shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-mono font-bold border border-[#1C1917] dark:border-white bg-[#1C1917] text-white shadow-xs transition-all duration-200 cursor-pointer min-h-[36px]"
-            data-material="all"
-          >
-            All Materials
-          </button>
-          <button 
-            type="button" 
-            onclick="setMaterialFilter('natural-wood', this)" 
-            class="material-filter-btn flex-shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-mono font-bold border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 hover:border-emerald-600 bg-white dark:bg-[#181614] shadow-xs transition-all duration-200 cursor-pointer min-h-[36px] flex items-center gap-1.5"
-            data-material="natural-wood"
-          >
-            <span class="w-2 h-2 rounded-full bg-emerald-600 inline-block"></span>
-            100% Solid Teak
-          </button>
-          <button 
-            type="button" 
-            onclick="setMaterialFilter('particle-board', this)" 
-            class="material-filter-btn flex-shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-mono font-bold border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 hover:border-amber-600 bg-white dark:bg-[#181614] shadow-xs transition-all duration-200 cursor-pointer min-h-[36px] flex items-center gap-1.5"
-            data-material="particle-board"
-          >
-            <span class="w-2 h-2 rounded-full bg-amber-600 inline-block"></span>
-            E1 Engineered Board
-          </button>
-          <button 
-            type="button" 
-            onclick="setMaterialFilter('hybrid', this)" 
-            class="material-filter-btn flex-shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full text-[11px] font-mono font-bold border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 hover:border-purple-600 bg-white dark:bg-[#181614] shadow-xs transition-all duration-200 cursor-pointer min-h-[36px] flex items-center gap-1.5"
-            data-material="hybrid"
-          >
-            <span class="w-2 h-2 rounded-full bg-purple-600 inline-block"></span>
-            Hybrid Craft
           </button>
         </div>
       </div>
