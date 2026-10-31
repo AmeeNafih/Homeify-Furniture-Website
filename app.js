@@ -2713,9 +2713,7 @@ function initHeroParallax() {
 
 function initHeroCarousel() {
   const heroImg = document.getElementById('hero-main-img');
-  const heroBadgeTag = document.getElementById('hero-slide-tag');
   const heroBadgeTitle = document.getElementById('hero-slide-title');
-  const heroBadgeSpecs = document.getElementById('hero-slide-specs');
   const indicatorsContainer = document.getElementById('hero-indicators');
 
   if (!heroImg || !indicatorsContainer) return;
@@ -2723,17 +2721,17 @@ function initHeroCarousel() {
   indicatorsContainer.innerHTML = HERO_SLIDES.map((slide, idx) => `
     <button 
       type="button"
-      class="hero-indicator-btn flex-shrink-0 flex items-center gap-2 p-1.5 pr-3 rounded-2xl border transition-all duration-300 cursor-pointer ${idx === 0 ? 'active bg-[#0D0C0B] text-white border-amber-400 shadow-md ring-1 ring-amber-400/40' : 'bg-white/95 text-stone-700 border-stone-200/90 hover:border-stone-400 hover:bg-white'}"
+      id="hero-indicator-btn-${idx}"
+      class="hero-indicator-btn flex-shrink-0 flex items-center gap-2.5 px-3 py-1.5 sm:py-2 rounded-xl border transition-all duration-300 cursor-pointer ${idx === 0 ? 'active bg-amber-500 text-[#0D0C0B] border-amber-400 font-extrabold shadow-lg shadow-amber-500/25 ring-2 ring-amber-400/60' : 'bg-white/10 text-stone-200 border-white/20 hover:border-amber-400/60 hover:bg-white/20'}"
       data-slide="${idx}"
       onclick="setHeroSlide(${idx})"
       title="${slide.title}"
     >
-      <div class="indicator-thumb w-8 h-8 sm:w-9 sm:h-9 rounded-xl overflow-hidden bg-stone-900 border ${idx === 0 ? 'border-amber-400 ring-1 ring-amber-400' : 'border-stone-200'} flex-shrink-0">
+      <div class="indicator-thumb w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden bg-stone-900 border ${idx === 0 ? 'border-[#0D0C0B] ring-1 ring-[#0D0C0B]/40' : 'border-white/30'} flex-shrink-0">
         <img src="${slide.image}" alt="${slide.tag}" class="w-full h-full object-cover" />
       </div>
-      <div class="text-left pr-0.5">
-        <span class="indicator-title block text-[11px] sm:text-xs font-bold leading-tight font-sans whitespace-nowrap">${slide.tag}</span>
-        <span class="indicator-sub text-[9px] font-mono uppercase tracking-wider block ${idx === 0 ? 'text-amber-300' : 'text-stone-500 font-medium'}">Highlight</span>
+      <div class="text-left pr-1">
+        <span class="indicator-title block text-xs sm:text-[13px] font-bold leading-tight font-sans whitespace-nowrap">${slide.tag}</span>
       </div>
     </button>
   `).join('');
@@ -2744,13 +2742,21 @@ function initHeroCarousel() {
   }, 6500);
 }
 
+window.prevHeroSlide = function() {
+  const nextIdx = (currentHeroSlideIndex - 1 + HERO_SLIDES.length) % HERO_SLIDES.length;
+  setHeroSlide(nextIdx);
+};
+
+window.nextHeroSlide = function() {
+  const nextIdx = (currentHeroSlideIndex + 1) % HERO_SLIDES.length;
+  setHeroSlide(nextIdx);
+};
+
 window.setHeroSlide = function(index) {
   currentHeroSlideIndex = index;
   const slide = HERO_SLIDES[index];
   const heroImg = document.getElementById('hero-main-img');
-  const heroBadgeTag = document.getElementById('hero-slide-tag');
   const heroBadgeTitle = document.getElementById('hero-slide-title');
-  const heroBadgeSpecs = document.getElementById('hero-slide-specs');
   const indicatorBtns = document.querySelectorAll('.hero-indicator-btn');
 
   if (!heroImg) return;
@@ -2760,9 +2766,7 @@ window.setHeroSlide = function(index) {
 
   setTimeout(() => {
     heroImg.src = slide.image;
-    if (heroBadgeTag) heroBadgeTag.textContent = slide.tag;
     if (heroBadgeTitle) heroBadgeTitle.textContent = slide.title;
-    if (heroBadgeSpecs) heroBadgeSpecs.textContent = slide.specs;
 
     heroImg.style.opacity = '1';
     heroImg.style.transform = 'scale(1)';
@@ -2771,15 +2775,13 @@ window.setHeroSlide = function(index) {
   indicatorBtns.forEach((btn, idx) => {
     const isCur = (idx === index);
     const thumbBox = btn.querySelector('.indicator-thumb');
-    const subtext = btn.querySelector('.indicator-sub');
     if (isCur) {
-      btn.className = 'hero-indicator-btn flex-shrink-0 flex items-center gap-2 p-1.5 pr-3 rounded-2xl border transition-all duration-300 cursor-pointer active bg-[#0D0C0B] text-white border-amber-400 shadow-md ring-1 ring-amber-400/40';
-      if (thumbBox) thumbBox.className = 'indicator-thumb w-8 h-8 sm:w-9 sm:h-9 rounded-xl overflow-hidden bg-stone-900 border border-amber-400 ring-1 ring-amber-400 flex-shrink-0';
-      if (subtext) subtext.className = 'indicator-sub text-[9px] font-mono uppercase tracking-wider block text-amber-300';
+      btn.className = 'hero-indicator-btn flex-shrink-0 flex items-center gap-2.5 px-3 py-1.5 sm:py-2 rounded-xl border transition-all duration-300 cursor-pointer active bg-amber-500 text-[#0D0C0B] border-amber-400 font-extrabold shadow-lg shadow-amber-500/25 ring-2 ring-amber-400/60';
+      if (thumbBox) thumbBox.className = 'indicator-thumb w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden bg-stone-900 border border-[#0D0C0B] ring-1 ring-[#0D0C0B]/40 flex-shrink-0';
+      btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     } else {
-      btn.className = 'hero-indicator-btn flex-shrink-0 flex items-center gap-2 p-1.5 pr-3 rounded-2xl border transition-all duration-300 cursor-pointer bg-white/95 text-stone-700 border-stone-200/90 hover:border-stone-400 hover:bg-white';
-      if (thumbBox) thumbBox.className = 'indicator-thumb w-8 h-8 sm:w-9 sm:h-9 rounded-xl overflow-hidden bg-stone-900 border border-stone-200 flex-shrink-0';
-      if (subtext) subtext.className = 'indicator-sub text-[9px] font-mono uppercase tracking-wider block text-stone-500 font-medium';
+      btn.className = 'hero-indicator-btn flex-shrink-0 flex items-center gap-2.5 px-3 py-1.5 sm:py-2 rounded-xl border transition-all duration-300 cursor-pointer bg-white/10 text-stone-200 border-white/20 hover:border-amber-400/60 hover:bg-white/20';
+      if (thumbBox) thumbBox.className = 'indicator-thumb w-8 h-8 sm:w-9 sm:h-9 rounded-lg overflow-hidden bg-stone-900 border border-white/30 flex-shrink-0';
     }
   });
 };
