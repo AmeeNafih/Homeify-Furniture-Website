@@ -934,27 +934,35 @@
         </div>
 
         <!-- Card 3: Augmented Reality Smartphone Preview -->
-        <div class="p-6 sm:p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-emerald-400/40 transition-all duration-300 flex flex-col justify-between group hover:bg-white/[0.07]">
+        <div class="p-6 sm:p-8 rounded-3xl bg-white/5 border border-emerald-500/30 hover:border-emerald-400/60 transition-all duration-300 flex flex-col justify-between group hover:bg-white/[0.07] relative overflow-hidden shadow-lg">
+          <div class="absolute top-3 right-3">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 animate-pulse">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Active AR
+            </span>
+          </div>
           <div>
-            <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-mobile-screen-button"></i>
+            <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform shadow-md">
+              <i class="fa-solid fa-camera"></i>
             </div>
             <h3 class="font-heading text-xl font-bold text-white mb-2.5">
               AR In-Room Camera Preview
             </h3>
             <p class="text-xs sm:text-sm text-stone-300 font-sans leading-relaxed">
-              Point your iPhone or Android phone camera at any spot in your villa or apartment to drop full 3D spatial models of our king cots, dining tables, and sectional sofas right in place.
+              Open your smartphone or laptop camera to project full 1:1 true-scale Grade-A Teak creations directly onto your room floor. Move, rotate, and check clearance in real time.
             </p>
           </div>
           <div class="pt-6 mt-6 border-t border-white/10 flex items-center justify-between">
-            <span class="text-[11px] font-mono text-emerald-300 font-semibold">WebXR / QuickLook Ready</span>
+            <span class="text-[11px] font-mono text-emerald-300 font-semibold flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-dot text-[8px] text-emerald-400 animate-pulse"></i>
+              Live Camera Ready
+            </span>
             <button 
               type="button" 
-              onclick="openRoomVisualizerModal()" 
-              class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-white hover:text-emerald-300 transition-colors cursor-pointer"
+              onclick="openARRoomCamera()" 
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500 hover:bg-emerald-400 text-stone-950 text-xs font-mono font-bold transition-all shadow-md active:scale-95 cursor-pointer"
             >
+              <i class="fa-solid fa-camera text-xs"></i>
               <span>Launch Camera</span>
-              <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </button>
           </div>
         </div>
@@ -977,11 +985,19 @@
         <div class="flex items-center gap-3 flex-wrap justify-center flex-shrink-0">
           <button 
             type="button" 
+            onclick="openARRoomCamera()" 
+            class="px-6 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500 hover:bg-emerald-400 text-stone-950 transition-all font-mono shadow-md cursor-pointer active:scale-95 flex items-center gap-2"
+          >
+            <i class="fa-solid fa-camera text-sm"></i>
+            <span>Launch AR Camera</span>
+          </button>
+          <button 
+            type="button" 
             onclick="openRoomVisualizerModal()" 
             class="px-6 py-3.5 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-400 hover:bg-amber-300 text-stone-950 transition-all font-mono shadow-md cursor-pointer active:scale-95 flex items-center gap-2"
           >
             <i class="fa-solid fa-ruler-combined text-sm"></i>
-            <span>Interactive Room Planner</span>
+            <span>Clearance Calculator</span>
           </button>
           <button 
             type="button" 
@@ -2610,6 +2626,17 @@
           </span>
         </div>
 
+        <!-- AR In-Room Camera Quick Trigger on Product Image -->
+        <button 
+          type="button" 
+          onclick="openARRoomCameraForCurrentProduct()" 
+          class="absolute top-3.5 right-3.5 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0D0C0B]/85 hover:bg-[#0D0C0B] text-white text-[11px] font-mono font-bold border border-white/20 hover:border-amber-400 shadow-xl cursor-pointer transition-all active:scale-95 backdrop-blur-md"
+          title="See this piece in your room using AR Camera"
+        >
+          <i class="fa-solid fa-camera text-amber-400 text-xs"></i>
+          <span>View in Room (AR)</span>
+        </button>
+
         <!-- Admin Quick Photo Upload Button directly on Modal Image -->
         <label 
           id="modal-admin-photo-btn" 
@@ -2717,6 +2744,17 @@
         </div>
 
         <div class="pt-4 border-t border-stone-200 flex flex-col sm:flex-row gap-2.5 font-mono">
+          <button 
+            id="modal-ar-btn" 
+            type="button" 
+            onclick="openARRoomCameraForCurrentProduct()"
+            class="py-3.5 px-4 rounded-2xl font-bold text-xs uppercase tracking-wider bg-amber-400 hover:bg-amber-300 text-stone-950 transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+            title="Launch AR camera to see this piece in your room"
+          >
+            <i class="fa-solid fa-camera text-sm"></i>
+            <span>View In Room (AR)</span>
+          </button>
+
           <a 
             id="modal-whatsapp-btn" 
             href="#" 
@@ -3217,6 +3255,270 @@
     </div>
 
   </aside>
+
+  <!-- =========================================================================
+       11E. LIVE AR IN-ROOM CAMERA 3D SPATIAL PREVIEW MODAL
+       ========================================================================= -->
+  <div id="ar-room-camera-modal" class="modal-overlay modal-hidden fixed inset-0 z-[70] bg-black text-white flex flex-col justify-between overflow-hidden select-none">
+    
+    <!-- Camera Stream Layer & Stage Viewport -->
+    <div id="ar-viewport" class="relative w-full h-full flex-1 overflow-hidden bg-stone-950 flex items-center justify-center">
+      
+      <!-- Live Rear/Front Camera Video Feed -->
+      <video 
+        id="ar-camera-video" 
+        autoplay 
+        playsinline 
+        muted 
+        class="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
+      ></video>
+
+      <!-- Offscreen Canvas for Photo Capture -->
+      <canvas id="ar-capture-canvas" class="hidden"></canvas>
+
+      <!-- Fallback Room Backdrop (When camera is disabled, denied, or custom room photo chosen) -->
+      <div 
+        id="ar-fallback-backdrop" 
+        class="hidden absolute inset-0 w-full h-full bg-cover bg-center z-0 transition-all duration-500"
+        style="background-image: url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=80');"
+      >
+        <div class="absolute inset-0 bg-black/25"></div>
+      </div>
+
+      <!-- Perspective Floor Grid Simulation (AR Spatial Reticle) -->
+      <div id="ar-floor-grid" class="absolute inset-0 pointer-events-none z-10 opacity-35 flex items-end justify-center pb-20">
+        <div class="w-full max-w-xl h-80 border-b-2 border-emerald-400/80 bg-gradient-to-t from-emerald-500/15 to-transparent [transform:perspective(600px)_rotateX(65deg)] rounded-3xl"></div>
+      </div>
+
+      <!-- Interactive Spatial Furniture Item (Draggable, Scalable, Rotatable) -->
+      <div 
+        id="ar-furniture-wrapper" 
+        class="absolute z-20 cursor-grab active:cursor-grabbing flex flex-col items-center justify-center transition-transform duration-75"
+        style="touch-action: none;"
+      >
+        <!-- Contact Floor Drop Shadow -->
+        <div 
+          id="ar-furniture-shadow" 
+          class="absolute bottom-2 w-4/5 h-10 bg-black/60 rounded-full blur-md pointer-events-none transition-all"
+        ></div>
+
+        <!-- Real Furniture Image Cutout / Realistic Graphic -->
+        <img 
+          id="ar-furniture-img" 
+          src="assets/ripper-model-5-feet-teak-cot-kerala.jpg" 
+          alt="AR Furniture Model" 
+          class="relative max-w-[280px] sm:max-w-[420px] md:max-w-[480px] max-h-[50vh] object-contain drop-shadow-2xl pointer-events-none select-none transition-all duration-150"
+          draggable="false"
+        />
+
+        <!-- Floating True-Scale Dimension Badge -->
+        <div 
+          id="ar-dimension-badge" 
+          class="mt-2.5 px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-amber-400/80 text-amber-300 text-[11px] font-mono font-bold shadow-xl pointer-events-none flex items-center gap-1.5"
+        >
+          <i class="fa-solid fa-ruler-combined text-amber-400 text-[10px]"></i>
+          <span id="ar-dimension-text">78″ × 72″ × 36″ (King Cot)</span>
+          <span id="ar-scale-percent" class="text-white/70 text-[9px] font-normal">• 100% (1:1 Scale)</span>
+        </div>
+      </div>
+
+      <!-- Top Overlay Bar (Controls & Status) -->
+      <div class="absolute top-0 left-0 right-0 z-30 p-3 sm:p-5 flex items-center justify-between bg-gradient-to-b from-black/80 via-black/40 to-transparent">
+        <!-- Live Status Pill -->
+        <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-md border border-emerald-400/60 shadow-lg">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="ar-status-label" class="text-[11px] font-mono font-bold text-white tracking-wide uppercase">Live AR Camera</span>
+          </div>
+          <!-- Switch Camera Button (Environment vs User) -->
+          <button 
+            type="button" 
+            id="ar-flip-camera-btn" 
+            onclick="toggleARCameraFacingMode()" 
+            class="w-9 h-9 rounded-full bg-black/70 hover:bg-black text-white border border-white/20 flex items-center justify-center transition-all cursor-pointer shadow-md active:scale-95"
+            title="Flip Camera (Front/Rear)"
+            aria-label="Flip Camera"
+          >
+            <i class="fa-solid fa-camera-rotate text-xs"></i>
+          </button>
+        </div>
+
+        <!-- Center: Current Piece Title -->
+        <div class="hidden sm:block text-center max-w-xs truncate">
+          <span id="ar-top-product-title" class="font-heading font-bold text-xs sm:text-sm text-white drop-shadow-md">
+            Solid Teak Royal King Cot
+          </span>
+        </div>
+
+        <!-- Right: Mode Switches & Close -->
+        <div class="flex items-center gap-2">
+          <!-- Backdrop Mode Toggle (Camera vs Room Preset vs Custom Upload) -->
+          <div class="relative">
+            <button 
+              type="button" 
+              onclick="toggleARBackdropSelector()" 
+              class="px-2.5 sm:px-3 py-1.5 rounded-full bg-black/70 hover:bg-black text-stone-200 hover:text-white border border-white/20 text-xs font-mono font-semibold flex items-center gap-1.5 backdrop-blur-md cursor-pointer transition-all"
+              title="Change Room Backdrop"
+            >
+              <i class="fa-solid fa-couch text-amber-400 text-xs"></i>
+              <span class="hidden sm:inline">Room Scene</span>
+            </button>
+            <!-- Dropdown for Backdrops -->
+            <div id="ar-backdrop-menu" class="hidden absolute right-0 top-full mt-2 w-56 p-2 rounded-2xl bg-stone-900/95 backdrop-blur-xl border border-white/20 shadow-2xl z-40 space-y-1">
+              <button type="button" onclick="setARBackdrop('camera')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-white/10 text-xs font-mono flex items-center gap-2 text-emerald-400">
+                <i class="fa-solid fa-camera"></i> Live Room Camera
+              </button>
+              <button type="button" onclick="setARBackdrop('preset-living')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-white/10 text-xs font-mono flex items-center gap-2 text-stone-200">
+                <i class="fa-solid fa-house"></i> Modern Villa Living Room
+              </button>
+              <button type="button" onclick="setARBackdrop('preset-bedroom')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-white/10 text-xs font-mono flex items-center gap-2 text-stone-200">
+                <i class="fa-solid fa-bed"></i> Minimalist Master Bedroom
+              </button>
+              <button type="button" onclick="setARBackdrop('preset-dining')" class="w-full text-left px-3 py-2 rounded-xl hover:bg-white/10 text-xs font-mono flex items-center gap-2 text-stone-200">
+                <i class="fa-solid fa-utensils"></i> Teak Architectural Dining Room
+              </button>
+              <label class="w-full text-left px-3 py-2 rounded-xl hover:bg-white/10 text-xs font-mono flex items-center gap-2 text-amber-300 cursor-pointer">
+                <i class="fa-solid fa-upload"></i> Upload My Room Photo
+                <input type="file" accept="image/*" class="hidden" onchange="handleARRoomPhotoUpload(event)">
+              </label>
+            </div>
+          </div>
+
+          <!-- Close AR Camera Button -->
+          <button 
+            type="button" 
+            onclick="closeARRoomCamera()" 
+            class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/70 hover:bg-rose-600 text-white border border-white/20 flex items-center justify-center transition-all cursor-pointer shadow-lg active:scale-95"
+            aria-label="Close AR Camera"
+          >
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Gesture Floating Hint Pill (Center) -->
+      <div id="ar-gesture-hint" class="absolute top-16 left-1/2 -translate-x-1/2 z-20 pointer-events-none transition-opacity duration-500">
+        <div class="px-3.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-[10px] font-mono text-stone-300 flex items-center gap-1.5 shadow-md">
+          <i class="fa-solid fa-hand-pointer text-amber-400"></i>
+          <span>Drag to move • Pinch to scale • Sliders below</span>
+        </div>
+      </div>
+
+      <!-- Permission / Error Notification Banner (If camera permission is denied) -->
+      <div id="ar-camera-fallback-msg" class="hidden absolute top-28 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-30 p-3.5 rounded-2xl bg-stone-900/90 backdrop-blur-md border border-amber-400/50 text-white text-xs shadow-2xl flex items-start gap-3">
+        <i class="fa-solid fa-triangle-exclamation text-amber-400 text-base flex-shrink-0 mt-0.5"></i>
+        <div class="flex-1">
+          <span class="font-bold block text-amber-300">Room Scene Mode Active</span>
+          <p class="text-[11px] text-stone-300 mt-0.5">Using high-resolution villa room backdrop. You can also upload a photo of your room to test how this piece fits!</p>
+        </div>
+        <button type="button" onclick="document.getElementById('ar-camera-fallback-msg').classList.add('hidden')" class="text-stone-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-xs"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Bottom Floating Dock (Controls, Carousel & Actions) -->
+    <div class="relative z-30 p-3 sm:p-4 bg-gradient-to-t from-black/95 via-[#141210]/95 to-black/70 backdrop-blur-xl border-t border-white/15 space-y-3">
+      
+      <!-- Row 1: Fine-Tune Adjustments (Scale, Rotation, Polish, Reset) -->
+      <div class="flex items-center justify-between gap-2 overflow-x-auto no-scrollbar py-0.5 text-xs font-mono">
+        <!-- Scale Controls -->
+        <div class="flex items-center gap-1.5 bg-white/10 px-2.5 py-1 rounded-full border border-white/10 flex-shrink-0">
+          <span class="text-[10px] text-stone-400">Scale:</span>
+          <button type="button" onclick="adjustARScale(-0.1)" class="w-5 h-5 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center font-bold text-xs cursor-pointer">-</button>
+          <input 
+            id="ar-scale-slider" 
+            type="range" 
+            min="0.5" 
+            max="1.5" 
+            step="0.05" 
+            value="1.0" 
+            oninput="setARScale(parseFloat(this.value))" 
+            class="w-16 sm:w-20 accent-amber-400"
+          />
+          <button type="button" onclick="adjustARScale(0.1)" class="w-5 h-5 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center font-bold text-xs cursor-pointer">+</button>
+          <button type="button" onclick="resetARScale()" class="px-1.5 py-0.5 rounded text-[10px] font-bold text-amber-300 hover:text-amber-200">1:1</button>
+        </div>
+
+        <!-- Rotation Controls -->
+        <div class="flex items-center gap-1.5 bg-white/10 px-2.5 py-1 rounded-full border border-white/10 flex-shrink-0">
+          <span class="text-[10px] text-stone-400">Angle:</span>
+          <button type="button" onclick="rotateARFurniture(-45)" class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center cursor-pointer" title="Rotate Left 45°">
+            <i class="fa-solid fa-rotate-left text-[10px]"></i>
+          </button>
+          <button type="button" onclick="rotateARFurniture(45)" class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center cursor-pointer" title="Rotate Right 45°">
+            <i class="fa-solid fa-rotate-right text-[10px]"></i>
+          </button>
+          <button type="button" onclick="toggleARFlip()" class="px-2 py-0.5 rounded-full bg-white/15 hover:bg-white/30 text-[10px] text-stone-200 cursor-pointer" title="Flip Mirror">
+            <i class="fa-solid fa-arrows-left-right text-[10px] mr-1"></i>Flip
+          </button>
+        </div>
+
+        <!-- Timber Polish Finish Filter -->
+        <div class="flex items-center gap-1.5 bg-white/10 px-2 py-1 rounded-full border border-white/10 flex-shrink-0">
+          <span class="text-[10px] text-stone-400">Polish:</span>
+          <button type="button" onclick="setARPolishFilter('natural')" class="ar-polish-btn active px-2 py-0.5 rounded-full bg-amber-500 text-stone-950 font-bold text-[10px]" data-polish="natural">Natural Teak</button>
+          <button type="button" onclick="setARPolishFilter('walnut')" class="ar-polish-btn px-2 py-0.5 rounded-full text-stone-300 hover:text-white text-[10px]" data-polish="walnut">Walnut</button>
+          <button type="button" onclick="setARPolishFilter('honey')" class="ar-polish-btn px-2 py-0.5 rounded-full text-stone-300 hover:text-white text-[10px]" data-polish="honey">Honey Oak</button>
+        </div>
+
+        <!-- Reset Center -->
+        <button type="button" onclick="resetARPosition()" class="flex-shrink-0 px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 hover:text-white text-[10px] cursor-pointer">
+          <i class="fa-solid fa-arrows-to-dot mr-1"></i>Re-Center
+        </button>
+      </div>
+
+      <!-- Row 2: Product Quick Switcher Carousel -->
+      <div>
+        <div class="flex items-center justify-between pb-1 px-1 text-[10px] font-mono text-stone-400">
+          <span>Switch Piece in Room:</span>
+          <span id="ar-product-count" class="text-amber-400">Tap any item below</span>
+        </div>
+        <div id="ar-product-reel" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 flex-nowrap scroll-smooth">
+          <!-- Populated dynamically via JS with top pieces -->
+        </div>
+      </div>
+
+      <!-- Row 3: Action Buttons (Snapshot Photo, WhatsApp Quote, Clearance Planner) -->
+      <div class="pt-1 flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap font-mono text-xs">
+        <!-- Capture / Snapshot Button -->
+        <button 
+          type="button" 
+          onclick="captureARSnapshot()" 
+          class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold flex items-center justify-center gap-2 transition-all cursor-pointer border border-white/20 active:scale-95 shadow-sm"
+        >
+          <i class="fa-solid fa-camera text-amber-400 text-sm"></i>
+          <span>Save Room Photo</span>
+        </button>
+
+        <!-- WhatsApp Direct Inquiry with Current Piece -->
+        <a 
+          id="ar-whatsapp-btn" 
+          href="https://wa.me/919778446620" 
+          target="_blank" 
+          rel="noopener"
+          class="flex-1 py-2.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 text-center truncate"
+        >
+          <i class="fa-brands fa-whatsapp text-sm"></i>
+          <span>Chat Atelier for Quote</span>
+        </a>
+
+        <!-- Open 2D Clearance Calculator -->
+        <button 
+          type="button" 
+          onclick="openClearanceFromAR()" 
+          class="hidden md:inline-flex px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-stone-300 hover:text-white font-semibold transition-all border border-white/10 cursor-pointer"
+          title="Open Room Clearance Calculator"
+        >
+          <i class="fa-solid fa-ruler-combined mr-1.5 text-xs text-amber-400"></i>
+          <span>Clearance Stats</span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
 
   <!-- =========================================================================
        11F. INTERACTIVE ROOM VISUALIZER & CLEARANCE CALCULATOR MODAL

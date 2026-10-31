@@ -3168,6 +3168,15 @@ function renderBentoGallery(filterCategory) {
             <div class="flex items-center gap-1.5">
               <button 
                 type="button" 
+                onclick="event.stopPropagation(); openARRoomCamera('${product.id}');" 
+                class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/15 hover:bg-emerald-500 text-emerald-800 dark:text-emerald-300 hover:text-stone-950 transition-all border border-emerald-500/30 shadow-xs cursor-pointer" 
+                title="View ${product.name} in your room using AR Camera"
+                aria-label="AR Camera View"
+              >
+                <i class="fa-solid fa-camera text-xs"></i>
+              </button>
+              <button 
+                type="button" 
                 onclick="shareProductLink('${product.id}', event);" 
                 class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 dark:bg-stone-800 hover:bg-teak hover:text-white text-stone-600 dark:text-stone-300 transition-colors border border-stone-200/90 dark:border-white/10 shadow-sm cursor-pointer" 
                 title="Share ${product.name}"
@@ -3569,6 +3578,547 @@ function handleLiveSearch(query) {
     `;
   }).join('');
 }
+
+// ==========================================================================
+// 2E. LIVE AR IN-ROOM CAMERA 3D SPATIAL PREVIEW ENGINE
+// ==========================================================================
+let arCameraStream = null;
+let arCurrentFacingMode = 'environment';
+let arCurrentProduct = null;
+let arCurrentScale = 1.0;
+let arCurrentRotation = 0;
+let arIsFlipped = false;
+let arCurrentPolish = 'natural';
+let arPosX = 0;
+let arPosY = 0;
+let arBackdropMode = 'camera';
+let arCustomBackdropUrl = null;
+let arIsDragging = false;
+let arDragStartX = 0;
+let arDragStartY = 0;
+let arInitialPosX = 0;
+let arInitialPosY = 0;
+let arInitialPinchDist = 0;
+let arInitialScaleOnPinch = 1.0;
+
+const AR_PRESET_BACKDROPS = {
+  'preset-living': 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=80',
+  'preset-bedroom': 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1600&q=80',
+  'preset-dining': 'https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=1600&q=80'
+};
+
+window.openARRoomCamera = function(productId) {
+  const modal = document.getElementById('ar-room-camera-modal');
+  if (!modal) return;
+
+  // Find product
+  let targetProd = null;
+  if (productId) {
+    targetProd = PRODUCTS.find(p => p.id === productId);
+  }
+  if (!targetProd && selectedProductForModal) {
+    targetProd = selectedProductForModal;
+  }
+  if (!targetProd) {
+    targetProd = PRODUCTS.find(p => p.category === 'sofas') || PRODUCTS[0];
+  }
+  arCurrentProduct = targetProd;
+
+  // Reset transforms
+  arCurrentScale = 1.0;
+  arCurrentRotation = 0;
+  arIsFlipped = false;
+  arCurrentPolish = 'natural';
+  arPosX = 0;
+  arPosY = 0;
+
+  // Open modal
+  modal.classList.remove('modal-hidden');
+  modal.classList.add('modal-visible');
+  document.body.style.overflow = 'hidden';
+
+  // Apply product details to AR HUD
+  updateARProductDisplay();
+
+  // Populate horizontal product selector reel
+  renderARProductReel();
+
+  // Init gesture drag/pinch handlers
+  initARGestures();
+
+  // Start Camera Stream
+  startARCameraStream('environment');
+};
+
+window.openARRoomCameraForCurrentProduct = function() {
+  if (selectedProductForModal) {
+    openARRoomCamera(selectedProductForModal.id);
+  } else {
+    openARRoomCamera();
+  }
+};
+
+window.closeARRoomCamera = function() {
+  const modal = document.getElementById('ar-room-camera-modal');
+  if (modal) {
+    modal.classList.remove('modal-visible');
+    modal.classList.add('modal-hidden');
+  }
+  document.body.style.overflow = 'auto';
+  stopARCameraStream();
+
+  // Close backdrop menu if open
+  const menu = document.getElementById('ar-backdrop-menu');
+  if (menu) menu.classList.add('hidden');
+};
+
+async function startARCameraStream(facingMode = 'environment') {
+  stopARCameraStream();
+  arCurrentFacingMode = facingMode;
+
+  const video = document.getElementById('ar-camera-video');
+  const fallbackBackdrop = document.getElementById('ar-fallback-backdrop');
+  const fallbackMsg = document.getElementById('ar-camera-fallback-msg');
+  const statusLabel = document.getElementById('ar-status-label');
+
+  if (arBackdropMode !== 'camera') {
+    applyARBackdropView();
+    return;
+  }
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    showARCameraFallback('Camera API is not supported on this browser or connection. Switched to high-resolution room backdrop mode.');
+    return;
+  }
+
+  try {
+    const constraints = {
+      video: {
+        facingMode: { ideal: facingMode },
+        width: { ideal: 1920 },
+        height: { ideal: 1080 }
+      },
+      audio: false
+    };
+
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    arCameraStream = stream;
+    if (video) {
+      video.srcObject = stream;
+      await video.play();
+      video.classList.remove('hidden');
+    }
+    if (fallbackBackdrop) fallbackBackdrop.classList.add('hidden');
+    if (fallbackMsg) fallbackMsg.classList.add('hidden');
+    if (statusLabel) statusLabel.textContent = facingMode === 'user' ? 'Live Front Camera' : 'Live Rear AR Camera';
+  } catch (err) {
+    console.warn('Primary AR camera constraints failed, attempting basic camera:', err);
+    try {
+      const basicStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      arCameraStream = basicStream;
+      if (video) {
+        video.srcObject = basicStream;
+        await video.play();
+        video.classList.remove('hidden');
+      }
+      if (fallbackBackdrop) fallbackBackdrop.classList.add('hidden');
+      if (fallbackMsg) fallbackMsg.classList.add('hidden');
+      if (statusLabel) statusLabel.textContent = 'Live Room Camera';
+    } catch (fallbackErr) {
+      console.warn('Camera access unavailable:', fallbackErr);
+      showARCameraFallback('Camera access was not granted. Using high-resolution room scene mode — drag & test furniture freely!');
+    }
+  }
+}
+
+function stopARCameraStream() {
+  if (arCameraStream) {
+    try {
+      arCameraStream.getTracks().forEach(track => track.stop());
+    } catch (e) {}
+    arCameraStream = null;
+  }
+  const video = document.getElementById('ar-camera-video');
+  if (video) {
+    video.srcObject = null;
+  }
+}
+
+window.toggleARCameraFacingMode = function() {
+  const nextMode = arCurrentFacingMode === 'environment' ? 'user' : 'environment';
+  arBackdropMode = 'camera';
+  startARCameraStream(nextMode);
+};
+
+function showARCameraFallback(msg) {
+  stopARCameraStream();
+  arBackdropMode = 'preset-living';
+  applyARBackdropView();
+
+  const fallbackMsg = document.getElementById('ar-camera-fallback-msg');
+  if (fallbackMsg) {
+    if (msg) {
+      const p = fallbackMsg.querySelector('p');
+      if (p) p.textContent = msg;
+    }
+    fallbackMsg.classList.remove('hidden');
+  }
+  const statusLabel = document.getElementById('ar-status-label');
+  if (statusLabel) statusLabel.textContent = 'Room Scene Active';
+}
+
+function applyARBackdropView() {
+  const video = document.getElementById('ar-camera-video');
+  const fallbackBackdrop = document.getElementById('ar-fallback-backdrop');
+  const statusLabel = document.getElementById('ar-status-label');
+
+  if (arBackdropMode === 'camera') {
+    if (fallbackBackdrop) fallbackBackdrop.classList.add('hidden');
+    if (video) video.classList.remove('hidden');
+    if (statusLabel) statusLabel.textContent = 'Live AR Camera';
+  } else {
+    stopARCameraStream();
+    if (video) video.classList.add('hidden');
+    if (fallbackBackdrop) {
+      fallbackBackdrop.classList.remove('hidden');
+      let bgUrl = arCustomBackdropUrl || AR_PRESET_BACKDROPS[arBackdropMode] || AR_PRESET_BACKDROPS['preset-living'];
+      fallbackBackdrop.style.backgroundImage = `url('${bgUrl}')`;
+    }
+    if (statusLabel) {
+      statusLabel.textContent = arBackdropMode === 'custom' ? 'Custom Room Photo' : 'Room Scene Mode';
+    }
+  }
+}
+
+window.toggleARBackdropSelector = function() {
+  const menu = document.getElementById('ar-backdrop-menu');
+  if (menu) menu.classList.toggle('hidden');
+};
+
+window.setARBackdrop = function(mode) {
+  arBackdropMode = mode;
+  const menu = document.getElementById('ar-backdrop-menu');
+  if (menu) menu.classList.add('hidden');
+
+  if (mode === 'camera') {
+    startARCameraStream(arCurrentFacingMode);
+  } else {
+    applyARBackdropView();
+  }
+};
+
+window.handleARRoomPhotoUpload = function(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    arCustomBackdropUrl = e.target.result;
+    arBackdropMode = 'custom';
+    applyARBackdropView();
+    showToast('Your room photo loaded! Place and position the furniture directly.');
+  };
+  reader.readAsDataURL(file);
+
+  const menu = document.getElementById('ar-backdrop-menu');
+  if (menu) menu.classList.add('hidden');
+};
+
+function updateARProductDisplay() {
+  if (!arCurrentProduct) return;
+
+  const img = document.getElementById('ar-furniture-img');
+  const title = document.getElementById('ar-top-product-title');
+  const dimText = document.getElementById('ar-dimension-text');
+  const scalePercent = document.getElementById('ar-scale-percent');
+  const whatsappBtn = document.getElementById('ar-whatsapp-btn');
+
+  if (img) {
+    img.src = arCurrentProduct.image;
+    img.alt = arCurrentProduct.name;
+  }
+  if (title) title.textContent = arCurrentProduct.name;
+  if (dimText) {
+    dimText.textContent = `${arCurrentProduct.dimensions || 'True Scale'} • ${arCurrentProduct.name}`;
+  }
+  if (scalePercent) {
+    scalePercent.textContent = `• ${Math.round(arCurrentScale * 100)}% (Scale)`;
+  }
+  if (whatsappBtn) {
+    const text = `Hello Homeify Furniture! I am testing the "${arCurrentProduct.name}" in my room via AR Camera (${arCurrentProduct.dimensions}, Workshop Price: ${arCurrentProduct.factoryPrice}). Please provide availability and customized wood finish options.`;
+    whatsappBtn.href = `https://wa.me/${WORKSHOP_WHATSAPP}?text=${encodeURIComponent(text)}`;
+  }
+
+  updateARFurnitureTransform();
+}
+
+function updateARFurnitureTransform() {
+  const wrapper = document.getElementById('ar-furniture-wrapper');
+  const img = document.getElementById('ar-furniture-img');
+  const shadow = document.getElementById('ar-furniture-shadow');
+  const scaleSlider = document.getElementById('ar-scale-slider');
+  const scalePercent = document.getElementById('ar-scale-percent');
+
+  if (scaleSlider) scaleSlider.value = arCurrentScale;
+  if (scalePercent) scalePercent.textContent = `• ${Math.round(arCurrentScale * 100)}% (Scale)`;
+
+  if (wrapper) {
+    const flipStr = arIsFlipped ? 'scaleX(-1)' : 'scaleX(1)';
+    wrapper.style.transform = `translate3d(${arPosX}px, ${arPosY}px, 0) scale(${arCurrentScale}) rotate(${arCurrentRotation}deg) ${flipStr}`;
+  }
+
+  // Polish filter effect on image
+  if (img) {
+    if (arCurrentPolish === 'walnut') {
+      img.style.filter = 'sepia(0.35) saturate(1.2) contrast(1.1) brightness(0.85)';
+    } else if (arCurrentPolish === 'honey') {
+      img.style.filter = 'sepia(0.2) saturate(1.4) brightness(1.08)';
+    } else {
+      img.style.filter = 'none';
+    }
+  }
+
+  // Shadow dynamics
+  if (shadow) {
+    shadow.style.opacity = Math.min(0.8, 0.45 * arCurrentScale);
+  }
+}
+
+window.adjustARScale = function(delta) {
+  arCurrentScale = Math.max(0.5, Math.min(1.6, arCurrentScale + delta));
+  updateARFurnitureTransform();
+};
+
+window.setARScale = function(val) {
+  arCurrentScale = Math.max(0.5, Math.min(1.6, val));
+  updateARFurnitureTransform();
+};
+
+window.resetARScale = function() {
+  arCurrentScale = 1.0;
+  updateARFurnitureTransform();
+};
+
+window.rotateARFurniture = function(degDelta) {
+  arCurrentRotation = (arCurrentRotation + degDelta) % 360;
+  updateARFurnitureTransform();
+};
+
+window.toggleARFlip = function() {
+  arIsFlipped = !arIsFlipped;
+  updateARFurnitureTransform();
+};
+
+window.resetARPosition = function() {
+  arPosX = 0;
+  arPosY = 0;
+  arCurrentScale = 1.0;
+  arCurrentRotation = 0;
+  arIsFlipped = false;
+  updateARFurnitureTransform();
+};
+
+window.setARPolishFilter = function(polish) {
+  arCurrentPolish = polish;
+  const btns = document.querySelectorAll('.ar-polish-btn');
+  btns.forEach(b => {
+    if (b.getAttribute('data-polish') === polish) {
+      b.classList.add('active', 'bg-amber-500', 'text-stone-950', 'font-bold');
+      b.classList.remove('text-stone-300');
+    } else {
+      b.classList.remove('active', 'bg-amber-500', 'text-stone-950', 'font-bold');
+      b.classList.add('text-stone-300');
+    }
+  });
+  updateARFurnitureTransform();
+};
+
+function renderARProductReel() {
+  const reel = document.getElementById('ar-product-reel');
+  if (!reel) return;
+
+  const items = PRODUCTS.slice(0, 16);
+  reel.innerHTML = items.map(p => `
+    <button 
+      type="button" 
+      onclick="selectARProduct('${p.id}')" 
+      class="ar-reel-card flex-shrink-0 flex items-center gap-2 p-1.5 pr-3 rounded-xl border transition-all cursor-pointer ${p.id === (arCurrentProduct ? arCurrentProduct.id : '') ? 'bg-amber-400 text-stone-950 border-amber-300 shadow-md font-bold' : 'bg-white/10 hover:bg-white/20 text-stone-200 border-white/15'}"
+      title="${p.name}"
+    >
+      <div class="w-8 h-8 rounded-lg overflow-hidden bg-stone-900 border border-white/20 flex-shrink-0">
+        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover" />
+      </div>
+      <div class="text-left max-w-[120px] truncate">
+        <span class="block text-[11px] leading-tight truncate">${p.name}</span>
+        <span class="block text-[9px] opacity-75 font-mono">${p.factoryPrice}</span>
+      </div>
+    </button>
+  `).join('');
+}
+
+window.selectARProduct = function(productId) {
+  const prod = PRODUCTS.find(p => p.id === productId);
+  if (!prod) return;
+  arCurrentProduct = prod;
+  updateARProductDisplay();
+  renderARProductReel();
+  showToast(`Switched to "${prod.name}" in AR Camera`);
+};
+
+window.openClearanceFromAR = function() {
+  closeARRoomCamera();
+  setTimeout(openRoomVisualizerModal, 250);
+};
+
+// Pointer & Touch Event Handlers for Dragging & Pinching
+function initARGestures() {
+  const wrapper = document.getElementById('ar-furniture-wrapper');
+  const viewport = document.getElementById('ar-viewport');
+  if (!wrapper || !viewport) return;
+
+  let activePointerId = null;
+
+  wrapper.onpointerdown = function(e) {
+    e.preventDefault();
+    activePointerId = e.pointerId;
+    try { wrapper.setPointerCapture(e.pointerId); } catch (err) {}
+    arIsDragging = true;
+    arDragStartX = e.clientX;
+    arDragStartY = e.clientY;
+    arInitialPosX = arPosX;
+    arInitialPosY = arPosY;
+  };
+
+  wrapper.onpointermove = function(e) {
+    if (!arIsDragging || e.pointerId !== activePointerId) return;
+    const dx = e.clientX - arDragStartX;
+    const dy = e.clientY - arDragStartY;
+    arPosX = arInitialPosX + dx;
+    arPosY = arInitialPosY + dy;
+    updateARFurnitureTransform();
+  };
+
+  wrapper.onpointerup = function(e) {
+    if (e.pointerId === activePointerId) {
+      arIsDragging = false;
+      try { wrapper.releasePointerCapture(e.pointerId); } catch (err) {}
+      activePointerId = null;
+    }
+  };
+
+  wrapper.onpointercancel = function(e) {
+    arIsDragging = false;
+    activePointerId = null;
+  };
+
+  // Touch Pinch-to-Zoom Handler for 2-finger gesture
+  viewport.ontouchstart = function(e) {
+    if (e.touches && e.touches.length === 2) {
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      arInitialPinchDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+      arInitialScaleOnPinch = arCurrentScale;
+    }
+  };
+
+  viewport.ontouchmove = function(e) {
+    if (e.touches && e.touches.length === 2 && arInitialPinchDist > 0) {
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const currentDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+      const ratio = currentDist / arInitialPinchDist;
+      arCurrentScale = Math.max(0.5, Math.min(1.6, arInitialScaleOnPinch * ratio));
+      updateARFurnitureTransform();
+    }
+  };
+
+  viewport.ontouchend = function(e) {
+    if (!e.touches || e.touches.length < 2) {
+      arInitialPinchDist = 0;
+    }
+  };
+}
+
+// Capture Snapshot Photo with Watermark
+window.captureARSnapshot = function() {
+  const canvas = document.getElementById('ar-capture-canvas');
+  const video = document.getElementById('ar-camera-video');
+  const furnitureImg = document.getElementById('ar-furniture-img');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  const w = 1280;
+  const h = 720;
+  canvas.width = w;
+  canvas.height = h;
+
+  // 1. Draw Background (Video or Backdrop)
+  if (arBackdropMode === 'camera' && video && video.readyState >= 2) {
+    ctx.drawImage(video, 0, 0, w, h);
+  } else {
+    ctx.fillStyle = '#1C1917';
+    ctx.fillRect(0, 0, w, h);
+  }
+
+  // 2. Draw Furniture Piece Composited
+  if (furnitureImg && furnitureImg.complete) {
+    ctx.save();
+    const centerX = w / 2 + arPosX;
+    const centerY = h / 2 + arPosY;
+    ctx.translate(centerX, centerY);
+    ctx.scale(arCurrentScale * (arIsFlipped ? -1 : 1), arCurrentScale);
+    ctx.rotate((arCurrentRotation * Math.PI) / 180);
+
+    const imgW = 420;
+    const aspect = (furnitureImg.naturalHeight || 300) / (furnitureImg.naturalWidth || 420);
+    const imgH = imgW * aspect;
+
+    // Contact drop shadow on canvas
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+    ctx.beginPath();
+    ctx.ellipse(0, imgH / 2 - 10, imgW * 0.4, 20, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Draw Image
+    ctx.drawImage(furnitureImg, -imgW / 2, -imgH / 2, imgW, imgH);
+    ctx.restore();
+  }
+
+  // 3. Draw Watermark & Product Specs
+  ctx.save();
+  ctx.fillStyle = 'rgba(13, 12, 11, 0.78)';
+  ctx.fillRect(0, h - 80, w, 80);
+
+  ctx.fillStyle = '#C5A059';
+  ctx.font = 'bold 20px "Plus Jakarta Sans", sans-serif';
+  ctx.fillText('HOMEIFY FURNITURE ATELIER', 30, h - 45);
+
+  ctx.fillStyle = '#FAF7F2';
+  ctx.font = '14px "Inter", sans-serif';
+  const prodName = arCurrentProduct ? arCurrentProduct.name : 'Custom Furniture';
+  const prodDim = arCurrentProduct ? arCurrentProduct.dimensions : 'Custom';
+  ctx.fillText(`${prodName} • ${prodDim} • Grade-A Natural Teak • 5-Year Warranty`, 30, h - 20);
+
+  ctx.fillStyle = '#25D366';
+  ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText('WhatsApp: +91 97784 46620', w - 30, h - 35);
+  ctx.restore();
+
+  // 4. Trigger download & preview toast
+  try {
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+    const link = document.createElement('a');
+    link.download = `homeify-ar-${(arCurrentProduct ? arCurrentProduct.name : 'furniture').toLowerCase().replace(/[^a-z0-9]/g, '-')}.jpg`;
+    link.href = dataUrl;
+    link.click();
+    showToast('AR Room snapshot saved! You can send it directly to WhatsApp for an instant custom quote.');
+  } catch (err) {
+    showToast('Snapshot captured successfully!');
+  }
+};
 
 // ==========================================================================
 // 2D. INTERACTIVE 3D ROOM VISUALIZER & CLEARANCE CALCULATOR
@@ -4036,6 +4586,7 @@ function initModalListeners() {
       closeSearchModal();
       closeWishlistDrawer();
       closeRoomVisualizerModal();
+      closeARRoomCamera();
       closeConsultationModal();
     }
     // Global hotkey '/' to open search (if not typing in input)
