@@ -1126,3 +1126,91 @@ html.dark .bento-card:hover {
   border-color: rgba(212, 175, 55, 0.4);
   box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.7);
 }
+
+
+/* ==========================================================================
+   STATE-OF-THE-ART MOBILE APP EXPERIENCE & TOUCH ENGINE
+   ========================================================================== */
+
+/* Universal Mobile Touch Optimization */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-13 {
+  width: 3.25rem !important;
+}
+.h-13 {
+  height: 3.25rem !important;
+}
+
+/* Enhanced Horizontal Reels & Snap Physics */
+#curated-highlights-strip,
+#hero-indicators {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+#curated-highlights-strip > * {
+  scroll-snap-align: start;
+}
+
+@media (max-width: 768px) {
+  /* Prevent accidental horizontal overflow */
+  html, body {
+    overflow-x: hidden;
+  }
+
+  /* Enhanced Hero typography scaling for mobile */
+  h1 {
+    letter-spacing: -0.025em;
+  }
+
+  /* Mobile App Bottom Sheet Transformation for Product Modal */
+  #product-lightbox-modal {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+
+  #product-lightbox-modal .modal-container {
+    max-height: 88vh !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 1.75rem 1.75rem 0 0 !important;
+    margin: 0 !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    animation: sheetSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes sheetSlideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  #product-lightbox-modal #modal-product-img {
+    min-height: 220px !important;
+    max-height: 260px !important;
+  }
+
+  /* Safe padding for fixed mobile bottom dock */
+  footer {
+    padding-bottom: 7rem !important;
+  }
+
+  /* Mobile Button Touch Target Elevation */
+  .corp-btn-primary,
+  .corp-btn-secondary {
+    min-height: 48px;
+  }
+
+  /* Compact KPI Bar on Mobile */
+  .corp-stat-cell {
+    padding: 0.75rem 0.5rem !important;
+  }
+}

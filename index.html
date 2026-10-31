@@ -174,6 +174,18 @@
     </div>
   </div>
 
+  <!-- Mobile Micro Top Bar (Clean, compact manufacturer status) -->
+  <div class="sm:hidden bg-[#0D0C0B] text-stone-300 text-[10px] font-mono border-b border-white/10 relative z-40 px-3.5 py-1.5 flex items-center justify-between">
+    <span class="inline-flex items-center gap-1.5 text-champagne font-bold tracking-wide">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+      Factory Direct · Erattupetta
+    </span>
+    <a href="tel:+919778446620" class="flex items-center gap-1 text-white font-bold hover:text-champagne transition-colors">
+      <i class="fa-solid fa-phone text-[9px] text-champagne"></i>
+      <span>97784 46620</span>
+    </a>
+  </div>
+
   <!-- =========================================================================
        1. MODERN FLOATING GLASS NAVIGATION DOCK (With Dynamic Vector Logo)
        ========================================================================= -->
@@ -259,7 +271,7 @@
         <button 
           id="mobile-theme-toggle" 
           type="button" 
-          class="theme-toggle-btn p-2.5 rounded-2xl bg-white dark:bg-stone-800 text-stone-700 dark:text-champagne border border-stone-200 dark:border-white/10 shadow-sm flex items-center justify-center active:scale-95 transition-transform cursor-pointer"
+          class="theme-toggle-btn w-10 h-10 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-champagne border border-stone-200 dark:border-white/10 shadow-sm flex items-center justify-center active:scale-95 transition-transform cursor-pointer"
           title="Toggle Light / Dark Mode" 
           aria-label="Toggle Light / Dark Mode"
         >
@@ -267,8 +279,12 @@
           <i class="fa-solid fa-sun text-sm dark-toggle-sun text-champagne hidden"></i>
         </button>
 
-        <button id="mobile-menu-btn" class="p-2.5 rounded-2xl bg-white dark:bg-stone-800 text-espresso dark:text-white border border-stone-200 dark:border-white/10 shadow-sm cursor-pointer" aria-label="Toggle Navigation">
-          <i class="fa-solid fa-bars-staggered text-xl"></i>
+        <button 
+          id="mobile-menu-btn" 
+          class="w-10 h-10 rounded-xl bg-[#0D0C0B] text-white dark:bg-white dark:text-[#0D0C0B] border border-stone-200/20 shadow-sm flex items-center justify-center active:scale-95 transition-transform cursor-pointer" 
+          aria-label="Toggle Navigation"
+        >
+          <i class="fa-solid fa-bars-staggered text-sm"></i>
         </button>
       </div>
 
@@ -277,53 +293,77 @@
 
   <!-- Mobile Slide-out Drawer -->
   <div id="drawer-overlay" class="fixed inset-0 bg-espresso/70 backdrop-blur-md z-50 hidden transition-opacity duration-300"></div>
-  <aside id="mobile-drawer" class="fixed top-0 right-0 bottom-0 w-84 max-w-[85vw] bg-alabaster z-50 transform translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col p-6 border-l border-stone-200">
-    <div class="flex items-center justify-between pb-6 border-b border-stone-200">
-      <div class="flex items-center gap-3">
-        <img src="assets/homeify-logo-dark-text.png" alt="Homeify Furniture - Furniture with a touch of artistry" class="dynamic-site-logo h-8 w-auto object-contain">
+  <aside id="mobile-drawer" class="fixed top-0 right-0 bottom-0 w-84 max-w-[85vw] bg-white dark:bg-[#121110] text-stone-900 dark:text-white z-50 transform translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col p-5 sm:p-6 border-l border-stone-200 dark:border-white/10 overflow-y-auto">
+    <div class="flex items-center justify-between pb-5 border-b border-stone-100 dark:border-white/10">
+      <div class="flex items-center gap-2.5">
+        <img src="assets/homeify-logo-dark-text.png" alt="Homeify Furniture" class="dynamic-site-logo h-7 w-auto object-contain">
       </div>
-      <button id="drawer-close-btn" class="p-2 text-stone-500 hover:text-espresso rounded-xl" aria-label="Close menu">
-        <i class="fa-solid fa-xmark text-xl"></i>
+      <button id="drawer-close-btn" class="w-9 h-9 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-500 hover:text-espresso dark:text-stone-300 flex items-center justify-center active:scale-95 transition-all" aria-label="Close menu">
+        <i class="fa-solid fa-xmark text-lg"></i>
       </button>
     </div>
 
-    <nav class="flex flex-col gap-4 py-6 text-sm font-semibold text-stone-800 uppercase tracking-wider font-sans">
-      <a href="#gallery" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
-        <span>Full Catalog</span>
+    <!-- Navigation Items styled like sleek iOS cards -->
+    <nav class="flex flex-col gap-2 py-5 font-sans">
+      <a href="#gallery" class="mobile-drawer-link p-3 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center justify-between transition-colors">
+        <span class="flex items-center gap-2.5 font-bold text-xs uppercase tracking-wider text-stone-800 dark:text-stone-200">
+          <i class="fa-solid fa-shapes text-teak text-sm"></i>
+          <span>The Collection</span>
+        </span>
         <i class="fa-solid fa-chevron-right text-xs text-stone-400"></i>
       </a>
-      <a href="#material-comparator" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
-        <span>Materials (Wood vs. Board)</span>
-        <span class="text-[10px] px-2 py-0.5 rounded-full bg-sage/10 text-sage font-bold font-mono">Guide</span>
+
+      <a href="#material-comparator" class="mobile-drawer-link p-3 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center justify-between transition-colors">
+        <span class="flex items-center gap-2.5 font-bold text-xs uppercase tracking-wider text-stone-800 dark:text-stone-200">
+          <i class="fa-solid fa-scale-balanced text-sage text-sm"></i>
+          <span>Wood vs. Board</span>
+        </span>
+        <span class="text-[9px] px-2 py-0.5 rounded-full bg-sage/10 text-sage font-bold font-mono">Guide</span>
       </a>
-      <a href="#warranty-promise" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
-        <span>5-Year Warranty Guarantee</span>
-        <span class="text-[10px] px-2 py-0.5 rounded-full bg-champagne text-espresso font-bold font-mono">Included</span>
+
+      <a href="#warranty-promise" class="mobile-drawer-link p-3 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center justify-between transition-colors">
+        <span class="flex items-center gap-2.5 font-bold text-xs uppercase tracking-wider text-stone-800 dark:text-stone-200">
+          <i class="fa-solid fa-shield-halved text-champagne text-sm"></i>
+          <span>5-Year Warranty</span>
+        </span>
+        <span class="text-[9px] px-2 py-0.5 rounded-full bg-champagne text-[#0D0C0B] font-bold font-mono">Included</span>
       </a>
-      <a href="#workshop-heritage" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
-        <span>Erattupetta Workshop</span>
+
+      <a href="#workshop-heritage" class="mobile-drawer-link p-3 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center justify-between transition-colors">
+        <span class="flex items-center gap-2.5 font-bold text-xs uppercase tracking-wider text-stone-800 dark:text-stone-200">
+          <i class="fa-solid fa-compass text-amber-600 text-sm"></i>
+          <span>Erattupetta Workshop</span>
+        </span>
         <i class="fa-solid fa-chevron-right text-xs text-stone-400"></i>
       </a>
-      <a href="#reviews" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
-        <span>Google Reviews</span>
-        <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 font-bold font-mono flex items-center gap-1">
-          <i class="fa-solid fa-star text-[9px] text-[#FBBC04]"></i> 5.0 Star
+
+      <a href="#reviews" class="mobile-drawer-link p-3 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center justify-between transition-colors">
+        <span class="flex items-center gap-2.5 font-bold text-xs uppercase tracking-wider text-stone-800 dark:text-stone-200">
+          <i class="fa-solid fa-star text-amber-500 text-sm"></i>
+          <span>Google Reviews</span>
+        </span>
+        <span class="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 font-bold font-mono flex items-center gap-1">
+          5.0 ★
         </span>
       </a>
-      <a href="#custom-quote" class="mobile-drawer-link py-2 border-b border-stone-200 flex items-center justify-between">
-        <span>Interactive Configurator</span>
-        <i class="fa-solid fa-calculator text-xs text-teak"></i>
+
+      <a href="#custom-quote" class="mobile-drawer-link p-3 rounded-xl bg-stone-50 dark:bg-stone-800/60 hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center justify-between transition-colors">
+        <span class="flex items-center gap-2.5 font-bold text-xs uppercase tracking-wider text-stone-800 dark:text-stone-200">
+          <i class="fa-solid fa-calculator text-teak text-sm"></i>
+          <span>Price Estimator</span>
+        </span>
+        <i class="fa-solid fa-arrow-right text-xs text-stone-400"></i>
       </a>
     </nav>
 
     <!-- Appearance Switcher in Mobile Drawer -->
-    <div class="py-3 px-3.5 rounded-2xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-white/10 flex items-center justify-between font-mono text-xs mb-3">
-      <span class="flex items-center gap-2 text-stone-700 dark:text-stone-300 font-bold">
+    <div class="py-2.5 px-3 rounded-xl bg-stone-100 dark:bg-stone-800/80 border border-stone-200/80 dark:border-white/10 flex items-center justify-between font-mono text-xs mb-4">
+      <span class="flex items-center gap-2 text-stone-700 dark:text-stone-300 font-bold text-[11px]">
         <i class="fa-solid fa-circle-half-stroke text-teak"></i> Theme Appearance
       </span>
       <button 
         type="button" 
-        class="theme-toggle-btn px-3 py-1.5 rounded-xl bg-white dark:bg-stone-700 text-stone-800 dark:text-champagne border border-stone-200 dark:border-white/10 font-bold shadow-sm flex items-center gap-1.5 cursor-pointer"
+        class="theme-toggle-btn px-3 py-1 rounded-lg bg-white dark:bg-stone-700 text-stone-800 dark:text-champagne border border-stone-200 dark:border-white/10 font-bold shadow-sm flex items-center gap-1.5 cursor-pointer text-[11px]"
       >
         <i class="fa-solid fa-moon dark-toggle-moon text-xs"></i>
         <i class="fa-solid fa-sun dark-toggle-sun text-champagne text-xs hidden"></i>
@@ -331,26 +371,26 @@
       </button>
     </div>
 
-    <div class="mt-auto pt-6 border-t border-stone-200 dark:border-white/10 space-y-2.5">
+    <!-- Quick Contact Card in Drawer -->
+    <div class="mt-auto pt-4 border-t border-stone-100 dark:border-white/10 space-y-2">
       <a 
-        href="https://www.instagram.com/homeify.furniture/" 
-        target="_blank" 
-        rel="noopener"
-        class="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md hover:opacity-95 active:scale-95 transition-all"
-      >
-        <i class="fa-brands fa-instagram text-base"></i>
-        <span>Follow @homeify.furniture</span>
-      </a>
-
-      <a 
-        href="https://wa.me/919778446620?text=Hello%20Homeify%20Furniture%20(M%20E%20S%20Junction,%20Erattupetta)!%20I%20would%20like%20to%20inquire." 
-        class="w-full py-3.5 px-4 rounded-2xl bg-[#25D366] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg btn-3d active:scale-95"
+        href="https://wa.me/919778446620?text=Hello%20Homeify%20Furniture%20(Erattupetta)!%20I%20would%20like%20to%20inquire." 
+        class="w-full py-3 px-4 rounded-xl bg-[#25D366] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md active:scale-95 transition-transform"
       >
         <i class="fa-brands fa-whatsapp text-lg"></i>
         <span>WhatsApp: 97784 46620</span>
       </a>
-      <div class="text-center text-[11px] text-stone-500 font-mono">
-        <i class="fa-solid fa-location-dot text-teak"></i> Homeify Furniture, M E S Junction, Erattupetta
+
+      <a 
+        href="tel:+919778446620" 
+        class="w-full py-2.5 px-4 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 border border-stone-200 dark:border-white/10 active:scale-95 transition-transform font-mono"
+      >
+        <i class="fa-solid fa-phone text-teak text-xs"></i>
+        <span>Call Workshop Line</span>
+      </a>
+
+      <div class="text-center text-[10px] text-stone-500 dark:text-stone-400 font-mono pt-1">
+        <i class="fa-solid fa-location-dot text-teak"></i> M E S Junction, Erattupetta
       </div>
     </div>
   </aside>
@@ -552,8 +592,16 @@
           </div>
         </div>
 
-        <div id="curated-highlights-strip" class="flex items-stretch gap-3.5 sm:gap-4 overflow-x-auto no-scrollbar py-2 px-1 -mx-1 flex-nowrap">
+        <div id="curated-highlights-strip" class="flex items-stretch gap-3.5 sm:gap-4 overflow-x-auto no-scrollbar py-2 px-1 -mx-1 flex-nowrap scroll-smooth">
           <!-- Populated via app.js with the 10 top products -->
+        </div>
+
+        <!-- Mobile Swipe Helper -->
+        <div class="sm:hidden flex items-center justify-between pt-2 px-1 text-[10px] font-mono text-stone-500 dark:text-stone-400">
+          <span>10 Flagships Direct From Atelier</span>
+          <span class="inline-flex items-center gap-1 text-teak font-bold">
+            Swipe <i class="fa-solid fa-arrow-right-long animate-pulse"></i>
+          </span>
         </div>
       </div>
 
@@ -3654,57 +3702,60 @@
   <!-- =========================================================================
        14. PERSISTENT MOBILE BOTTOM DOCK (Thumb-Reachable Quick Actions)
        ========================================================================= -->
-  <nav id="mobile-bottom-dock" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0D0C0B]/95 backdrop-blur-xl border-t border-white/10 px-2 sm:px-3 py-2 flex items-center justify-around safe-bottom shadow-[0_-8px_25px_rgba(0,0,0,0.5)]">
+  <nav id="mobile-bottom-dock" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0D0C0B]/92 backdrop-blur-2xl border-t border-white/10 px-3 py-1.5 flex items-center justify-between safe-bottom shadow-[0_-10px_35px_rgba(0,0,0,0.6)]">
+    <!-- Catalog Tab -->
+    <a 
+      href="#gallery" 
+      class="flex-1 flex flex-col items-center justify-center gap-1 py-1 text-stone-400 hover:text-white active:scale-95 transition-all"
+      aria-label="Browse Catalog"
+    >
+      <i class="fa-solid fa-shapes text-base"></i>
+      <span class="text-[10px] font-mono font-medium tracking-tight">Catalog</span>
+    </a>
+
+    <!-- Materials Tab -->
+    <a 
+      href="#material-comparator" 
+      class="flex-1 flex flex-col items-center justify-center gap-1 py-1 text-stone-400 hover:text-white active:scale-95 transition-all"
+      aria-label="Compare Materials"
+    >
+      <i class="fa-solid fa-scale-balanced text-base"></i>
+      <span class="text-[10px] font-mono font-medium tracking-tight">Materials</span>
+    </a>
+
+    <!-- Center Raised WhatsApp Action (High-Converting Focal Point) -->
     <a 
       href="https://wa.me/919778446620?text=Hello%20Homeify%20Furniture%20(Erattupetta)!%20I%20would%20like%20to%20discuss%20custom%20furniture." 
       target="_blank" 
       rel="noopener"
-      class="flex flex-col items-center justify-center gap-1 py-1 px-2 rounded-xl text-stone-300 hover:text-white active:scale-95 transition-transform"
-      aria-label="WhatsApp Us"
+      class="flex-shrink-0 flex flex-col items-center justify-center relative -top-3.5 px-2 group active:scale-95 transition-transform"
+      aria-label="Direct WhatsApp Chat"
     >
-      <div class="relative">
-        <i class="fa-brands fa-whatsapp text-xl text-[#25D366]"></i>
-        <span class="absolute -top-1 -right-1.5 w-2 h-2 rounded-full bg-champagne animate-pulse"></span>
+      <div class="w-13 h-13 rounded-full bg-[#25D366] text-white flex items-center justify-center text-2xl shadow-xl shadow-[#25D366]/40 border-2 border-[#0D0C0B] relative">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span class="absolute top-0 right-0 w-3 h-3 rounded-full bg-champagne border-2 border-[#0D0C0B] animate-pulse"></span>
       </div>
-      <span class="text-[9px] sm:text-[10px] font-mono font-medium tracking-tight">WhatsApp</span>
+      <span class="text-[9px] font-mono font-bold text-[#25D366] tracking-wider uppercase mt-0.5">WhatsApp</span>
     </a>
 
+    <!-- Direct Call Tab -->
     <a 
       href="tel:+919778446620" 
-      class="flex flex-col items-center justify-center gap-1 py-1 px-2 rounded-xl text-stone-300 hover:text-white active:scale-95 transition-transform"
+      class="flex-1 flex flex-col items-center justify-center gap-1 py-1 text-stone-400 hover:text-white active:scale-95 transition-all"
       aria-label="Direct Phone Call"
     >
-      <i class="fa-solid fa-phone text-lg text-champagne"></i>
-      <span class="text-[9px] sm:text-[10px] font-mono font-medium tracking-tight">Call</span>
+      <i class="fa-solid fa-phone text-base text-champagne"></i>
+      <span class="text-[10px] font-mono font-medium tracking-tight">Call</span>
     </a>
 
-    <a 
-      href="#gallery" 
-      class="flex flex-col items-center justify-center gap-1 py-1 px-2 rounded-xl text-stone-300 hover:text-white active:scale-95 transition-transform"
-      aria-label="Browse Gallery"
-    >
-      <i class="fa-solid fa-shapes text-lg text-stone-300"></i>
-      <span class="text-[9px] sm:text-[10px] font-mono font-medium tracking-tight">Catalog</span>
-    </a>
-
-    <a 
-      href="https://www.instagram.com/homeify.furniture/" 
-      target="_blank" 
-      rel="noopener"
-      class="flex flex-col items-center justify-center gap-1 py-1 px-2 rounded-xl text-stone-300 hover:text-white active:scale-95 transition-transform group"
-      aria-label="Instagram Profile"
-    >
-      <i class="fa-brands fa-instagram text-xl text-pink-500 group-hover:scale-110 transition-transform"></i>
-      <span class="text-[9px] sm:text-[10px] font-mono font-medium tracking-tight text-pink-400">Insta</span>
-    </a>
-
+    <!-- Quote Configurator Tab -->
     <a 
       href="#custom-quote" 
-      class="flex flex-col items-center justify-center gap-1 py-1 px-2.5 sm:px-3 rounded-xl text-white bg-teak hover:bg-teak/90 active:scale-95 transition-all shadow-md"
+      class="flex-1 flex flex-col items-center justify-center gap-1 py-1 text-stone-400 hover:text-white active:scale-95 transition-all"
       aria-label="Calculate Price"
     >
-      <i class="fa-solid fa-calculator text-base text-white"></i>
-      <span class="text-[9px] sm:text-[10px] font-mono font-bold tracking-tight">Quote</span>
+      <i class="fa-solid fa-calculator text-base text-teak-light"></i>
+      <span class="text-[10px] font-mono font-medium tracking-tight">Quote</span>
     </a>
   </nav>
 

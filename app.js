@@ -2735,7 +2735,7 @@ function renderCuratedHighlights() {
     return `
       <div 
         onclick="openProductModalById('${item.id}')"
-        class="group w-[230px] sm:w-[260px] flex-shrink-0 cursor-pointer bg-white dark:bg-[#161514] border border-stone-200/90 dark:border-white/10 rounded-2xl p-3 shadow-sm hover:shadow-xl hover:border-teak/50 dark:hover:border-champagne/40 transition-all duration-300 flex flex-col justify-between"
+        class="group w-[78vw] sm:w-[260px] max-w-[280px] flex-shrink-0 snap-start cursor-pointer bg-white dark:bg-[#161514] border border-stone-200/90 dark:border-white/10 rounded-2xl p-3 shadow-sm hover:shadow-xl hover:border-teak/50 dark:hover:border-champagne/40 transition-all duration-300 flex flex-col justify-between"
         title="${item.name} • Direct Workshop Price: ${item.factoryPrice}"
         role="button"
         tabindex="0"
