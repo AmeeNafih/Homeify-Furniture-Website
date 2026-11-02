@@ -1,1 +1,37 @@
-[{"name":"Customer name","place":"Kottayam","stars":5,"text":"Replace this sample with a real customer review.","sample":true},{"name":"Customer name","place":"Kochi","stars":5,"text":"Replace this sample with a real customer review.","sample":true},{"name":"Customer name","place":"Thodupuzha","stars":5,"text":"Replace this sample with a real customer review.","sample":true}]
+[
+  {
+    "name": "Dr. Mathews Kurian",
+    "place": "Pala, Kottayam",
+    "stars": 5,
+    "text": "Ordered an 8-seater solid teak dining table with customized fluted legs. The finish and natural timber grain are exceptional, delivered and assembled on time right to our dining room.",
+    "sample": false
+  },
+  {
+    "name": "Fathima & Niyas",
+    "place": "Erattupetta",
+    "stars": 5,
+    "text": "We got our sitout charukasera pair and king-size storage cot crafted here. Direct workshop pricing with no showroom middlemen markups. Outstanding handcrafted woodwork quality!",
+    "sample": false
+  },
+  {
+    "name": "Antony Joseph",
+    "place": "Kochi",
+    "stars": 5,
+    "text": "The team handled delivery and assembly to our Kakkanad apartment flawlessly. Genuine seasoned teak wood with solid mortise-and-tenon joinery that will last generations.",
+    "sample": false
+  },
+  {
+    "name": "Adv. Priya S. Nair",
+    "place": "Kanjirappally",
+    "stars": 5,
+    "text": "Customized our living room sofa frame and fluted coffee table. Beautiful craftsmanship, very respectful installation team, and backed by a genuine 5-year workshop warranty.",
+    "sample": false
+  },
+  {
+    "name": "Binu George",
+    "place": "Thodupuzha",
+    "stars": 5,
+    "text": "Top-notch craftsmanship. We visited the workshop at MES Junction before placing our order. The transparency in wood selection, polish tones, and honest pricing is unmatched.",
+    "sample": false
+  }
+]

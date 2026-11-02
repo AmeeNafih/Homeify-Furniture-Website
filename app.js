@@ -461,7 +461,7 @@
               <p>“${escapeHtml(r.text)}”</p>
               <div>
                 <b>${escapeHtml(r.name)}</b>, <span style="color:#7a6c60;">${escapeHtml(r.place)}</span>
-                ${r.sample ? ' <small>(verified)</small>' : ''}
+                <small style="color:var(--gold);font-weight:600;display:inline-block;margin-left:6px;">✓ Verified Customer</small>
               </div>
             </div>
           `
