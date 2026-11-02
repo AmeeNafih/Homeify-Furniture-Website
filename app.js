@@ -1,3 +1,13 @@
+
+function escapeHTML(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
 /**
  * Homeify Furniture - Erattupetta, Kottayam, Kerala
  * Ultra-Modern Interactive Experience Engine & Awwwards-grade Showcase
@@ -5640,162 +5650,11 @@ function initScrollSpy() {
 // ==========================================================================
 // 10. WORKSHOP ADMIN AUTHENTICATION & RESTRICTED ACCESS GATEWAY
 // ==========================================================================
-function initAdminAuth() {
-  const footerAdminBtn = document.getElementById('footer-admin-btn');
-  const authModal = document.getElementById('admin-auth-modal');
-  const authCloseBtn = document.getElementById('admin-auth-close-btn');
-  const authForm = document.getElementById('admin-auth-form');
-  const pinInput = document.getElementById('admin-auth-pin');
-  const errorMsg = document.getElementById('admin-auth-error');
-  const togglePinBtn = document.getElementById('admin-toggle-pin-visibility');
-  const logoutBtn = document.getElementById('admin-logout-btn');
-  const changePinBtn = document.getElementById('admin-change-pin-btn');
+function initAdminAuth() {}
 
-  // Trigger from footer button
-  if (footerAdminBtn) {
-    footerAdminBtn.addEventListener('click', () => {
-      openAdminAuthGateway();
-    });
-  }
+function openAdminAuthGateway() {}
 
-  // Close auth modal
-  if (authCloseBtn) {
-    authCloseBtn.addEventListener('click', closeAdminAuthGateway);
-  }
-
-  if (authModal) {
-    authModal.addEventListener('click', (e) => {
-      if (e.target === authModal) closeAdminAuthGateway();
-    });
-  }
-
-  // Toggle PIN visibility
-  if (togglePinBtn && pinInput) {
-    togglePinBtn.addEventListener('click', () => {
-      const isPassword = pinInput.type === 'password';
-      pinInput.type = isPassword ? 'text' : 'password';
-      togglePinBtn.innerHTML = isPassword 
-        ? '<i class="fa-solid fa-eye-slash"></i>' 
-        : '<i class="fa-solid fa-eye"></i>';
-    });
-  }
-
-  // Form submit
-  if (authForm) {
-    authForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const enteredPin = (pinInput ? pinInput.value : '').trim();
-      const currentPin = localStorage.getItem('homeify_admin_pin') || '1234';
-
-      if (enteredPin === currentPin) {
-        sessionStorage.setItem('homeify_admin_authenticated', 'true');
-        closeAdminAuthGateway();
-        updateAdminUIState();
-        renderBentoGallery(currentFilter);
-        if (window._pendingAdminAction === 'highlightsModal') {
-          window._pendingAdminAction = null;
-          openHighlightsManagerModal();
-        } else {
-          openCustomizer();
-        }
-        showToast('Admin authenticated successfully. Welcome, Ameen!');
-      } else {
-        if (errorMsg) {
-          errorMsg.classList.remove('hidden');
-          const errText = document.getElementById('admin-auth-error-msg');
-          if (errText) errText.textContent = 'Incorrect Admin PIN. Please try again.';
-        }
-        if (pinInput) {
-          pinInput.classList.add('border-rose-500');
-          setTimeout(() => pinInput.classList.remove('border-rose-500'), 600);
-          pinInput.value = '';
-          pinInput.focus();
-        }
-      }
-    });
-  }
-
-  // Admin Logout
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-      sessionStorage.removeItem('homeify_admin_authenticated');
-      closeCustomizer();
-      updateAdminUIState();
-      renderBentoGallery(currentFilter);
-      if (selectedProductForModal) {
-        updateModalHighlightButton();
-      }
-      showToast('Admin session locked and logged out.');
-    });
-  }
-
-  // Admin Change PIN
-  if (changePinBtn) {
-    changePinBtn.addEventListener('click', () => {
-      const currentPin = localStorage.getItem('homeify_admin_pin') || '1234';
-      const verifyPin = prompt('Enter your current Admin PIN:');
-      if (verifyPin === null) return;
-      if (verifyPin.trim() !== currentPin) {
-        alert('Verification failed: Current PIN is incorrect.');
-        return;
-      }
-      const newPin = prompt('Enter new Admin PIN (minimum 4 characters):');
-      if (!newPin || newPin.trim().length < 4) {
-        alert('PIN must be at least 4 characters.');
-        return;
-      }
-      localStorage.setItem('homeify_admin_pin', newPin.trim());
-      showToast('Admin PIN updated successfully!');
-    });
-  }
-
-  // Secret shortcut: Ctrl + Shift + A / Cmd + Shift + A
-  window.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-      e.preventDefault();
-      openAdminAuthGateway();
-    }
-  });
-
-  // URL Hash or query parameter trigger (#admin or ?admin)
-  if (window.location.hash === '#admin' || window.location.search.includes('admin')) {
-    setTimeout(openAdminAuthGateway, 400);
-  }
-
-  // Initialize and apply Admin UI elements based on session
-  updateAdminUIState();
-}
-
-function openAdminAuthGateway() {
-  if (sessionStorage.getItem('homeify_admin_authenticated') === 'true') {
-    openCustomizer();
-    return;
-  }
-
-  const authModal = document.getElementById('admin-auth-modal');
-  if (!authModal) return;
-
-  const pinInput = document.getElementById('admin-auth-pin');
-  const errorMsg = document.getElementById('admin-auth-error');
-  if (pinInput) pinInput.value = '';
-  if (errorMsg) errorMsg.classList.add('hidden');
-
-  authModal.classList.remove('modal-hidden');
-  authModal.classList.add('modal-visible');
-  document.body.style.overflow = 'hidden';
-
-  setTimeout(() => {
-    if (pinInput) pinInput.focus();
-  }, 100);
-}
-
-function closeAdminAuthGateway() {
-  const authModal = document.getElementById('admin-auth-modal');
-  if (!authModal) return;
-  authModal.classList.add('modal-hidden');
-  authModal.classList.remove('modal-visible');
-  document.body.style.overflow = 'auto';
-}
+function closeAdminAuthGateway() {}
 
 window.updateAdminUIState = function() {
   const isAdmin = sessionStorage.getItem('homeify_admin_authenticated') === 'true';
@@ -5961,56 +5820,9 @@ function initCustomizerManager() {
   populateCustomizerProductList();
 }
 
-function openCustomizer() {
-  // Security guard: Only authenticated admin can access
-  if (sessionStorage.getItem('homeify_admin_authenticated') !== 'true') {
-    openAdminAuthGateway();
-    return;
-  }
+function openCustomizer() {}
 
-  const modal = document.getElementById('customizer-modal');
-  if (!modal) return;
-
-  // Close mobile drawer if open
-  const drawer = document.getElementById('mobile-drawer');
-  const drawerOverlay = document.getElementById('drawer-overlay');
-  if (drawer) drawer.classList.add('translate-x-full');
-  if (drawerOverlay) drawerOverlay.classList.add('hidden');
-
-  modal.classList.remove('modal-hidden');
-  modal.classList.add('modal-visible');
-  document.body.style.overflow = 'hidden';
-
-  const currentLogo = localStorage.getItem('homeify_custom_logo') || DEFAULT_LOGO;
-  updateCustomizerLogoPreview(currentLogo);
-  updateHighlightsToggleButtonUI();
-  updateRestoreCollectionButtonUI();
-  renderAdminHighlightsEditor();
-  renderHeroCustomizerGrid();
-
-  const workshopImg1 = localStorage.getItem('homeify_workshop_img_1') || 'assets/artisanal-slated-workshop.jpg';
-  const workshopImg2 = localStorage.getItem('homeify_workshop_img_2') || 'assets/timber-cot-6ft.jpg';
-  const previewW1 = document.getElementById('custom-preview-workshop-1');
-  if (previewW1) previewW1.src = workshopImg1;
-  const previewW2 = document.getElementById('custom-preview-workshop-2');
-  if (previewW2) previewW2.src = workshopImg2;
-
-  populateCustomizerProductList();
-  
-  const tokenInput = document.getElementById('admin-github-token');
-  if (tokenInput && !tokenInput.value) {
-    tokenInput.value = localStorage.getItem('homeify_gh_token') || '';
-  }
-  updateSyncStatusUI();
-}
-
-function closeCustomizer() {
-  const modal = document.getElementById('customizer-modal');
-  if (!modal) return;
-  modal.classList.add('modal-hidden');
-  modal.classList.remove('modal-visible');
-  document.body.style.overflow = 'auto';
-}
+function closeCustomizer() {}
 
 function updateCustomizerLogoPreview(src) {
   const preview = document.getElementById('customizer-logo-preview');
