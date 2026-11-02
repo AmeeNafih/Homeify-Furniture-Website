@@ -405,6 +405,34 @@
     .then(([prodData, highlightIds, reviewData]) => {
       products = prodData;
 
+      // Inject Schema.org Product ItemList for SEO
+      try {
+        const schemaScript = document.createElement('script');
+        schemaScript.type = 'application/ld+json';
+        schemaScript.text = JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          'name': 'Homeify Furniture Catalog',
+          'itemListElement': products.slice(0, 30).map((p, idx) => ({
+            '@type': 'ListItem',
+            'position': idx + 1,
+            'item': {
+              '@type': 'Product',
+              'name': p.name,
+              'image': 'https://homeifyfurniture.in/' + p.img,
+              'description': p.desc || p.name,
+              'offers': {
+                '@type': 'Offer',
+                'priceCurrency': 'INR',
+                'price': p.price,
+                'availability': 'https://schema.org/InStock'
+              }
+            }
+          }))
+        });
+        document.head.appendChild(schemaScript);
+      } catch {}
+
       // Dynamic material dropdown (auto-hidden if only 1 material)
       const materials = [...new Set(products.map(p => p.mat).filter(Boolean))];
       const matSelect = $('#mat');
