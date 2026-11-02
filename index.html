@@ -145,6 +145,25 @@
     <a class="btn" href="https://wa.me/919778446620?text=Hi%20Homeify%2C%20I%20need%20a%20quote" target="_blank" rel="noopener">Get Quote</a>
   </div>
 
+  <!-- Quick View Product Modal -->
+  <div class="modal" id="pmodal" role="dialog" aria-modal="true" aria-labelledby="pmtitle">
+    <div class="modal-box">
+      <button class="ic modal-close" id="pmclose" aria-label="Close details">✕</button>
+      <div class="modal-ph" id="pmimg"></div>
+      <div class="modal-info">
+        <span class="eyebrow" id="pmcat">Solid Teak Wood</span>
+        <h3 id="pmtitle" style="margin:8px 0 12px;font-size:24px;"></h3>
+        <div id="pmstars"></div>
+        <div class="pr" id="pmprice" style="margin:14px 0 18px;"></div>
+        <p id="pmdesc" style="font-size:14px;color:#5c5046;margin-bottom:20px;line-height:1.6;"></p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <a class="btn" id="pmwa" href="#" target="_blank" rel="noopener" style="flex:1;">Enquire on WhatsApp</a>
+          <button class="btn" id="pmcart" style="flex:1;background:var(--walnut);">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js" defer></script>
 </body>
 </html>
