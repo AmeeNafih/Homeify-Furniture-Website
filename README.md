@@ -65,20 +65,23 @@ Because this repository contains only static files (`index.html`, `styles.css`, 
 
 All catalog products are stored in **[`products.json`](products.json)**. You can manage products using either method:
 
-### Method A: Using the Local Product Studio (`tools/admin.html`)
+### Method A: Using the Local Workshop Studio (`tools/admin.html`) & 1-Click Auto-Deploy
 
-1. Start your local server:
+1. Start the workshop studio server:
    ```bash
-   python3 -m http.server 8080
+   python3 tools/server.py
    ```
-2. Open the studio locally at **`http://localhost:8080/tools/admin.html`** (or open `tools/admin.html` directly in your browser).
-3. Fill out the visual product form: Title, Category, Material, Factory Price, MRP, Photo, and Description.
-4. Review the live visual card preview in real time.
-5. Click **"Download Updated products.json"** to download the new catalog file, and move it to your repository folder to replace `products.json`.
-6. Add your new WebP photo to `assets/p/`.
-7. Commit and push to publish live (`git add . && git commit -m "Add product" && git push origin main`).
+2. Open the studio in your browser at **`http://localhost:8080/tools/admin.html`**.
+3. What you can do in the studio:
+   - **Quick Price Editing:** Edit Factory Price (₹) and Showroom MRP (₹) directly on any row in the catalog table.
+   - **Best Sellers Carousel Manager:** Click `★ Best Seller` on any product to add/remove it from the top homepage carousel. Use `▲ / ▼` in the Best Sellers manager to reorder them in the exact sequence you want customers to see.
+   - **Add or Edit Full Products:** Add new pieces with real-time visual card preview, or click `✏️ Edit` on any piece to update its title, images, categories, and descriptions.
+4. **1-Click Live Deploy to Website:**
+   - Click the **`🚀 Deploy to Website`** button in the header.
+   - The studio server automatically updates `products.json` and `highlights.json`, synchronizes SEO structured data in `index.html`, commits to Git, and pushes to GitHub (`main` branch).
+   - Vercel automatically detects the push and deploys the updates to **`https://homeifyfurniture.in`** within ~15–30 seconds.
 
-*Note: `tools/admin.html` is an internal tool located in `tools/` and excluded from production deployment via `.vercelignore`. It contains zero PINs, secrets, or tokens. It cannot write directly to the live server; it generates and downloads the updated file to your computer.*
+*Note: `tools/` is an internal folder excluded from production deployment via `.vercelignore`. It contains zero public secrets or tokens, and is accessible only when run locally by you.*
 
 ### Method B: Directly Editing `products.json`
 
