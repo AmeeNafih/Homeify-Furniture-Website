@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Homeify Workshop | Admin Portal</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #faf6f0;
+      --sand: #f0e8dc;
+      --walnut: #4a3123;
+      --bronze: #8a5a32;
+      --ink: #2e2824;
+      --gold: #b8935a;
+      --terra: #b5603e;
+      --green: #2e7d32;
+      --border: #d9ccbb;
+      --r: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* Login Screen Container */
+    #login-view {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px 16px;
+      background: radial-gradient(circle at top, #faf6f0 0%, #ede3d4 100%);
+    }
+    .login-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 12px 36px rgba(74, 49, 35, 0.08);
+      width: 100%;
+      max-width: 420px;
+      padding: 36px 32px;
+      text-align: center;
+    }
+    .login-brand {
+      margin-bottom: 24px;
+    }
+    .login-brand img {
+      height: 42px;
+      width: auto;
+      margin-bottom: 12px;
+    }
+    .login-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--walnut);
+      margin-bottom: 6px;
+    }
+    .login-sub {
+      font-size: 13.5px;
+      color: #6e6157;
+      line-height: 1.4;
+    }
+    .login-form {
+      margin-top: 24px;
+      text-align: left;
+    }
+    .login-group {
+      margin-bottom: 16px;
+    }
+    .login-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--walnut);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .login-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--ink);
+      background: #fafaf8;
+      transition: all 0.2s;
+    }
+    .login-input:focus {
+      outline: none;
+      border-color: var(--walnut);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(74, 49, 35, 0.1);
+    }
+    .login-remember {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #5c5046;
+      cursor: pointer;
+    }
+    .login-btn {
+      width: 100%;
+      height: 46px;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #b5603e 0%, #8a5a32 100%);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(181, 96, 62, 0.25);
+    }
+    .login-btn:hover {
+      box-shadow: 0 6px 18px rgba(181, 96, 62, 0.4);
+      transform: translateY(-1px);
+    }
+    .login-error {
+      display: none;
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #ffcdd2;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    /* Admin View (Studio) */
+    #admin-view {
+      display: none;
+      padding-bottom: 80px;
+    }
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(74, 49, 35, 0.05);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .header-brand h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      color: var(--walnut);
+    }
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #f4ede4;
+      color: var(--walnut);
+      border: 1px solid var(--border);
+    }
+    .status-pill.online {
+      background: #e8f5e9;
+      color: #1b5e20;
+      border-color: #c8e6c9;
+    }
+    .status-pill.warning {
+      background: #fff8e1;
+      color: #b78103;
+      border-color: #ffe082;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 40px;
+      padding: 0 18px;
+      border-radius: 999px;
+      background: var(--terra);
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 13.5px;
+      border: 0;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn:hover { background: var(--bronze); }
+    .btn-deploy {
+      background: linear-gradient(135deg, #b5603e 0%, #8a5a32 100%);
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(181, 96, 62, 0.25);
+    }
+    .btn-deploy:hover {
+      box-shadow: 0 6px 16px rgba(181, 96, 62, 0.4);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--walnut);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: var(--sand); }
+    .btn-sm {
+      min-height: 34px;
+      padding: 0 12px;
+      font-size: 12px;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 28px auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .card-panel {
+      background: #ffffff;
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+      padding: 26px;
+      box-shadow: 0 4px 16px rgba(74, 49, 35, 0.04);
+    }
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #f0e8dc;
+    }
+    .panel-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 21px;
+      color: var(--walnut);
+    }
+    .panel-desc {
+      font-size: 13.5px;
+      color: #6e6157;
+      margin-top: 3px;
+    }
+
+    /* Best Sellers Manager Section */
+    .bs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 900px) {
+      .bs-grid { grid-template-columns: 1fr; }
+    }
+    .bs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 480px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+    .bs-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      background: #fafaf8;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: background 0.15s;
+    }
+    .bs-item:hover { background: #f5efe6; }
+    .bs-item-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 0;
+    }
+    .bs-item-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      background: var(--walnut);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .bs-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: var(--sand);
+      flex-shrink: 0;
+    }
+    .bs-details { min-width: 0; }
+    .bs-details b {
+      display: block;
+      font-size: 13.5px;
+      color: var(--walnut);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .bs-details span {
+      font-size: 12px;
+      color: #7a6c60;
+    }
+    .bs-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .icon-btn {
+      width: 30px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--walnut);
+      cursor: pointer;
+      font-size: 13px;
+      transition: background 0.15s;
+    }
+    .icon-btn:hover:not(:disabled) { background: var(--sand); }
+    .icon-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .icon-btn.remove:hover {
+      background: #ffebee;
+      color: #c62828;
+      border-color: #ffcdd2;
+    }
+
+    /* Live Best Sellers Preview Rail */
+    .bs-preview-rail {
+      background: var(--sand);
+      border-radius: var(--r);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .bs-rail-scroll {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scroll-snap-type: x mandatory;
+    }
+    .bs-mini-card {
+      min-width: 170px;
+      width: 170px;
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+      scroll-snap-align: start;
+      box-shadow: 0 4px 12px rgba(74, 49, 35, 0.06);
+    }
+    .bs-mini-card img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      background: #e6ded1;
+    }
+    .bs-mini-card .info { padding: 10px; }
+    .bs-mini-card h4 {
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.3;
+      height: 32px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .bs-mini-card .pr {
+      margin-top: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--walnut);
+    }
+
+    /* Form & Preview Grid */
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: start;
+    }
+    @media (max-width: 860px) {
+      .grid-layout { grid-template-columns: 1fr; }
+    }
+    .form-group { margin-bottom: 16px; }
+    label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--walnut);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--ink);
+      background: #fafaf8;
+    }
+    textarea {
+      height: 86px;
+      padding: 10px 14px;
+      resize: vertical;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--walnut);
+      background: #ffffff;
+    }
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 600px) {
+      .row-2 { grid-template-columns: 1fr; }
+    }
+    .preview-box {
+      background: var(--sand);
+      padding: 20px;
+      border-radius: var(--r);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .product-card-preview {
+      background: #ffffff;
+      border-radius: var(--r);
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(74, 49, 35, 0.12);
+      width: 100%;
+      max-width: 290px;
+    }
+    .ph {
+      aspect-ratio: 1/1;
+      background: #e6ded1;
+      position: relative;
+      overflow: hidden;
+    }
+    .ph img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .tag {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--gold);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+    .card-info { padding: 14px; }
+    .card-info h3 {
+      font-size: 14px;
+      font-weight: 600;
+      min-height: 38px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .pr {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+    .pr b { font-size: 16px; color: var(--walnut); }
+    .pr s { font-size: 12px; color: #9c8e83; }
+    .st { color: var(--gold); font-size: 13px; margin: 4px 0; }
+
+    /* Catalog Table */
+    .catalog-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      background: #ffffff;
+      border-radius: var(--r);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .catalog-table th, .catalog-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      vertical-align: middle;
+    }
+    .catalog-table th {
+      background: #f7f3ed;
+      color: var(--walnut);
+      font-weight: 600;
+    }
+    .thumb {
+      width: 42px;
+      height: 42px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: var(--sand);
+      vertical-align: middle;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+    .tbl-input {
+      width: 110px;
+      height: 36px;
+      padding: 0 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--walnut);
+      background: #ffffff;
+      transition: all 0.2s;
+    }
+    .tbl-input:focus {
+      border-color: var(--terra);
+      outline: none;
+      background: #fffcf8;
+      box-shadow: 0 0 0 2px rgba(181, 96, 62, 0.15);
+    }
+    .tbl-input.modified {
+      border-color: #f59e0b;
+      background: #fffdf5;
+    }
+    .tbl-disc {
+      display: block;
+      font-size: 11px;
+      color: var(--terra);
+      font-weight: 600;
+      margin-top: 3px;
+    }
+    .bs-star-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: #6e6157;
+      transition: all 0.15s;
+    }
+    .bs-star-btn:hover {
+      background: #fcf6ea;
+      border-color: var(--gold);
+    }
+    .bs-star-btn.active {
+      background: #fbf3e0;
+      border-color: var(--gold);
+      color: #8f6516;
+      font-weight: 700;
+    }
+    .edit-btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--walnut);
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .edit-btn:hover { background: var(--sand); }
+    .del-btn {
+      background: none;
+      border: 1px solid #e0c5bf;
+      color: #c62828;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .del-btn:hover { background: #ffebee; }
+
+    /* Toast Notification / Deploy Modal */
+    .toast-bar {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      max-width: 440px;
+      background: #2e2824;
+      color: #ffffff;
+      padding: 14px 18px;
+      border-radius: 10px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      transform: translateY(120%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .toast-bar.visible { transform: translateY(0); }
+    .toast-bar p {
+      font-size: 13.5px;
+      line-height: 1.4;
+      margin: 0;
+    }
+    .deploy-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(46, 40, 36, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1050;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .deploy-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .deploy-modal {
+      background: #ffffff;
+      border-radius: var(--r);
+      max-width: 500px;
+      width: 90%;
+      padding: 30px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    .deploy-modal h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--walnut);
+      margin-bottom: 10px;
+    }
+    .deploy-modal p {
+      font-size: 14px;
+      color: #5c5046;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f0e8dc;
+      border-top-color: var(--terra);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <!-- 1. LOGIN SCREEN -->
+  <section id="login-view">
+    <div class="login-card">
+      <div class="login-brand">
+        <img src="assets/logo.webp" alt="Homeify Furniture">
+        <h2 class="login-title">Workshop Admin Portal</h2>
+        <p class="login-sub">Direct access to product catalog, pricing adjustments, and homepage best sellers.</p>
+      </div>
+
+      <div class="login-error" id="login-error">
+        Invalid username or password. Please try again.
+      </div>
+
+      <form class="login-form" id="login-form">
+        <div class="login-group">
+          <label class="login-label" for="login-user">Username</label>
+          <input type="text" class="login-input" id="login-user" placeholder="Enter username" autocomplete="username" required autofocus>
+        </div>
+
+        <div class="login-group">
+          <label class="login-label" for="login-pass">Password</label>
+          <input type="password" class="login-input" id="login-pass" placeholder="Enter password" autocomplete="current-password" required>
+        </div>
+
+        <label class="login-remember">
+          <input type="checkbox" id="login-remember" checked>
+          <span>Remember me on this browser</span>
+        </label>
+
+        <button type="submit" class="login-btn">Sign In to Workshop ➔</button>
+      </form>
+      <p style="margin-top:16px;font-size:12px;color:#9c8e83;">🔒 Authorized Homeify Atelier Personnel Only</p>
+    </div>
+  </section>
+
+  <!-- 2. ADMIN STUDIO VIEW -->
+  <div id="admin-view">
+    <!-- Top Sticky Header -->
+    <header>
+      <div class="header-brand">
+        <img src="assets/logo.webp" width="100" height="34" alt="Homeify" style="height:32px;width:auto;">
+        <h1>Product, Price &amp; Best Sellers Studio</h1>
+      </div>
+      <div class="header-controls">
+        <span class="status-pill" id="server-status">Detecting deploy status...</span>
+        <span class="status-pill warning" id="changes-badge" style="display:none;">🟡 0 changes pending</span>
+        <button id="btn-deploy-top" class="btn btn-deploy">🚀 Deploy to Website</button>
+        <span class="status-pill" id="user-badge" style="background:#fff;border-color:var(--border);">👤 ameen</span>
+        <button class="btn btn-secondary btn-sm" id="btn-logout" title="Sign out of Admin Portal">Sign Out</button>
+        <a class="btn btn-secondary btn-sm" href="/" target="_blank">View Live Site ↗</a>
+      </div>
+    </header>
+
+    <div class="container">
+
+      <!-- Best Sellers Strip Manager -->
+      <section class="card-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">⭐ Best Sellers Carousel Manager</h2>
+            <p class="panel-desc">Manage the top showcase strip on the homepage. Use <b>▲ / ▼</b> to adjust carousel position, or toggle pieces directly in the catalog table below.</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <select id="bs-add-select" style="min-width:240px;height:38px;font-size:13px;">
+              <option value="">+ Add a piece to Best Sellers...</option>
+            </select>
+            <button id="bs-add-btn" class="btn btn-secondary btn-sm">+ Add to Carousel</button>
+          </div>
+        </div>
+
+        <div class="bs-grid">
+          <!-- Left: Sorted List of Best Sellers -->
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <label style="margin:0;">Active Best Sellers (<span id="bs-count">0</span> pieces)</label>
+              <small style="color:#7a6c60;">Drag or click arrows to reorder</small>
+            </div>
+            <div class="bs-list" id="bs-list-container"></div>
+          </div>
+
+          <!-- Right: Live Horizontal Scroll Carousel Preview -->
+          <div>
+            <label style="margin-bottom:8px;">Live Carousel Preview (As seen on Homeify)</label>
+            <div class="bs-preview-rail">
+              <div class="bs-rail-scroll" id="bs-rail-preview"></div>
+              <div style="display:flex;justify-content:space-between;font-size:11.5px;color:#7a6c60;padding-top:4px;">
+                <span>← Scroll horizontally to preview cards →</span>
+                <span>Position #1 appears first</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Product Editor & Live Preview Form -->
+      <div class="grid-layout">
+        <!-- Left Column: Add / Edit Form -->
+        <section class="card-panel">
+          <h2 class="panel-title" id="form-panel-title">Add New Product to Collection</h2>
+          <p class="panel-desc" id="form-panel-desc">Fill out details below. The card preview updates automatically in real-time.</p>
+
+          <form id="prod-form" style="margin-top:16px;">
+            <div class="form-group">
+              <label for="p-name">Product Title</label>
+              <input type="text" id="p-name" placeholder="e.g. Solid Teak 6-Seater Dining Table with Cushioned Chairs" required>
+            </div>
+
+            <div class="row-2">
+              <div class="form-group">
+                <label for="p-room">Room / Category</label>
+                <select id="p-room">
+                  <option value="living">Living Room</option>
+                  <option value="bedroom">Bedroom</option>
+                  <option value="dining">Dining</option>
+                  <option value="office">Office</option>
+                  <option value="custom">Custom Woodwork</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="p-mat">Primary Material</label>
+                <select id="p-mat">
+                  <option value="natural-wood">Solid Teak &amp; Rosewood</option>
+                  <option value="engineered">Reinforced Engineered Wood</option>
+                  <option value="fabric">Upholstery &amp; Cane Weave</option>
+                  <option value="metal">Architectural Metal</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row-2">
+              <div class="form-group">
+                <label for="p-price">Factory Offer Price (₹)</label>
+                <input type="number" id="p-price" placeholder="45000" min="0" required>
+              </div>
+              <div class="form-group">
+                <label for="p-mrp">Showroom Benchmark MRP (₹)</label>
+                <input type="number" id="p-mrp" placeholder="62000" min="0" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="p-img">Image File Path</label>
+              <input type="text" id="p-img" placeholder="assets/p/my-product.webp" required>
+              <small style="color:#7a6c60;font-size:12px;margin-top:4px;display:block;">
+                Or select photo to preview: <input type="file" id="p-file" accept="image/*" style="font-size:12px;margin-top:4px;">
+              </small>
+            </div>
+
+            <div class="row-2">
+              <div class="form-group">
+                <label for="p-rating">Customer Rating</label>
+                <select id="p-rating">
+                  <option value="5">★★★★★ (5.0 Stars)</option>
+                  <option value="4.5">★★★★½ (4.5 Stars)</option>
+                  <option value="4">★★★★☆ (4.0 Stars)</option>
+                  <option value="0">No reviews yet (Hide stars)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="p-id">Custom Slug / ID (Optional)</label>
+                <input type="text" id="p-id" placeholder="auto-generated from title">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="p-desc">Product Description &amp; Guarantee</label>
+              <textarea id="p-desc" placeholder="Handcrafted from seasoned mature Kerala teak with mortise-and-tenon joints. Backed by Homeify's 5-year workshop warranty with free delivery and installation."></textarea>
+            </div>
+
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;">
+              <button type="submit" id="btn-submit" class="btn" style="flex:1;">+ Add to Catalog</button>
+              <button type="button" id="btn-reset" class="btn btn-secondary">Reset Form</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Right Column: Card Preview & Export Actions -->
+        <section class="card-panel">
+          <h2 class="panel-title">Live Card Preview</h2>
+          <p class="panel-desc">Exactly how customers view your piece on desktop and mobile.</p>
+
+          <div class="preview-box" style="margin-top:16px;">
+            <article class="product-card-preview" id="card-preview">
+              <div class="ph">
+                <img id="prev-img" src="assets/hero.webp" alt="Preview Image">
+                <span class="tag" id="prev-tag">Save 27%</span>
+              </div>
+              <div class="card-info">
+                <h3 id="prev-title">Solid Teak 6-Seater Dining Table</h3>
+                <div class="st" id="prev-stars">★★★★★</div>
+                <div class="pr">
+                  <b id="prev-price">₹45,000</b>
+                  <s id="prev-mrp">₹62,000</s>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div style="margin-top:24px;display:flex;flex-direction:column;gap:10px;">
+            <button id="btn-deploy-side" class="btn btn-deploy" style="width:100%;">
+              🚀 Deploy All Changes to Live Website
+            </button>
+            <div style="display:flex;gap:8px;">
+              <button id="btn-download-products" class="btn btn-secondary btn-sm" style="flex:1;">
+                📥 Download products.json
+              </button>
+              <button id="btn-download-highlights" class="btn btn-secondary btn-sm" style="flex:1;">
+                📥 Download highlights.json
+              </button>
+            </div>
+            <button id="btn-gh-token" class="btn btn-secondary btn-sm" style="margin-top:4px;font-size:11.5px;color:#7a6c60;">
+              ⚙️ Cloud Deploy GitHub Token (Optional)
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <!-- Workshop Catalog & Price Editor Table -->
+      <section class="card-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Workshop Catalog &amp; Quick Price Editor (<span id="cat-count">0</span> pieces)</h2>
+            <p class="panel-desc">Edit Factory Price and MRP directly in the table below. Click <b>★ Best Seller</b> to add/remove a piece from the homepage carousel.</p>
+          </div>
+          <input type="text" id="cat-search" placeholder="Search pieces by name or ID..." style="max-width:280px;height:38px;">
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="catalog-table">
+            <thead>
+              <tr>
+                <th style="min-width:220px;">Piece</th>
+                <th>Category</th>
+                <th>Material</th>
+                <th style="min-width:130px;">Factory Price (₹)</th>
+                <th style="min-width:140px;">Showroom MRP (₹)</th>
+                <th style="min-width:130px;">Best Seller Strip</th>
+                <th style="min-width:120px;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="catalog-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Toast Bar for Live Price Changes -->
+  <div class="toast-bar" id="toast-bar">
+    <p id="toast-msg">Price updated. Ready to deploy.</p>
+    <button class="btn btn-sm btn-deploy" id="toast-deploy-btn">Deploy Now</button>
+  </div>
+
+  <!-- Deploy Progress & Result Modal -->
+  <div class="deploy-overlay" id="deploy-modal">
+    <div class="deploy-modal">
+      <div id="deploy-spinner" class="spinner"></div>
+      <h3 id="deploy-title">Deploying to Live Website...</h3>
+      <p id="deploy-status">Saving products.json and highlights.json, committing changes to GitHub, and triggering live Vercel deployment.</p>
+      <div id="deploy-actions" style="display:none;gap:10px;justify-content:center;">
+        <a class="btn btn-deploy" id="deploy-view-link" href="/" target="_blank">View Live Website ↗</a>
+        <button class="btn btn-secondary" id="deploy-close-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ----------------------------------------------------
+      // AUTHENTICATION LOGIC (ameen / homeify)
+      // ----------------------------------------------------
+      const AUTH_USER = 'ameen';
+      const AUTH_PASS = 'homeify';
+
+      const loginView = document.getElementById('login-view');
+      const adminView = document.getElementById('admin-view');
+      const loginForm = document.getElementById('login-form');
+      const loginUser = document.getElementById('login-user');
+      const loginPass = document.getElementById('login-pass');
+      const loginRemember = document.getElementById('login-remember');
+      const loginError = document.getElementById('login-error');
+      const btnLogout = document.getElementById('btn-logout');
+
+      function isAuthenticated() {
+        return sessionStorage.getItem('homeify_auth') === 'ameen' || localStorage.getItem('homeify_auth') === 'ameen';
+      }
+
+      function showAdminStudio() {
+        loginView.style.display = 'none';
+        adminView.style.display = 'block';
+        initStudio();
+      }
+
+      function showLoginScreen() {
+        loginView.style.display = 'flex';
+        adminView.style.display = 'none';
+        loginUser.value = '';
+        loginPass.value = '';
+        loginError.style.display = 'none';
+      }
+
+      loginForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const u = loginUser.value.trim().toLowerCase();
+        const p = loginPass.value;
+
+        if (u === AUTH_USER && p === AUTH_PASS) {
+          sessionStorage.setItem('homeify_auth', 'ameen');
+          if (loginRemember.checked) {
+            localStorage.setItem('homeify_auth', 'ameen');
+          }
+          loginError.style.display = 'none';
+          showAdminStudio();
+        } else {
+          loginError.style.display = 'block';
+          loginPass.value = '';
+          loginPass.focus();
+        }
+      });
+
+      btnLogout.addEventListener('click', () => {
+        sessionStorage.removeItem('homeify_auth');
+        localStorage.removeItem('homeify_auth');
+        showLoginScreen();
+      });
+
+      // Initial check
+      if (isAuthenticated()) {
+        showAdminStudio();
+      } else {
+        showLoginScreen();
+      }
+
+      // ----------------------------------------------------
+      // STUDIO APPLICATION LOGIC
+      // ----------------------------------------------------
+      let studioInitialized = false;
+      let catalog = [];
+      let highlights = [];
+      let editingId = null;
+      let pendingChanges = 0;
+      let serverAvailable = false;
+
+      const formatR = n => '₹' + Number(n || 0).toLocaleString('en-IN');
+      const slugify = text => text.toString().toLowerCase().trim().replace(/[\s\W-]+/g, '-').replace(/^-+|-+$/g, '');
+
+      // DOM Elements
+      const serverStatusEl = document.getElementById('server-status');
+      const changesBadgeEl = document.getElementById('changes-badge');
+      const btnDeployTop = document.getElementById('btn-deploy-top');
+      const btnDeploySide = document.getElementById('btn-deploy-side');
+      const toastBar = document.getElementById('toast-bar');
+      const toastMsg = document.getElementById('toast-msg');
+      const toastDeployBtn = document.getElementById('toast-deploy-btn');
+      const deployModal = document.getElementById('deploy-modal');
+      const deploySpinner = document.getElementById('deploy-spinner');
+      const deployTitle = document.getElementById('deploy-title');
+      const deployStatus = document.getElementById('deploy-status');
+      const deployActions = document.getElementById('deploy-actions');
+      const deployCloseBtn = document.getElementById('deploy-close-btn');
+
+      // Best Sellers elements
+      const bsListContainer = document.getElementById('bs-list-container');
+      const bsRailPreview = document.getElementById('bs-rail-preview');
+      const bsCount = document.getElementById('bs-count');
+      const bsAddSelect = document.getElementById('bs-add-select');
+      const bsAddBtn = document.getElementById('bs-add-btn');
+
+      // Form Elements
+      const fName = document.getElementById('p-name');
+      const fRoom = document.getElementById('p-room');
+      const fMat = document.getElementById('p-mat');
+      const fPrice = document.getElementById('p-price');
+      const fMrp = document.getElementById('p-mrp');
+      const fImg = document.getElementById('p-img');
+      const fFile = document.getElementById('p-file');
+      const fRating = document.getElementById('p-rating');
+      const fId = document.getElementById('p-id');
+      const fDesc = document.getElementById('p-desc');
+      const form = document.getElementById('prod-form');
+      const submitBtn = document.getElementById('btn-submit');
+      const panelTitle = document.getElementById('form-panel-title');
+      const panelDesc = document.getElementById('form-panel-desc');
+
+      // Preview Elements
+      const prevTitle = document.getElementById('prev-title');
+      const prevPrice = document.getElementById('prev-price');
+      const prevMrp = document.getElementById('prev-mrp');
+      const prevTag = document.getElementById('prev-tag');
+      const prevStars = document.getElementById('prev-stars');
+      const prevImg = document.getElementById('prev-img');
+
+      function initStudio() {
+        if (studioInitialized) return;
+        studioInitialized = true;
+
+        checkServerStatus();
+        setInterval(checkServerStatus, 15000);
+
+        Promise.all([
+          fetch('products.json').then(r => r.json()),
+          fetch('highlights.json').then(r => r.json())
+        ])
+        .then(([productsData, highlightsData]) => {
+          catalog = productsData;
+          highlights = highlightsData || [];
+          updatePreview();
+          renderCatalogTable();
+          renderBestSellers();
+        })
+        .catch(err => {
+          console.error('Error loading data:', err);
+        });
+      }
+
+      function checkServerStatus() {
+        // Try local backend API if available
+        fetch('/api/status')
+          .then(r => r.json())
+          .then(data => {
+            if (data.online) {
+              serverAvailable = true;
+              serverStatusEl.className = 'status-pill online';
+              serverStatusEl.innerHTML = `🟢 Local Deploy Bridge Connected`;
+            }
+          })
+          .catch(() => {
+            serverAvailable = false;
+            const hasGhToken = !!localStorage.getItem('homeify_gh_token');
+            if (hasGhToken) {
+              serverStatusEl.className = 'status-pill online';
+              serverStatusEl.innerHTML = `🟢 Cloud GitHub Deploy Active`;
+            } else {
+              serverStatusEl.className = 'status-pill';
+              serverStatusEl.innerHTML = `🌐 Live Production Mode`;
+            }
+          });
+      }
+
+      function markChange(description) {
+        pendingChanges++;
+        changesBadgeEl.style.display = 'inline-flex';
+        changesBadgeEl.textContent = `🟡 ${pendingChanges} changes pending`;
+
+        showToast(description + ' Ready to deploy to website.');
+      }
+
+      function showToast(msg) {
+        toastMsg.textContent = msg;
+        toastBar.classList.add('visible');
+        clearTimeout(toastBar._timer);
+        toastBar._timer = setTimeout(() => {
+          toastBar.classList.remove('visible');
+        }, 6000);
+      }
+
+      function updatePreview() {
+        const title = fName.value.trim() || 'Solid Teak 6-Seater Dining Table';
+        const price = Number(fPrice.value) || 45000;
+        const mrp = Number(fMrp.value) || 62000;
+        const rating = Number(fRating.value) || 5;
+
+        prevTitle.textContent = title;
+        prevPrice.textContent = formatR(price);
+
+        if (mrp > price) {
+          const discount = Math.round(((mrp - price) / mrp) * 100);
+          prevMrp.textContent = formatR(mrp);
+          prevMrp.style.display = 'inline';
+          prevTag.textContent = 'Save ' + discount + '%';
+          prevTag.style.display = 'inline-block';
+        } else {
+          prevMrp.style.display = 'none';
+          prevTag.style.display = 'none';
+        }
+
+        prevStars.textContent = rating > 0 ? '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating)) : '';
+      }
+
+      [fName, fPrice, fMrp, fRating].forEach(el => el.addEventListener('input', updatePreview));
+
+      fName.addEventListener('blur', () => {
+        if (!editingId && !fId.value.trim() && fName.value.trim()) {
+          const slug = slugify(fName.value).slice(0, 36);
+          fId.value = slug;
+          if (!fImg.value.trim()) fImg.value = 'assets/p/' + slug + '.webp';
+        }
+      });
+
+      fFile.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = ev => { prevImg.src = ev.target.result; };
+          reader.readAsDataURL(file);
+          if (!fImg.value.trim()) {
+            fImg.value = 'assets/p/' + slugify(file.name.replace(/\.[^/.]+$/, '')) + '.webp';
+          }
+        }
+      });
+
+      fImg.addEventListener('input', () => {
+        if (fImg.value.trim()) {
+          prevImg.src = fImg.value.trim();
+        }
+      });
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        const name = fName.value.trim();
+        const price = Number(fPrice.value);
+        const mrp = Number(fMrp.value);
+        const room = fRoom.value;
+        const mat = fMat.value;
+        const img = fImg.value.trim() || 'assets/hero.webp';
+        const rating = Number(fRating.value) || null;
+        const desc = fDesc.value.trim();
+        const id = fId.value.trim() || slugify(name) || ('item-' + Date.now());
+
+        if (editingId) {
+          const idx = catalog.findIndex(p => p.id === editingId);
+          if (idx >= 0) {
+            catalog[idx] = {
+              ...catalog[idx],
+              id, name, room, mat, price, mrp, img, rating, desc
+            };
+            markChange(`Updated details for "${name}".`);
+          }
+          editingId = null;
+          panelTitle.textContent = 'Add New Product to Collection';
+          panelDesc.textContent = 'Fill out details below. The card preview updates automatically in real-time.';
+          submitBtn.textContent = '+ Add to Catalog';
+          form.reset();
+          updatePreview();
+        } else {
+          const newProduct = {
+            id, name, room, mat, price, mrp, img, w: 800, h: 800, rating, desc
+          };
+          catalog.unshift(newProduct);
+          markChange(`Added "${name}" to catalog.`);
+          form.reset();
+          updatePreview();
+        }
+
+        renderCatalogTable(document.getElementById('cat-search').value);
+        renderBestSellers();
+      });
+
+      function renderBestSellers() {
+        bsCount.textContent = highlights.length;
+
+        const unusedProducts = catalog.filter(p => !highlights.includes(p.id));
+        bsAddSelect.innerHTML = '<option value="">+ Add a piece to Best Sellers...</option>' +
+          unusedProducts.map(p => `<option value="${p.id}">${p.name} (${formatR(p.price)})</option>`).join('');
+
+        if (highlights.length === 0) {
+          bsListContainer.innerHTML = '<div style="padding:20px;text-align:center;color:#7a6c60;font-size:13px;">No best sellers selected yet. Add pieces from the catalog below.</div>';
+          bsRailPreview.innerHTML = '<div style="padding:20px;color:#7a6c60;font-size:13px;">No active best sellers to preview.</div>';
+          return;
+        }
+
+        const bsProducts = highlights.map(id => catalog.find(p => p.id === id)).filter(Boolean);
+
+        bsListContainer.innerHTML = bsProducts.map((p, idx) => `
+          <div class="bs-item" data-id="${p.id}">
+            <div class="bs-item-info">
+              <span class="bs-item-num">#${idx + 1}</span>
+              <img src="${p.img}" class="bs-thumb" alt="">
+              <div class="bs-details">
+                <b>${p.name}</b>
+                <span>${formatR(p.price)} &bull; ${p.room}</span>
+              </div>
+            </div>
+            <div class="bs-actions">
+              <button class="icon-btn" data-bs-move="up" data-idx="${idx}" ${idx === 0 ? 'disabled' : ''} title="Move Earlier in Strip">▲</button>
+              <button class="icon-btn" data-bs-move="down" data-idx="${idx}" ${idx === bsProducts.length - 1 ? 'disabled' : ''} title="Move Later in Strip">▼</button>
+              <button class="icon-btn remove" data-bs-remove="${p.id}" title="Remove from Best Sellers">✕</button>
+            </div>
+          </div>
+        `).join('');
+
+        bsRailPreview.innerHTML = bsProducts.map(p => {
+          const disc = p.mrp > p.price ? Math.round(((p.mrp - p.price) / p.mrp) * 100) : 0;
+          return `
+            <div class="bs-mini-card">
+              <img src="${p.img}" alt="${p.name}">
+              <div class="info">
+                <h4>${p.name}</h4>
+                <div class="pr">
+                  <span>${formatR(p.price)}</span>
+                  ${disc > 0 ? `<span style="font-size:11px;color:var(--terra);font-weight:600;margin-left:4px;">-${disc}%</span>` : ''}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      bsAddBtn.addEventListener('click', () => {
+        const id = bsAddSelect.value;
+        if (id && !highlights.includes(id)) {
+          highlights.push(id);
+          const p = catalog.find(x => x.id === id);
+          markChange(`Added "${p ? p.name : id}" to Best Sellers.`);
+          renderBestSellers();
+          renderCatalogTable(document.getElementById('cat-search').value);
+        }
+      });
+
+      bsListContainer.addEventListener('click', e => {
+        const moveBtn = e.target.closest('[data-bs-move]');
+        if (moveBtn) {
+          const dir = moveBtn.dataset.bsMove;
+          const idx = Number(moveBtn.dataset.idx);
+          if (dir === 'up' && idx > 0) {
+            const temp = highlights[idx - 1];
+            highlights[idx - 1] = highlights[idx];
+            highlights[idx] = temp;
+            markChange('Reordered Best Sellers strip.');
+            renderBestSellers();
+          } else if (dir === 'down' && idx < highlights.length - 1) {
+            const temp = highlights[idx + 1];
+            highlights[idx + 1] = highlights[idx];
+            highlights[idx] = temp;
+            markChange('Reordered Best Sellers strip.');
+            renderBestSellers();
+          }
+          return;
+        }
+
+        const removeBtn = e.target.closest('[data-bs-remove]');
+        if (removeBtn) {
+          const id = removeBtn.dataset.bsRemove;
+          highlights = highlights.filter(x => x !== id);
+          const p = catalog.find(x => x.id === id);
+          markChange(`Removed "${p ? p.name : id}" from Best Sellers.`);
+          renderBestSellers();
+          renderCatalogTable(document.getElementById('cat-search').value);
+        }
+      });
+
+      function renderCatalogTable(filter = '') {
+        const rows = document.getElementById('catalog-rows');
+        const count = document.getElementById('cat-count');
+        const query = (filter || '').toLowerCase();
+
+        const list = catalog.filter(p => !query || (p.name + ' ' + p.id + ' ' + p.room).toLowerCase().includes(query));
+        count.textContent = list.length;
+
+        rows.innerHTML = list.map(p => {
+          const disc = p.mrp > p.price ? Math.round(((p.mrp - p.price) / p.mrp) * 100) : 0;
+          const isBestSeller = highlights.includes(p.id);
+
+          return `
+            <tr data-row-id="${p.id}">
+              <td>
+                <div style="display:flex;align-items:center;">
+                  <img src="${p.img}" class="thumb" alt="">
+                  <div>
+                    <b>${p.name}</b>
+                    <div style="font-size:12px;color:#7a6c60;">ID: ${p.id}</div>
+                  </div>
+                </div>
+              </td>
+              <td><span style="text-transform:capitalize;">${p.room}</span></td>
+              <td>${p.mat}</td>
+              <td>
+                <div style="display:flex;align-items:center;gap:4px;">
+                  <span style="font-size:13px;font-weight:600;color:var(--walnut);">₹</span>
+                  <input type="number" class="tbl-input price-input" data-id="${p.id}" data-field="price" value="${p.price}" min="0" title="Edit Factory Offer Price">
+                </div>
+              </td>
+              <td>
+                <div style="display:flex;align-items:center;gap:4px;">
+                  <span style="font-size:13px;font-weight:600;color:#9c8e83;">₹</span>
+                  <input type="number" class="tbl-input mrp-input" data-id="${p.id}" data-field="mrp" value="${p.mrp}" min="0" title="Edit Showroom MRP">
+                </div>
+                <span class="tbl-disc" id="disc-${p.id}">${disc > 0 ? (disc + '% off') : 'No discount'}</span>
+              </td>
+              <td>
+                <button type="button" class="bs-star-btn ${isBestSeller ? 'active' : ''}" data-bs-toggle="${p.id}">
+                  ${isBestSeller ? '★ Best Seller' : '☆ Add to Best'}
+                </button>
+              </td>
+              <td>
+                <div style="display:flex;align-items:center;gap:4px;">
+                  <button type="button" class="edit-btn" data-edit="${p.id}" title="Edit All Details">✏️ Edit</button>
+                  <button type="button" class="del-btn" data-del="${p.id}" title="Delete Piece">✕</button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      document.getElementById('cat-search').addEventListener('input', e => {
+        renderCatalogTable(e.target.value);
+      });
+
+      document.getElementById('catalog-rows').addEventListener('input', e => {
+        const input = e.target.closest('.price-input, .mrp-input');
+        if (input) {
+          const id = input.dataset.id;
+          const field = input.dataset.field;
+          const val = Number(input.value);
+          const p = catalog.find(x => x.id === id);
+          if (p && !isNaN(val)) {
+            p[field] = val;
+            input.classList.add('modified');
+
+            const discSpan = document.getElementById('disc-' + id);
+            if (discSpan) {
+              const disc = p.mrp > p.price ? Math.round(((p.mrp - p.price) / p.mrp) * 100) : 0;
+              discSpan.textContent = disc > 0 ? (disc + '% off') : 'No discount';
+            }
+
+            markChange(`Price for "${p.name}" updated to ${formatR(p.price)}.`);
+            renderBestSellers();
+          }
+        }
+      });
+
+      document.getElementById('catalog-rows').addEventListener('click', e => {
+        const bsToggle = e.target.closest('[data-bs-toggle]');
+        if (bsToggle) {
+          const id = bsToggle.dataset.bsToggle;
+          const p = catalog.find(x => x.id === id);
+          if (highlights.includes(id)) {
+            highlights = highlights.filter(x => x !== id);
+            bsToggle.classList.remove('active');
+            bsToggle.textContent = '☆ Add to Best';
+            markChange(`Removed "${p ? p.name : id}" from Best Sellers.`);
+          } else {
+            highlights.push(id);
+            bsToggle.classList.add('active');
+            bsToggle.textContent = '★ Best Seller';
+            markChange(`Added "${p ? p.name : id}" to Best Sellers.`);
+          }
+          renderBestSellers();
+          return;
+        }
+
+        const editBtn = e.target.closest('[data-edit]');
+        if (editBtn) {
+          const id = editBtn.dataset.edit;
+          const p = catalog.find(x => x.id === id);
+          if (p) {
+            editingId = p.id;
+            fName.value = p.name;
+            fRoom.value = p.room;
+            fMat.value = p.mat;
+            fPrice.value = p.price;
+            fMrp.value = p.mrp;
+            fImg.value = p.img;
+            fRating.value = p.rating || 0;
+            fId.value = p.id;
+            fDesc.value = p.desc || '';
+            panelTitle.textContent = 'Edit Product: ' + p.name;
+            panelDesc.textContent = 'Update details below and click "Save Product Changes".';
+            submitBtn.textContent = '💾 Save Product Changes';
+            updatePreview();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+          return;
+        }
+
+        const delBtn = e.target.closest('[data-del]');
+        if (delBtn) {
+          const id = delBtn.dataset.del;
+          if (confirm('Are you sure you want to remove this piece from the catalog?')) {
+            catalog = catalog.filter(p => p.id !== id);
+            highlights = highlights.filter(x => x !== id);
+            renderCatalogTable(document.getElementById('cat-search').value);
+            renderBestSellers();
+            markChange('Removed piece from catalog.');
+          }
+        }
+      });
+
+      document.getElementById('btn-reset').addEventListener('click', () => {
+        editingId = null;
+        form.reset();
+        panelTitle.textContent = 'Add New Product to Collection';
+        panelDesc.textContent = 'Fill out details below. The card preview updates automatically in real-time.';
+        submitBtn.textContent = '+ Add to Catalog';
+        updatePreview();
+      });
+
+      // ----------------------------------------------------
+      // DEPLOYMENT PIPELINE
+      // ----------------------------------------------------
+      async function deployViaGitHubAPI(token) {
+        const repo = 'AmeeNafih/Homeify-Furniture-Website';
+        const headers = {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json'
+        };
+
+        // 1. Update products.json
+        const pRes = await fetch(`https://api.github.com/repos/${repo}/contents/products.json`, { headers });
+        if (!pRes.ok) throw new Error('Could not access products.json on GitHub: ' + pRes.statusText);
+        const pData = await pRes.json();
+        const pContentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(catalog, null, 2) + '\n')));
+
+        await fetch(`https://api.github.com/repos/${repo}/contents/products.json`, {
+          method: 'PUT',
+          headers,
+          body: JSON.stringify({
+            message: 'Update catalog prices via Live Workshop Admin',
+            content: pContentBase64,
+            sha: pData.sha,
+            branch: 'main'
+          })
+        });
+
+        // 2. Update highlights.json
+        const hRes = await fetch(`https://api.github.com/repos/${repo}/contents/highlights.json`, { headers });
+        if (hRes.ok) {
+          const hData = await hRes.json();
+          const hContentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(highlights, null, 2) + '\n')));
+          await fetch(`https://api.github.com/repos/${repo}/contents/highlights.json`, {
+            method: 'PUT',
+            headers,
+            body: JSON.stringify({
+              message: 'Update best sellers carousel via Live Workshop Admin',
+              content: hContentBase64,
+              sha: hData.sha,
+              branch: 'main'
+            })
+          });
+        }
+      }
+
+      async function executeDeploy() {
+        deployModal.classList.add('open');
+        deploySpinner.style.display = 'block';
+        deployActions.style.display = 'none';
+        deployTitle.textContent = 'Deploying Changes to Live Website...';
+        deployStatus.textContent = 'Saving catalog & best sellers, committing to GitHub, and triggering Vercel build...';
+
+        // Check if local server endpoint exists
+        if (serverAvailable) {
+          fetch('/api/deploy', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              products: catalog,
+              highlights: highlights
+            })
+          })
+          .then(r => r.json())
+          .then(res => {
+            deploySpinner.style.display = 'none';
+            deployActions.style.display = 'flex';
+            if (res.success) {
+              deployTitle.textContent = '🎉 Deployed Successfully!';
+              deployStatus.innerHTML = `
+                <b>${res.message}</b><br><br>
+                ${res.commit ? `<span style="font-family:monospace;background:#f0e8dc;padding:3px 8px;border-radius:4px;">Git Commit: ${res.commit}</span><br><br>` : ''}
+                Vercel takes approximately 15–30 seconds to refresh the live site.
+              `;
+              pendingChanges = 0;
+              changesBadgeEl.style.display = 'none';
+              document.querySelectorAll('.tbl-input.modified').forEach(el => el.classList.remove('modified'));
+              toastBar.classList.remove('visible');
+            } else {
+              deployTitle.textContent = '⚠️ Deployment Notice';
+              deployStatus.innerHTML = `<b>Error:</b> ${res.error || 'Server error'}`;
+            }
+          })
+          .catch(() => tryCloudDeploy());
+        } else {
+          tryCloudDeploy();
+        }
+      }
+
+      async function tryCloudDeploy() {
+        const ghToken = localStorage.getItem('homeify_gh_token');
+        if (ghToken) {
+          try {
+            await deployViaGitHubAPI(ghToken);
+            deploySpinner.style.display = 'none';
+            deployActions.style.display = 'flex';
+            deployTitle.textContent = '🎉 Deployed Successfully via GitHub!';
+            deployStatus.innerHTML = `
+              <b>Catalog and Best Sellers successfully committed directly to GitHub!</b><br><br>
+              Vercel is now building and deploying your changes to <code>https://homeifyfurniture.in</code> (~15–30 seconds).
+            `;
+            pendingChanges = 0;
+            changesBadgeEl.style.display = 'none';
+            document.querySelectorAll('.tbl-input.modified').forEach(el => el.classList.remove('modified'));
+            toastBar.classList.remove('visible');
+          } catch (err) {
+            deploySpinner.style.display = 'none';
+            deployActions.style.display = 'flex';
+            deployTitle.textContent = '⚠️ GitHub Cloud Deploy Error';
+            deployStatus.innerHTML = `<b>Error:</b> ${err.message}<br><br>Please check your token or download updated files below.`;
+          }
+        } else {
+          deploySpinner.style.display = 'none';
+          deployActions.style.display = 'flex';
+          deployTitle.textContent = '🌐 Live Web Deploy Setup';
+          deployStatus.innerHTML = `
+            You are using the admin portal on the live web.<br><br>
+            <b>Option 1: Direct 1-Click Cloud Deploy:</b> Set your GitHub Personal Access Token using the <b>"⚙️ Cloud Deploy GitHub Token"</b> button below.<br><br>
+            <b>Option 2: Instant Download:</b> Click <b>"Download products.json"</b> and <b>"Download highlights.json"</b> to save your changes locally.
+          `;
+        }
+      }
+
+      document.getElementById('btn-gh-token').addEventListener('click', () => {
+        const current = localStorage.getItem('homeify_gh_token') || '';
+        const token = prompt('Enter your GitHub Personal Access Token (classic with repo scope, or fine-grained with Contents read/write) to enable 1-click cloud deploy from anywhere:', current);
+        if (token !== null) {
+          if (token.trim()) {
+            localStorage.setItem('homeify_gh_token', token.trim());
+            alert('✓ GitHub Token saved in your browser! You can now deploy live with 1 click.');
+            checkServerStatus();
+          } else {
+            localStorage.removeItem('homeify_gh_token');
+            alert('GitHub Token removed.');
+            checkServerStatus();
+          }
+        }
+      });
+
+      btnDeployTop.addEventListener('click', executeDeploy);
+      btnDeploySide.addEventListener('click', executeDeploy);
+      toastDeployBtn.addEventListener('click', executeDeploy);
+      deployCloseBtn.addEventListener('click', () => {
+        deployModal.classList.remove('open');
+      });
+
+      function downloadFile(content, filename) {
+        const blob = new Blob([content], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      document.getElementById('btn-download-products').addEventListener('click', () => {
+        downloadFile(JSON.stringify(catalog, null, 2), 'products.json');
+      });
+
+      document.getElementById('btn-download-highlights').addEventListener('click', () => {
+        downloadFile(JSON.stringify(highlights, null, 2), 'highlights.json');
+      });
+
+    })();
+  </script>
+</body>
+</html>
