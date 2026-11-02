@@ -1,5 +1,6 @@
 # robots.txt for https://homeifyfurniture.in/
 User-agent: *
 Allow: /
+Disallow: /admin.html
 
 Sitemap: https://homeifyfurniture.in/sitemap.xml

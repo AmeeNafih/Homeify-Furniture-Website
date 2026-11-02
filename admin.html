@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Homeify Workshop | Product Management Studio</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #faf6f0;
+      --sand: #f0e8dc;
+      --walnut: #4a3123;
+      --bronze: #8a5a32;
+      --ink: #2e2824;
+      --gold: #b8935a;
+      --terra: #b5603e;
+      --border: #d9ccbb;
+      --r: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.5;
+      padding-bottom: 60px;
+    }
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .header-brand h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--walnut);
+    }
+    .header-actions a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--terra);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #ffffff;
+    }
+    .container {
+      max-width: 1240px;
+      margin: 32px auto;
+      padding: 0 20px;
+    }
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 32px;
+      align-items: start;
+    }
+    .card-panel {
+      background: #ffffff;
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+      padding: 28px;
+      box-shadow: 0 4px 16px rgba(74, 49, 35, 0.05);
+    }
+    .panel-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--walnut);
+      margin-bottom: 6px;
+    }
+    .panel-desc {
+      font-size: 14px;
+      color: #6e6157;
+      margin-bottom: 24px;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--walnut);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      height: 44px;
+      padding: 0 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--ink);
+      background: #fafaf8;
+    }
+    textarea {
+      height: 90px;
+      padding: 10px 14px;
+      resize: vertical;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--walnut);
+      background: #ffffff;
+    }
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 24px;
+      border-radius: 999px;
+      background: var(--terra);
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 14px;
+      border: 0;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background: var(--bronze);
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--walnut);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      background: var(--sand);
+    }
+    .preview-box {
+      background: var(--sand);
+      padding: 20px;
+      border-radius: var(--r);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .product-card-preview {
+      background: #ffffff;
+      border-radius: var(--r);
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(74, 49, 35, 0.12);
+      width: 100%;
+      max-width: 300px;
+    }
+    .ph {
+      aspect-ratio: 1/1;
+      background: #e6ded1;
+      position: relative;
+      overflow: hidden;
+    }
+    .ph img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .tag {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--gold);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+    .info {
+      padding: 14px;
+    }
+    .info h3 {
+      font-size: 14px;
+      font-weight: 600;
+      min-height: 40px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .pr {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+    .pr b { font-size: 16px; color: var(--walnut); }
+    .pr s { font-size: 12px; color: #9c8e83; }
+    .st { color: var(--gold); font-size: 13px; margin: 4px 0; }
+    .status-msg {
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-top: 16px;
+      display: none;
+    }
+    .status-success {
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #c8e6c9;
+    }
+    .catalog-list {
+      margin-top: 40px;
+    }
+    .catalog-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      background: #ffffff;
+      border-radius: var(--r);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .catalog-table th, .catalog-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .catalog-table th {
+      background: #f7f3ed;
+      color: var(--walnut);
+      font-weight: 600;
+    }
+    .thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: var(--sand);
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    .del-btn {
+      background: none;
+      border: 1px solid #e0c5bf;
+      color: #c62828;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .del-btn:hover {
+      background: #ffebee;
+    }
+    @media (max-width: 860px) {
+      .grid-layout { grid-template-columns: 1fr; }
+      .row-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-brand">
+      <img src="assets/logo.webp" width="100" height="34" alt="Homeify" style="height:32px;width:auto;">
+      <h1>Product Studio</h1>
+    </div>
+    <div class="header-actions">
+      <a href="/" target="_blank">View Live Website ↗</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="grid-layout">
+      <!-- Left Column: Add Product Form -->
+      <section class="card-panel">
+        <h2 class="panel-title">Add New Product to Collection</h2>
+        <p class="panel-desc">Fill out the details below. The card preview updates automatically in real-time.</p>
+
+        <form id="prod-form">
+          <div class="form-group">
+            <label for="p-name">Product Title</label>
+            <input type="text" id="p-name" placeholder="e.g. Solid Teak 6-Seater Dining Table with Cushioned Chairs" required>
+          </div>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="p-room">Room / Category</label>
+              <select id="p-room">
+                <option value="living">Living Room</option>
+                <option value="bedroom">Bedroom</option>
+                <option value="dining">Dining</option>
+                <option value="office">Office</option>
+                <option value="custom">Custom Woodwork</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="p-mat">Primary Material</label>
+              <select id="p-mat">
+                <option value="natural-wood">Solid Teak &amp; Rosewood</option>
+                <option value="engineered">Reinforced Engineered Wood</option>
+                <option value="fabric">Upholstery &amp; Cane Weave</option>
+                <option value="metal">Architectural Metal</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="p-price">Factory Offer Price (₹)</label>
+              <input type="number" id="p-price" placeholder="45000" min="0" required>
+            </div>
+            <div class="form-group">
+              <label for="p-mrp">Showroom Benchmark MRP (₹)</label>
+              <input type="number" id="p-mrp" placeholder="62000" min="0" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="p-img">Image File Path</label>
+            <input type="text" id="p-img" placeholder="assets/p/my-product.webp" required>
+            <small style="color:#7a6c60;font-size:12px;margin-top:4px;display:block;">
+              Or select photo to preview: <input type="file" id="p-file" accept="image/*" style="font-size:12px;margin-top:4px;">
+            </small>
+          </div>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="p-rating">Customer Rating</label>
+              <select id="p-rating">
+                <option value="5">★★★★★ (5.0 Stars)</option>
+                <option value="4.5">★★★★½ (4.5 Stars)</option>
+                <option value="4">★★★★☆ (4.0 Stars)</option>
+                <option value="0">No reviews yet (Hide stars)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="p-id">Custom Slug / ID (Optional)</label>
+              <input type="text" id="p-id" placeholder="auto-generated from title">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="p-desc">Product Description &amp; Guarantee</label>
+            <textarea id="p-desc" placeholder="Handcrafted from seasoned mature Kerala teak with mortise-and-tenon joints. Backed by Homeify's 5-year workshop warranty with free delivery and installation."></textarea>
+          </div>
+
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;">
+            <button type="submit" class="btn" style="flex:1;">+ Add to Catalog</button>
+            <button type="button" id="btn-reset" class="btn btn-secondary">Reset</button>
+          </div>
+        </form>
+
+        <div id="status-box" class="status-msg status-success"></div>
+      </section>
+
+      <!-- Right Column: Live Card Preview & One-Click Save -->
+      <section class="card-panel">
+        <h2 class="panel-title">Live Card Preview</h2>
+        <p class="panel-desc">This is exactly how visitors see your piece on mobile &amp; desktop.</p>
+
+        <div class="preview-box">
+          <article class="product-card-preview" id="card-preview">
+            <div class="ph">
+              <img id="prev-img" src="assets/hero.webp" alt="Preview Image">
+              <span class="tag" id="prev-tag">Save 27%</span>
+            </div>
+            <div class="info">
+              <h3 id="prev-title">Solid Teak 6-Seater Dining Table</h3>
+              <div class="st" id="prev-stars">★★★★★</div>
+              <div class="pr">
+                <b id="prev-price">₹45,000</b>
+                <s id="prev-mrp">₹62,000</s>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div style="margin-top:24px;display:flex;flex-direction:column;gap:12px;">
+          <button id="btn-download" class="btn" style="background:var(--walnut);">
+            📥 Download Updated products.json
+          </button>
+          <button id="btn-copy" class="btn btn-secondary">
+            📋 Copy JSON Snippet
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Catalog Management List -->
+    <section class="card-panel catalog-list">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <h2 class="panel-title">Current Workshop Catalog (<span id="cat-count">0</span> pieces)</h2>
+          <p class="panel-desc" style="margin-bottom:0;">Search, inspect, or remove any product from the active collection.</p>
+        </div>
+        <input type="text" id="cat-search" placeholder="Search products..." style="max-width:260px;">
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="catalog-table">
+          <thead>
+            <tr>
+              <th>Piece</th>
+              <th>Category</th>
+              <th>Material</th>
+              <th>Factory Price</th>
+              <th>Showroom MRP</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="catalog-rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (function() {
+      let catalog = [];
+      const formatR = n => '₹' + Number(n || 0).toLocaleString('en-IN');
+      const slugify = text => text.toString().toLowerCase().trim().replace(/[\s\W-]+/g, '-').replace(/^-+|-+$/g, '');
+
+      // Load current products
+      fetch('products.json')
+        .then(r => r.json())
+        .then(data => {
+          catalog = data;
+          updatePreview();
+          renderCatalogTable();
+        });
+
+      // DOM Elements
+      const fName = document.getElementById('p-name');
+      const fRoom = document.getElementById('p-room');
+      const fMat = document.getElementById('p-mat');
+      const fPrice = document.getElementById('p-price');
+      const fMrp = document.getElementById('p-mrp');
+      const fImg = document.getElementById('p-img');
+      const fFile = document.getElementById('p-file');
+      const fRating = document.getElementById('p-rating');
+      const fId = document.getElementById('p-id');
+      const fDesc = document.getElementById('p-desc');
+      const form = document.getElementById('prod-form');
+      const statusBox = document.getElementById('status-box');
+
+      // Live Preview Elements
+      const prevTitle = document.getElementById('prev-title');
+      const prevPrice = document.getElementById('prev-price');
+      const prevMrp = document.getElementById('prev-mrp');
+      const prevTag = document.getElementById('prev-tag');
+      const prevStars = document.getElementById('prev-stars');
+      const prevImg = document.getElementById('prev-img');
+
+      function updatePreview() {
+        const title = fName.value.trim() || 'Solid Teak 6-Seater Dining Table';
+        const price = Number(fPrice.value) || 45000;
+        const mrp = Number(fMrp.value) || 62000;
+        const rating = Number(fRating.value) || 5;
+
+        prevTitle.textContent = title;
+        prevPrice.textContent = formatR(price);
+
+        if (mrp > price) {
+          const discount = Math.round(((mrp - price) / mrp) * 100);
+          prevMrp.textContent = formatR(mrp);
+          prevMrp.style.display = 'inline';
+          prevTag.textContent = `Save ${discount}%`;
+          prevTag.style.display = 'inline-block';
+        } else {
+          prevMrp.style.display = 'none';
+          prevTag.style.display = 'none';
+        }
+
+        prevStars.textContent = rating > 0 ? '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating)) : '';
+      }
+
+      // Input listeners for preview
+      [fName, fPrice, fMrp, fRating].forEach(el => el.addEventListener('input', updatePreview));
+
+      fName.addEventListener('blur', () => {
+        if (!fId.value.trim() && fName.value.trim()) {
+          const slug = slugify(fName.value).slice(0, 36);
+          fId.value = slug;
+          if (!fImg.value.trim()) {
+            fImg.value = `assets/p/${slug}.webp`;
+          }
+        }
+      });
+
+      // Handle local image file selection
+      fFile.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = ev => {
+            prevImg.src = ev.target.result;
+          };
+          reader.readAsDataURL(file);
+          if (!fImg.value.trim()) {
+            const cleanName = slugify(file.name.replace(/\.[^/.]+$/, ''));
+            fImg.value = `assets/p/${cleanName}.webp`;
+          }
+        }
+      });
+
+      fImg.addEventListener('input', () => {
+        if (fImg.value.trim()) {
+          prevImg.src = fImg.value.trim();
+        }
+      });
+
+      // Form submission
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        const name = fName.value.trim();
+        const price = Number(fPrice.value);
+        const mrp = Number(fMrp.value);
+        const room = fRoom.value;
+        const mat = fMat.value;
+        const img = fImg.value.trim() || 'assets/hero.webp';
+        const rating = Number(fRating.value) || null;
+        const desc = fDesc.value.trim();
+        const id = fId.value.trim() || slugify(name) || ('item-' + Date.now());
+
+        const newProduct = {
+          id,
+          name,
+          room,
+          mat,
+          price,
+          mrp,
+          img,
+          w: 800,
+          h: 800,
+          rating,
+          desc
+        };
+
+        // Add to top of catalog
+        catalog.unshift(newProduct);
+        renderCatalogTable();
+
+        statusBox.style.display = 'block';
+        statusBox.textContent = `✓ "${name}" added to in-memory catalog! Click "Download Updated products.json" to save your file.`;
+
+        // Automatically trigger file download
+        downloadProductsJson();
+      });
+
+      function renderCatalogTable(filter = '') {
+        const rows = document.getElementById('catalog-rows');
+        const count = document.getElementById('cat-count');
+        const query = filter.toLowerCase();
+
+        const list = catalog.filter(p => !query || (p.name + ' ' + p.id + ' ' + p.room).toLowerCase().includes(query));
+        count.textContent = list.length;
+
+        rows.innerHTML = list.map(p => `
+          <tr>
+            <td>
+              <img src="${p.img}" class="thumb" alt="">
+              <b>${p.name}</b>
+              <div style="font-size:12px;color:#7a6c60;">ID: ${p.id}</div>
+            </td>
+            <td><span style="text-transform:capitalize;">${p.room}</span></td>
+            <td>${p.mat}</td>
+            <td><b>${formatR(p.price)}</b></td>
+            <td><s>${formatR(p.mrp)}</s></td>
+            <td>
+              <button class="del-btn" data-del="${p.id}">Remove</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      document.getElementById('cat-search').addEventListener('input', e => {
+        renderCatalogTable(e.target.value);
+      });
+
+      document.getElementById('catalog-rows').addEventListener('click', e => {
+        if (e.target.dataset.del) {
+          const id = e.target.dataset.del;
+          if (confirm('Are you sure you want to remove this piece from the catalog?')) {
+            catalog = catalog.filter(p => p.id !== id);
+            renderCatalogTable(document.getElementById('cat-search').value);
+            statusBox.style.display = 'block';
+            statusBox.textContent = 'Piece removed. Click "Download Updated products.json" to save your change.';
+          }
+        }
+      });
+
+      function downloadProductsJson() {
+        const jsonStr = JSON.stringify(catalog, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'products.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      document.getElementById('btn-download').addEventListener('click', downloadProductsJson);
+
+      document.getElementById('btn-copy').addEventListener('click', () => {
+        const name = fName.value.trim() || 'New Teak Furniture Piece';
+        const price = Number(fPrice.value) || 45000;
+        const mrp = Number(fMrp.value) || 62000;
+        const room = fRoom.value;
+        const mat = fMat.value;
+        const img = fImg.value.trim() || 'assets/p/new-piece.webp';
+        const rating = Number(fRating.value) || 5;
+        const desc = fDesc.value.trim();
+        const id = fId.value.trim() || slugify(name);
+
+        const snippet = JSON.stringify({ id, name, room, mat, price, mrp, img, w: 800, h: 800, rating, desc }, null, 2);
+        navigator.clipboard.writeText(snippet).then(() => {
+          alert('Product JSON snippet copied to clipboard!');
+        });
+      });
+
+      document.getElementById('btn-reset').addEventListener('click', () => {
+        form.reset();
+        updatePreview();
+        statusBox.style.display = 'none';
+      });
+    })();
+  </script>
+</body>
+</html>
