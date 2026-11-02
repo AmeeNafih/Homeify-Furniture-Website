@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Homeify Workshop | Product Management Studio</title>
   <meta name="robots" content="noindex, nofollow">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -285,7 +285,7 @@
 
   <header>
     <div class="header-brand">
-      <img src="assets/logo.webp" width="100" height="34" alt="Homeify" style="height:32px;width:auto;">
+      <img src="../assets/logo.webp" width="100" height="34" alt="Homeify" style="height:32px;width:auto;">
       <h1>Product Studio</h1>
     </div>
     <div class="header-actions">
@@ -385,7 +385,7 @@
         <div class="preview-box">
           <article class="product-card-preview" id="card-preview">
             <div class="ph">
-              <img id="prev-img" src="assets/hero.webp" alt="Preview Image">
+              <img id="prev-img" src="../assets/hero.webp" alt="Preview Image">
               <span class="tag" id="prev-tag">Save 27%</span>
             </div>
             <div class="info">
@@ -445,7 +445,7 @@
       const slugify = text => text.toString().toLowerCase().trim().replace(/[\s\W-]+/g, '-').replace(/^-+|-+$/g, '');
 
       // Load current products
-      fetch('products.json')
+      fetch('../products.json')
         .then(r => r.json())
         .then(data => {
           catalog = data;
@@ -583,7 +583,7 @@
         rows.innerHTML = list.map(p => `
           <tr>
             <td>
-              <img src="${p.img}" class="thumb" alt="">
+              <img src="../${p.img}" class="thumb" alt="">
               <b>${p.name}</b>
               <div style="font-size:12px;color:#7a6c60;">ID: ${p.id}</div>
             </td>

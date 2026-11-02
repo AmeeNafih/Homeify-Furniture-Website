@@ -65,15 +65,20 @@ Because this repository contains only static files (`index.html`, `styles.css`, 
 
 All catalog products are stored in **[`products.json`](products.json)**. You can manage products using either method:
 
-### Method A: Using the Internal Product Studio (`admin.html`)
+### Method A: Using the Local Product Studio (`tools/admin.html`)
 
-1. Open `admin.html` in your browser (e.g. `http://localhost:8080/admin.html` or locally).
-2. Fill out the visual product form: Title, Category, Material, Factory Price, MRP, Photo, and Description.
-3. Review the live visual card preview in real time.
-4. Click **"Download Updated products.json"** to download the new catalog file, and replace `products.json` in your repository.
-5. Commit and push to publish live (`git add products.json && git commit -m "Add product" && git push origin main`).
+1. Start your local server:
+   ```bash
+   python3 -m http.server 8080
+   ```
+2. Open the studio locally at **`http://localhost:8080/tools/admin.html`** (or open `tools/admin.html` directly in your browser).
+3. Fill out the visual product form: Title, Category, Material, Factory Price, MRP, Photo, and Description.
+4. Review the live visual card preview in real time.
+5. Click **"Download Updated products.json"** to download the new catalog file, and move it to your repository folder to replace `products.json`.
+6. Add your new WebP photo to `assets/p/`.
+7. Commit and push to publish live (`git add . && git commit -m "Add product" && git push origin main`).
 
-*Note: `admin.html` is a standalone internal utility. It contains no secrets or PINs, has `noindex`, and only creates file downloads on your local device (it does not write to the live website).*
+*Note: `tools/admin.html` is an internal tool located in `tools/` and excluded from production deployment via `.vercelignore`. It contains zero PINs, secrets, or tokens. It cannot write directly to the live server; it generates and downloads the updated file to your computer.*
 
 ### Method B: Directly Editing `products.json`
 
