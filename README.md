@@ -63,7 +63,19 @@ Because this repository contains only static files (`index.html`, `styles.css`, 
 
 ## 🛠️ How to Add or Edit Products
 
-All catalog products are stored in **[`products.json`](products.json)**. There is no backend database or admin login; editing this file is all that is required.
+All catalog products are stored in **[`products.json`](products.json)**. You can manage products using either method:
+
+### Method A: Using the Internal Product Studio (`admin.html`)
+
+1. Open `admin.html` in your browser (e.g. `http://localhost:8080/admin.html` or locally).
+2. Fill out the visual product form: Title, Category, Material, Factory Price, MRP, Photo, and Description.
+3. Review the live visual card preview in real time.
+4. Click **"Download Updated products.json"** to download the new catalog file, and replace `products.json` in your repository.
+5. Commit and push to publish live (`git add products.json && git commit -m "Add product" && git push origin main`).
+
+*Note: `admin.html` is a standalone internal utility. It contains no secrets or PINs, has `noindex`, and only creates file downloads on your local device (it does not write to the live website).*
+
+### Method B: Directly Editing `products.json`
 
 ### Product Schema
 
