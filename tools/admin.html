@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Homeify Workshop | Product Management Studio</title>
+  <title>Homeify Workshop | Product & Price Studio</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -219,15 +219,16 @@
     .pr s { font-size: 12px; color: #9c8e83; }
     .st { color: var(--gold); font-size: 13px; margin: 4px 0; }
     .status-msg {
-      padding: 12px 16px;
+      padding: 14px 18px;
       border-radius: 8px;
       font-size: 14px;
-      margin-top: 16px;
+      margin-top: 18px;
       display: none;
+      line-height: 1.4;
     }
     .status-success {
       background: #e8f5e9;
-      color: #2e7d32;
+      color: #1b5e20;
       border: 1px solid #c8e6c9;
     }
     .catalog-list {
@@ -243,10 +244,11 @@
       border: 1px solid var(--border);
     }
     .catalog-table th, .catalog-table td {
-      padding: 12px 16px;
+      padding: 12px 14px;
       text-align: left;
       border-bottom: 1px solid var(--border);
-      font-size: 14px;
+      font-size: 13.5px;
+      vertical-align: middle;
     }
     .catalog-table th {
       background: #f7f3ed;
@@ -262,11 +264,52 @@
       vertical-align: middle;
       margin-right: 10px;
     }
+    .tbl-input {
+      width: 110px;
+      height: 38px;
+      padding: 0 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--walnut);
+      background: #ffffff;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .tbl-input:focus {
+      border-color: var(--terra);
+      outline: none;
+      background: #fffcf8;
+      box-shadow: 0 0 0 2px rgba(181, 96, 62, 0.15);
+    }
+    .tbl-disc {
+      display: block;
+      font-size: 11px;
+      color: var(--terra);
+      font-weight: 600;
+      margin-top: 3px;
+    }
+    .edit-btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--walnut);
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 6px;
+      transition: background 0.15s;
+    }
+    .edit-btn:hover {
+      background: var(--sand);
+    }
     .del-btn {
       background: none;
       border: 1px solid #e0c5bf;
       color: #c62828;
-      padding: 4px 10px;
+      padding: 6px 10px;
       border-radius: 6px;
       cursor: pointer;
       font-size: 12px;
@@ -286,7 +329,7 @@
   <header>
     <div class="header-brand">
       <img src="../assets/logo.webp" width="100" height="34" alt="Homeify" style="height:32px;width:auto;">
-      <h1>Product Studio</h1>
+      <h1>Product &amp; Price Studio</h1>
     </div>
     <div class="header-actions">
       <a href="/" target="_blank">View Live Website ↗</a>
@@ -295,10 +338,10 @@
 
   <div class="container">
     <div class="grid-layout">
-      <!-- Left Column: Add Product Form -->
+      <!-- Left Column: Add / Edit Product Form -->
       <section class="card-panel">
-        <h2 class="panel-title">Add New Product to Collection</h2>
-        <p class="panel-desc">Fill out the details below. The card preview updates automatically in real-time.</p>
+        <h2 class="panel-title" id="form-panel-title">Add New Product to Collection</h2>
+        <p class="panel-desc" id="form-panel-desc">Fill out the details below. The card preview updates automatically in real-time.</p>
 
         <form id="prod-form">
           <div class="form-group">
@@ -369,15 +412,15 @@
           </div>
 
           <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;">
-            <button type="submit" class="btn" style="flex:1;">+ Add to Catalog</button>
-            <button type="button" id="btn-reset" class="btn btn-secondary">Reset</button>
+            <button type="submit" id="btn-submit" class="btn" style="flex:1;">+ Add to Catalog</button>
+            <button type="button" id="btn-reset" class="btn btn-secondary">Reset Form</button>
           </div>
         </form>
 
         <div id="status-box" class="status-msg status-success"></div>
       </section>
 
-      <!-- Right Column: Live Card Preview & One-Click Save -->
+      <!-- Right Column: Live Card Preview & Actions -->
       <section class="card-panel">
         <h2 class="panel-title">Live Card Preview</h2>
         <p class="panel-desc">This is exactly how visitors see your piece on mobile &amp; desktop.</p>
@@ -410,26 +453,26 @@
       </section>
     </div>
 
-    <!-- Catalog Management List -->
+    <!-- Catalog Management List & Price Editor -->
     <section class="card-panel catalog-list">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
         <div>
-          <h2 class="panel-title">Current Workshop Catalog (<span id="cat-count">0</span> pieces)</h2>
-          <p class="panel-desc" style="margin-bottom:0;">Search, inspect, or remove any product from the active collection.</p>
+          <h2 class="panel-title">Workshop Catalog (<span id="cat-count">0</span> pieces)</h2>
+          <p class="panel-desc" style="margin-bottom:0;">Edit Factory Price and MRP directly in the boxes below, or click <b>✏️ Edit</b> to update full details.</p>
         </div>
-        <input type="text" id="cat-search" placeholder="Search products..." style="max-width:260px;">
+        <input type="text" id="cat-search" placeholder="Search pieces by name or ID..." style="max-width:280px;">
       </div>
 
       <div style="overflow-x:auto;">
         <table class="catalog-table">
           <thead>
             <tr>
-              <th>Piece</th>
+              <th style="min-width:240px;">Piece</th>
               <th>Category</th>
               <th>Material</th>
-              <th>Factory Price</th>
-              <th>Showroom MRP</th>
-              <th>Action</th>
+              <th style="min-width:140px;">Factory Price (₹)</th>
+              <th style="min-width:150px;">Showroom MRP (₹)</th>
+              <th style="min-width:140px;">Actions</th>
             </tr>
           </thead>
           <tbody id="catalog-rows"></tbody>
@@ -441,6 +484,7 @@
   <script>
     (function() {
       let catalog = [];
+      let editingId = null;
       const formatR = n => '₹' + Number(n || 0).toLocaleString('en-IN');
       const slugify = text => text.toString().toLowerCase().trim().replace(/[\s\W-]+/g, '-').replace(/^-+|-+$/g, '');
 
@@ -465,6 +509,9 @@
       const fId = document.getElementById('p-id');
       const fDesc = document.getElementById('p-desc');
       const form = document.getElementById('prod-form');
+      const submitBtn = document.getElementById('btn-submit');
+      const panelTitle = document.getElementById('form-panel-title');
+      const panelDesc = document.getElementById('form-panel-desc');
       const statusBox = document.getElementById('status-box');
 
       // Live Preview Elements
@@ -488,7 +535,7 @@
           const discount = Math.round(((mrp - price) / mrp) * 100);
           prevMrp.textContent = formatR(mrp);
           prevMrp.style.display = 'inline';
-          prevTag.textContent = `Save ${discount}%`;
+          prevTag.textContent = 'Save ' + discount + '%';
           prevTag.style.display = 'inline-block';
         } else {
           prevMrp.style.display = 'none';
@@ -498,15 +545,14 @@
         prevStars.textContent = rating > 0 ? '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating)) : '';
       }
 
-      // Input listeners for preview
       [fName, fPrice, fMrp, fRating].forEach(el => el.addEventListener('input', updatePreview));
 
       fName.addEventListener('blur', () => {
-        if (!fId.value.trim() && fName.value.trim()) {
+        if (!editingId && !fId.value.trim() && fName.value.trim()) {
           const slug = slugify(fName.value).slice(0, 36);
           fId.value = slug;
           if (!fImg.value.trim()) {
-            fImg.value = `assets/p/${slug}.webp`;
+            fImg.value = 'assets/p/' + slug + '.webp';
           }
         }
       });
@@ -522,18 +568,18 @@
           reader.readAsDataURL(file);
           if (!fImg.value.trim()) {
             const cleanName = slugify(file.name.replace(/\.[^/.]+$/, ''));
-            fImg.value = `assets/p/${cleanName}.webp`;
+            fImg.value = 'assets/p/' + cleanName + '.webp';
           }
         }
       });
 
       fImg.addEventListener('input', () => {
         if (fImg.value.trim()) {
-          prevImg.src = fImg.value.trim();
+          prevImg.src = fImg.value.trim().startsWith('assets/') ? ('../' + fImg.value.trim()) : fImg.value.trim();
         }
       });
 
-      // Form submission
+      // Form submission (Add or Edit)
       form.addEventListener('submit', e => {
         e.preventDefault();
 
@@ -547,64 +593,160 @@
         const desc = fDesc.value.trim();
         const id = fId.value.trim() || slugify(name) || ('item-' + Date.now());
 
-        const newProduct = {
-          id,
-          name,
-          room,
-          mat,
-          price,
-          mrp,
-          img,
-          w: 800,
-          h: 800,
-          rating,
-          desc
-        };
+        if (editingId) {
+          // Update existing product
+          const idx = catalog.findIndex(p => p.id === editingId);
+          if (idx >= 0) {
+            catalog[idx] = {
+              ...catalog[idx],
+              id,
+              name,
+              room,
+              mat,
+              price,
+              mrp,
+              img,
+              rating,
+              desc
+            };
+            statusBox.style.display = 'block';
+            statusBox.textContent = '✓ "' + name + '" updated successfully! Click "Download Updated products.json" to save your file.';
+          }
+          editingId = null;
+          panelTitle.textContent = 'Add New Product to Collection';
+          panelDesc.textContent = 'Fill out the details below. The card preview updates automatically in real-time.';
+          submitBtn.textContent = '+ Add to Catalog';
+          form.reset();
+          updatePreview();
+        } else {
+          // Add new product to top
+          const newProduct = {
+            id,
+            name,
+            room,
+            mat,
+            price,
+            mrp,
+            img,
+            w: 800,
+            h: 800,
+            rating,
+            desc
+          };
+          catalog.unshift(newProduct);
+          statusBox.style.display = 'block';
+          statusBox.textContent = '✓ "' + name + '" added to catalog! Click "Download Updated products.json" to save your file.';
+        }
 
-        // Add to top of catalog
-        catalog.unshift(newProduct);
-        renderCatalogTable();
-
-        statusBox.style.display = 'block';
-        statusBox.textContent = `✓ "${name}" added to in-memory catalog! Click "Download Updated products.json" to save your file.`;
-
-        // Automatically trigger file download
+        renderCatalogTable(document.getElementById('cat-search').value);
         downloadProductsJson();
       });
 
       function renderCatalogTable(filter = '') {
         const rows = document.getElementById('catalog-rows');
         const count = document.getElementById('cat-count');
-        const query = filter.toLowerCase();
+        const query = (filter || '').toLowerCase();
 
         const list = catalog.filter(p => !query || (p.name + ' ' + p.id + ' ' + p.room).toLowerCase().includes(query));
         count.textContent = list.length;
 
-        rows.innerHTML = list.map(p => `
-          <tr>
-            <td>
-              <img src="../${p.img}" class="thumb" alt="">
-              <b>${p.name}</b>
-              <div style="font-size:12px;color:#7a6c60;">ID: ${p.id}</div>
-            </td>
-            <td><span style="text-transform:capitalize;">${p.room}</span></td>
-            <td>${p.mat}</td>
-            <td><b>${formatR(p.price)}</b></td>
-            <td><s>${formatR(p.mrp)}</s></td>
-            <td>
-              <button class="del-btn" data-del="${p.id}">Remove</button>
-            </td>
-          </tr>
-        `).join('');
+        rows.innerHTML = list.map(p => {
+          const disc = p.mrp > p.price ? Math.round(((p.mrp - p.price) / p.mrp) * 100) : 0;
+          return `
+            <tr data-row-id="${p.id}">
+              <td>
+                <div style="display:flex;align-items:center;">
+                  <img src="../${p.img}" class="thumb" alt="">
+                  <div>
+                    <b>${p.name}</b>
+                    <div style="font-size:12px;color:#7a6c60;">ID: ${p.id}</div>
+                  </div>
+                </div>
+              </td>
+              <td><span style="text-transform:capitalize;">${p.room}</span></td>
+              <td>${p.mat}</td>
+              <td>
+                <div style="display:flex;align-items:center;gap:4px;">
+                  <span style="font-size:13px;font-weight:600;color:var(--walnut);">₹</span>
+                  <input type="number" class="tbl-input price-input" data-id="${p.id}" data-field="price" value="${p.price}" min="0" title="Edit Factory Offer Price">
+                </div>
+              </td>
+              <td>
+                <div style="display:flex;align-items:center;gap:4px;">
+                  <span style="font-size:13px;font-weight:600;color:#9c8e83;">₹</span>
+                  <input type="number" class="tbl-input mrp-input" data-id="${p.id}" data-field="mrp" value="${p.mrp}" min="0" title="Edit Showroom MRP">
+                </div>
+                <span class="tbl-disc" id="disc-${p.id}">${disc > 0 ? (disc + '% off') : 'No discount'}</span>
+              </td>
+              <td>
+                <div style="display:flex;align-items:center;gap:4px;">
+                  <button type="button" class="edit-btn" data-edit="${p.id}" title="Edit All Details in Top Form">✏️ Edit</button>
+                  <button type="button" class="del-btn" data-del="${p.id}" title="Delete Piece">✕</button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
       }
 
       document.getElementById('cat-search').addEventListener('input', e => {
         renderCatalogTable(e.target.value);
       });
 
+      // Handle table input (inline price/MRP edits)
+      document.getElementById('catalog-rows').addEventListener('input', e => {
+        const input = e.target.closest('.price-input, .mrp-input');
+        if (input) {
+          const id = input.dataset.id;
+          const field = input.dataset.field;
+          const val = Number(input.value);
+          const p = catalog.find(x => x.id === id);
+          if (p && !isNaN(val)) {
+            p[field] = val;
+            const discSpan = document.getElementById('disc-' + id);
+            if (discSpan) {
+              const disc = p.mrp > p.price ? Math.round(((p.mrp - p.price) / p.mrp) * 100) : 0;
+              discSpan.textContent = disc > 0 ? (disc + '% off') : 'No discount';
+            }
+            statusBox.style.display = 'block';
+            statusBox.textContent = '✓ Price updated for "' + p.name + '"! Factory Price: ' + formatR(p.price) + ' | MRP: ' + formatR(p.mrp) + '. Click "Download Updated products.json" to save.';
+          }
+        }
+      });
+
+      // Handle table buttons (Edit full details or Delete)
       document.getElementById('catalog-rows').addEventListener('click', e => {
-        if (e.target.dataset.del) {
-          const id = e.target.dataset.del;
+        // Edit button
+        const editBtn = e.target.closest('[data-edit]');
+        if (editBtn) {
+          const id = editBtn.dataset.edit;
+          const p = catalog.find(x => x.id === id);
+          if (p) {
+            editingId = p.id;
+            fName.value = p.name;
+            fRoom.value = p.room;
+            fMat.value = p.mat;
+            fPrice.value = p.price;
+            fMrp.value = p.mrp;
+            fImg.value = p.img;
+            fRating.value = p.rating || 0;
+            fId.value = p.id;
+            fDesc.value = p.desc || '';
+            panelTitle.textContent = 'Edit Product: ' + p.name;
+            panelDesc.textContent = 'Update any product detail below and click "Save Product Changes".';
+            submitBtn.textContent = '💾 Save Product Changes';
+            updatePreview();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            statusBox.style.display = 'block';
+            statusBox.textContent = 'Editing "' + p.name + '". Make your changes above and click "Save Product Changes".';
+          }
+          return;
+        }
+
+        // Delete button
+        const delBtn = e.target.closest('[data-del]');
+        if (delBtn) {
+          const id = delBtn.dataset.del;
           if (confirm('Are you sure you want to remove this piece from the catalog?')) {
             catalog = catalog.filter(p => p.id !== id);
             renderCatalogTable(document.getElementById('cat-search').value);
@@ -647,7 +789,11 @@
       });
 
       document.getElementById('btn-reset').addEventListener('click', () => {
+        editingId = null;
         form.reset();
+        panelTitle.textContent = 'Add New Product to Collection';
+        panelDesc.textContent = 'Fill out the details below. The card preview updates automatically in real-time.';
+        submitBtn.textContent = '+ Add to Catalog';
         updatePreview();
         statusBox.style.display = 'none';
       });
