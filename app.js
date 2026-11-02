@@ -223,6 +223,7 @@
 
     $('#drawer')?.classList.add('on');
     $('#scrim')?.classList.add('on');
+    document.body.classList.add('no-scroll');
   }
 
   function openProductModal(productId) {
@@ -276,12 +277,15 @@
 
     pm?.classList.add('on');
     $('#scrim')?.classList.add('on');
+    document.body.classList.add('no-scroll');
   }
 
   function closeAllOverlays() {
     ['#drawer', '#links', '#scrim', '#pmodal'].forEach(sel => {
       $(sel)?.classList.remove('on');
     });
+    $('#nav')?.classList.remove('menu-open');
+    document.body.classList.remove('no-scroll');
   }
 
   function toggleArrayItem(arr, item) {
@@ -351,11 +355,14 @@
   // Navigation and Drawer Controls
   $('#burger')?.addEventListener('click', () => {
     $('#links')?.classList.add('on');
+    $('#nav')?.classList.add('menu-open');
     $('#scrim')?.classList.add('on');
+    document.body.classList.add('no-scroll');
   });
 
   $('#scrim')?.addEventListener('click', closeAllOverlays);
   $('#dclose')?.addEventListener('click', closeAllOverlays);
+  $('#lclose')?.addEventListener('click', closeAllOverlays);
   $('#pmclose')?.addEventListener('click', closeAllOverlays);
 
   $('#cbtn')?.addEventListener('click', () => openDrawer('cart'));
