@@ -112,8 +112,30 @@ class HomeifyHandler(http.server.SimpleHTTPRequestHandler):
                 if not products or not isinstance(products, list):
                     raise ValueError("Payload missing 'products' list")
 
-                # 1. Write products.json
+                # 1. Merge incoming products with existing products on disk to preserve any newly cataloged items
                 products_path = os.path.join(REPO_DIR, "products.json")
+                if os.path.exists(products_path):
+                    try:
+                        with open(products_path, "r", encoding="utf-8") as f:
+                            disk_products = json.load(f)
+                        if isinstance(disk_products, list):
+                            incoming_map = {p.get("id"): p for p in products if p.get("id")}
+                            merged = []
+                            for dp in disk_products:
+                                pid = dp.get("id")
+                                if pid in incoming_map:
+                                    inp = incoming_map.pop(pid)
+                                    dp["price"] = inp.get("price", dp.get("price"))
+                                    dp["mrp"] = inp.get("mrp", dp.get("mrp"))
+                                    if "badge" in inp:
+                                        dp["badge"] = inp["badge"]
+                                merged.append(dp)
+                            for remaining in incoming_map.values():
+                                merged.append(remaining)
+                            products = merged
+                    except Exception as e:
+                        print(f"Merge warning: {e}", file=sys.stderr)
+
                 with open(products_path, "w", encoding="utf-8") as f:
                     json.dump(products, f, indent=2, ensure_ascii=False)
                     f.write("\n")

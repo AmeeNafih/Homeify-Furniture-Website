@@ -1521,11 +1521,35 @@
           'Content-Type': 'application/json'
         };
 
-        // 1. Update products.json
+        // 1. Update products.json (merging local edits with remote catalog to preserve all workshop products)
         const pRes = await fetch(`https://api.github.com/repos/${repo}/contents/products.json`, { headers });
         if (!pRes.ok) throw new Error('Could not access products.json on GitHub: ' + pRes.statusText);
         const pData = await pRes.json();
-        const pContentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(catalog, null, 2) + '\n')));
+        
+        let mergedCatalog = catalog;
+        try {
+          const remoteStr = decodeURIComponent(escape(atob(pData.content.replace(/\s/g, ''))));
+          const remoteProducts = JSON.parse(remoteStr);
+          if (Array.isArray(remoteProducts)) {
+            const localMap = new Map(catalog.map(p => [p.id, p]));
+            mergedCatalog = remoteProducts.map(rp => {
+              const local = localMap.get(rp.id);
+              if (local) {
+                localMap.delete(rp.id);
+                return { ...rp, price: local.price, mrp: local.mrp, badge: local.badge || rp.badge };
+              }
+              return rp;
+            });
+            for (const remaining of localMap.values()) {
+              mergedCatalog.push(remaining);
+            }
+            catalog = mergedCatalog;
+          }
+        } catch (e) {
+          console.warn('Could not merge with remote products.json, using local:', e);
+        }
+
+        const pContentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(mergedCatalog, null, 2) + '\n')));
 
         await fetch(`https://api.github.com/repos/${repo}/contents/products.json`, {
           method: 'PUT',
