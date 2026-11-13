@@ -585,7 +585,7 @@
     "cat": "Cots & Beds",
     "mat": "natural-wood",
     "mrp": 88000,
-    "price": 59999,
+    "price": 22999,
     "dim": "80\"L × 72\"W × 78\"H (King 6×6.5 Ft)",
     "finish": "Organic Teak Matt Seal",
     "badge": "Canopy Luxury",
@@ -593,7 +593,8 @@
     "img": "assets/p/cot-teak-poster.webp",
     "w": 800,
     "h": 751,
-    "desc": "Monumental solid teak four-poster canopy cot hand-turned from mature Grade-A natural teak. Designed to drape sheer Kerala mosquito canopies with timeless verandah elegance."
+    "desc": "Monumental solid teak four-poster canopy cot hand-turned from mature Grade-A natural teak. Designed to drape sheer Kerala mosquito canopies with timeless verandah elegance.",
+    "rating": null
   },
   {
     "id": "cot-carved-arch",
