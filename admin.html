@@ -1119,9 +1119,10 @@
         checkServerStatus();
         setInterval(checkServerStatus, 15000);
 
+        const cacheBust = '?v=' + Date.now();
         Promise.all([
-          fetch('products.json').then(r => r.json()),
-          fetch('highlights.json').then(r => r.json())
+          fetch('products.json' + cacheBust, { cache: 'no-store' }).then(r => r.json()),
+          fetch('highlights.json' + cacheBust, { cache: 'no-store' }).then(r => r.json())
         ])
         .then(([productsData, highlightsData]) => {
           catalog = productsData;

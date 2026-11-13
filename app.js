@@ -403,11 +403,12 @@
     ).join('');
   }
 
-  // Fetch data files asynchronously
+  // Fetch data files asynchronously with cache busting
+  const cacheBust = '?v=' + Date.now();
   Promise.all([
-    fetch('products.json').then(res => res.json()),
-    fetch('highlights.json').then(res => res.json()),
-    fetch('reviews.json').then(res => res.json())
+    fetch('products.json' + cacheBust, { cache: 'no-store' }).then(res => res.json()),
+    fetch('highlights.json' + cacheBust, { cache: 'no-store' }).then(res => res.json()),
+    fetch('reviews.json' + cacheBust, { cache: 'no-store' }).then(res => res.json())
   ])
     .then(([prodData, highlightIds, reviewData]) => {
       products = prodData;
